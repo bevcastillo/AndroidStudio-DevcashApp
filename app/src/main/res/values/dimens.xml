@@ -9,4 +9,8 @@
     <dimen name="buttons">14sp</dimen>
     <dimen name="text_inputs">16sp</dimen>
 
+    <!-- padding -->
+    <dimen name="padding_top">10dp</dimen>
+    <dimen name="text_padding">10sp</dimen>
+
 </resources>

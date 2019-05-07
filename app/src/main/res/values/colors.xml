@@ -8,4 +8,11 @@
     <color name="whiteBG">#FAFAFA</color>
     <color name="whiteDarker">#EBF0F3</color>
 
+    <!-- other colors used -->
+    <color name="blue_link">#0033CC</color>
+
+
+    <color name="end_color">#FDEDE8</color>
+    <color name="login_color">#F5A68F</color>
+
 </resources>
