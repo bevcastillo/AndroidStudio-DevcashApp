@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Devcash</string>
+    
+    <!-- Navbar titles-->
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="add_prod">Add product</string>
+    <string name="edit_prod">Edit product</string>
+    <string name="add_service">Add services</string>
+    <string name="edit_services">Edit services</string>
+    <string name="inventory">Inventory</string>
+    <string name="variants">Variants</string>
+    <string name="representation_pos">Representation on POS</string>
+
+    <!-- buttons strings-->
+    <string name="send">SEND</string>
+    <string name="save">SAVE</string>
+    <string name="pay">PAY</string>
+    <string name="canel">CANCEL</string>
+    <string name="login_desc">LOGIN</string>
+    <string name="sign_desc">SIGN UP</string>
+
+
+    <!-- Login strings-->
+    <string name="user_email">Username/Email</string>
+    <string name="passw">Password</string>
+    <string name="forgot_passw">Forgot Password?</string>
+
+    <!-- forgot password string -->
+    <string name="forgot_passw_desc">Enter your email address to receive instructions to reset your password.</string>
+    <string name="email">Email</string>
+
+    <string name="quality_splash">QUALITY INVENTORY AND CASHIERING SYSTEM</string>
+
+
+    <!-- Add products strings-->
+    <string name="prod_name">Product Name</string>
+    <string name="category">Category</string>
+    <string name="availability">This item isa available for sale.</string>
+    <string name="condition">Condition</string>
+    <string name="item_count">Item count</string>
+    <string name="exp_date">Expiration Date</string>
+    <string name="add_exp_date">ADD EXPIRATION DATE</string>
+    <string name="sold_by">Sold by</string>
+    <string name="each">Each</string>
+    <string name="weight">Weight</string>
+    <string name="unit">Unit</string>
+    <string name="price">Price</string>
+    <string name="qr_code">QR Code</string>
+
+    <string name="disc">Discounts</string>
+    <string name="disc_name">Discount Name</string>
+    <string name="vaue">Value</string>
+
+    <string name="in_stock">In Stock</string>
+    <string name="rop">ROP</string>
+
+    <string name="variants_desc">Use variants of an item that has different size, color, or other options.</string>
+    <string name="add_variants">ADD VARIANTS</string>
+
+    <string name="color">Color</string>
+    <string name="image">Image</string>
+
+</resources>
