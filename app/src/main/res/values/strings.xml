@@ -25,6 +25,7 @@
     <string name="user_email">Username/Email</string>
     <string name="passw">Password</string>
     <string name="forgot_passw">Forgot Password?</string>
+    <string name="f_password">Forgot Password</string>
 
     <!-- forgot password string -->
     <string name="forgot_passw_desc">Enter your email address to receive instructions to reset your password.</string>
@@ -60,5 +61,35 @@
 
     <string name="color">Color</string>
     <string name="image">Image</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <!-- drawer strings -->
+    <string name="owner">Enterprise Owner</string>
+    <string name="email_addr">enterpriseowner@gmail.com</string>
+
+    <!-- navigation drawer string -->
+    <string name="dashboard">Dashboard</string>
+    <string name="sales">Sales</string>
+    <string name="inventory_title">Inventory</string>
+    <string name="discounts">Discounts</string>
+    <string name="categories">Category</string>
+    <string name="notification">Notification</string>
+    <string name="settings">Settings</string>
+    <string name="help_center">Help Center</string>
+    <string name="employees">Employees</string>
+
 
 </resources>

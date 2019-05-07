@@ -56,7 +56,11 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
         }
 
         Toast.makeText(getApplication(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
+        Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
+        startActivity(owner_dashboard);
     }
+
+
 
 
     @Override

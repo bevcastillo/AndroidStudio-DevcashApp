@@ -10,18 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".DashboardActivity"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="landscape"></activity>
+        <activity
             android:name=".RegisterLoginActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ForgotPasswordActivity"
-            android:screenOrientation="landscape"
-            android:parentActivityName=".OwnerLoginActivity"/>
+            android:label="@string/f_password"
+            android:parentActivityName=".OwnerLoginActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".OwnerLoginActivity"
             android:label="@string/login"
-            android:screenOrientation="landscape"
-            android:parentActivityName=".RegisterLoginActivity"/>
+            android:parentActivityName=".RegisterLoginActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".SplashScreenActivity"
             android:screenOrientation="landscape"
@@ -32,7 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.example.devcash;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -33,6 +34,10 @@ public class RegisterLoginActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.btn_signup:
+                String url = "https://www.devcash.com.ph/signup.php";
+                Intent devcash = new Intent(Intent.ACTION_VIEW);
+                devcash.setData(Uri.parse(url));
+                startActivity(devcash);
                 break;
         }
     }
