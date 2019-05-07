@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="page_title">20sp</dimen>
+    <dimen name="paragraph_text">14sp</dimen>
+    <dimen name="list_title_small">14sp</dimen>
+    <dimen name="list_title_medium">16sp</dimen>
+    <dimen name="secondary_text">14sp</dimen>
+    <dimen name="buttons">14sp</dimen>
+    <dimen name="text_inputs">16sp</dimen>
+
+</resources>
