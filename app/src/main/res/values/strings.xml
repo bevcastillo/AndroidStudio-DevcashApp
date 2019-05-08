@@ -116,6 +116,7 @@
     <string name="settings">Settings</string>
     <string name="help_center">Help Center</string>
     <string name="employees">Employees</string>
+    <string name="reports">Reports</string>
 
     <!-- numbers -->
     <string name="count">0</string>
