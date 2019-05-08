@@ -49,6 +49,9 @@
     <string name="price">Price</string>
     <string name="qr_code">QR Code</string>
 
+    <!-- Add products strings-->
+    <string name="service_name">Service Name</string>
+
     <string name="disc">Discounts</string>
     <string name="disc_name">Discount Name</string>
     <string name="value">Value</string>
