@@ -10,9 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".AddCategoryActivity"
+            android:label="@string/add_category"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".AddEmployeeActivity"
+            android:label="@string/add_employee"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".AddServicesActivity"
             android:label="@string/add_service"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".AddProductActivity"
             android:label="@string/add_prod"

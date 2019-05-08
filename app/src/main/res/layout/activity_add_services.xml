@@ -55,7 +55,7 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
-                        android:id="@+id/prod_category_layout"
+                        android:id="@+id/service_category_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -78,14 +78,14 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/prod_availability"
+                        android:id="@+id/service_availability"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:paddingTop="@dimen/padding_top">
 
                         <CheckBox
-                            android:id="@+id/check_availavility"
+                            android:id="@+id/service_check_availavility"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/colorPrimary"

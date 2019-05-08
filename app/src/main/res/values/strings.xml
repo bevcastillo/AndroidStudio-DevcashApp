@@ -8,6 +8,10 @@
     <string name="edit_prod">Edit product</string>
     <string name="add_service">Add services</string>
     <string name="edit_services">Edit services</string>
+    <string name="add_employee">Add Employee</string>
+    <string name="edit_employee">Edit Employee</string>
+    <string name="add_category">Add Category</string>
+    <string name="edit_category">Edit Category</string>
     <string name="inventory">Inventory</string>
     <string name="variants">Variants</string>
     <string name="representation_pos">Representation on POS</string>
@@ -49,8 +53,16 @@
     <string name="price">Price</string>
     <string name="qr_code">QR Code</string>
 
-    <!-- Add products strings-->
+    <!-- Add services strings-->
     <string name="service_name">Service Name</string>
+
+    <!-- Add employee strings-->
+    <string name="emp_name">Employee Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="pnumber">Phone Number</string>
+    <string name="task">Task</string>
+    <string name="cashier">Cashier</string>
+    <string name="add_pincode">ADD PIN CODE</string>
 
     <string name="disc">Discounts</string>
     <string name="disc_name">Discount Name</string>
