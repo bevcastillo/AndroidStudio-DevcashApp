@@ -91,5 +91,33 @@
     <string name="help_center">Help Center</string>
     <string name="employees">Employees</string>
 
+    <!-- numbers -->
+    <string name="count">0</string>
+    <string name="money">P 0.00</string>
+
+
+    <!-- array strings -->
+    <string-array name="categories">
+        <item>No category</item>
+        <item>Create category</item>
+        <item>Category 1</item>
+        <item>Category 2</item>
+        <item>Category 3</item>
+        <item>Category 4</item>
+        <item>Category 5</item>
+    </string-array>
+
+    <string-array name="condition">
+        <item>New</item>
+        <item>Lost</item>
+        <item>Disposed of</item>
+        <item>Damaged</item>
+    </string-array>
+
+    <string-array name="unit">
+        <item>kilograms</item>
+        <item>meters</item>
+        <item>grams</item>
+    </string-array>
 
 </resources>

@@ -15,4 +15,8 @@
     <color name="end_color">#FDEDE8</color>
     <color name="login_color">#F5A68F</color>
 
+    <!-- text colors-->
+    <color name="dark_text">#1B2631</color>
+    <color name="icon_light">#808080</color>
+
 </resources>

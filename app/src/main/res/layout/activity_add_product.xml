@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddProductActivity"
+    android:orientation="vertical"
+    android:background="@color/whiteDarker">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clipToPadding="false">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/prod_details_card"
+                android:layout_width="650dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/text_padding"
+                android:layout_marginTop="@dimen/padding_top"
+                android:background="@color/whiteBG"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_top"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/padding_30"
+                    android:paddingRight="@dimen/padding_30">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_prod_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prod_name"
+                            android:inputType="text"
+                            android:padding="@dimen/text_padding"
+                            android:textColorHint="@color/colorPrimary"
+                            android:textSize="@dimen/text_inputs" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:id="@+id/prod_category_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/text_padding"
+                            android:text="@string/category" />
+
+                        <Spinner
+                            android:id="@+id/spinner_prod_category"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/categories"
+                            android:paddingTop="@dimen/padding_top" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/prod_availability"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <CheckBox
+                            android:id="@+id/check_availavility"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/colorPrimary"
+                            android:text="@string/availability" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/condition_item_count_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <LinearLayout
+                            android:id="@+id/condition_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingRight="@dimen/padding_30">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/text_padding"
+                                android:text="@string/condition" />
+
+                            <Spinner
+                                android:id="@+id/spinner_prod_condition"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:entries="@array/condition"
+                                android:paddingTop="@dimen/padding_top" />
+
+                        </LinearLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/text_input_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/padding_30"
+                            android:paddingTop="@dimen/padding_30"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/item_count"
+                                android:inputType="number"
+                                android:padding="@dimen/text_padding"
+                                android:text="@string/count"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/text_inputs" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/exp_date_item_count_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/text_input_exp_date"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingTop="@dimen/text_padding"
+                            android:paddingRight="@dimen/padding_30"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/ic_date_range_black_24dp"
+                                android:drawablePadding="@dimen/text_padding"
+                                android:drawableTint="@color/icon_light"
+                                android:hint="@string/exp_date"
+                                android:inputType="date"
+                                android:padding="@dimen/text_padding"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/text_inputs" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/text_input_exp_date_count"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/padding_30"
+                            android:paddingTop="@dimen/text_padding"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/item_count"
+                                android:inputType="number"
+                                android:padding="@dimen/text_padding"
+                                android:text="@string/count"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/text_inputs" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/add_exp_date_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <ImageView
+                            android:id="@+id/image_view_add_exp_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_add_circle_black_24dp"
+                            android:tint="@color/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/text_padding"
+                            android:text="@string/add_exp_date"
+                            android:textColor="@color/dark_text" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/sold_by_unit_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/text_padding"
+                            android:layout_gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/sold_by" />
+
+                            <RadioGroup
+                                android:id="@+id/radio_group_soldby"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/text_padding">
+
+                                <RadioButton
+                                    android:id="@+id/radio_button_each"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:buttonTint="@color/colorPrimary"
+                                    android:checked="true"
+                                    android:text="@string/each"
+                                    android:paddingRight="@dimen/text_padding"/>
+
+                                <RadioButton
+                                    android:id="@+id/radio_button_weight"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:buttonTint="@color/colorPrimary"
+                                    android:text="@string/weight" />
+
+                            </RadioGroup>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/unit_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/padding_30">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/text_padding"
+                                android:text="@string/unit" />
+
+                            <Spinner
+                                android:id="@+id/spinner_unit"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:entries="@array/unit"
+                                android:paddingTop="@dimen/padding_top" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
