@@ -8,10 +8,12 @@
     <string name="edit_prod">Edit product</string>
     <string name="add_service">Add services</string>
     <string name="edit_services">Edit services</string>
-    <string name="add_employee">Add Employee</string>
+    <string name="add_employee">Add employee</string>
     <string name="edit_employee">Edit Employee</string>
-    <string name="add_category">Add Category</string>
-    <string name="edit_category">Edit Category</string>
+    <string name="add_category">Add category</string>
+    <string name="edit_category">Edit category</string>
+    <string name="add_disc">Add discount</string>
+    <string name="edit_disc">Edit discount</string>
     <string name="inventory">Inventory</string>
     <string name="variants">Variants</string>
     <string name="representation_pos">Representation on POS</string>
@@ -64,9 +66,18 @@
     <string name="cashier">Cashier</string>
     <string name="add_pincode">ADD PIN CODE</string>
 
+
+    <!-- discounts strings-->
+
     <string name="disc">Discounts</string>
     <string name="disc_name">Discount Name</string>
+    <string name="disc_code">Discount Code</string>
+    <string name="type">Type</string>
+    <string name="percentage">Percentage</string>
+    <string name="amount">Amount</string>
     <string name="value">Value</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
 
     <string name="in_stock">In Stock</string>
     <string name="rop">ROP</string>
