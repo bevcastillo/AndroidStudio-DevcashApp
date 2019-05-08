@@ -51,7 +51,7 @@
 
     <string name="disc">Discounts</string>
     <string name="disc_name">Discount Name</string>
-    <string name="vaue">Value</string>
+    <string name="value">Value</string>
 
     <string name="in_stock">In Stock</string>
     <string name="rop">ROP</string>
@@ -118,6 +118,16 @@
         <item>kilograms</item>
         <item>meters</item>
         <item>grams</item>
+    </string-array>
+
+    <string-array name="discount">
+        <item>No discount</item>
+        <item>Create discount</item>
+        <item>Discount 1</item>
+        <item>Discount 2</item>
+        <item>Discount 3</item>
+        <item>Discount 4</item>
+        <item>Discount 5</item>
     </string-array>
 
 </resources>
