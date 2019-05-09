@@ -99,7 +99,7 @@ public class DashboardActivity extends AppCompatActivity
                 fragment = new InventoryFragment();
                 break;
             case R.id.nav_employee:
-                Toast.makeText(this, "Employee", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Employees", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_reports:
                 fragment = new ReportsFragment();
