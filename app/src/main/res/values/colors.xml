@@ -6,7 +6,9 @@
 
     <!-- bg colors -->
     <color name="whiteBG">#FAFAFA</color>
-    <color name="whiteDarker">#EBF0F3</color>
+    <color name="whiteDarker">#F5F5F5</color>
+    <color name="whiteDark">#F0F0F0</color>
+    <color name="grainsboro">#DCDCDC</color>
 
     <!-- other colors used -->
     <color name="blue_link">#0033CC</color>

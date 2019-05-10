@@ -35,7 +35,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         builder.setPositiveButton("LEAVE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                AddCategoryActivity.super.onBackPressed();
+                finish();
             }
         });
 
@@ -46,5 +46,14 @@ public class AddCategoryActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            onBackPressed();
+            return true;
+        }else
+        return super.onOptionsItemSelected(item);
     }
 }

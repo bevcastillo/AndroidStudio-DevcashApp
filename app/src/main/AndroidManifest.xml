@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".NotificationsActivity"></activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings"
+            android:screenOrientation="landscape"/>
+        <activity
             android:name=".AddDiscountActivity"
             android:label="@string/add_disc"
             android:screenOrientation="landscape" />
@@ -58,9 +64,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="landscape">
-        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

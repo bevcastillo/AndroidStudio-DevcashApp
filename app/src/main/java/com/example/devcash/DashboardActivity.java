@@ -119,7 +119,8 @@ public class DashboardActivity extends AppCompatActivity
                 fragment = new HelpCenterFragment();
                 break;
             case R.id.nav_settings:
-                fragment = new SettingsFragment();
+                Intent tosettings = new Intent(DashboardActivity.this, SettingsActivity.class);
+                startActivity(tosettings);
                 break;
         }
 

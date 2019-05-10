@@ -127,6 +127,10 @@
     <string name="count">0</string>
     <string name="money">P 0.00</string>
 
+    <!-- search strings -->
+    <string name="search">Search..</string>
+    <string name="search_settings">Search for settings..</string>
+
 
     <!-- array strings -->
     <string-array name="categories">
