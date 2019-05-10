@@ -43,7 +43,7 @@
     <!-- Add products strings-->
     <string name="prod_name">Product Name</string>
     <string name="category">Category</string>
-    <string name="availability">This item isa available for sale.</string>
+    <string name="availability">This item is available for sale.</string>
     <string name="condition">Condition</string>
     <string name="item_count">Item count</string>
     <string name="exp_date">Expiration Date</string>
@@ -79,6 +79,9 @@
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
 
+    <!-- category strings-->
+    <string name="category_name">Category Name</string>
+
     <string name="in_stock">In Stock</string>
     <string name="rop">ROP</string>
 
@@ -110,6 +113,8 @@
     <string name="dashboard">Dashboard</string>
     <string name="sales">Sales</string>
     <string name="inventory_title">Inventory</string>
+    <string name="products">Products</string>
+    <string name="services">Services</string>
     <string name="discounts">Discounts</string>
     <string name="categories">Category</string>
     <string name="notification">Notification</string>

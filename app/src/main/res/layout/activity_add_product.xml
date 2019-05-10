@@ -106,13 +106,14 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical"
+                            android:paddingTop="@dimen/padding_30"
                             android:paddingRight="@dimen/padding_30">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="@dimen/text_padding"
-                                android:text="@string/condition" />
+                                android:text="@string/condition"
+                                android:textSize="@dimen/small_title" />
 
                             <Spinner
                                 android:id="@+id/spinner_prod_condition"
@@ -283,7 +284,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="@dimen/text_padding"
+                                android:padding="@dimen/small_title"
                                 android:text="@string/unit" />
 
                             <Spinner
@@ -392,7 +393,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="@dimen/text_padding"
+                                android:padding="@dimen/small_title"
                                 android:text="@string/disc_name" />
 
                             <Spinner

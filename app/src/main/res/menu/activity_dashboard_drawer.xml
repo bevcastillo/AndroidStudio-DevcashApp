@@ -17,6 +17,18 @@
             android:icon="@drawable/ic_store_black_24dp"
             android:title="@string/inventory" />
         <item
+            android:id="@+id/nav_products"
+            android:title="@string/products" />
+        <item
+            android:id="@+id/nav_services"
+            android:title="@string/services" />
+        <item
+            android:id="@+id/nav_categories"
+            android:title="@string/category" />
+        <item
+            android:id="@+id/nav_discounts"
+            android:title="@string/discounts" />
+        <item
             android:id="@+id/nav_employee"
             android:icon="@drawable/ic_person_black_24dp"
             android:title="@string/employees" />

@@ -34,14 +34,14 @@ public class DashboardActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -96,10 +96,21 @@ public class DashboardActivity extends AppCompatActivity
                 fragment = new SalesFragment();
                 break;
             case R.id.nav_inventory:
-                fragment = new InventoryFragment();
+                break;
+            case R.id.nav_products:
+                fragment = new ProductsFragment();
+                break;
+            case R.id.nav_services:
+                fragment = new ServicesFragment();
+                break;
+            case R.id.nav_categories:
+                fragment = new CategoriesFragment();
+                break;
+            case R.id.nav_discounts:
+                fragment = new DiscountsFragment();
                 break;
             case R.id.nav_employee:
-                Toast.makeText(this, "Employees", Toast.LENGTH_SHORT).show();
+                fragment = new EmployeesFragment();
                 break;
             case R.id.nav_reports:
                 fragment = new ReportsFragment();
