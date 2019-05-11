@@ -10,11 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".NotificationsActivity"></activity>
+            android:name=".OwnerProfileActivity"
+            android:label="@string/profile"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".SettingsActivity"/>
+        <activity
+            android:name=".NotificationsActivity"
+            android:label="@string/notification"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".SettingsActivity"/>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ADD_UI.AddDiscountActivity"
             android:label="@string/add_disc"

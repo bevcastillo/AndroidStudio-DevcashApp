@@ -22,12 +22,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="9"
         android:textSize="@dimen/text_inputs"
-        android:layout_margin="22dp"
-        android:text="Textview"/>
+        android:layout_margin="20dp"
+        android:text="Textview"
+        android:textColor="@color/dark_text"/>
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:layout_weight="1"
         android:src="@drawable/ic_chevron_right"
         android:tint="@color/icon_light"/>

@@ -131,6 +131,15 @@
     <string name="search">Search..</string>
     <string name="search_settings">Search for settings..</string>
 
+    <!-- settings strings -->
+    <string name="profile">Profile</string>
+    <string name="enterpprise">Enterprise</string>
+    <string name="billing">Billing &amp; Subscription</string>
+    <string name="receipts">Receipts</string>
+    <string name="notifs">Notifications Settings</string>
+    <string name="about">About</string>
+
+
 
     <!-- array strings -->
     <string-array name="categories">

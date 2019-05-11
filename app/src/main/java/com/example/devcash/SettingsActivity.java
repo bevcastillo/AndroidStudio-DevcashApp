@@ -1,5 +1,7 @@
 package com.example.devcash;
 
+import android.content.Intent;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -72,6 +74,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Toast.makeText(getApplicationContext(), "You have clicked " + view.getTag(), Toast.LENGTH_SHORT).show();
+        Intent toprofile = new Intent(SettingsActivity.this, OwnerProfileActivity.class);
+        startActivity(toprofile);
     }
 }
