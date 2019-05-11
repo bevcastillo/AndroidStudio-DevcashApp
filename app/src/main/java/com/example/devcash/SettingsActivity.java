@@ -74,7 +74,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Intent toprofile = new Intent(SettingsActivity.this, EnterpriseActivity.class);
+        Intent toprofile = new Intent(SettingsActivity.this, NotificationsSettingsActivity.class);
         startActivity(toprofile);
     }
 }

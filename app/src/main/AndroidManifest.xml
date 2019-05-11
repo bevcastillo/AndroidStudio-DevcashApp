@@ -10,10 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".NotificationsSettingsActivity"
+            android:label="@string/notifs_settings"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".SettingsActivity"></activity>
+        <activity
             android:name=".EnterpriseActivity"
             android:label="@string/enterpprise"
             android:parentActivityName=".SettingsActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".OwnerProfileActivity"
             android:label="@string/profile"

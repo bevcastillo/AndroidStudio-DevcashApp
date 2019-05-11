@@ -138,6 +138,7 @@
     <string name="receipts">Receipts</string>
     <string name="notifs">Notifications Settings</string>
     <string name="about">About</string>
+    <string name="notifs_settings">Notificatons Settings</string>
 
 
     <!-- array strings -->
