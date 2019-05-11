@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.HelpCenterFragment"
+    tools:context=".HelpCenterActivity"
     android:orientation="vertical"
     android:background="@color/whiteDarker">
 
@@ -21,7 +22,7 @@
             <LinearLayout
                 android:id="@+id/searchArticlesLayout"
                 android:layout_width="match_parent"
-                android:layout_height="163dp"
+                android:layout_height="130dp"
                 android:background="@drawable/help_linear_bg"
                 android:orientation="vertical"
                 android:padding="10dp">
@@ -30,7 +31,7 @@
                     android:layout_width="650dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="85dp"
+                    android:layout_marginTop="50dp"
                     android:layout_marginBottom="10dp"
                     android:background="@color/whiteBG"
                     android:drawableLeft="@drawable/ic_search_black_24dp"

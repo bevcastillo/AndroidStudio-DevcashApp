@@ -1,18 +1,22 @@
 package com.example.devcash;
 
+import java.io.Serializable;
+
 public class EnterpriseList {
 
     private String enterpriseTitle, enterpriseDetails;
+    private int icon;
 
     //constructor
 
-    public EnterpriseList(String enterpriseTitle, String enterpriseDetails) {
+    public EnterpriseList(String enterpriseTitle, String enterpriseDetails, int icon) {
         super();
         this.enterpriseTitle = enterpriseTitle;
         this.enterpriseDetails = enterpriseDetails;
+        this.icon = icon;
     }
 
-    //getters and setters
+    //setters and getters
 
     public String getEnterpriseTitle() {
         return enterpriseTitle;
@@ -28,5 +32,13 @@ public class EnterpriseList {
 
     public void setEnterpriseDetails(String enterpriseDetails) {
         this.enterpriseDetails = enterpriseDetails;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 }

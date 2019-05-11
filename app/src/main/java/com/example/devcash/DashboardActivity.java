@@ -18,11 +18,11 @@ import android.widget.Toast;
 import com.example.devcash.Fragments.CategoriesFragment;
 import com.example.devcash.Fragments.DiscountsFragment;
 import com.example.devcash.Fragments.EmployeesFragment;
-import com.example.devcash.Fragments.HelpCenterFragment;
 import com.example.devcash.Fragments.ProductsFragment;
 import com.example.devcash.Fragments.ReportsFragment;
 import com.example.devcash.Fragments.SalesFragment;
 import com.example.devcash.Fragments.ServicesFragment;
+import com.example.devcash.Settings_UI.SettingsActivity;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,6 +59,7 @@ public class DashboardActivity extends AppCompatActivity
     }
 
     @Override
+
     public void onBackPressed() {
         drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -71,7 +72,7 @@ public class DashboardActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.dashboard, menu);
+//        getMenuInflater().inflate(R.menu.dashboard, menu);
         return true;
     }
 
@@ -83,9 +84,9 @@ public class DashboardActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -122,7 +123,8 @@ public class DashboardActivity extends AppCompatActivity
                 fragment = new ReportsFragment();
                 break;
             case R.id.nav_help:
-                fragment = new HelpCenterFragment();
+                Intent toHelp = new Intent(DashboardActivity.this, HelpCenterActivity.class);
+                startActivity(toHelp);
                 break;
             case R.id.nav_settings:
                 Intent tosettings = new Intent(DashboardActivity.this, SettingsActivity.class);

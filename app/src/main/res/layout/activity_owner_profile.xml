@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OwnerProfileActivity"
+    tools:context=".Settings_UI.OwnerProfileActivity"
     android:orientation="vertical"
     android:background="@color/whiteBG"
     android:padding="@dimen/text_padding">
@@ -13,6 +13,7 @@
         android:id="@+id/listview_myprofile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/text_padding"
         android:dividerHeight="1dp"/>
 
 </LinearLayout>

@@ -1,7 +1,6 @@
-package com.example.devcash;
+package com.example.devcash.Settings_UI;
 
 import android.content.Intent;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,7 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.devcash.AboutActivity;
 import com.example.devcash.CustomAdapters.SettingsAdapter;
+import com.example.devcash.NotificationsSettingsActivity;
+import com.example.devcash.R;
+import com.example.devcash.SettingsList;
 
 import java.util.ArrayList;
 
@@ -102,7 +105,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 startActivity(notifications);
                 break;
             case 6:
-                Toast.makeText(this, "You have clicked About", Toast.LENGTH_SHORT).show();
+                Intent about = new Intent(SettingsActivity.this, AboutActivity.class);
+                startActivity(about);
                 break;
         }
 

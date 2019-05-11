@@ -139,6 +139,12 @@
     <string name="notifs">Notifications Settings</string>
     <string name="about">About</string>
     <string name="notifs_settings">Notificatons Settings</string>
+    <string name="logout">LOG OUT</string>
+
+    <!-- about strings -->
+    <string name="title">Devcash for Android</string>
+    <string name="version">Version</string>
+    <string name="version_desc">2019.0.0.1.100</string>
 
 
     <!-- array strings -->

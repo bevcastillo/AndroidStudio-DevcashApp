@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.devcash.EnterpriseList;
@@ -53,6 +54,7 @@ public class EnterpriseAdapter extends BaseAdapter {
             handler = new EnterpriseHandler();
             handler.enterprise_title = (TextView) convertView.findViewById(R.id.enterprise_title);
             handler.enterprise_details = (TextView) convertView.findViewById(R.id.enterprise_details);
+            handler.icon = (ImageView) convertView.findViewById(R.id.enterprise_icon);
             convertView.setTag(handler);
         }else
             handler = (EnterpriseHandler) convertView.getTag();
@@ -60,6 +62,7 @@ public class EnterpriseAdapter extends BaseAdapter {
         //fill the view elements
         handler.enterprise_title.setText(enterpriselist.get(position).getEnterpriseTitle());
         handler.enterprise_details.setText(enterpriselist.get(position).getEnterpriseDetails());
+        handler.icon.setImageResource(enterpriselist.get(position).getIcon());
 
         return convertView;
     }
@@ -67,5 +70,6 @@ public class EnterpriseAdapter extends BaseAdapter {
     //create a static class to handle Enterprise layout
     static class EnterpriseHandler{
         TextView enterprise_title, enterprise_details;
+        ImageView icon;
     }
 }

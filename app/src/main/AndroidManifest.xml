@@ -10,26 +10,35 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".NotificationsSettingsActivity"
-            android:label="@string/notifs_settings"
-            android:screenOrientation="landscape"
-            android:parentActivityName=".SettingsActivity"></activity>
+            android:name=".HelpCenterActivity"
+            android:label="@string/help_center"
+            android:screenOrientation="landscape"></activity>
         <activity
-            android:name=".EnterpriseActivity"
-            android:label="@string/enterpprise"
-            android:parentActivityName=".SettingsActivity"
+            android:name=".AboutActivity"
+            android:label="@string/about"
+            android:parentActivityName=".Settings_UI.SettingsActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".OwnerProfileActivity"
+            android:name=".NotificationsSettingsActivity"
+            android:label="@string/notifs_settings"
+            android:parentActivityName=".Settings_UI.SettingsActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Settings_UI.EnterpriseActivity"
+            android:label="@string/enterpprise"
+            android:parentActivityName=".Settings_UI.SettingsActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Settings_UI.OwnerProfileActivity"
             android:label="@string/profile"
-            android:parentActivityName=".SettingsActivity"
+            android:parentActivityName=".Settings_UI.SettingsActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".NotificationsActivity"
             android:label="@string/notification"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Settings_UI.SettingsActivity"
             android:label="@string/settings"
             android:screenOrientation="landscape" />
         <activity

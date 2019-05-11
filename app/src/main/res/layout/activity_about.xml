@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AboutActivity"
+    android:orientation="vertical"
+    android:backgroundTint="@color/whiteBG"
+    android:paddingTop="@dimen/padding_30"
+    android:paddingLeft="50dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:textSize="25sp"
+        android:textColor="@color/colorPrimary"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/version"
+        android:layout_marginTop="@dimen/padding_30"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/version_desc"
+        android:layout_marginTop="@dimen/text_padding"
+        android:textColor="@color/dark_text"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Devcash"
+            android:layout_marginTop="@dimen/padding_30"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="and the"
+            android:layout_marginTop="@dimen/padding_30"
+            android:textColor="@color/dark_text"
+            android:paddingLeft="@dimen/text_padding"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Devcash"
+            android:layout_marginTop="@dimen/padding_30"
+            android:textColor="@color/colorPrimary"
+            android:paddingLeft="@dimen/text_padding"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="logos are trademarks of"
+            android:layout_marginTop="@dimen/padding_30"
+            android:textColor="@color/dark_text"
+            android:paddingLeft="@dimen/text_padding"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Devcash Inc."
+            android:layout_marginTop="@dimen/padding_30"
+            android:textColor="@color/colorPrimary"
+            android:paddingLeft="@dimen/text_padding"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="All rights reserved."
+        android:textColor="@color/dark_text"
+        android:paddingTop="@dimen/text_padding"/>
+
+</LinearLayout>
