@@ -73,8 +73,43 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     /// listeners to settings listview
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        SettingsList selectedSettingsList = this.list.get(position);
 
-        Intent toprofile = new Intent(SettingsActivity.this, NotificationsSettingsActivity.class);
-        startActivity(toprofile);
+        int icon = selectedSettingsList.getSettingsicon();
+        String title = selectedSettingsList.getSettingstitle();
+
+        //switch
+        switch (position){
+            case 0:
+                Intent profile = new Intent(SettingsActivity.this, OwnerProfileActivity.class);
+                startActivity(profile);
+                break;
+            case 1:
+                Intent enterpise = new Intent(SettingsActivity.this, EnterpriseActivity.class);
+                startActivity(enterpise);
+                break;
+            case 2:
+                Toast.makeText(this, "You have clicked Password", Toast.LENGTH_SHORT).show();
+                break;
+            case 3:
+                Toast.makeText(this, "You have clicked Billing & Subscription", Toast.LENGTH_SHORT).show();
+                break;
+            case 4:
+                Toast.makeText(this, "You have clicked Receipt", Toast.LENGTH_SHORT).show();
+                break;
+            case 5:
+                Intent notifications = new Intent(SettingsActivity.this, NotificationsSettingsActivity.class);
+                startActivity(notifications);
+                break;
+            case 6:
+                Toast.makeText(this, "You have clicked About", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+
+
+
+//        Intent toprofile = new Intent(SettingsActivity.this, NotificationsSettingsActivity.class);
+//        startActivity(toprofile);
     }
 }
