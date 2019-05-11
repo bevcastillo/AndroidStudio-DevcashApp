@@ -32,10 +32,10 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/profile_icon"
         android:layout_width="0dp"
         android:layout_height="25dp"
         android:layout_weight="1"
-        android:src="@drawable/ic_chevron_right"
-        android:tint="@color/icon_light"/>
+        android:src="@drawable/ic_chevron_right"/>
 
 </LinearLayout>

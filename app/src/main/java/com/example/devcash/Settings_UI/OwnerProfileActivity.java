@@ -1,5 +1,6 @@
 package com.example.devcash.Settings_UI;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.devcash.ChangeNameActivity;
 import com.example.devcash.CustomAdapters.OwnerProfileAdapter;
 import com.example.devcash.OwnerProfileList;
 import com.example.devcash.R;
@@ -32,14 +34,13 @@ public class OwnerProfileActivity extends AppCompatActivity implements AdapterVi
         adapter = new OwnerProfileAdapter(this, list);
 
         //populate the list
-        list.add(new OwnerProfileList("User ID","123456"));
-        list.add(new OwnerProfileList("Name","Mary Jane Doe"));
-        list.add(new OwnerProfileList("Birthdate","April 8, 1980"));
-        list.add(new OwnerProfileList("Gender","Female"));
-        list.add(new OwnerProfileList("Mobile number","+63 906 528 3986"));
-        list.add(new OwnerProfileList("Username","itsmaryjane"));
-        list.add(new OwnerProfileList("Email address","maryjane_doe@gmail.com"));
-        list.add(new OwnerProfileList("DEACTIVATE",""));
+        list.add(new OwnerProfileList("User ID","123456", R.drawable.ic_chevron_right_white));
+        list.add(new OwnerProfileList("Name","Mary Jane Doe", R.drawable.ic_chevron_right));
+        list.add(new OwnerProfileList("Birthdate","April 8, 1980", R.drawable.ic_chevron_right));
+        list.add(new OwnerProfileList("Gender","Female", R.drawable.ic_chevron_right));
+        list.add(new OwnerProfileList("Mobile number","+63 906 528 3986", R.drawable.ic_chevron_right));
+        list.add(new OwnerProfileList("Username","itsmaryjane", R.drawable.ic_chevron_right));
+        list.add(new OwnerProfileList("Email address","maryjane_doe@gmail.com", R.drawable.ic_chevron_right));
 
         //delegate the adapter
         lv.setAdapter(adapter);
@@ -54,13 +55,15 @@ public class OwnerProfileActivity extends AppCompatActivity implements AdapterVi
 
         String title = selectedProfileList.getProfileTitle();
         String details = selectedProfileList.getProfileDetails();
+        int icon = selectedProfileList.getProfileIcon();
 
         switch (position){
             case 0:
                 Toast.makeText(this,"You have clicked User ID.", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
-                Toast.makeText(this,"You have clicked Name.", Toast.LENGTH_SHORT).show();
+                Intent name = new Intent(OwnerProfileActivity.this, ChangeNameActivity.class);
+                startActivity(name);
                 break;
             case 2:
                 Toast.makeText(this,"You have clicked Birthdate.", Toast.LENGTH_SHORT).show();
@@ -76,9 +79,6 @@ public class OwnerProfileActivity extends AppCompatActivity implements AdapterVi
                 break;
             case 6:
                 Toast.makeText(this,"You have clicked Email address.", Toast.LENGTH_SHORT).show();
-                break;
-            case 7:
-                Toast.makeText(this,"You have clicked Logout.", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

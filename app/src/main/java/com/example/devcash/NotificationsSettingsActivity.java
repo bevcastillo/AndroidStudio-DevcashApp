@@ -28,8 +28,8 @@ public class NotificationsSettingsActivity extends AppCompatActivity implements 
         adapter = new NotificationSettingsAdapter(this, list);
 
         //populate the list
-        list.add(new NotificationsSettingsList("Cancelled Transactions","When cashier cancels a purchase transaction."));
-        list.add(new NotificationsSettingsList("Item Condition Change","When inventory checker change the item's condition."));
+        list.add(new NotificationsSettingsList("Cancelled Transactions","Get notifications when cashier cancels a purchase transaction."));
+        list.add(new NotificationsSettingsList("Item Condition Change","Get notifications when inventory checker change the item's condition."));
         list.add(new NotificationsSettingsList("Low Stock Notification","Get notifications on items that are low or out of stock."));
 
         //delagate the adapter

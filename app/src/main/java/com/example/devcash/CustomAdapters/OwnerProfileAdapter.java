@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.devcash.OwnerProfileList;
@@ -51,6 +52,8 @@ public class OwnerProfileAdapter extends BaseAdapter {
             handler = new OwnerProfileHandler();
             handler.profile_title = (TextView) convertView.findViewById(R.id.profile_title);
             handler.profile_details = (TextView) convertView.findViewById(R.id.profile_details);
+            handler.profile_icon = (ImageView) convertView.findViewById(R.id.profile_icon);
+
             convertView.setTag(handler);
         }else
             handler = (OwnerProfileHandler) convertView.getTag();
@@ -58,6 +61,7 @@ public class OwnerProfileAdapter extends BaseAdapter {
         //fill the view elemets
         handler.profile_title.setText(ownerprofilelist.get(position).getProfileTitle());
         handler.profile_details.setText(ownerprofilelist.get(position).getProfileDetails());
+        handler.profile_icon.setImageResource(ownerprofilelist.get(position).getProfileIcon());
 
         return convertView;
     }
@@ -65,5 +69,6 @@ public class OwnerProfileAdapter extends BaseAdapter {
     //create static class to handle Owner Profile layout
     static class OwnerProfileHandler{
         TextView profile_title, profile_details;
+        ImageView profile_icon;
     }
 }

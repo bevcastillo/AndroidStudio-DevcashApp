@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.devcash.AboutActivity;
+import com.example.devcash.ChangePasswordActivity;
 import com.example.devcash.CustomAdapters.SettingsAdapter;
 import com.example.devcash.NotificationsSettingsActivity;
 import com.example.devcash.R;
@@ -41,12 +42,13 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         adapter = new SettingsAdapter(this, list);
 
         //populate the list
-        list.add(new SettingsList(R.drawable.employee, "Profile"));
+        list.add(new SettingsList(R.drawable.employee, "Account"));
         list.add(new SettingsList(R.drawable.store, "Enterprise"));
         list.add(new SettingsList(R.drawable.password, "Password"));
-        list.add(new SettingsList(R.drawable.cash_billing, "Billing & Subscription"));
+        list.add(new SettingsList(R.drawable.cash_billing, "Billing and Subscription"));
         list.add(new SettingsList(R.drawable.receipt, "Receipts"));
         list.add(new SettingsList(R.drawable.notification, "Notifications Settings"));
+        list.add(new SettingsList(R.drawable.terms, "Terms and Conditions"));
         list.add(new SettingsList(R.drawable.info, "About"));
 
         //delegate the adapter
@@ -92,7 +94,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 startActivity(enterpise);
                 break;
             case 2:
-                Toast.makeText(this, "You have clicked Password", Toast.LENGTH_SHORT).show();
+                Intent passw = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
+                startActivity(passw);
                 break;
             case 3:
                 Toast.makeText(this, "You have clicked Billing & Subscription", Toast.LENGTH_SHORT).show();
@@ -105,6 +108,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 startActivity(notifications);
                 break;
             case 6:
+                Toast.makeText(this, "You have clicked Terms & Conditions", Toast.LENGTH_SHORT).show();
+                break;
+            case 7:
                 Intent about = new Intent(SettingsActivity.this, AboutActivity.class);
                 startActivity(about);
                 break;

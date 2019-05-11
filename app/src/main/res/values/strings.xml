@@ -146,6 +146,17 @@
     <string name="version">Version</string>
     <string name="version_desc">2019.0.0.1.100</string>
 
+    <!-- change name strings -->
+    <string name="changename">Name</string>
+    <string name="firstname">First name</string>
+    <string name="middlename">Middle name</string>
+    <string name="lastname">Last name</string>
+
+    <!-- change password strings -->
+    <string name="changepasswtitle">Change password</string>
+    <string name="currentpassw">Current password</string>
+    <string name="newpassw">New Password</string>
+    <string name="verifypassw">Verify password</string>
 
     <!-- array strings -->
     <string-array name="categories">

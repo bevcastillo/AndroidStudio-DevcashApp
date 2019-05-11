@@ -16,6 +16,7 @@
 
     <color name="end_color">#FDEDE8</color>
     <color name="light_orange">#F5A68F</color>
+    <color name="light_gray">#EBF0F3</color>
 
     <!-- text colors-->
     <color name="dark_text">#1B2631</color>

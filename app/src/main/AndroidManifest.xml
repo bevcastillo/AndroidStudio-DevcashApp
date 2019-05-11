@@ -10,9 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ChangePasswordActivity"
+            android:label="@string/changepasswtitle"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".Settings_UI.SettingsActivity"></activity>
+        <activity
+            android:name=".ChangeNameActivity"
+            android:label="@string/changename"
+            android:parentActivityName=".Settings_UI.OwnerProfileActivity"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".HelpCenterActivity"
             android:label="@string/help_center"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".AboutActivity"
             android:label="@string/about"
@@ -30,7 +40,7 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".Settings_UI.OwnerProfileActivity"
-            android:label="@string/profile"
+            android:label="Account"
             android:parentActivityName=".Settings_UI.SettingsActivity"
             android:screenOrientation="landscape" />
         <activity
