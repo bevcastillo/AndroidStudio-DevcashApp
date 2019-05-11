@@ -140,7 +140,6 @@
     <string name="about">About</string>
 
 
-
     <!-- array strings -->
     <string-array name="categories">
         <item>No category</item>
