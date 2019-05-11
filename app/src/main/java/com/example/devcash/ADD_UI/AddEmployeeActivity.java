@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.ADD_UI;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -8,14 +8,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class AddDiscountActivity extends AppCompatActivity {
+import com.example.devcash.R;
+
+public class AddEmployeeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_discount);
+        setContentView(R.layout.activity_add_employee);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -59,7 +62,7 @@ public class AddDiscountActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
-            Toast.makeText(this, "Discount Successfully added.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Employee Successfully added.", Toast.LENGTH_SHORT).show();
             finish();
         }
         return super.onOptionsItemSelected(item);

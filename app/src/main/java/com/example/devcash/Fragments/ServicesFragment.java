@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Fragments;
 
 
 import android.content.Intent;
@@ -11,14 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.devcash.ADD_UI.AddServicesActivity;
+import com.example.devcash.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CategoriesFragment extends Fragment {
+public class ServicesFragment extends Fragment {
 
 
-    public CategoriesFragment() {
+    public ServicesFragment() {
         // Required empty public constructor
     }
 
@@ -27,16 +30,16 @@ public class CategoriesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_services, container, false);
 
         //add floating action button
-        FloatingActionButton categories_fab = view.findViewById(R.id.addcategories_fab);
-        categories_fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton services_fab = view.findViewById(R.id.addservices_fab);
+        services_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // when add fab is pressed, go to add product activity
-                Intent addprod = new Intent(getActivity(), AddCategoryActivity.class);
-                startActivity(addprod);
+                Intent addservices = new Intent(getActivity(), AddServicesActivity.class);
+                startActivity(addservices);
             }
         });
 
@@ -47,6 +50,6 @@ public class CategoriesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getActivity().setTitle("Categories");
+        getActivity().setTitle("Services");
     }
 }

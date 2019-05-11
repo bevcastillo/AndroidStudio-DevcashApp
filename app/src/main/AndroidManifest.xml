@@ -16,23 +16,23 @@
             android:label="@string/settings"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".AddDiscountActivity"
+            android:name=".ADD_UI.AddDiscountActivity"
             android:label="@string/add_disc"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AddCategoryActivity"
+            android:name=".ADD_UI.AddCategoryActivity"
             android:label="@string/add_category"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AddEmployeeActivity"
+            android:name=".ADD_UI.AddEmployeeActivity"
             android:label="@string/add_employee"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AddServicesActivity"
+            android:name=".ADD_UI.AddServicesActivity"
             android:label="@string/add_service"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AddProductActivity"
+            android:name=".ADD_UI.AddProductActivity"
             android:label="@string/add_prod"
             android:screenOrientation="landscape" />
         <activity

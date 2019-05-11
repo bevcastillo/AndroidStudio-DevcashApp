@@ -2,11 +2,8 @@ package com.example.devcash;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
@@ -17,6 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
+
+import com.example.devcash.Fragments.CategoriesFragment;
+import com.example.devcash.Fragments.DiscountsFragment;
+import com.example.devcash.Fragments.EmployeesFragment;
+import com.example.devcash.Fragments.HelpCenterFragment;
+import com.example.devcash.Fragments.ProductsFragment;
+import com.example.devcash.Fragments.ReportsFragment;
+import com.example.devcash.Fragments.SalesFragment;
+import com.example.devcash.Fragments.ServicesFragment;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

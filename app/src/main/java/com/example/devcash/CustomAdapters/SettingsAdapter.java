@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.CustomAdapters;
 
 import android.content.Context;
 import android.media.Image;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.devcash.R;
+import com.example.devcash.SettingsList;
 
 import java.util.ArrayList;
 

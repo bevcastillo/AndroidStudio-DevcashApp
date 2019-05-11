@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Fragments;
 
 
 import android.content.Intent;
@@ -11,14 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.devcash.ADD_UI.AddEmployeeActivity;
+import com.example.devcash.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ServicesFragment extends Fragment {
+public class EmployeesFragment extends Fragment {
 
 
-    public ServicesFragment() {
+    public EmployeesFragment() {
         // Required empty public constructor
     }
 
@@ -27,16 +30,16 @@ public class ServicesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_services, container, false);
+        View view = inflater.inflate(R.layout.fragment_employees, container, false);
 
         //add floating action button
-        FloatingActionButton services_fab = view.findViewById(R.id.addservices_fab);
-        services_fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton emp_fab = view.findViewById(R.id.addemp_fab);
+        emp_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // when add fab is pressed, go to add product activity
-                Intent addservices = new Intent(getActivity(), AddServicesActivity.class);
-                startActivity(addservices);
+                Intent addprod = new Intent(getActivity(), AddEmployeeActivity.class);
+                startActivity(addprod);
             }
         });
 
@@ -47,6 +50,6 @@ public class ServicesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getActivity().setTitle("Services");
+        getActivity().setTitle("Employees");
     }
 }
