@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class AddEmployeeActivity extends AppCompatActivity {
 
@@ -50,10 +51,19 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+
+        int id = item.getItemId();
+
+        //menu item click handling
+        //if back button is clicked
+        if (id == android.R.id.home){
             onBackPressed();
             return true;
-        }else
-            return super.onOptionsItemSelected(item);
+        }else if(id == R.id.action_save){ //if SAVE is clicked
+            Toast.makeText(this, "Employee Successfully added.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 }

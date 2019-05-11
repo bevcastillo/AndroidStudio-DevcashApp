@@ -31,27 +31,21 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         // show Back button in the app bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //////////
 
-//        settings_list.add(new SettingsList(R.drawable.ic_profile, "Profile"));
-//        settings_list.add(new SettingsList(R.drawable.ic_enterprise, "Enterprise"));
-//        settings_list.add(new SettingsList(R.drawable.ic_password, "Password"));
-//        settings_list.add(new SettingsList(R.drawable.ic_money, "Billing & Subscription"));
-//        settings_list.add(new SettingsList(R.drawable.ic_receipt, "Receipts"));
-//        settings_list.add(new SettingsList(R.drawable.ic_notifications, "Notification Settings"));
-//        settings_list.add(new SettingsList(R.drawable.ic_help_black_24dp, "About"));
 
         //instantiate
         lv = (ListView) this.findViewById(R.id.listview_settings);
         adapter = new SettingsAdapter(this, list);
 
         //populate the list
-        list.add(new SettingsList(R.drawable.ic_profile, "Profile"));
-        list.add(new SettingsList(R.drawable.ic_enterprise, "Enterprise"));
-        list.add(new SettingsList(R.drawable.ic_password, "Password"));
-        list.add(new SettingsList(R.drawable.ic_money, "Billing & Subscription"));
-        list.add(new SettingsList(R.drawable.ic_receipt, "Receipts"));
-        list.add(new SettingsList(R.drawable.ic_notifications, "Notification Settings"));
-        list.add(new SettingsList(R.drawable.ic_help_black_24dp, "About"));
+        list.add(new SettingsList(R.drawable.employee, "Profile"));
+        list.add(new SettingsList(R.drawable.store, "Enterprise"));
+        list.add(new SettingsList(R.drawable.password, "Password"));
+        list.add(new SettingsList(R.drawable.cash_billing, "Billing & Subscription"));
+        list.add(new SettingsList(R.drawable.receipt, "Receipts"));
+        list.add(new SettingsList(R.drawable.notification, "Notifications Settings"));
+        list.add(new SettingsList(R.drawable.info, "About"));
 
         //delegate the adapter
         lv.setAdapter(adapter);
@@ -66,6 +60,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         finish();
     }
 
+    ///////
     //handles back button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -76,6 +71,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             return super.onOptionsItemSelected(item);
     }
 
+    /// listeners to settings listview
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
