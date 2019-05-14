@@ -10,10 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".TermsActivity"
+            android:label="@string/terms"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".Settings_UI.SettingsActivity"/>
+        <activity
             android:name=".ChangePasswordActivity"
             android:label="@string/changepasswtitle"
-            android:screenOrientation="landscape"
-            android:parentActivityName=".Settings_UI.SettingsActivity"></activity>
+            android:parentActivityName=".Settings_UI.SettingsActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ChangeNameActivity"
             android:label="@string/changename"

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TermsActivity"
+    android:orientation="vertical"
+    android:background="@color/whiteBG">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_30">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/terms"
+                android:textSize="25sp"
+                android:textColor="@color/dark_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum1"
+                android:textStyle="bold"
+                android:textColor="@color/dark_text"
+                android:layout_marginTop="@dimen/page_title"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum"
+                android:layout_marginTop="@dimen/text_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum2"
+                android:textStyle="bold"
+                android:textColor="@color/dark_text"
+                android:layout_marginTop="@dimen/page_title"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum"
+                android:layout_marginTop="@dimen/text_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum3"
+                android:textStyle="bold"
+                android:textColor="@color/dark_text"
+                android:layout_marginTop="@dimen/page_title"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum"
+                android:layout_marginTop="@dimen/text_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum4"
+                android:textStyle="bold"
+                android:textColor="@color/dark_text"
+                android:layout_marginTop="@dimen/page_title"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum"
+                android:layout_marginTop="@dimen/text_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum5"
+                android:textStyle="bold"
+                android:textColor="@color/dark_text"
+                android:layout_marginTop="@dimen/page_title"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loremipsum"
+                android:layout_marginTop="@dimen/text_padding"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

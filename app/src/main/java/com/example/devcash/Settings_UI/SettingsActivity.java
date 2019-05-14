@@ -15,6 +15,7 @@ import com.example.devcash.CustomAdapters.SettingsAdapter;
 import com.example.devcash.NotificationsSettingsActivity;
 import com.example.devcash.R;
 import com.example.devcash.SettingsList;
+import com.example.devcash.TermsActivity;
 
 import java.util.ArrayList;
 
@@ -108,7 +109,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 startActivity(notifications);
                 break;
             case 6:
-                Toast.makeText(this, "You have clicked Terms & Conditions", Toast.LENGTH_SHORT).show();
+                Intent terms = new Intent(SettingsActivity.this, TermsActivity.class);
+                startActivity(terms);
                 break;
             case 7:
                 Intent about = new Intent(SettingsActivity.this, AboutActivity.class);
