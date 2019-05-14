@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Settings_UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.devcash.CustomAdapters.NotificationSettingsAdapter;
+import com.example.devcash.NotificationsSettingsList;
+import com.example.devcash.R;
 
 import java.util.ArrayList;
 

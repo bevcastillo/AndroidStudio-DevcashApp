@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:background="@color/whiteBG">
+
+    <ImageView
+        android:id="@+id/prod_image"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:scaleType="fitCenter"
+        android:layout_margin="8dp"
+        tools:srcCompat="@tools:sample/avatars[0]"
+        android:layout_gravity="left|center"/>
+
+    <LinearLayout
+        android:id="@+id/itemandstock"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:padding="10sp">
+
+        <TextView
+            android:id="@+id/txtprod_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Item name"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_inputs" />
+
+        <TextView
+            android:id="@+id/txtstock_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stock Count"
+            android:textSize="@dimen/small_title" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="10sp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/txtprod_condition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Condition"
+            android:textSize="@dimen/text_inputs" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="10sp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/txtprod_disc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Discount"
+            android:textSize="@dimen/text_inputs" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center|right"
+        android:paddingRight="@dimen/text_padding">
+
+        <TextView
+            android:id="@+id/txtprod_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="@dimen/text_inputs" />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

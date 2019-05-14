@@ -9,9 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.devcash.ChangePasswordActivity;
 import com.example.devcash.CustomAdapters.SettingsAdapter;
-import com.example.devcash.NotificationsSettingsActivity;
 import com.example.devcash.R;
 import com.example.devcash.SettingsList;
 

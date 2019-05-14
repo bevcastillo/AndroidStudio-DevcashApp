@@ -21,5 +21,6 @@
     <!-- text colors-->
     <color name="dark_text">#1B2631</color>
     <color name="icon_light">#808080</color>
+    <color name="icon_bg">#F0F0F0</color>
 
 </resources>

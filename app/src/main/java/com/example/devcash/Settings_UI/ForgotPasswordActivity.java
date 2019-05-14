@@ -1,13 +1,15 @@
-package com.example.devcash;
+package com.example.devcash.Settings_UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ChangePasswordActivity extends AppCompatActivity {
+import com.example.devcash.R;
+
+public class ForgotPasswordActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_password);
+        setContentView(R.layout.activity_forgot_password);
     }
 }

@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.devcash.Settings_UI.ForgotPasswordActivity;
+
 public class OwnerLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextInputLayout textInputOwnerUsername, textInputOwnerPassw;

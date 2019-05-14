@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:gravity="left|center">
+
+        <ImageView
+            android:id="@+id/service_image"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="left|center"
+            android:layout_margin="8dp"
+            android:scaleType="fitCenter"
+            tools:srcCompat="@tools:sample/avatars[0]" />
+
+        <TextView
+            android:id="@+id/txtservice_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Employee name"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_inputs"
+            android:layout_marginLeft="@dimen/text_padding"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="@dimen/text_padding">
+
+        <TextView
+            android:id="@+id/txtemployee_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_inputs" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingRight="@dimen/text_padding">
+
+        <TextView
+            android:id="@+id/txtemployee_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_inputs" />
+
+    </LinearLayout>
+
+</LinearLayout>

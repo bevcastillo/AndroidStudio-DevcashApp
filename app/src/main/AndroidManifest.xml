@@ -12,15 +12,15 @@
         <activity
             android:name=".Settings_UI.TermsActivity"
             android:label="@string/terms"
-            android:screenOrientation="landscape"
-            android:parentActivityName=".Settings_UI.SettingsActivity"/>
+            android:parentActivityName=".Settings_UI.SettingsActivity"
+            android:screenOrientation="landscape" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name=".Settings_UI.ChangePasswordActivity"
             android:label="@string/changepasswtitle"
             android:parentActivityName=".Settings_UI.SettingsActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ChangeNameActivity"
+            android:name=".Settings_UI.ChangeNameActivity"
             android:label="@string/changename"
             android:parentActivityName=".Settings_UI.OwnerProfileActivity"
             android:screenOrientation="landscape" />
@@ -34,7 +34,7 @@
             android:parentActivityName=".Settings_UI.SettingsActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".NotificationsSettingsActivity"
+            android:name=".Settings_UI.NotificationsSettingsActivity"
             android:label="@string/notifs_settings"
             android:parentActivityName=".Settings_UI.SettingsActivity"
             android:screenOrientation="landscape" />
@@ -86,7 +86,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".Settings_UI.ForgotPasswordActivity"
             android:label="@string/f_password"
             android:parentActivityName=".OwnerLoginActivity"
             android:screenOrientation="landscape" />

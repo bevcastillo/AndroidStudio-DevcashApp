@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.devcash.ChangeNameActivity;
 import com.example.devcash.CustomAdapters.OwnerProfileAdapter;
 import com.example.devcash.OwnerProfileList;
 import com.example.devcash.R;
