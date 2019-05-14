@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".TermsActivity"
+            android:name=".Settings_UI.TermsActivity"
             android:label="@string/terms"
             android:screenOrientation="landscape"
             android:parentActivityName=".Settings_UI.SettingsActivity"/>
@@ -29,7 +29,7 @@
             android:label="@string/help_center"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".AboutActivity"
+            android:name=".Settings_UI.AboutActivity"
             android:label="@string/about"
             android:parentActivityName=".Settings_UI.SettingsActivity"
             android:screenOrientation="landscape" />
