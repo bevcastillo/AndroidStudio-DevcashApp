@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".RefundReceiptActivity"
+            android:label="@string/refund"
+            android:screenOrientation="landscape"></activity>
+        <activity
             android:name=".DetailedReceiptActivity"
             android:label="@string/receipt_detail"
             android:screenOrientation="landscape" />

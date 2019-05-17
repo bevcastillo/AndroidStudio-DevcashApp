@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_refund"
+        android:title="@string/refund"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/send_email"
+        android:title="@string/send_email"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/send_text"
+        android:title="@string/send_text"
+        app:showAsAction="never" />
+
+</menu>

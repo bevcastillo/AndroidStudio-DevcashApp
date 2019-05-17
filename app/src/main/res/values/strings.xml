@@ -214,7 +214,7 @@
     <string name="monthly">monthly</string>
     <string name="prev_payments">Previous payments</string>
     <string name="subscription_type">Subscription type</string>
-    
+
     <string name="new_title">New</string>
     <string name="damaged_title">Damaged</string>
     <string name="lost_title">Lost</string>
@@ -223,6 +223,10 @@
     <string name="tobe_rep">To be replenished</string>
     <string name="expiring_soon">Expiring soon</string>
     <string name="discounted_items">Discounted items</string>
+
+    <string name="refund">Refund</string>
+    <string name="send_email">Send via Email</string>
+    <string name="send_text">Send view SMS</string>
 
 
     <string name="bdate">Birthdate</string>

@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddCategoryActivity;
 import com.example.devcash.R;
@@ -58,5 +59,30 @@ public class CategoriesFragment extends Fragment {
 
         getActivity().setTitle("Categories");
     }
-    
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.refundsettingsmenu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_refund:
+                Toast.makeText(getActivity(),"You have pressed refund menu.", Toast.LENGTH_SHORT).show();
+            case R.id.send_email:
+                Toast.makeText(getActivity(), "You have pressed send via email menu.", Toast.LENGTH_SHORT).show();
+            case R.id.send_text:
+                Toast.makeText(getActivity(), "You have pressed send via SMS", Toast.LENGTH_SHORT).show();
+        }
+
+        return false;
+    }
 }
