@@ -10,6 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".DetailedReceiptActivity"
+            android:label="@string/receipt_detail"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".SalesTransactionActivity" />
+        <activity
             android:name=".Settings_UI.TermsActivity"
             android:label="@string/terms"
             android:parentActivityName=".Settings_UI.SettingsActivity"

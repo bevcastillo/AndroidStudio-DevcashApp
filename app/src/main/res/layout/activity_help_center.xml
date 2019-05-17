@@ -34,7 +34,7 @@
                     android:layout_marginTop="50dp"
                     android:layout_marginBottom="10dp"
                     android:background="@color/whiteBG"
-                    android:drawableLeft="@drawable/ic_search_black_24dp"
+                    android:drawableLeft="@drawable/ic_search"
                     android:drawablePadding="10dp"
                     android:drawableTint="@color/icon_light"
                     android:hint="Search for articles.."

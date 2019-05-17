@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="@dimen/text_padding">
+
+    <ImageView
+        android:id="@+id/settings_icons"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:scaleType="fitCenter"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_receipt"
+        android:tint="@color/icon_light"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/text_padding">
+
+        <TextView
+            android:id="@+id/txtreceipt_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/money_1"
+            android:textSize="@dimen/page_title"
+            android:textColor="@color/dark_text"/>
+
+        <TextView
+            android:id="@+id/txtreceipt_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textColor="@color/dark_text"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/devcash_commission_title"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/count"
+            android:paddingLeft="3dp"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_inputs"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center|right">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/count"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/page_title"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -20,7 +20,7 @@
             android:layout_gravity="left|center"
             android:layout_margin="8dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_local_offer_black_24dp"
+            android:src="@drawable/ic_local_offer"
             android:tint="@color/icon_light"/>
 
         <TextView

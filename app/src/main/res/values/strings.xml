@@ -122,10 +122,33 @@
     <string name="help_center">Help Center</string>
     <string name="employees">Employees</string>
     <string name="reports">Reports</string>
+    <string name="salesrep">Sales Reports</string>
+    <string name="inventoryrep">Inventory Reports</string>
+    <string name="payment_statement">Payment Statement</string>
+    <string name="receipts">Receipts</string>
 
     <!-- numbers -->
     <string name="count">0</string>
     <string name="money">P 0.00</string>
+    <string name="money_1">0.00</string>
+    <string name="date">12/12/2012</string>
+    <string name="time">10:10 AM</string>
+    <string name="devcash_commission_title">Devcash Commission: </string>
+    <string name="receipt_detail">Receipt Details</string>
+    <string name="date_title">Date: </string>
+    <string name="id">#123456</string>
+    <string name="total_title">Total</string>
+    <string name="customer_type">Customer Type</string>
+    <string name="cashier_title">Cashier:</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="discount">Discount</string>
+    <string name="vat">VAT</string>
+    <string name="evat">E-VAT</string>
+    <string name="zerorated">ZERO Rated</string>
+    <string name="dev_commission">Devcash Commission</string>
+    <string name="cash">Cash</string>
+    <string name="change">Change</string>
+    <string name="percent_title">0 %</string>
 
     <!-- search strings -->
     <string name="search">Search..</string>
@@ -135,7 +158,6 @@
     <string name="profile">Profile</string>
     <string name="enterpprise">Enterprise</string>
     <string name="billing">Billing &amp; Subscription</string>
-    <string name="receipts">Receipts</string>
     <string name="notifs">Notifications Settings</string>
     <string name="about">About</string>
     <string name="notifs_settings">Notificatons Settings</string>

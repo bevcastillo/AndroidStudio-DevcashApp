@@ -45,7 +45,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         list.add(new SettingsList(R.drawable.cash_billing, "Billing and Subscription"));
         list.add(new SettingsList(R.drawable.receipt, "Receipts"));
         list.add(new SettingsList(R.drawable.notification, "Notifications Settings"));
-        list.add(new SettingsList(R.drawable.terms, "Terms and Conditions"));
+        list.add(new SettingsList(R.drawable.order, "Terms and Conditions"));
         list.add(new SettingsList(R.drawable.info, "About"));
 
         //delegate the adapter

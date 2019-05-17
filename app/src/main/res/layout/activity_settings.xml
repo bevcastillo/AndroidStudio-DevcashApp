@@ -15,7 +15,7 @@
          android:layout_height="50dp"
          android:layout_gravity="center"
          android:background="@color/grainsboro"
-         android:drawableLeft="@drawable/ic_search_black_24dp"
+         android:drawableLeft="@drawable/ic_search"
          android:drawablePadding="10dp"
          android:drawableTint="@color/icon_light"
          android:hint="@string/search_settings"
