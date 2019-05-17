@@ -214,6 +214,15 @@
     <string name="monthly">monthly</string>
     <string name="prev_payments">Previous payments</string>
     <string name="subscription_type">Subscription type</string>
+    
+    <string name="new_title">New</string>
+    <string name="damaged_title">Damaged</string>
+    <string name="lost_title">Lost</string>
+    <string name="disposedof_title">Disposed of</string>
+
+    <string name="tobe_rep">To be replenished</string>
+    <string name="expiring_soon">Expiring soon</string>
+    <string name="discounted_items">Discounted items</string>
 
 
     <string name="bdate">Birthdate</string>

@@ -120,7 +120,18 @@ public class DashboardActivity extends AppCompatActivity
                 fragment = new EmployeesFragment();
                 break;
             case R.id.nav_reports:
-                fragment = new ReportsFragment();
+                break;
+            case R.id.nav_salesrep:
+
+                break;
+            case R.id.nav_inventoryrep:
+                fragment = new InventoryReportsFragment();
+                break;
+            case R.id.nav_payment:
+                fragment = new PaymentStatementFragment();
+                break;
+            case R.id.nav_receipts:
+                fragment = new AllReceiptsFragment();
                 break;
             case R.id.nav_help:
                 Intent toHelp = new Intent(DashboardActivity.this, HelpCenterActivity.class);
