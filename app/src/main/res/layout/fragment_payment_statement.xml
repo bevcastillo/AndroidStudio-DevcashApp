@@ -108,6 +108,7 @@
                             android:padding="@dimen/text_padding">
 
                             <TextView
+                                android:id="@+id/text_paybill"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:text="@string/pay_now"
@@ -120,6 +121,7 @@
                         </LinearLayout>
                     </LinearLayout>
                     <TextView
+                        android:id="@+id/text_viewbill"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="@string/view_bill"
@@ -222,6 +224,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/text_viewaccountdetails"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="@dimen/padding_30"
