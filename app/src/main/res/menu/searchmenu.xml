@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_disc_spinner"
+        android:title="@string/action_spinner"
+        android:orderInCategory="1"
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_search"
-        android:title="@string/search"
-        android:icon="@drawable/ic_search"
-        app:showAsAction="ifRoom" />
+        android:title="@string/search_title"
+        android:orderInCategory="2"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always" />
 </menu>

@@ -230,6 +230,8 @@
 
 
     <string name="bdate">Birthdate</string>
+    <string name="search_title">Search</string>
+    <string name="action_spinner">Discount Spinner</string>
 
 
     <!-- array strings -->
