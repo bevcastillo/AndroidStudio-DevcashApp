@@ -198,6 +198,23 @@
         congue vulputate. Sed ut porttitor mi. Cras volutpat mattis lacus non faucibus. Cras ac
         risus egestas, laoreet lacus vel, feugiat lectus. Proin tempor, velit ac pulvinar tincidunt,
         enim ex volutpat velit, sed scelerisque ligula ipsum at dolor. </string>
+    <string name="note">Note:</string>
+    <string name="note1">* Amount to pay includes your current balance from your latest bill, plus
+        any other unpaid overdue balances.</string>
+    <string name="note2">* For your current billed amount for the month, please check your bill statement.</string>
+    <string name="note3">* Ignore this if you have already paid your bill.</string>
+    <string name="view_bill">View current bill</string>
+    <string name="pay_now">Pay now</string>
+    <string name="as_of">As of today,</string>
+    <string name="due_on">Due on</string>
+    <string name="amount_pay">Amount to pay</string>
+    <string name="subscription_details">Subscription details</string>
+    <string name="view_account">View account details</string>
+    <string name="subscription_for">Subscription for</string>
+    <string name="monthly">monthly</string>
+    <string name="prev_payments">Previous payments</string>
+    <string name="subscription_type">Subscription type</string>
+
 
     <string name="bdate">Birthdate</string>
 
