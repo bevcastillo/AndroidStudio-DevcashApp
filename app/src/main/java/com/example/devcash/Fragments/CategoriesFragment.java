@@ -16,17 +16,33 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddCategoryActivity;
+import com.example.devcash.CategoryList;
+import com.example.devcash.CustomAdapters.CagtegorylistAdapter;
 import com.example.devcash.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CategoriesFragment extends Fragment {
+
+    ListView lv;
+    ArrayList<CategoryList> list = new ArrayList<CategoryList>();
+    //adapter
+    CagtegorylistAdapter adapter;
+
+
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -49,6 +65,7 @@ public class CategoriesFragment extends Fragment {
                 startActivity(addprod);
             }
         });
+
 
         return view;
     }

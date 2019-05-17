@@ -3,7 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.DiscountsFragment">
+    tools:context=".Fragments.DiscountsFragment"
+    android:padding="@dimen/text_padding">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="1dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/adddiscounts_fab"

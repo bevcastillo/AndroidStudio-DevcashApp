@@ -8,11 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.devcash.R;
 
 public class AddCategoryActivity extends AppCompatActivity {
+
+    EditText editTextCatName;
+    Button btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +26,18 @@ public class AddCategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_category);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //
+        editTextCatName = (EditText) findViewById(R.id.text_input_category_name);
+        //add listeners to the buttons
+        btnAdd = (Button) findViewById(R.id.btn_adddisc);
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
