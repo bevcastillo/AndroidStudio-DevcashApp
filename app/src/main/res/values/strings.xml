@@ -236,6 +236,19 @@
     <string name="choose_photo">Choose photo</string>
     <string name="take_photo">Take photo</string>
 
+    <string name="payment_info_title">Payment Info</string>
+    <string name="statement_for">Your statement for</string>
+    <string name="beg_balance">Beginning Balance</string>
+    <string name="prev_statement_balance">Previous Statement Balance</string>
+    <string name="devcash_fees">Devcash Fees</string>
+    <string name="close_balance">Closing Balance</string>
+    <string name="statement_tobe_paid">Statement to be paid on or before</string>
+    <string name="premium_fee">Premium Fee</string>
+    <string name="billing_for">Billing Summary for</string>
+    <string name="pay_id">Payment ID</string>
+    <string name="basic_comm">Basic/Commission Fee</string>
+    <string name="prem_fee">Premium Fee</string>
+
 
     <!-- array strings -->
     <string-array name="categories">

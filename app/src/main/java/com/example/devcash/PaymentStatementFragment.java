@@ -57,7 +57,7 @@ public class PaymentStatementFragment extends Fragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.text_viewbill:
-                Intent detailedreceipt = new Intent(getActivity(), DetailedReceiptActivity.class);
+                Intent detailedreceipt = new Intent(getActivity(), PaymentInfoActivity.class);
                 startActivity(detailedreceipt);
                 break;
             case R.id.text_viewaccountdetails:

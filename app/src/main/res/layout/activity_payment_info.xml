@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PaymentInfoActivity"
+    android:background="@color/whiteDark"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/paystatement_card"
+                android:layout_width="650dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/text_padding"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="@dimen/padding_top"
+                android:background="@color/whiteBG"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="647dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_30"
+                    android:layout_marginBottom="@dimen/padding_30"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/padding_30"
+                    android:paddingRight="@dimen/padding_30"
+                    android:gravity="center">
+
+                    <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/text_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/pay_id"
+                        android:textColor="@color/dark_text"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/id"
+                        android:gravity="right"
+                        android:textColor="@color/dark_text"/>
+
+                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/text_padding">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/statement_for"
+                            android:textColor="@color/dark_text" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/date"
+                            android:gravity="right"
+                            android:textColor="@color/dark_text"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Divider"
+                        android:layout_marginTop="@dimen/top"
+                        android:layout_marginBottom="@dimen/top"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/beg_balance"
+                        android:paddingTop="@dimen/padding_top"
+                        android:textColor="@color/dark_text"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/prev_statement_balance"
+                            android:paddingTop="@dimen/padding_top"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/money"
+                            android:gravity="right|center"
+                            android:textColor="@color/dark_text"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/subtotal"
+                            android:paddingTop="@dimen/padding_top"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/money"
+                            android:gravity="right|center"
+                            android:textColor="@color/dark_text"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Divider"
+                        android:layout_marginTop="@dimen/top"
+                        android:layout_marginBottom="@dimen/top"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/devcash_fees"
+                        android:paddingTop="@dimen/padding_top"
+                        android:textColor="@color/dark_text"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/basic_comm"
+                            android:paddingTop="@dimen/padding_top"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/money"
+                            android:gravity="right|center"
+                            android:textColor="@color/dark_text"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/prem_fee"
+                            android:paddingTop="@dimen/padding_top"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/money"
+                            android:gravity="right|center"
+                            android:textColor="@color/dark_text"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Divider"
+                        android:layout_marginTop="@dimen/top"
+                        android:layout_marginBottom="@dimen/top"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/subtotal"
+                            android:paddingTop="@dimen/padding_top"
+                            android:textColor="@color/dark_text"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/money"
+                            android:gravity="right|center"
+                            android:textColor="@color/dark_text"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Divider"
+                        android:layout_marginTop="@dimen/top"
+                        android:layout_marginBottom="@dimen/top"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/statement_tobe_paid"
+                            android:textColor="@color/dark_text"
+                            android:textSize="@dimen/text_inputs"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/date"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/dark_text"
+                            android:textSize="@dimen/text_inputs"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/money"
+                            android:gravity="right"
+                            android:textColor="@color/dark_text"
+                            android:textSize="@dimen/page_title"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pay_now"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/whiteBG"
+                        android:layout_marginTop="@dimen/padding_30"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
