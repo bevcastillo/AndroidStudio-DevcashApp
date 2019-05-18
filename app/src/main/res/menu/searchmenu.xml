@@ -7,7 +7,7 @@
         android:title="@string/action_spinner"
         android:orderInCategory="1"
         app:actionViewClass="android.widget.Spinner"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_search"

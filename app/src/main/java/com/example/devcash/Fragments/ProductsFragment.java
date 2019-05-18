@@ -8,8 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.example.devcash.ADD_UI.AddProductActivity;
 import com.example.devcash.R;
@@ -18,13 +22,20 @@ import com.example.devcash.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProductsFragment extends Fragment {
+public class ProductsFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
 
     public ProductsFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //inflate the action menu
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +63,36 @@ public class ProductsFragment extends Fragment {
         getActivity().setTitle("Products");
     }
 
+    //handles the search menu
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.searchmenu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search..");
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return true;
+    }
 }
