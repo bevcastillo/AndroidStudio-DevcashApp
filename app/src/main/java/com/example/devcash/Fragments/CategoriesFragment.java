@@ -1,48 +1,24 @@
 package com.example.devcash.Fragments;
 
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddCategoryActivity;
-import com.example.devcash.CategoryList;
-import com.example.devcash.CustomAdapters.CagtegorylistAdapter;
 import com.example.devcash.R;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CategoriesFragment extends Fragment {
-
-    ListView lv;
-    ArrayList<CategoryList> list = new ArrayList<CategoryList>();
-    //adapter
-    CagtegorylistAdapter adapter;
-
-
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -77,29 +53,29 @@ public class CategoriesFragment extends Fragment {
         getActivity().setTitle("Categories");
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setHasOptionsMenu(true);
+//    }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.refundsettingsmenu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.action_refund:
-                Toast.makeText(getActivity(),"You have pressed refund menu.", Toast.LENGTH_SHORT).show();
-            case R.id.send_email:
-                Toast.makeText(getActivity(), "You have pressed send via email menu.", Toast.LENGTH_SHORT).show();
-            case R.id.send_text:
-                Toast.makeText(getActivity(), "You have pressed send via SMS", Toast.LENGTH_SHORT).show();
-        }
-
-        return false;
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.refundsettingsmenu, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        switch (item.getItemId()){
+//            case R.id.action_refund:
+//                Toast.makeText(getActivity(),"You have pressed refund menu.", Toast.LENGTH_SHORT).show();
+//            case R.id.send_email:
+//                Toast.makeText(getActivity(), "You have pressed send via email menu.", Toast.LENGTH_SHORT).show();
+//            case R.id.send_text:
+//                Toast.makeText(getActivity(), "You have pressed send via SMS", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        return false;
+//    }
 }

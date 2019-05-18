@@ -193,7 +193,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_30"
-                android:layout_marginBottom="@dimen/padding_top"
+                android:layout_marginBottom="@dimen/padding_30"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/padding_30"
                 android:paddingRight="@dimen/padding_30">
@@ -212,19 +212,74 @@
                 android:paddingTop="@dimen/padding_top"
                 android:gravity="center|left">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Upload image"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@color/whiteDarker"
+                    android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/emp_image"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_add_a_photo"
-                    android:tint="@color/icon_light"
-                    android:paddingTop="@dimen/text_padding"
-                    android:paddingLeft="@dimen/text_padding"/>
+                    <ImageView
+                        android:id="@+id/emp_photo"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/ic_photo"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/padding_30">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="@dimen/text_padding">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_folder"
+                            android:tint="@color/icon_light"/>
+                        <TextView
+                            android:id="@+id/txt_empchoosephoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Choose photo"
+                            android:textAllCaps="true"
+                            android:textColor="@color/dark_text"
+                            android:paddingLeft="@dimen/text_padding"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="@dimen/text_padding">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_camera"
+                            android:tint="@color/icon_light"/>
+                        <TextView
+                            android:id="@+id/txt_emptakephoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Take photo"
+                            android:textAllCaps="true"
+                            android:textColor="@color/dark_text"
+                            android:paddingLeft="@dimen/text_padding"/>
+                    </LinearLayout>
+
+
+                </LinearLayout>
 
             </LinearLayout>
 

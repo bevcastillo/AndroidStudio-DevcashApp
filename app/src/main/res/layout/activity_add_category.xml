@@ -57,16 +57,6 @@
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
-            <Button
-                android:id="@+id/btn_adddisc"
-                android:layout_width="650dp"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:text="SAVE"
-                android:textColor="@color/whiteBG"
-                android:layout_marginTop="@dimen/text_padding"/>
-
         </LinearLayout>
     </ScrollView>
 

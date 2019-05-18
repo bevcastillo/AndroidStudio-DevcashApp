@@ -43,7 +43,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         list.add(new SettingsList(R.drawable.store, "Enterprise"));
         list.add(new SettingsList(R.drawable.password, "Password"));
         list.add(new SettingsList(R.drawable.cash_billing, "Billing and Subscription"));
-        list.add(new SettingsList(R.drawable.receipt, "Receipts"));
         list.add(new SettingsList(R.drawable.notification, "Notifications Settings"));
         list.add(new SettingsList(R.drawable.order, "Terms and Conditions"));
         list.add(new SettingsList(R.drawable.info, "About"));
@@ -98,17 +97,14 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 Toast.makeText(this, "You have clicked Billing & Subscription", Toast.LENGTH_SHORT).show();
                 break;
             case 4:
-                Toast.makeText(this, "You have clicked Receipt", Toast.LENGTH_SHORT).show();
-                break;
-            case 5:
                 Intent notifications = new Intent(SettingsActivity.this, NotificationsSettingsActivity.class);
                 startActivity(notifications);
                 break;
-            case 6:
+            case 5:
                 Intent terms = new Intent(SettingsActivity.this, TermsActivity.class);
                 startActivity(terms);
                 break;
-            case 7:
+            case 6:
                 Intent about = new Intent(SettingsActivity.this, AboutActivity.class);
                 startActivity(about);
                 break;
