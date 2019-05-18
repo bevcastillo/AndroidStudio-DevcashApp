@@ -115,7 +115,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    //handles opening the camera
+    //handles opening the camera and gallery
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -233,6 +233,9 @@
     <string name="search_title">Search</string>
     <string name="action_spinner">Discount Spinner</string>
 
+    <string name="choose_photo">Choose photo</string>
+    <string name="take_photo">Take photo</string>
+
 
     <!-- array strings -->
     <string-array name="categories">

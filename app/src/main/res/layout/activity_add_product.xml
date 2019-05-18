@@ -508,7 +508,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/emp_image_card"
+                android:id="@+id/prod_image_card"
                 android:layout_width="650dp"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
@@ -533,33 +533,27 @@
                         android:textColor="@color/colorPrimary"/>
 
                     <LinearLayout
-                        android:id="@+id/discount_value_layout"
+                        android:id="@+id/prod_value_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingTop="@dimen/padding_top"
+                        android:layout_marginTop="@dimen/padding_top"
                         android:gravity="center|left">
+
+
+                        <ImageView
+                            android:id="@+id/prod_photo"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:src="@drawable/ic_photo"
+                            android:background="@color/whiteDarker"
+                            android:maxHeight="@dimen/text_padding"
+                            android:maxWidth="@dimen/text_padding"/>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:background="@color/whiteDarker"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:id="@+id/emp_photo"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/ic_photo"
-                                android:tint="@color/icon_light" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/padding_30">
 
@@ -579,7 +573,7 @@
                                     android:id="@+id/txt_prodchoosephoto"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Choose photo"
+                                    android:text="@string/choose_photo"
                                     android:textAllCaps="true"
                                     android:textColor="@color/dark_text"
                                     android:paddingLeft="@dimen/text_padding"/>
@@ -601,23 +595,15 @@
                                     android:id="@+id/txt_prodtakephoto"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Take photo"
+                                    android:text="@string/take_photo"
                                     android:textAllCaps="true"
                                     android:textColor="@color/dark_text"
                                     android:paddingLeft="@dimen/text_padding"/>
                             </LinearLayout>
-
-
                         </LinearLayout>
-
                     </LinearLayout>
-
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
-
-
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
