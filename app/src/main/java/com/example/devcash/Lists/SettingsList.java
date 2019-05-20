@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Lists;
 
 public class SettingsList {
 

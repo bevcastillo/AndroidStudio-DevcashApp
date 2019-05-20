@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.devcash.ADD_UI.AddCategoryActivity;
@@ -55,6 +56,15 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
             }
         });
 
+        //handles listview
+        ListView lvcategories = view.findViewById(R.id.categorylist_listview);
+
+        //set adapter
+        // set click listener
+
+        //show no data found text when listview is empty
+        lvcategories.setEmptyView(view.findViewById(R.id.emptycategory_face));
+        lvcategories.setEmptyView(view.findViewById(R.id.empty_category));
 
         return view;
     }

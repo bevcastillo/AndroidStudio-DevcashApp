@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.devcash.ADD_UI.AddProductActivity;
@@ -53,6 +54,16 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                 startActivity(addprod);
             }
         });
+
+        //handles listview
+        ListView lvproducts = view.findViewById(R.id.productlist_listview);
+
+        //set adapter
+        // set click listener
+
+        //show no data found text when listview is empty
+        lvproducts.setEmptyView(view.findViewById(R.id.emptyproduct_face));
+        lvproducts.setEmptyView(view.findViewById(R.id.empty_product));
         return view;
     }
 

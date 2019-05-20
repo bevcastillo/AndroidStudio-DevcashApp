@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.devcash.ADD_UI.AddServicesActivity;
@@ -53,6 +54,16 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                 startActivity(addservices);
             }
         });
+
+        //handles listview
+        ListView lvservices = view.findViewById(R.id.serviceslist_listview);
+
+        //set adapter
+        // set click listener
+
+        //show no data found text when listview is empty
+        lvservices.setEmptyView(view.findViewById(R.id.emptyservices_face));
+        lvservices.setEmptyView(view.findViewById(R.id.empty_services));
 
         return view;
     }

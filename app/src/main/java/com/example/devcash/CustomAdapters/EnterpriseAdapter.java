@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.devcash.EnterpriseList;
+import com.example.devcash.Lists.EnterpriseList;
 import com.example.devcash.R;
 
 import java.util.ArrayList;

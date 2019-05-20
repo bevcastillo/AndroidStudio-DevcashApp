@@ -249,6 +249,21 @@
     <string name="basic_comm">Basic/Commission Fee</string>
     <string name="prem_fee">Premium Fee</string>
 
+    <string name="nodata_categories">Sorry, there are no categories found.\nPlease click (+)
+        to start adding categories.</string>
+
+    <string name="nodata_product">Sorry, there are no products found.\nPlease click (+)
+        to start adding products.</string>
+
+    <string name="nodata_services">Sorry, there are no services found.\nPlease click (+)
+        to start adding services.</string>
+
+    <string name="nodata_discounts">Sorry, there are no discounts found.\nPlease click (+)
+        to start adding discounts.</string>
+
+    <string name="nodata_employees">Sorry, there are no employees found.\nPlease click (+)
+        to start adding employees.</string>
+
 
     <!-- array strings -->
     <string-array name="categories">

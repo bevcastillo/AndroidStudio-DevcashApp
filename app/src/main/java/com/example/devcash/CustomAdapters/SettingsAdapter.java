@@ -1,7 +1,6 @@
 package com.example.devcash.CustomAdapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.devcash.R;
-import com.example.devcash.SettingsList;
+import com.example.devcash.Lists.SettingsList;
 
 import java.util.ArrayList;
 

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.devcash.ADD_UI.AddDiscountActivity;
@@ -64,6 +65,16 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
                 startActivity(addprod);
             }
         });
+
+        //handles listview
+        ListView lvdiscounts = view.findViewById(R.id.discountlist_listview);
+
+        //set adapter
+        // set click listener
+
+        //show no data found text when listview is empty
+        lvdiscounts.setEmptyView(view.findViewById(R.id.emptydiscount_face));
+        lvdiscounts.setEmptyView(view.findViewById(R.id.empty_discount));
 
         return view;
     }

@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.example.devcash.CustomAdapters.SettingsAdapter;
 import com.example.devcash.R;
-import com.example.devcash.SettingsList;
+import com.example.devcash.Lists.SettingsList;
 
 import java.util.ArrayList;
 

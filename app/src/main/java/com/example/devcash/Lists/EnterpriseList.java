@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Lists;
 
 import java.io.Serializable;
 

@@ -8,7 +8,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.devcash.CustomAdapters.EnterpriseAdapter;
-import com.example.devcash.EnterpriseList;
+import com.example.devcash.Lists.EnterpriseList;
 import com.example.devcash.R;
 
 import java.util.ArrayList;
