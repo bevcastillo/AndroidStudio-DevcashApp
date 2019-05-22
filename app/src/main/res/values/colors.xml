@@ -25,4 +25,7 @@
 
     <color name="color_red">#F52020</color>
 
+    <color name="color_itemcount">#E1E6E9</color>
+    <color name="colorGray">#424949</color>
+
 </resources>

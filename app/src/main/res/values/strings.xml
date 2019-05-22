@@ -267,6 +267,12 @@
     <string name="item_name">Sample item</string>
     <string name="x">x</string>
 
+    <string name="item_count_title">Item Count</string>
+    <string name="opencurly">(</string>
+    <string name="closecurly">)</string>
+    <string name="discount_title">Discount</string>
+
+
 
     <!-- array strings -->
     <string-array name="categories">
