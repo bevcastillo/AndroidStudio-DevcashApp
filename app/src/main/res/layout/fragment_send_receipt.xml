@@ -79,34 +79,109 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/padding_50">
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/customer_cash"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_50"
-                    app:errorEnabled="true">
+                    android:layout_weight="5"
+                    android:orientation="vertical">
 
-                    <android.support.design.widget.TextInputEditText
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/customer_cash"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/cash_received"
-                        android:inputType="text"
-                        android:padding="@dimen/text_padding"
-                        android:drawableLeft="@drawable/ic_email"
-                        android:drawableTint="@color/icon_light"
-                        android:drawablePadding="@dimen/text_padding"/>
+                        app:errorEnabled="true">
 
-                </android.support.design.widget.TextInputLayout>
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/enter_email"
+                            android:inputType="text"
+                            android:padding="@dimen/text_padding"
+                            android:drawableLeft="@drawable/ic_email"
+                            android:drawableTint="@color/icon_light"
+                            android:drawablePadding="@dimen/text_padding"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_send"
+                        android:tint="@color/colorPrimary"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/customer_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/enter_number"
+                            android:inputType="text"
+                            android:padding="@dimen/text_padding"
+                            android:drawableLeft="@drawable/ic_smartphone"
+                            android:drawableTint="@color/icon_light"
+                            android:drawablePadding="@dimen/text_padding"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_send"
+                        android:tint="@color/colorPrimary"/>
+                </LinearLayout>
 
             </LinearLayout>
 
 
 
 
-
         </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/new_purchase"
+            android:textColor="@color/whiteBG"
+            android:background="@color/colorPrimary"/>
 
 
     </LinearLayout>
