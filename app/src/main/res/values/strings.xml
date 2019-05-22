@@ -272,6 +272,13 @@
     <string name="closecurly">)</string>
     <string name="discount_title">Discount</string>
 
+    <string name="total_due">Total amount due</string>
+    <string name="cash_received">Cash Received</string>
+    <string name="charge">Charge</string>
+    <string name="total_paid">Total paid</string>
+    <string name="enter_email">Enter email address</string>
+    <string name="enter_number">Enter mobile number</string>
+    <string name="new_purchase">New Purchase</string>
 
 
     <!-- array strings -->

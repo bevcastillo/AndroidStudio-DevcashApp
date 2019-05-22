@@ -24,4 +24,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_spacing">5dp</dimen>
 
+    <dimen name="padding_50">50dp</dimen>
+
 </resources>

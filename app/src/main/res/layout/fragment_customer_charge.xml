@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="450dp"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".CustomerChargeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/text_padding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/money_1"
+            android:gravity="center"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/page_title"
+            android:paddingTop="@dimen/padding_30"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/total_due"
+            android:textSize="@dimen/small_title"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/customer_cash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_50"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/cash_received"
+                android:inputType="text"
+                android:padding="@dimen/text_padding" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/charge"
+            android:textColor="@color/whiteBG"
+            android:background="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+
+</FrameLayout>
