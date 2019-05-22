@@ -264,6 +264,9 @@
     <string name="nodata_employees">Sorry, there are no employees found.\nPlease click (+)
         to start adding employees.</string>
 
+    <string name="item_name">Sample item</string>
+    <string name="x">x</string>
+
 
     <!-- array strings -->
     <string-array name="categories">
