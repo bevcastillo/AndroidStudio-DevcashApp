@@ -24,6 +24,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/txt_customer_totalpaid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/money_1"
@@ -53,6 +54,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/txt_customer_change"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/money_1"
@@ -90,7 +92,7 @@
                     android:orientation="vertical">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/customer_cash"
+                        android:id="@+id/editText_customer_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -116,6 +118,7 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/img_sendemail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_send"
@@ -137,7 +140,7 @@
                     android:orientation="vertical">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/customer_phone"
+                        android:id="@+id/editText_customer_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -163,6 +166,7 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/img_sendphone"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_send"
@@ -171,12 +175,10 @@
 
             </LinearLayout>
 
-
-
-
         </LinearLayout>
 
         <Button
+            android:id="@+id/btn_newPurchase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/new_purchase"

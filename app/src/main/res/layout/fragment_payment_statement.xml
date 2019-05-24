@@ -74,6 +74,7 @@
                             android:layout_weight="1">
 
                             <TextView
+                                android:id="@+id/txt_amountpayment"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/money"
@@ -92,6 +93,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/due_on"/>
                                 <TextView
+                                    android:id="@+id/txt_paymentduedate"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/date"
