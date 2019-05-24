@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Fragments;
 
 
 import android.os.Bundle;
@@ -9,14 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.devcash.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AllReceiptsFragment extends Fragment {
+public class ChargeFragment extends Fragment {
 
 
-    public AllReceiptsFragment() {
+    public ChargeFragment() {
         // Required empty public constructor
     }
 
@@ -25,7 +27,8 @@ public class AllReceiptsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_all_receipts, container, false);
+        View view = inflater.inflate(R.layout.fragment_charge, container, false);
+
         return view;
     }
 
@@ -33,6 +36,6 @@ public class AllReceiptsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getActivity().setTitle("Receipts");
+        getActivity().setTitle("Charge Customer");
     }
 }

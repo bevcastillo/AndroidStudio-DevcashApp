@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="250dp"
     android:layout_height="match_parent"
-    tools:context=".PurchaseListFragment"
+    tools:context=".Fragments.PurchaseListFragment"
     android:orientation="vertical">
 
 
@@ -13,7 +13,8 @@
         android:orientation="horizontal"
         android:background="@color/color_itemcount"
         android:padding="@dimen/text_padding"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="@dimen/padding_50">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -65,7 +66,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/text_padding">
+        android:padding="@dimen/text_padding"
+        android:gravity="bottom">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -76,9 +78,34 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ListView
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent">
+
+                    <ListView
+                        android:id="@+id/purchaseditem_listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_horizontal">
+
+                        <TextView
+                            android:id="@+id/txt_nopurchaseitem"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/no_items1"
+                            android:gravity="center"/>
+
+
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -181,6 +208,7 @@
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/btn_paypurchasetransaction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/whiteBG"

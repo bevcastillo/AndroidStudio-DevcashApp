@@ -15,11 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.example.devcash.Fragments.AllReceiptsFragment;
 import com.example.devcash.Fragments.CategoriesFragment;
 import com.example.devcash.Fragments.DiscountsFragment;
 import com.example.devcash.Fragments.EmployeesFragment;
+import com.example.devcash.Fragments.InventoryReportsFragment;
+import com.example.devcash.Fragments.PaymentStatementFragment;
 import com.example.devcash.Fragments.ProductsFragment;
-import com.example.devcash.Fragments.ReportsFragment;
 import com.example.devcash.Fragments.SalesFragment;
 import com.example.devcash.Fragments.ServicesFragment;
 import com.example.devcash.Settings_UI.SettingsActivity;

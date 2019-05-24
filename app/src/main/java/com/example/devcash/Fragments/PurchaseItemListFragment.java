@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Fragments;
 
 
 import android.os.Bundle;
@@ -7,14 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.devcash.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChargeFragment extends Fragment {
+public class PurchaseItemListFragment extends Fragment {
 
 
-    public ChargeFragment() {
+    public PurchaseItemListFragment() {
         // Required empty public constructor
     }
 
@@ -23,7 +25,7 @@ public class ChargeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_charge, container, false);
+        return inflater.inflate(R.layout.fragment_purchase_item_list, container, false);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Fragments;
 
 
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.devcash.PaymentInfoActivity;
+import com.example.devcash.R;
 import com.example.devcash.Settings_UI.SettingsActivity;
 
 import org.w3c.dom.Text;

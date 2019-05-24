@@ -273,12 +273,17 @@
     <string name="discount_title">Discount</string>
 
     <string name="total_due">Total amount due</string>
-    <string name="cash_received">Cash Received</string>
+    <string name="cash_received">Enter Cash Received</string>
     <string name="charge">Charge</string>
     <string name="total_paid">Total paid</string>
     <string name="enter_email">Enter email address</string>
     <string name="enter_number">Enter mobile number</string>
     <string name="new_purchase">New Purchase</string>
+
+    <string name="no_items">Sorry, there are no items found.\nPlease go to your
+        inventory to start adding products/services.</string>
+    <string name="go_inventory">Go to inventory</string>
+    <string name="no_items1">No items</string>
 
 
     <!-- array strings -->

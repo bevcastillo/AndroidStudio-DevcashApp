@@ -15,10 +15,10 @@ import com.example.devcash.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SalesFragment extends Fragment {
+public class AllReceiptsFragment extends Fragment {
 
 
-    public SalesFragment() {
+    public AllReceiptsFragment() {
         // Required empty public constructor
     }
 
@@ -27,7 +27,7 @@ public class SalesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sales, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_receipts, container, false);
         return view;
     }
 
@@ -35,6 +35,6 @@ public class SalesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getActivity().setTitle("Sales Transaction");
+        getActivity().setTitle("Receipts");
     }
 }
