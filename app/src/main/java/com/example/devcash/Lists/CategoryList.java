@@ -1,15 +1,11 @@
 package com.example.devcash.Lists;
 
-public class CategoryList {
+import java.io.Serializable;
+
+public class CategoryList implements Serializable {
 
     private String category_name;
-
-    public CategoryList(String category_name) {
-        super();
-        this.category_name = category_name;
-    }
-
-    //getters and setters
+    private int category_id;
 
     public String getCategory_name() {
         return category_name;
@@ -17,5 +13,13 @@ public class CategoryList {
 
     public void setCategory_name(String category_name) {
         this.category_name = category_name;
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
     }
 }

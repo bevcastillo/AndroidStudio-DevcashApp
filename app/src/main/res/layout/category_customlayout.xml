@@ -24,7 +24,7 @@
             android:tint="@color/icon_light"/>
 
         <TextView
-            android:id="@+id/txtservice_name"
+            android:id="@+id/txtcategory_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category name"

@@ -2,6 +2,7 @@ package com.example.devcash.ADD_UI;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.devcash.Database.DatabaseHelper;
 import com.example.devcash.R;
 
 public class AddCategoryActivity extends AppCompatActivity {
+
+    TextInputEditText txtCategoryName;
+    DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,10 @@ public class AddCategoryActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //
+        db = new DatabaseHelper(this);
+
+        txtCategoryName = (TextInputEditText) findViewById(R.id.text_categoryname);
 
     }
 
@@ -78,8 +87,22 @@ public class AddCategoryActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
-            Toast.makeText(this, "Category Successfully added.", Toast.LENGTH_SHORT).show();
-            finish();
+            //collect the inputted data
+            String category_name = txtCategoryName.getEditableText().toString();
+
+            //validate
+            if(!category_name.equals("")){
+                //save to database
+                long result = db.addCategory(category_name);
+                if(result > 0){
+                    Toast.makeText(this, "Category Successfully added.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }else{
+                Toast.makeText(this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
+            }
+
+
         }
             return super.onOptionsItemSelected(item);
 

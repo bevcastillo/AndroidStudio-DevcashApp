@@ -13,11 +13,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.devcash.ADD_UI.AddCategoryActivity;
+import com.example.devcash.CustomAdapters.CategoryAdapter;
+import com.example.devcash.Database.DatabaseHelper;
+import com.example.devcash.Lists.CategoryList;
 import com.example.devcash.R;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -25,7 +33,10 @@ import com.example.devcash.R;
  */
 public class CategoriesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-
+    DatabaseHelper db;
+    ListView lv;
+    ArrayList<CategoryList> categoryListArrayList = new ArrayList<CategoryList>();
+    CategoryAdapter categoryAdapter;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -36,6 +47,8 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+
+
 
     }
 
@@ -57,16 +70,31 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         });
 
         //handles listview
-        ListView lvcategories = view.findViewById(R.id.categorylist_listview);
 
-        //set adapter
-        // set click listener
 
-        //show no data found text when listview is empty
-        lvcategories.setEmptyView(view.findViewById(R.id.emptycategory_face));
-        lvcategories.setEmptyView(view.findViewById(R.id.empty_category));
+
+//        //show no data found text when listview is empty
+//        lvcategories.setEmptyView(view.findViewById(R.id.emptycategory_face));
+//        lvcategories.setEmptyView(view.findViewById(R.id.empty_category));
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+        ListView lvcategories = (ListView) getView().findViewById(R.id.categorylist_listview);
+        db = new DatabaseHelper(getActivity());
+
+
+        lvcategories.setAdapter(categoryAdapter);
+
+        categoryAdapter = new CategoryAdapter(getActivity(), categoryListArrayList);
+        categoryListArrayList = db.getAllCategory();
+
+
     }
 
     @Override
@@ -88,6 +116,8 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+
     @Override
     public boolean onQueryTextSubmit(String query) {
         return true;
@@ -108,7 +138,7 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         return true;
     }
 
-//    @Override
+    //    @Override
 //    public void onCreate(@Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        setHasOptionsMenu(true);
