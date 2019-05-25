@@ -56,7 +56,7 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
         });
 
         //handles listview
-        ListView lvemployees = view.findViewById(R.id.employeelist_listview);
+        ListView lvemployees = view.findViewById(R.id.emplist_listview);
 
         //set adapter
         // set click listener

@@ -285,6 +285,9 @@
     <string name="go_inventory">Go to inventory</string>
     <string name="no_items1">No items</string>
 
+    <string name="lname">Lastname</string>
+    <string name="fname">Firstname</string>
+
 
     <!-- array strings -->
     <string-array name="categories">

@@ -11,10 +11,11 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:orientation="horizontal"
-        android:gravity="left|center">
+        android:gravity="left|center"
+        android:padding="@dimen/text_padding">
 
         <ImageView
-            android:id="@+id/category_color"
+            android:id="@+id/imgemp_image"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="left|center"
@@ -22,14 +23,44 @@
             android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars[0]" />
 
-        <TextView
-            android:id="@+id/txtcategory_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Category name"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtemp_lname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lname"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_inputs"
+                android:layout_marginLeft="@dimen/text_padding"/>
+
+            <TextView
+                android:id="@+id/txtemp_fname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fname"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_inputs"
+                android:layout_marginLeft="@dimen/text_spacing"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtemp_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/task"
             android:textColor="@color/dark_text"
             android:textSize="@dimen/text_inputs"
-            android:layout_marginLeft="@dimen/text_padding"/>
+            android:layout_marginLeft="@dimen/text_padding"
+            android:gravity="right"
+            android:paddingRight="@dimen/text_padding"/>
+
 
     </LinearLayout>
 

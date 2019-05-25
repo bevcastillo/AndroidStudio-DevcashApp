@@ -39,7 +39,7 @@
                     android:paddingRight="@dimen/padding_30">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_emp_name"
+                        android:id="@+id/text_input_emp_lname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -47,7 +47,24 @@
                         <android.support.design.widget.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/emp_name"
+                            android:hint="@string/lname"
+                            android:inputType="text"
+                            android:padding="@dimen/text_padding"
+                            android:textColorHint="@color/colorPrimary"
+                            android:textSize="@dimen/text_inputs" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_emp_fname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/fname"
                             android:inputType="text"
                             android:padding="@dimen/text_padding"
                             android:textColorHint="@color/colorPrimary"
@@ -108,7 +125,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/price_qrCode_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"

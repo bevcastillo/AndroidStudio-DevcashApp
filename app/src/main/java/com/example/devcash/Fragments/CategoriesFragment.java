@@ -51,8 +51,8 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
             @Override
             public void onClick(View view) {
                 // when add fab is pressed, go to add product activity
-                Intent addprod = new Intent(getActivity(), AddCategoryActivity.class);
-                startActivity(addprod);
+                Intent addcategory = new Intent(getActivity(), AddCategoryActivity.class);
+                startActivity(addcategory);
             }
         });
 
