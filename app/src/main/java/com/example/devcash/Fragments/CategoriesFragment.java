@@ -78,7 +78,6 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        pullToRefresh = (SwipeRefreshLayout) getActivity().findViewById(R.id.category_pulltorefresh);
 
         //handles listview
         ListView lvcategories = (ListView) getActivity().findViewById(R.id.categorylist_listview);
@@ -94,19 +93,20 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         lvcategories.setAdapter(categoryAdapter);
 
         //setting a setOnRefreshListener on the SwipeDownLayout
+
+        pullToRefresh = (SwipeRefreshLayout) getActivity().findViewById(R.id.category_pulltorefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                pullToRefresh.setRefreshing(true);
-
+                categoryAdapter.notifyDataSetChanged();
+                pullToRefresh.setRefreshing(false);
             }
         });
 
 ///////////
         getActivity().setTitle("Categories");
     }
-
 
     //handles the search menu
     @Override

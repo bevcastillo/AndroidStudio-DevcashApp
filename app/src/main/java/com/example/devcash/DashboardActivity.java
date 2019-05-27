@@ -105,6 +105,7 @@ public class DashboardActivity extends AppCompatActivity
                 fragment = new SalesFragment();
                 break;
             case R.id.nav_inventory:
+                fragment = new InventoryFragment();
                 break;
             case R.id.nav_products:
                 fragment = new ProductsFragment();
