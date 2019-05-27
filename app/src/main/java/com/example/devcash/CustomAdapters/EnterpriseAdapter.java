@@ -27,7 +27,7 @@ public class EnterpriseAdapter extends BaseAdapter {
         super();
         this.context = context;
         this.enterpriselist = enterpriselist;
-        this.inflater = LayoutInflater.from(context);
+//        this.inflater = LayoutInflater.from(context);
     }
 
     @Override

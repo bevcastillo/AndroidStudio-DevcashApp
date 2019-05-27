@@ -1,6 +1,7 @@
 package com.example.devcash.CustomAdapters;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ public class CategoryAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<CategoryList> categoryListArrayList;
+    LayoutInflater inflater;
+
 
     public CategoryAdapter(Context context, ArrayList<CategoryList> categoryListArrayList) {
         this.context = context;
@@ -45,13 +48,12 @@ public class CategoryAdapter extends BaseAdapter {
         if(convertView == null){
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.category_customlayout, null, true);
+            convertView = inflater.inflate(R.layout.category_customlayout, parent, false);
 
             holder.textCategoryName = (TextView) convertView.findViewById(R.id.txtcategory_name);
 
             convertView.setTag(holder);
         }else{
-            //the getTag returns the viewHolder object set as a tag
             holder = (ViewHolder)convertView.getTag();
         }
         //display the data into the CategoryFragment

@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/category_color"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="left|center"
             android:layout_margin="8dp"
             android:scaleType="fitCenter"

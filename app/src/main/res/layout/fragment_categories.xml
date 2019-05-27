@@ -5,37 +5,47 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.CategoriesFragment"
     android:padding="@dimen/text_padding"
-    android:layout_marginTop="50dp">
+    android:layout_marginTop="@dimen/padding_50">
 
-        <ListView
-            android:id="@+id/categorylist_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:dividerHeight="1dp"/>
-
-
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/category_pulltorefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/emptycategory_face"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_cry_face"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/empty_category"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/nodata_categories"
-            android:layout_marginTop="15dp"/>
+            android:layout_height="match_parent">
 
-    </LinearLayout>
+            <ListView
+                android:id="@+id/categorylist_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="1dp"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/empty_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="135dp"
+                    android:gravity="center"
+                    android:text="@string/nodata_categories" />
+
+            </RelativeLayout>
+
+
+        </FrameLayout>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addcategories_fab"
@@ -46,5 +56,6 @@
         android:src="@drawable/ic_add"
         android:tint="@color/whiteBG"
         android:backgroundTint="@color/colorPrimary"/>
+
 
 </FrameLayout>

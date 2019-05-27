@@ -1,12 +1,14 @@
 package com.example.devcash.Fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddCategoryActivity;
 import com.example.devcash.CustomAdapters.CategoryAdapter;
@@ -34,9 +37,8 @@ import java.util.List;
 public class CategoriesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
     DatabaseHelper db;
-    ListView lv;
-    ArrayList<CategoryList> categoryListArrayList = new ArrayList<CategoryList>();
     CategoryAdapter categoryAdapter;
+    SwipeRefreshLayout pullToRefresh;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -69,40 +71,42 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
             }
         });
 
-        //handles listview
-
-
-
-//        //show no data found text when listview is empty
-//        lvcategories.setEmptyView(view.findViewById(R.id.emptycategory_face));
-//        lvcategories.setEmptyView(view.findViewById(R.id.empty_category));
-
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-        ListView lvcategories = (ListView) getView().findViewById(R.id.categorylist_listview);
-        db = new DatabaseHelper(getActivity());
-
-
-        lvcategories.setAdapter(categoryAdapter);
-
-        categoryAdapter = new CategoryAdapter(getActivity(), categoryListArrayList);
-        categoryListArrayList = db.getAllCategory();
-
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        pullToRefresh = (SwipeRefreshLayout) getActivity().findViewById(R.id.category_pulltorefresh);
+
+        //handles listview
+        ListView lvcategories = (ListView) getActivity().findViewById(R.id.categorylist_listview);
+        db = new DatabaseHelper(getActivity());
+
+        ArrayList<CategoryList> categoryListArrayList = new ArrayList<CategoryList>();
+        categoryListArrayList = db.getAllCategory();
+        categoryAdapter = new CategoryAdapter(getActivity(), categoryListArrayList);
+
+        //show no data found text when listview is empty
+        lvcategories.setEmptyView(view.findViewById(R.id.empty_category));
+
+        lvcategories.setAdapter(categoryAdapter);
+
+        //setting a setOnRefreshListener on the SwipeDownLayout
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                pullToRefresh.setRefreshing(true);
+
+            }
+        });
+
+///////////
         getActivity().setTitle("Categories");
     }
+
 
     //handles the search menu
     @Override
@@ -138,29 +142,4 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         return true;
     }
 
-    //    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setHasOptionsMenu(true);
-//    }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.refundsettingsmenu, menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()){
-//            case R.id.action_refund:
-//                Toast.makeText(getActivity(),"You have pressed refund menu.", Toast.LENGTH_SHORT).show();
-//            case R.id.send_email:
-//                Toast.makeText(getActivity(), "You have pressed send via email menu.", Toast.LENGTH_SHORT).show();
-//            case R.id.send_text:
-//                Toast.makeText(getActivity(), "You have pressed send via SMS", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        return false;
-//    }
 }

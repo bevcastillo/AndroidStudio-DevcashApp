@@ -125,11 +125,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 categoryList.setCategory_id(c.getInt(c.getColumnIndex(COL_CAT_ID)));
                 categoryList.setCategory_name(c.getString(c.getColumnIndex(COL_CAT_NAME)));
 
-
-                //adding to employee list
+                //adding to category list
+                categoryListArrayList.add(categoryList);
             }while (c.moveToNext());
         }
 
+        db.close();
         return categoryListArrayList;
     }
 
