@@ -5,10 +5,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_dashboard"
-            android:icon="@drawable/ic_dashboard"
-            android:title="@string/dashboard" />
-        <item
             android:id="@+id/nav_sales"
             android:icon="@drawable/ic_shopping_basket"
             android:title="@string/sales" />
@@ -17,41 +13,25 @@
             android:icon="@drawable/ic_store"
             android:title="@string/inventory" />
         <item
-            android:id="@+id/nav_products"
-            android:title="@string/products" />
-        <item
-            android:id="@+id/nav_services"
-            android:title="@string/services" />
-        <item
-            android:id="@+id/nav_categories"
-            android:title="@string/category" />
-        <item
-            android:id="@+id/nav_discounts"
-            android:title="@string/discounts" />
-        <item
             android:id="@+id/nav_employee"
             android:icon="@drawable/ic_person"
             android:title="@string/employees" />
         <item
-            android:id="@+id/nav_reports"
-            android:icon="@drawable/ic_timeline"
-            android:title="@string/reports"/>
-        <item
-            android:id="@+id/nav_salesrep"
-            android:title="@string/salesrep"/>
-        <item
-            android:id="@+id/nav_inventoryrep"
-            android:title="@string/inventoryrep"/>
-        <item
             android:id="@+id/nav_payment"
+            android:icon="@drawable/ic_payment"
             android:title="@string/payment_statement"/>
         <item
             android:id="@+id/nav_receipts"
+            android:icon="@drawable/ic_receipt"
             android:title="@string/receipts"/>
     </group>
 
     <item android:title="Others">
         <menu>
+            <item
+                android:id="@+id/nav_reports"
+                android:icon="@drawable/ic_insert_chart"
+                android:title="@string/backoffice"/>
             <item
                 android:id="@+id/nav_help"
                 android:icon="@drawable/ic_help"

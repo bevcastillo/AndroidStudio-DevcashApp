@@ -6,8 +6,7 @@
     tools:context=".InventoryFragment"
     android:orientation="horizontal"
     android:id="@+id/inventory_content"
-    android:padding="@dimen/text_inputs"
->
+    android:padding="@dimen/text_inputs">
 
     <fragment
         android:id="@+id/inventorylist_fragment"

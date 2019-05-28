@@ -1,6 +1,7 @@
 package com.example.devcash.CustomAdapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,7 @@ public class InventoryListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         InventoryListHandler handler = null;
+
         if(convertView == null){
             convertView = inflater.inflate(R.layout.customlayout_inventorylist, null);
             handler = new InventoryListHandler();
@@ -64,6 +66,7 @@ public class InventoryListAdapter extends BaseAdapter {
         handler.icon.setImageResource(inventoryList.get(position).getIcon());
 
         return convertView;
+
     }
 
 

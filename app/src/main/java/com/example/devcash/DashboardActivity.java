@@ -1,6 +1,7 @@
 package com.example.devcash;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -98,37 +99,20 @@ public class DashboardActivity extends AppCompatActivity
         Fragment fragment = null;
 
         switch (id){
-            case R.id.nav_dashboard:
-                Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.nav_sales:
                 fragment = new SalesFragment();
                 break;
             case R.id.nav_inventory:
                 fragment = new InventoryFragment();
                 break;
-            case R.id.nav_products:
-                fragment = new ProductsFragment();
-                break;
-            case R.id.nav_services:
-                fragment = new ServicesFragment();
-                break;
-            case R.id.nav_categories:
-                fragment = new CategoriesFragment();
-                break;
-            case R.id.nav_discounts:
-                fragment = new DiscountsFragment();
-                break;
             case R.id.nav_employee:
                 fragment = new EmployeesFragment();
                 break;
             case R.id.nav_reports:
-                break;
-            case R.id.nav_salesrep:
-
-                break;
-            case R.id.nav_inventoryrep:
-                fragment = new InventoryReportsFragment();
+                String url = "https://www.devcash.com.ph/dashboard.php";
+                Intent reports = new Intent(Intent.ACTION_VIEW);
+                reports.setData(Uri.parse(url));
+                startActivity(reports);
                 break;
             case R.id.nav_payment:
                 fragment = new PaymentStatementFragment();

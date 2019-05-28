@@ -288,6 +288,8 @@
     <string name="lname">Lastname</string>
     <string name="fname">Firstname</string>
 
+    <string name="backoffice">Back Office</string>
+
 
     <!-- array strings -->
     <string-array name="categories">

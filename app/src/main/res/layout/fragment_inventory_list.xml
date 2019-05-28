@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".InventoryListFragment"
     android:layout_marginTop="@dimen/padding_50"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?android:attr/activatedBackgroundIndicator">
 
    <LinearLayout
        android:layout_width="match_parent"
@@ -15,7 +16,9 @@
        <ListView
            android:id="@+id/inventorylist_listview"
            android:layout_width="wrap_content"
-           android:layout_height="wrap_content"/>
+           android:layout_height="wrap_content"
+           android:choiceMode="singleChoice"
+           android:listSelector="@color/light_gray"/>
 
    </LinearLayout>
 
