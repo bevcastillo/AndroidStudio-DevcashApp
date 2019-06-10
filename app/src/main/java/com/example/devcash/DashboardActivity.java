@@ -109,10 +109,10 @@ public class DashboardActivity extends AppCompatActivity
                 fragment = new EmployeesFragment();
                 break;
             case R.id.nav_reports:
-                String url = "https://www.devcash.com.ph/dashboard.php";
-                Intent reports = new Intent(Intent.ACTION_VIEW);
-                reports.setData(Uri.parse(url));
-                startActivity(reports);
+                String url = "https://www.devcash.com.ph/signup.php";
+                Intent devcash = new Intent(Intent.ACTION_VIEW);
+                devcash.setData(Uri.parse(url));
+                startActivity(devcash);
                 break;
             case R.id.nav_payment:
                 fragment = new PaymentStatementFragment();

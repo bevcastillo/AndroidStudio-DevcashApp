@@ -11,7 +11,7 @@
     <string name="add_employee">Add employee</string>
     <string name="edit_employee">Edit Employee</string>
     <string name="add_category">Add category</string>
-    <string name="edit_category">Edit category</string>
+    <string name="edit_categorynavigation_drawer_open">Edit category</string>
     <string name="add_disc">Add discount</string>
     <string name="edit_disc">Edit discount</string>
     <string name="inventory">Inventory</string>
@@ -34,7 +34,7 @@
     <string name="f_password">Forgot Password</string>
 
     <!-- forgot password string -->
-    <string name="forgot_passw_desc">Enter your email address to receive instructions to reset your password.</string>
+    <string name="forgot_passw_desc">Enter your email address/mobile phone number to receive instructions to reset your password.</string>
     <string name="email">Email</string>
 
     <string name="quality_splash">QUALITY INVENTORY AND CASHIERING SYSTEM</string>
@@ -290,6 +290,21 @@
 
     <string name="backoffice">Back Office</string>
 
+    <string name="email_number">Email/Phone number</string>
+    <string name="free_label">Free</string>
+    <string name="basic_label">Basic</string>
+    <string name="pro_label">Pro</string>
+    <string name="basic_def">0.05%/receipt</string>
+    <string name="pro_def">1,000/month</string>
+    <string name="btn_free">Get Free</string>
+    <string name="btn_basic">Get Basic</string>
+    <string name="btn_pro">Get Pro</string>
+
+    <string name="subs_desc">Proin imperdiet orci eu nisi.\nProin imperdiet orci eu nisi.
+        \nProin imperdiet orci eu nisi.\nProin imperdiet orci eu nisi.</string>
+
+    <string name="curr_plan">Current Plan</string>
+    <string name="subs_name">Subscription Plan</string>
 
     <!-- array strings -->
     <string-array name="categories">

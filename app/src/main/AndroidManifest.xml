@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".SubscriptionActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/subs_name"></activity>
+        <activity
             android:name=".PaymentInfoActivity"
             android:label="@string/payment_info_title"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".RefundReceiptActivity"
             android:label="@string/refund"
