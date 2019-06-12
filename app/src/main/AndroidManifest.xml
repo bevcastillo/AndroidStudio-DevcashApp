@@ -12,7 +12,8 @@
         <activity
             android:name=".SubscriptionActivity"
             android:screenOrientation="landscape"
-            android:label="@string/subs_name"></activity>
+            android:label="@string/subs_name"
+            android:parentActivityName=".Settings_UI.SettingsActivity"></activity>
         <activity
             android:name=".PaymentInfoActivity"
             android:label="@string/payment_info_title"

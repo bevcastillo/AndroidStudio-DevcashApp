@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".RegisterLoginActivity"
     android:orientation="vertical"
-    android:background="@color/whiteBG">
+    android:background="@color/whiteBG"
+    android:gravity="bottom|center"
+    android:layout_marginBottom="@dimen/padding_100">
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="270dp"
         android:layout_height="65dp"
         app:srcCompat="@drawable/logo1"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"/>
+        android:layout_gravity="top|center"/>
 
     <LinearLayout
         android:layout_width="437dp"
@@ -30,16 +31,18 @@
             android:layout_height="wrap_content"
             android:background="@drawable/custom_btn_stroke"
             android:text="@string/sign_up"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:padding="@dimen/padding_20"/>
 
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_top"
+            android:layout_marginTop="@dimen/padding_50"
             android:background="@drawable/custom_btn"
             android:text="@string/login"
-            android:textColor="@color/whiteBG" />
+            android:textColor="@color/whiteBG"
+            android:padding="@dimen/padding_20"/>
 
 
     </LinearLayout>

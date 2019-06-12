@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.devcash.CustomAdapters.SettingsAdapter;
 import com.example.devcash.R;
 import com.example.devcash.Lists.SettingsList;
+import com.example.devcash.SubscriptionActivity;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         list.add(new SettingsList(R.drawable.employee, "Account"));
         list.add(new SettingsList(R.drawable.store, "Enterprise"));
         list.add(new SettingsList(R.drawable.password, "Password"));
-        list.add(new SettingsList(R.drawable.cash_billing, "Billing and Subscription"));
+        list.add(new SettingsList(R.drawable.cash_billing, "Subscription"));
         list.add(new SettingsList(R.drawable.notification, "Notifications Settings"));
         list.add(new SettingsList(R.drawable.order, "Terms and Conditions"));
         list.add(new SettingsList(R.drawable.info, "About"));
@@ -94,7 +95,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                 startActivity(passw);
                 break;
             case 3:
-                Toast.makeText(this, "You have clicked Billing & Subscription", Toast.LENGTH_SHORT).show();
+                Intent subs = new Intent(SettingsActivity.this, SubscriptionActivity.class);
+                startActivity(subs);
                 break;
             case 4:
                 Intent notifications = new Intent(SettingsActivity.this, NotificationsSettingsActivity.class);

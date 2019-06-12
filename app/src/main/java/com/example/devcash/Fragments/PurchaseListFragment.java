@@ -32,15 +32,11 @@ public class PurchaseListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_purchase_list, container, false);
 
-        //handles listview]
-        ListView lvitemlist = view.findViewById(R.id.purchaseditem_listview);
 
         //set adapter
         //set click listener
 
         //show no data found text when listview is empty
-        lvitemlist.setEmptyView(view.findViewById(R.id.txt_nopurchaseitem));
-
         // button click listener
         Button btnpay = view.findViewById(R.id.btn_paypurchasetransaction);
         btnpay.setOnClickListener(new View.OnClickListener() {

@@ -6,219 +6,63 @@
     tools:context=".Fragments.PurchaseListFragment"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal"
-        android:background="@color/color_itemcount"
+        android:background="@color/light_gray"
         android:padding="@dimen/text_padding"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/padding_50">
+        android:gravity="center">
 
-        <LinearLayout
+        <ImageView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:src="@drawable/ic_delete"
+            android:tint="@color/dark_text"
+            android:layout_gravity="left"/>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_delete"
-                android:tint="@color/colorGray"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_weight="5"
-            android:gravity="center">
+            android:text="@string/item_count_title"
+            android:gravity="center"
+            android:textSize="@dimen/page_title"
+            android:textColor="@color/dark_text"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/item_count_title"
-                android:textColor="@color/colorGray"
-                android:paddingRight="@dimen/text_spacing"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/opencurly"
-                android:textColor="@color/colorGray"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/count"
-                android:textColor="@color/colorGray"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/closecurly"
-                android:textColor="@color/colorGray"/>
-        </LinearLayout>
+
+
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/text_padding"
-        android:gravity="bottom">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ListView
-                        android:id="@+id/purchaseditem_listview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_gravity="center_horizontal">
-
-                        <TextView
-                            android:id="@+id/txt_nopurchaseitem"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/no_items1"
-                            android:gravity="center"/>
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:orientation="horizontal">
 
 
-
-                    </LinearLayout>
-
-                </FrameLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/text_padding">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/subtotal"/>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="@string/money_1"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/text_padding">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/discount_title"/>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="@string/money_1"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/text_padding">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/vat"/>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="@string/money_1"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_marginTop="@dimen/text_padding"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        style="@style/Divider"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/text_padding">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/total_title"
-                            android:textColor="@color/dark_text"
-                            android:textStyle="bold"
-                            android:textAllCaps="true"
-                            android:textSize="@dimen/text_inputs"/>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="@string/money_1"
-                            android:textColor="@color/dark_text"
-                            android:textSize="@dimen/text_inputs"
-                            android:textStyle="bold"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_paypurchasetransaction"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/whiteBG"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/pay"
-                    android:layout_marginTop="@dimen/text_padding"/>
-            </LinearLayout>
-
-        </ScrollView>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:padding="@dimen/text_padding">
+
+        <Button
+            android:id="@+id/btn_paypurchasetransaction"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/charge"
+            android:textColor="@color/whiteBG"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>
