@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_20">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/subtotal"
+            android:textSize="@dimen/page_title"
+            android:textColor="@color/dark_text"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txt_item_subtotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/money_1"
+            android:gravity="right"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/page_title"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_20">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/discount_title"
+            android:textSize="@dimen/page_title"
+            android:textColor="@color/dark_text"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txt_item_discount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/money_1"
+            android:gravity="right"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/page_title"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_20">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/vat"
+            android:textSize="@dimen/page_title"
+            android:textColor="@color/dark_text"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txt_item_vat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/money_1"
+            android:gravity="right"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/page_title"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/Divider"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_20">
+
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/total_title"
+            android:textSize="@dimen/page_title"
+            android:textColor="@color/dark_text"
+            android:textStyle="bold"
+            android:textAllCaps="true"/>
+
+        <TextView
+            android:id="@+id/txt_item_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/money_1"
+            android:gravity="right"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/page_title"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</LinearLayout>
