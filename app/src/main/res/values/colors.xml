@@ -6,6 +6,7 @@
 
     <!-- bg colors -->
     <color name="whiteBG">#FAFAFA</color>
+    <color name="white">#FFFFFF</color>
     <color name="whiteDarker">#F5F5F5</color>
     <color name="whiteDark">#F0F0F0</color>
     <color name="grainsboro">#DCDCDC</color>

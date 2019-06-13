@@ -305,6 +305,8 @@
 
     <string name="curr_plan">Current Plan</string>
     <string name="subs_name">Subscription Plan</string>
+    <string name="scan_label">Scan</string>
+    <string name="qrcode_result_default">Please focus camera to QR code</string>
 
     <!-- array strings -->
     <string-array name="categories">
