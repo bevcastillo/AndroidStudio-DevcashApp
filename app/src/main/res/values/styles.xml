@@ -30,4 +30,8 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
+    <style name="HeaderBar">
+        <item name="android:background">@color/whiteBG</item>
+    </style>
+
 </resources>

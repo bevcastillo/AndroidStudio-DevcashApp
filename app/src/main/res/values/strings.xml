@@ -305,8 +305,10 @@
 
     <string name="curr_plan">Current Plan</string>
     <string name="subs_name">Subscription Plan</string>
-    <string name="scan_label">Scan</string>
+    <string name="scan_label">scan</string>
     <string name="qrcode_result_default">Please focus camera to QR code</string>
+
+    <string name="new_label">new</string>
 
     <!-- array strings -->
     <string-array name="categories">
@@ -340,6 +342,11 @@
         <item>Discount 3</item>
         <item>Discount 4</item>
         <item>Discount 5</item>
+    </string-array>
+
+    <string-array name="customer_type">
+        <item>Regular Customer</item>
+        <item>Senior Citizen</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

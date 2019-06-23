@@ -6,11 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.devcash.R;
 
@@ -19,6 +26,9 @@ import com.example.devcash.R;
  * A simple {@link Fragment} subclass.
  */
 public class PurchaseListFragment extends Fragment {
+
+    Toolbar mytoolbar;
+    Spinner myspinner;
 
 
     public PurchaseListFragment() {
@@ -31,6 +41,31 @@ public class PurchaseListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_purchase_list, container, false);
+
+        setHasOptionsMenu(true);
+
+        mytoolbar = (Toolbar) view.findViewById(R.id.toolbar_purchaselist);
+        myspinner = (Spinner) view.findViewById(R.id.spinner_customertype);
+
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.customer_type));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        myspinner.setAdapter(myAdapter);
+
+        myspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(),
+                        myspinner.getSelectedItem().toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         //set adapter
@@ -55,4 +90,10 @@ public class PurchaseListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.purchaselist_menu, menu);
+    }
 }

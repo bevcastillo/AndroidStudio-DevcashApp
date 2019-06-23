@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_scan"
+        android:title="@string/scan_label"
+        android:icon="@drawable/ic_qr_code_scan"
+        app:showAsAction="always"
+        android:actionLayout="@layout/custom_purchaselist_layout"/>
+
+    <item
+        android:id="@+id/action_new"
+        android:title="@string/new_label"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="always"
+        android:actionLayout="@layout/custom_purchaselist_add_layout"/>
+
+
+</menu>

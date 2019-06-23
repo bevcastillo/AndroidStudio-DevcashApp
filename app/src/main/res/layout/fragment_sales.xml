@@ -9,8 +9,8 @@
 
     <fragment
         android:id="@+id/inventory_fragment"
-        android:name="com.example.devcash.QRScanFragment"
-        tools:layout="@layout/fragment_qrscan"
+        android:name="com.example.devcash.Fragments.PurchaseItemListFragment"
+        tools:layout="@layout/fragment_purchase_item_list"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2">
