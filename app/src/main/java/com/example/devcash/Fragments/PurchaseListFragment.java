@@ -27,8 +27,8 @@ import com.example.devcash.R;
  */
 public class PurchaseListFragment extends Fragment {
 
-    Toolbar mytoolbar;
-    Spinner myspinner;
+    Toolbar purchaseListToolbar;
+    Spinner purchaseListSpinner;
 
 
     public PurchaseListFragment() {
@@ -44,20 +44,21 @@ public class PurchaseListFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        mytoolbar = (Toolbar) view.findViewById(R.id.toolbar_purchaselist);
-        myspinner = (Spinner) view.findViewById(R.id.spinner_customertype);
+        purchaseListToolbar = (Toolbar) view.findViewById(R.id.toolbar_purchaselist);
+        purchaseListSpinner = (Spinner) view.findViewById(R.id.spinner_customertype);
 
+        ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.customer_type));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        myspinner.setAdapter(myAdapter);
+        purchaseListSpinner.setAdapter(myAdapter);
 
-        myspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        purchaseListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(),
-                        myspinner.getSelectedItem().toString(),
+                        purchaseListSpinner.getSelectedItem().toString(),
                         Toast.LENGTH_SHORT).show();
             }
 

@@ -348,6 +348,13 @@
         <item>Regular Customer</item>
         <item>Senior Citizen</item>
     </string-array>
+    
+    <string-array name="dropdownitempurchase">
+        <item>All Categories</item>
+        <item>Category 1</item>
+        <item>Category 2</item>
+        <item>Category 3</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

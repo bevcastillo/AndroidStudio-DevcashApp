@@ -23,4 +23,9 @@
         android:textSize="@dimen/page_title"
         android:textAllCaps="true"/>
 
+    <View
+        style="@style/Divider"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

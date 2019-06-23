@@ -34,4 +34,8 @@
         <item name="android:background">@color/whiteBG</item>
     </style>
 
+    <style name="PrimaryHeaderBar">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
 </resources>
