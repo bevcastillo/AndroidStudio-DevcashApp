@@ -72,7 +72,6 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getActivity().setTitle("Employees");
     }
 
     //handles the search menu

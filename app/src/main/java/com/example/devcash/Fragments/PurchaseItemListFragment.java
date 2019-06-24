@@ -2,8 +2,14 @@ package com.example.devcash.Fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,10 +29,14 @@ import com.example.devcash.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PurchaseItemListFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+public class PurchaseItemListFragment extends Fragment implements SearchView.OnQueryTextListener,
+        MenuItem.OnActionExpandListener{
 
     Toolbar itemListToolbar;
     Spinner itemListSpinner;
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    Toolbar toolbar;
 
 
     public PurchaseItemListFragment() {
@@ -37,17 +47,16 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //inflate the  menu
-        setHasOptionsMenu(true);
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_purchase_item_list, container, false);
-
+        setHasOptionsMenu(true);
 
         itemListToolbar = (Toolbar) view.findViewById(R.id.toolbar_purchaseitemlist);
         itemListSpinner = (Spinner) view.findViewById(R.id.spinner_allcategories);
@@ -58,6 +67,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
                 getResources().getStringArray(R.array.dropdownitempurchase));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemListSpinner.setAdapter(myAdapter);
+
 
         itemListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -80,6 +90,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.searchmenu, menu);
+
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);

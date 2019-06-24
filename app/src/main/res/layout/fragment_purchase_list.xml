@@ -15,11 +15,77 @@
         style="@style/HeaderBar"
         android:elevation="4dp">
 
-        <Spinner
-            android:id="@+id/spinner_customertype"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinner_customertype"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                style="@style/Divider"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/text_padding"
+                android:layout_marginRight="@dimen/text_padding">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_qr_code_scan"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scan_label"
+                    android:textAllCaps="true"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                style="@style/Divider"/>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/text_padding"
+                android:layout_marginRight="@dimen/text_padding">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_add"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_label"
+                    android:textAllCaps="true"/>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
 
     </android.support.v7.widget.Toolbar>
 
@@ -77,15 +143,7 @@
                 android:textSize="@dimen/page_title"
                 android:textColor="@color/dark_text"/>
 
-
-
         </LinearLayout>
-
-
-
-
-
-
 
     </LinearLayout>
 
