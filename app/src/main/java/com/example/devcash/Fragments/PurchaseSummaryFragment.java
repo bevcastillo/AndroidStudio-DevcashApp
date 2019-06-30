@@ -2,8 +2,6 @@ package com.example.devcash.Fragments;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -16,10 +14,10 @@ import com.example.devcash.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChargeFragment extends Fragment {
+public class PurchaseSummaryFragment extends Fragment {
 
 
-    public ChargeFragment() {
+    public PurchaseSummaryFragment() {
         // Required empty public constructor
     }
 
@@ -28,15 +26,9 @@ public class ChargeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_charge, container, false);
+        View view = inflater.inflate(R.layout.fragment_purchase_summary, container, false);
 
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
@@ -50,4 +42,5 @@ public class ChargeFragment extends Fragment {
         super.onStop();
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
+
 }

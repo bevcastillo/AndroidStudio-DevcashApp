@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="618dp"
-        android:layout_height="591dp"
-        app:srcCompat="@drawable/devcash_logo" />
+        android:layout_width="344dp"
+        android:layout_height="361dp"
+        app:srcCompat="@drawable/another_devcash_logo" />
 
 </LinearLayout>

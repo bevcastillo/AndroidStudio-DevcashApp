@@ -7,14 +7,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddProductActivity;
 import com.example.devcash.R;
@@ -24,6 +30,9 @@ import com.example.devcash.R;
  * A simple {@link Fragment} subclass.
  */
 public class ProductsFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+
+    Toolbar productsToolbar;
+    Spinner productsSpinner, conditionSpinner;
 
 
     public ProductsFragment() {
@@ -43,6 +52,52 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_products, container, false);
+
+        productsToolbar = (Toolbar) view.findViewById(R.id.toolbar_products);
+        productsSpinner = (Spinner) view.findViewById(R.id.spinner_products);
+        conditionSpinner = (Spinner) view.findViewById(R.id.spinner_condition);
+
+        ///
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.custom_spinner_item,
+                getResources().getStringArray(R.array.dropdownallproducts));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        productsSpinner.setAdapter(myAdapter);
+
+        productsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(),
+                        productsSpinner.getSelectedItem().toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ///
+        ArrayAdapter<String> conditionAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.custom_spinner_item,
+                getResources().getStringArray(R.array.dropdownallcondition));
+        conditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        conditionSpinner.setAdapter(conditionAdapter);
+
+        conditionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(),
+                        conditionSpinner.getSelectedItem().toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //add floating action button
         FloatingActionButton prod_fab = view.findViewById(R.id.addprod_fab);
@@ -105,5 +160,17 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 }

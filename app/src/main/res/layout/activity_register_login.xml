@@ -11,10 +11,10 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="420dp"
-        android:layout_height="329dp"
+        android:layout_width="251dp"
+        android:layout_height="226dp"
         android:layout_gravity="top|center"
-        app:srcCompat="@drawable/devcash_logo" />
+        app:srcCompat="@drawable/another_devcash_logo" />
 
     <LinearLayout
         android:layout_width="437dp"

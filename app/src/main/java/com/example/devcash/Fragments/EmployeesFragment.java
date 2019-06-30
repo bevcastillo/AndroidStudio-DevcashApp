@@ -44,6 +44,9 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_employees, container, false);
 
+        //
+        getActivity().setTitle("Employee");
+
         //add floating action button
         FloatingActionButton emp_fab = view.findViewById(R.id.addemp_fab);
         emp_fab.setOnClickListener(new View.OnClickListener() {

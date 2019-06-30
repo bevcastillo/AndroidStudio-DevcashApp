@@ -14,17 +14,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.widget.Toast;
 
 import com.example.devcash.Fragments.AllReceiptsFragment;
-import com.example.devcash.Fragments.CategoriesFragment;
-import com.example.devcash.Fragments.DiscountsFragment;
 import com.example.devcash.Fragments.EmployeesFragment;
-import com.example.devcash.Fragments.InventoryReportsFragment;
+import com.example.devcash.Fragments.InventoryFragment;
 import com.example.devcash.Fragments.PaymentStatementFragment;
-import com.example.devcash.Fragments.ProductsFragment;
 import com.example.devcash.Fragments.SalesFragment;
-import com.example.devcash.Fragments.ServicesFragment;
 import com.example.devcash.Settings_UI.SettingsActivity;
 
 public class DashboardActivity extends AppCompatActivity
@@ -59,6 +54,10 @@ public class DashboardActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.getMenu().getItem(0).setChecked(true);
+        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_sales));
+        ;
     }
 
     @Override

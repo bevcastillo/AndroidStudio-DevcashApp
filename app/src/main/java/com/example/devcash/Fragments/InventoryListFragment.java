@@ -1,4 +1,4 @@
-package com.example.devcash;
+package com.example.devcash.Fragments;
 
 
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import com.example.devcash.Fragments.DiscountsFragment;
 import com.example.devcash.Fragments.ProductsFragment;
 import com.example.devcash.Fragments.ServicesFragment;
 import com.example.devcash.Lists.InventoryList;
+import com.example.devcash.R;
 
 import java.util.ArrayList;
 

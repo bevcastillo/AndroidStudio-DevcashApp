@@ -4,160 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.PurchaseListFragment"
+    tools:context=".Fragments.PurchaseSummaryFragment"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_purchaselist"
+        android:id="@+id/toolbar_purchase_summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:theme="@style/ThemeOverlay.AppCompat.Light"
         style="@style/HeaderBar"
-        android:elevation="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/spinner_customertype"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                style="@style/Divider"/>
-
-            <LinearLayout
-                android:id="@+id/layout_transaction_qrcode"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginLeft="@dimen/text_padding"
-                android:layout_marginRight="@dimen/text_padding">
-
-                <ImageView
-                    android:id="@+id/transaction_qricon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_qr_code_scan"/>
-                <TextView
-                    android:id="@+id/transaction_qrtext"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/scan_label"
-                    android:textAllCaps="true"/>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                style="@style/Divider"/>
-
-
-            <LinearLayout
-                android:id="@+id/layout_transaction_new"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginLeft="@dimen/text_padding"
-                android:layout_marginRight="@dimen/text_padding">
-
-                <ImageView
-                    android:id="@+id/transaction_newIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_add"/>
-                <TextView
-                    android:id="@+id/transaction_newText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/new_label"
-                    android:textAllCaps="true"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
+        android:elevation="4dp"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
+        app:title="@string/customer_type_label">
 
     </android.support.v7.widget.Toolbar>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:background="@color/light_gray"
-        android:padding="@dimen/text_padding"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/transaction_deleteIcon"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_delete"
-            android:tint="@color/dark_text"
-            android:layout_gravity="left|center"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/item_count_title"
-                android:gravity="center"
-                android:textSize="@dimen/page_title"
-                android:textColor="@color/dark_text"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/opencurly"
-                android:paddingLeft="@dimen/text_inputs"
-                android:textSize="@dimen/page_title"
-                android:textColor="@color/dark_text"/>
-
-            <TextView
-                android:id="@+id/transaction_item_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/count"
-                android:textSize="@dimen/page_title"
-                android:textColor="@color/dark_text"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/closecurly"
-                android:textSize="@dimen/page_title"
-                android:textColor="@color/dark_text"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="7"
         android:orientation="horizontal">
 
         <ListView
-            android:id="@+id/listview_purchased_transaction"
+            android:id="@+id/listview_purchased_items"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -318,16 +187,5 @@
                 android:textColor="@color/dark_text"/>
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_paypurchasetransaction"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/charge"
-            android:textColor="@color/whiteBG"/>
-
-
     </LinearLayout>
-
 </LinearLayout>

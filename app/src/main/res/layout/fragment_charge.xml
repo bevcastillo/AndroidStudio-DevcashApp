@@ -7,15 +7,15 @@
     android:orientation="horizontal"
     android:id="@+id/customercharge_content">
 
-    <!--<fragment-->
-        <!--android:id="@+id/finalpurchaselist_fragment"-->
-        <!--android:name="com.example.devcash.Fragments.PurchaseListFragment"-->
-        <!--tools:layout="@layout/fragment_final_purchase_list"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1">-->
+    <fragment
+        android:id="@+id/purchasesummary_fragment"
+        android:name="com.example.devcash.Fragments.PurchaseSummaryFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        tools:layout="@layout/fragment_purchase_summary">
 
-    <!--</fragment>-->
+    </fragment>
 
     <View
         style="@style/Divider"
@@ -27,7 +27,7 @@
         android:name="com.example.devcash.Fragments.CustomerChargeFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         tools:layout="@layout/fragment_customer_charge">
 
     </fragment>

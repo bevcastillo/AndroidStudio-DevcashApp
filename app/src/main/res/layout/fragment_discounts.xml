@@ -3,8 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.DiscountsFragment"
-    android:padding="@dimen/text_padding">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.DiscountsFragment">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_discounts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        style="@style/PrimaryHeaderBar"
+        android:elevation="4dp">
+
+        <Spinner
+            android:id="@+id/spinner_discounts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/product_pulltorefresh"

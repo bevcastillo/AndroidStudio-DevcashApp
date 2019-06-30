@@ -310,6 +310,9 @@
 
     <string name="new_label">new</string>
 
+    <string name="send_receipt_label">Send Receipt</string>
+    <string name="customer_type_label">Customer Type</string>
+
     <!-- array strings -->
     <string-array name="categories">
         <item>No category</item>
@@ -348,12 +351,33 @@
         <item>Regular Customer</item>
         <item>Senior Citizen</item>
     </string-array>
-    
+
     <string-array name="dropdownitempurchase">
         <item>All Categories</item>
         <item>Category 1</item>
         <item>Category 2</item>
         <item>Category 3</item>
+    </string-array>
+
+    <string-array name="dropdownallproducts">
+        <item>All Products</item>
+    </string-array>
+
+    <string-array name="dropdownallcondition">
+        <item>All Condition</item>
+        <item>New</item>
+        <item>Lost</item>
+        <item>Disposed of</item>
+        <item>Damaged</item>
+    </string-array>
+
+    <string-array name="dropdownalldiscounts">
+        <item>All Discounts</item>
+        <item>On going</item>
+    </string-array>
+
+    <string-array name="dropdownallservices">
+        <item>All Services</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
