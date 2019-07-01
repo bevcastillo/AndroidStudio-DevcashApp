@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.devcash.QRCodeFragment;
 import com.example.devcash.R;
 
 
@@ -134,10 +135,11 @@ public class PurchaseListFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.layout_transaction_qrcode:
 //                Toast.makeText(getActivity(), "Scan Item", Toast.LENGTH_SHORT).show();
-                Fragment scanQRCodeFragment = new QRScanFragment();
+                Fragment QRCodeFragment = new QRCodeFragment();
+
                 FragmentManager fragmentManager1 = getFragmentManager();
                 FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
-                fragmentTransaction1.replace(R.id.inventory_fragment, scanQRCodeFragment);
+                fragmentTransaction1.replace(R.id.customersales_content, QRCodeFragment);
                 fragmentTransaction1.addToBackStack(null);
                 fragmentTransaction1.commit();
 

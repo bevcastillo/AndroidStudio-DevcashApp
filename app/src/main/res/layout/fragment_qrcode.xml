@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.SalesFragment"
-    android:orientation="horizontal"
-    android:id="@+id/customersales_content">
+    tools:context=".QRCodeFragment"
+    android:id="@+id/qrcodescan_content"
+    android:orientation="horizontal">
 
     <fragment
-        android:id="@+id/inventory_fragment"
-        android:name="com.example.devcash.Fragments.PurchaseItemListFragment"
-        tools:layout="@layout/fragment_purchase_item_list"
+        android:id="@+id/qrcodescan_fragment"
+        android:name="com.example.devcash.Fragments.QRScanFragment"
+        tools:layout="@layout/fragment_qrscan"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3">
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content" />
 
     <fragment
-        android:id="@+id/anotherfragment"
+        android:id="@+id/purchaselist_fragment"
         android:name="com.example.devcash.Fragments.PurchaseListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
