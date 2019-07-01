@@ -3,32 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.QRScanFragment"
-    android:padding="@dimen/padding_100"
     android:orientation="vertical">
 
-    <SurfaceView
-        android:id="@+id/cameraPreview"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_purchaseitemlist"
         android:layout_width="match_parent"
-        android:layout_height="400dp" />
-
-    <TextView
-        android:id="@+id/txt_qr_result"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/qrcode_result_default"
-        android:textColor="@color/dark_text"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/padding_20"
-        android:textSize="@dimen/text_inputs"/>
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        style="@style/PrimaryHeaderBar"
+        android:elevation="4dp"
+        app:title="@string/scan_code_label"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Title">
 
-    <Button
-        android:layout_width="300sp"
-        android:layout_height="80sp"
-        android:background="@color/colorPrimary"
-        android:text="@string/scan_label"
-        android:textColor="@color/whiteBG"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/padding_20"/>
+    </android.support.v7.widget.Toolbar>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+            <SurfaceView
+                android:id="@+id/cameraPreview"
+                android:layout_width="400dp"
+                android:layout_height="400dp" />
+
+            <TextView
+                android:id="@+id/txt_qr_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/qrcode_result_default"
+                android:textColor="@color/dark_text"
+                android:layout_marginTop="@dimen/padding_20"
+                android:textSize="@dimen/text_inputs"/>
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

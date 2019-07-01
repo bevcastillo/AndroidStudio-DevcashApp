@@ -313,6 +313,8 @@
     <string name="send_receipt_label">Send Receipt</string>
     <string name="customer_type_label">Customer Type</string>
 
+    <string name="scan_code_label">Scan QR code</string>
+
     <!-- array strings -->
     <string-array name="categories">
         <item>No category</item>

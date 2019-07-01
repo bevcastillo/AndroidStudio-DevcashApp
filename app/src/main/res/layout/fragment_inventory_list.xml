@@ -15,7 +15,8 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         style="@style/PrimaryHeaderBar"
         android:elevation="4dp"
-        app:title="@string/inventory_title">
+        app:title="@string/inventory_title"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Title">
 
     </android.support.v7.widget.Toolbar>
 
