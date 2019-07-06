@@ -3,24 +3,26 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding_top"
-    android:gravity="left|center">
+    android:padding="@dimen/padding_15"
+    android:gravity="left|center"
+    android:id="@+id/inventoryoptions_layout">
 
 
     <ImageView
         android:id="@+id/inventorylist_icon"
         android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_email"
-        android:tint="@color/icon_light"/>
+        android:tint="@color/icon_light"
+        android:layout_marginLeft="@dimen/padding_20"/>
 
     <TextView
         android:id="@+id/inventorylist_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/inventory_title"
-        android:paddingLeft="@dimen/padding_30"
-        android:textSize="@dimen/page_title"
+        android:paddingLeft="@dimen/padding_50"
+        android:textSize="@dimen/text_18"
         android:textColor="@color/dark_text"/>
 
 </LinearLayout>

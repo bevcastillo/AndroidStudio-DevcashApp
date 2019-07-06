@@ -9,7 +9,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.devcash.CustomAdapters.OwnerProfileAdapter;
-import com.example.devcash.Lists.OwnerProfileList;
+import com.example.devcash.Model.OwnerProfileList;
 import com.example.devcash.R;
 
 import java.util.ArrayList;

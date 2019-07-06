@@ -1,4 +1,4 @@
-package com.example.devcash.Lists;
+package com.example.devcash.Model;
 
 import android.widget.RadioButton;
 import android.widget.RadioGroup;

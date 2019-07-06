@@ -1,6 +1,4 @@
-package com.example.devcash.Lists;
-
-import java.io.Serializable;
+package com.example.devcash.Model;
 
 public class EnterpriseList {
 

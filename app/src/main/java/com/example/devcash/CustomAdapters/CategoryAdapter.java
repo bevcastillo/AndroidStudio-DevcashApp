@@ -1,14 +1,13 @@
 package com.example.devcash.CustomAdapters;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.devcash.Lists.CategoryList;
+import com.example.devcash.Model.CategoryList;
 import com.example.devcash.R;
 
 import java.util.ArrayList;

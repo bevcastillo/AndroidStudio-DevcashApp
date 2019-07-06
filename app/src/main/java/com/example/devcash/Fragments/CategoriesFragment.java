@@ -1,7 +1,6 @@
 package com.example.devcash.Fragments;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,12 +28,10 @@ import android.widget.Toast;
 import com.example.devcash.ADD_UI.AddCategoryActivity;
 import com.example.devcash.CustomAdapters.CategoryAdapter;
 import com.example.devcash.Database.DatabaseHelper;
-import com.example.devcash.Lists.CategoryList;
+import com.example.devcash.Model.CategoryList;
 import com.example.devcash.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**

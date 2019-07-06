@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.devcash.Lists.CategoryList;
-import com.example.devcash.Lists.EmployeeList;
+import com.example.devcash.Model.CategoryList;
+import com.example.devcash.Model.EmployeeList;
 
 import java.util.ArrayList;
 

@@ -7,11 +7,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.devcash.CustomAdapters.SettingsAdapter;
 import com.example.devcash.R;
-import com.example.devcash.Lists.SettingsList;
+import com.example.devcash.Model.SettingsList;
 import com.example.devcash.SubscriptionActivity;
 
 import java.util.ArrayList;

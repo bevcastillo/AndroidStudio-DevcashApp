@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.devcash.R;
-import com.example.devcash.Lists.SettingsList;
+import com.example.devcash.Model.SettingsList;
 
 import java.util.ArrayList;
 

@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.devcash.Lists.OwnerProfileList;
+import com.example.devcash.Model.OwnerProfileList;
 import com.example.devcash.R;
 
 import java.util.ArrayList;
