@@ -22,11 +22,9 @@
         android:layout_width="1dp"
         android:layout_height="wrap_content" />
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/inventorylist_fragmentcontainer"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"/>
-
-
 </LinearLayout>
