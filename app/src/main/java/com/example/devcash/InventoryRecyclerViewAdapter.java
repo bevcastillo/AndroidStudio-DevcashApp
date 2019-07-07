@@ -3,6 +3,7 @@ package com.example.devcash;
 import android.content.Context;
 import android.gesture.GestureLibraries;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -33,6 +34,7 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
     private ArrayList<Integer> mIcon = new ArrayList<>();
     private ArrayList<String> mLabel = new ArrayList<>();
     private Context context;
+    int selectedPosition = -1; //add a highlight to the selected list in the recycleview
 
     public InventoryRecyclerViewAdapter(Context context, ArrayList<Integer> mIcon, ArrayList<String> mLabel) {
         this.mIcon = mIcon;
@@ -59,11 +61,19 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
                     .into(viewHolder.icon);
 
             viewHolder.label.setText(mLabel.get(i));
-
+            if(selectedPosition == i){
+                viewHolder.itemView.setBackgroundColor(Color.parseColor("#DCDCDC"));
+                viewHolder.label.setTextColor(Color.parseColor("#ec4e20"));
+                viewHolder.icon.setColorFilter(Color.parseColor("#ec4e20"));
+            }else{
+                viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+                viewHolder.label.setTextColor(Color.parseColor("#000000"));
+                viewHolder.icon.setColorFilter(Color.parseColor("#000000"));
+            }
             viewHolder.customLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Log.d(TAG, "OnClick: clicked on: " + mLabel.get(i));
+                    Log.d(TAG, "OnClick: clicked on: " + mLabel.get(i));
 ////                    Toast.makeText(context, mLabel.get(i), Toast.LENGTH_SHORT).show();
 
 //                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
@@ -76,25 +86,36 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
                             fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, productsFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
-//                            Toast.makeText(context, "This is products", Toast.LENGTH_SHORT).show();
+                            notifyItemChanged(selectedPosition);
+                            selectedPosition=i;
+                            notifyItemChanged(selectedPosition);
                             break;
                         case 1:
                             ServicesFragment servicesFragment = new ServicesFragment();
                             fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, servicesFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
+                            notifyItemChanged(selectedPosition);
+                            selectedPosition=i;
+                            notifyItemChanged(selectedPosition);
                             break;
                         case  2:
                             CategoriesFragment categoriesFragment = new CategoriesFragment();
                             fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, categoriesFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
+                            notifyItemChanged(selectedPosition);
+                            selectedPosition=i;
+                            notifyItemChanged(selectedPosition);
                             break;
                         case 3:
                             DiscountsFragment discountsFragment = new DiscountsFragment();
                             fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, discountsFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
+                            notifyItemChanged(selectedPosition);
+                            selectedPosition=i;
+                            notifyItemChanged(selectedPosition);
                             break;
                     }
                 }
