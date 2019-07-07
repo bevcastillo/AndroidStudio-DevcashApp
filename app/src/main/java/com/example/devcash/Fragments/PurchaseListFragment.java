@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
@@ -37,6 +39,9 @@ public class PurchaseListFragment extends Fragment implements View.OnClickListen
     Spinner purchaseListSpinner;
     Button btnpay;
 
+    Toolbar toolbar;
+    DrawerLayout mDrawer;
+
     LinearLayout layoutScanCode, layoutNewTransaction;
 
 
@@ -61,6 +66,14 @@ public class PurchaseListFragment extends Fragment implements View.OnClickListen
         layoutNewTransaction = (LinearLayout) view.findViewById(R.id.layout_transaction_new);
 
         ///
+
+        //setting up the hamburger icon to show in the custom toolbar
+//        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+//
+//        mDrawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+
+
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.customer_type));
@@ -164,5 +177,18 @@ public class PurchaseListFragment extends Fragment implements View.OnClickListen
 //            default:
 //                return super.onOptionsItemSelected(item);
 //        }
+//    }
+
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        //The action bar home/up action should open or close the drawer
+//        switch (item.getItemId()){
+//            case android.R.id.home:
+//                mDrawer.openDrawer(GravityCompat.START);
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
 //    }
 }

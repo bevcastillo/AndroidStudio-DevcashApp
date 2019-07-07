@@ -238,24 +238,48 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <TextView
-                android:layout_width="match_parent"
+            <android.support.v7.widget.CardView
+                android:id="@+id/previouspaymentdetails_card"
+                android:layout_width="650dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/padding_30"
-                android:paddingLeft="@dimen/padding_30"
-                android:paddingRight="@dimen/text_padding"
-                android:text="@string/prev_payments"
-                android:textSize="@dimen/page_title"
-                android:textColor="@color/dark_text"/>
+                android:padding="@dimen/text_padding"
+                android:layout_marginTop="@dimen/padding_30"
+                android:layout_marginBottom="@dimen/padding_top"
+                android:background="@color/whiteBG"
+                android:layout_gravity="center">
 
-            <ListView
-                android:id="@+id/listview_prevstatements"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/text_padding"
-                android:dividerHeight="1dp"
-                android:layout_marginLeft="@dimen/text_inputs"
-                android:layout_marginRight="@dimen/text_inputs"/>
+                <LinearLayout
+                    android:layout_width="647dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_30"
+                    android:layout_marginBottom="@dimen/padding_30"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/padding_30"
+                    android:paddingRight="@dimen/padding_30"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/prev_statement_balance"
+                        android:textColor="@color/dark_text"
+                        android:textSize="@dimen/page_title"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_30">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycleView_prevpayments"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
 

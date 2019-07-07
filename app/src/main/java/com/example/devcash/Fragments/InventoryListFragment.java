@@ -26,13 +26,14 @@ import com.example.devcash.Model.InventoryList;
 import com.example.devcash.R;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class InventoryListFragment extends Fragment {
+public class InventoryListFragment extends Fragment implements InventoryRecyclerViewAdapter.onInventoryListener{
 
     private static final String TAG = "InventoryListFragment";
     //variables
@@ -49,19 +50,16 @@ public class InventoryListFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_inventory_list, container, false);
 
+
         Log.d(TAG, "onCreateView: started");
-        initImageBitmaps();
-//
-//        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.inventorylist_recycleview);
-//        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity())
-//                .build()); //adding a divider into the recyclerview list
+        initImageBitmaps(view);
+////
 //
 //        InventoryRecyclerViewAdapter adapter = new InventoryRecyclerViewAdapter();
 //        recyclerView.setAdapter(adapter);
@@ -71,7 +69,7 @@ public class InventoryListFragment extends Fragment {
         return view;
     }
 
-    private void initImageBitmaps(){
+    private void initImageBitmaps(View view){
         Log.d(TAG, "initImageBitmaps: preparing bitmaps");
 
         mIcon.add(R.drawable.ic_product);
@@ -86,13 +84,16 @@ public class InventoryListFragment extends Fragment {
         mIcon.add(R.drawable.ic_tag);
         mLabel.add("Discounts");
 
-        initRecyclerView();
+        initRecyclerView(view);
 
     }
 
-    private void initRecyclerView(){
-        Log.d(TAG, "initRecyclerView: init recyclerview");
-        RecyclerView recyclerView = getView().findViewById(R.id.inventorylist_recycleview);
+    private void initRecyclerView(View view){
+//        Log.d(TAG, "initRecyclerView: init recyclerview");
+        RecyclerView recyclerView = view.findViewById(R.id.inventorylist_recycleview);
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity())
+                .build()); //adding a divider into the recyclerview list
+
         InventoryRecyclerViewAdapter adapter = new InventoryRecyclerViewAdapter(getActivity(), mIcon, mLabel);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -105,79 +106,11 @@ public class InventoryListFragment extends Fragment {
 
     }
 
-//    //adding a listener to the recycleview list
-//    @Override
-//    public void onInventoryClick(int position) {
-//
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//
-//        switch (position){
-//            case 0:
-//                ProductsFragment productsFragment = new ProductsFragment();
-//                fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, productsFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                break;
-//            case 1:
-//                ServicesFragment servicesFragment = new ServicesFragment();
-//                fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, servicesFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                break;
-//            case  2:
-//                CategoriesFragment categoriesFragment = new CategoriesFragment();
-//                fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, categoriesFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                break;
-//            case 3:
-//                DiscountsFragment discountsFragment = new DiscountsFragment();
-//                fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, discountsFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                break;
-//        }
-//
-//
-//    }
+    //method created from OnInventoryListener from InventoryListFragment.java
+    //handles the onclick for the recycleview items
+    @Override
+    public void onInventoryClick(int position) {
+//        mLabel.get(position); //get the position of the clicked item
 
-
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        InventoryList selectedList = this.list.get(position);
-//
-//        int icon = selectedList.getIcon();
-//        String title = selectedList.getInventory_title();
-//
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//
-//        switch (position){
-//            case 0:
-//                ProductsFragment productsFragment = new ProductsFragment();
-//                fragmentTransaction.add(R.id.inventorylist_fragmentcontainer, productsFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                break;
-//            case 1:
-//                ServicesFragment servicesFragment = new ServicesFragment();
-//                fragmentTransaction.add(R.id.inventorylist_fragmentcontainer, servicesFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                break;
-//            case  2:
-//                CategoriesFragment categoriesFragment = new CategoriesFragment();
-//                fragmentTransaction.add(R.id.inventorylist_fragmentcontainer, categoriesFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                break;
-//            case 3:
-//                DiscountsFragment discountsFragment = new DiscountsFragment();
-//                fragmentTransaction.add(R.id.inventorylist_fragmentcontainer, discountsFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//                break;
-//        }
-//    }
+    }
 }
