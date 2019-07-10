@@ -316,6 +316,14 @@
     <string name="scan_code_label">Scan QR code</string>
 
     <!-- array strings -->
+
+    <string-array name="enterprise_type">
+        <item>School Supplies</item>
+        <item>Hardware Suppies</item>
+        <item>Merchandising Supplies</item>
+        <item>Retail Enterprises</item>
+    </string-array>
+
     <string-array name="categories">
         <item>No category</item>
         <item>Create category</item>

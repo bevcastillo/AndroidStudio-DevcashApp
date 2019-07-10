@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.devcash">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -12,11 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".OwnerSignupActivity"></activity>
         <activity
             android:name=".SubscriptionActivity"
-            android:screenOrientation="landscape"
             android:label="@string/subs_name"
-            android:parentActivityName=".Settings_UI.SettingsActivity"></activity>
+            android:parentActivityName=".Settings_UI.SettingsActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".PaymentInfoActivity"
             android:label="@string/payment_info_title"
@@ -129,7 +131,9 @@
             android:name=".MainActivity"
             android:screenOrientation="landscape" />
 
-        <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="barcode"/>
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
     </application>
 
 </manifest>

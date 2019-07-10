@@ -29,8 +29,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     TextView takephoto, choosephoto;
     EditText txtEmpLname, txtEmpFname, txtEmpEmail, txtEmpPhone;
 
-    DatabaseHelper db;
-
     private static final int PICK_IMAGE = 100;
 
     Uri imageUri;
@@ -106,20 +104,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             String empfname = this.txtEmpFname.getText().toString();
             String empemail = this.txtEmpEmail.getText().toString();
             String empphone = this.txtEmpPhone.getText().toString();
-
-            //validate
-            if(!emplname.equals("") && !empfname.equals("") && !empemail.equals("") && !empphone.equals("")){
-                //save data to database
-
-                long result = db.addEmployee(emplname, empfname, empemail, empphone);
-                if(result > 0){
-                    Toast.makeText(this, "Employee Successfully added.", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }else{
-                Toast.makeText(this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
-            }
-
 
 
         }

@@ -34,12 +34,14 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
     private ArrayList<Integer> mIcon = new ArrayList<>();
     private ArrayList<String> mLabel = new ArrayList<>();
     private Context context;
-    int selectedPosition = -1; //add a highlight to the selected list in the recycleview
+    private int selectedPosition = -1; //add a highlight to the selected list in the recycleview
+    private int selectedItem;
 
     public InventoryRecyclerViewAdapter(Context context, ArrayList<Integer> mIcon, ArrayList<String> mLabel) {
         this.mIcon = mIcon;
         this.mLabel = mLabel;
         this.context = context;
+        selectedItem = 0;
     }
 
     //responsible for inflating the view
@@ -51,6 +53,14 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
         return holder;
     }
 
+        public void selectTaskListItem(int pos){
+        int previousItem = selectedItem;
+        selectedItem = pos;
+
+        notifyItemChanged(previousItem);
+        notifyItemChanged(pos);
+        }
+
         @Override
         public void onBindViewHolder(@NonNull InventoryRecyclerViewAdapter.ViewHolder viewHolder, final int i) {
             Log.d(TAG, "onBindViewHolder: called.");
@@ -61,7 +71,7 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
                     .into(viewHolder.icon);
 
             viewHolder.label.setText(mLabel.get(i));
-            if(selectedPosition == i){
+            if(selectedPosition == i || selectedItem == i){
                 viewHolder.itemView.setBackgroundColor(Color.parseColor("#DCDCDC"));
                 viewHolder.label.setTextColor(Color.parseColor("#ec4e20"));
                 viewHolder.icon.setColorFilter(Color.parseColor("#ec4e20"));
@@ -70,6 +80,7 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
                 viewHolder.label.setTextColor(Color.parseColor("#000000"));
                 viewHolder.icon.setColorFilter(Color.parseColor("#000000"));
             }
+
             viewHolder.customLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -86,6 +97,7 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
                             fragmentTransaction.replace(R.id.inventorylist_fragmentcontainer, productsFragment);
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
+                            selectTaskListItem(i);
                             notifyItemChanged(selectedPosition);
                             selectedPosition=i;
                             notifyItemChanged(selectedPosition);

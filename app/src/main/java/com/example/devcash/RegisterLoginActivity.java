@@ -34,10 +34,12 @@ public class RegisterLoginActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.btn_signup:
-                String url = "https://www.devcash.com.ph/signup.php";
-                Intent devcash = new Intent(Intent.ACTION_VIEW);
-                devcash.setData(Uri.parse(url));
-                startActivity(devcash);
+//                String url = "https://www.devcash.com.ph/signup.php";
+//                Intent devcash = new Intent(Intent.ACTION_VIEW);
+//                devcash.setData(Uri.parse(url));
+//                startActivity(devcash);
+                Intent register = new Intent(RegisterLoginActivity.this, OwnerSignupActivity.class);
+                startActivity(register);
                 break;
         }
     }
