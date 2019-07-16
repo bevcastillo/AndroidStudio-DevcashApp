@@ -53,7 +53,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
     
     public void confirmInput(View v){
 
-        if(!validateEmail() || !validateEmail()){
+        if(!validateEmail() && !validateEmail()){
             return;
         }
 

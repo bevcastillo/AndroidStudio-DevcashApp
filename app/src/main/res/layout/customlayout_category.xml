@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:orientation="horizontal"
-        android:gravity="left|center">
+        android:gravity="left|center"
+        android:padding="@dimen/padding_15">
 
         <ImageView
             android:id="@+id/category_color"
@@ -21,7 +22,8 @@
             android:layout_margin="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_local_offer"
-            android:tint="@color/icon_light"/>
+            android:tint="@color/icon_light"
+            android:layout_marginLeft="@dimen/text_padding"/>
 
         <TextView
             android:id="@+id/txtcategory_name"

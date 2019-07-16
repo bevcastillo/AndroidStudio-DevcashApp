@@ -19,13 +19,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //database name
     static String DATABASE = "devcashdb";
 
-
     //owner table
     static String OWNER = "tbl_owner";
     static String COL_OWNER_ID = "owner_id";
-//    static String COL_ACCT_ID = "account_id"; //foreign key
-//    static String COL_ENT_ID = "enterprise_id"; //foreign key
-//    static String COL_TASK_ID = "task_id";
     static String COL_OWNER_LNAME = "owner_lname";
     static String COL_OWNER_FNAME = "owner_fname";
     static String COL_OWNER_IMAGE = "owner_image";
@@ -36,7 +32,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //enterprise table
     static String ENTERPRISE = "tbl_enterprise";
     static String COL_ENT_ID = "enterprise_id";
-//    static String COL_OWNER_ID = "owner_id"; //foreign key
     static String COL_ENT_NAME = "ent_name";
     static String COL_ENT_INDUSTRY_TYPE = "ent_industry_type";
     static String COL_ENT_ADDR = "ent_address";
@@ -47,7 +42,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //enterprise type
     static String ENTERPRISE_TYPE = "tbl_ent_type";
     static String COL_ENT_TYPE_ID = "ent_type_id";
-//    static String COL_ENT_ID = "enterprise_id"; // foreign key
     static String COL_ENT_TYPE = "ent_type";
     static String COL_ENT_NO_EMP = "ent_tot_num_emp";
 
@@ -63,9 +57,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //employee table
     static String EMPLOYEE = "tbl_employee";
     static String COL_EMP_ID = "emp_id";
-//    static String OWNER = "tbl_owner"; //foreign key
-//static String COL_ACCT_ID = "acct_id"; //foreign key
-//static String COL_TASK_ID = "task_id"; //foreign key
     static String COL_EMP_LNAME = "emp_lname";
     static String COL_EMP_FNAME = "emp_fname";
     static String COL_EMP_IMG = "emp_img";
@@ -83,7 +74,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //payment table
     static String OWNER_PAYMENT = "tbl_owner_payment";
     static String COL_PAYMENT_ID = "payment_id";
-//    static String COL_OWNER_ID = "owner_id"; //foreign key
     static String COL_PAYMENT_DATE_GIVEN = "payment_date_given";
     static String COL_PAYMENT_START_DATE = "payment_start_date";
     static String COL_PAYMENT_END_DATE = "payment_end_date";
@@ -101,9 +91,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //product table
     static String PRODUCT = "tbl_product";
     static String COL_PROD_ID = "prod_id";
-//    static String COL_DISC_ID = "disc_id"; //foreign key
-//    static String COL_CAT_ID = "category_id"; // foreign key
-//    static String COL_INV_ID = "inv_id"; //foreign key
     static String COL_PROD_QRCODE = "prod_qrcode";
     static String COL_PROD_TITLE = "prod_title";
     static String COL_PROD_IMAGE = "prod_image";
@@ -120,14 +107,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //inventory table
     static String INVENTORY = "tbl_inventory";
     static String COL_INV_ID = "inventory_id";
-//    static String PRODUCT = "tbl_product"; //foreign key
     static String COL_INV_STOCK = "inventory_stock";
     static String COL_INV_DATE_ADDED = "inventory_date_added";
     static String COL_INV_DATE_UPDATED = "inventory_date_updated";
 
     //service table
     static String SERVICE = "tbl_service";
-//    static String COL_DISC_ID = "discount_id"; //foreign key
     static String COL_SERVICE_ID = "service_id";
     static String COL_SERVICE_QRCODE = "service_qrcode";
     static String COL_SERVICE_TITLE = "service_title";
@@ -137,7 +122,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //discount table
     static String DISCOUNT = "tbl_discount";
     static String COL_DISC_ID = "discount_id";
-//    static String OWNER = "tbl_owner"; //foreign key
     static String COL_DISC_CODE = "discount_code";
     static String COL_DISC_VALUE = "discount_value";
     static String COL_DISC_TYPE = "discount_type";
@@ -149,10 +133,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //purchase transaction table
     static String TRANSACTION = "tbl_trans";
     static String COL_TRANS_ID = "trans_id";
-//    static String COL_PROD_ID = "prod_id"; //foreign key
-//    static String COL_SERVICE_ID = "service_id"; //foreign key
-//    static String COL_EMP_ID = "emp_id"; //foreign key
-//    static String COL_ENT_ID = "enterprise_id"; //foreign key
     static String COL_TRANS_CUST_TYPE = "trans_cust_type";
     static String COL_TRANS_CUST_CTCNUM = "trans_cust_ctcnum";
     static String COL_TRANS_CUST_EMAIL = "trans_cust_email";
@@ -196,7 +176,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COL_OWNER_GENDER + "TEXT,"
             + COL_OWNER_CTCNUM + "INTEGER,"
             + "FOREIGN KEY("+ COL_ACCT_ID +") REFERENCES "+ ACCOUNT +"("+ COL_ACCT_ID +"),"
-            + "FOREIGN KEY("+ COL_ENT_ID+") REFERENCES" + ENTERPRISE + "("+ COL_ENT_ID+ "));";
+            + "FOREIGN KEY("+ COL_ENT_ID+") REFERENCES " + ENTERPRISE + "("+ COL_ENT_ID+ "));";
 
     private static final String CREATE_TABLE_ACCOUNT = " CREATE TABLE "
             + ACCOUNT + "("
@@ -220,7 +200,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "FOREIGN KEY("+ COL_OWNER_ID +") REFERENCES "+ OWNER +"("+ COL_OWNER_ID +"), "
             + "FOREIGN KEY("+ COL_ACCT_ID +") REFERENCES "+ ACCOUNT +"("+ COL_ACCT_ID +"));";
 
-    private static final String CREATE_TABLE_OWNER_PAYMENT = " CREATE TABLE"
+    private static final String CREATE_TABLE_OWNER_PAYMENT = " CREATE TABLE "
             + OWNER_PAYMENT + "(  "
             + COL_PAYMENT_ID + "INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COL_PAYMENT_DATE_GIVEN + "DATE,"
@@ -295,20 +275,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "FOREIGN KEY("+ COL_EMP_ID +") REFERENCES "+ EMPLOYEE +"("+ COL_EMP_ID +"),"
             + "FOREIGN KEY("+ COL_ENT_ID +") REFERENCES "+ ENTERPRISE +"("+ COL_ENT_ID +"));";
 
-
-
-
     //calling the sql query created from CREATE_TABLE_EMPLOYEES
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //creating employee table
+        //creating the tables
         db.execSQL(CREATE_TABLE_CATEGORY);
-
+        db.execSQL(CREATE_TABLE_ACCOUNT);
+        db.execSQL(CREATE_TABLE_EMPLOYEE);
+        db.execSQL(CREATE_TABLE_ENT_TYPE);
+        db.execSQL(CREATE_TABLE_ENTERPRISE);
+        db.execSQL(CREATE_TABLE_INVENTORY);
+        db.execSQL(CREATE_TABLE_OWNER);
+        db.execSQL(CREATE_TABLE_OWNER_PAYMENT);
+        db.execSQL(CREATE_TABLE_SERVICES);
+        db.execSQL(CREATE_TABLE_TRANSACTION);
+        db.execSQL(CREATE_TABLE_PRODUCT);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS '" + CATEGORY + "'");
+        db.execSQL("DROP TABLE IF EXISTS '" + ACCOUNT +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + EMPLOYEE +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + ENTERPRISE_TYPE +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + ENTERPRISE +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + INVENTORY +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + OWNER +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + OWNER_PAYMENT +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + SERVICE +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + TRANSACTION +"'");
+        db.execSQL("DROP TABLE IF EXISTS '" + PRODUCT +"'");
+
         onCreate(db);
 
     }
@@ -325,6 +322,72 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long insert = db.insert(CATEGORY, null, values);
 
         return insert;
+    }
+
+    //insert data to account table
+    public  boolean insert_account(String acc_uname, String acc_email, String acc_passw, String acc_type, String acc_status){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("acc_uname", acc_uname);
+        contentValues.put("acc_email", acc_email);
+        contentValues.put("acc_passw", acc_passw);
+        contentValues.put("acc_type", acc_type);
+        contentValues.put("acc_status", acc_status);
+
+        long insert = db.insert("ACCOUNT", null, contentValues);
+        if(insert==1)
+            return false;
+        else
+            return true;
+    }
+
+    //insert into owner table
+    public boolean insert_owner(String owner_lname, String owner_fname, String owner_image, String owner_dob, String owner_gender, String owner_ctcnum){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("owner_lname", owner_lname);
+        contentValues.put("owner_fname", owner_fname);
+        contentValues.put("owner_image", owner_image);
+        contentValues.put("owner_dob", owner_dob);
+        contentValues.put("owner_gender", owner_gender);
+        contentValues.put("owner_ctcnum", owner_ctcnum);
+
+        long insert = db.insert("OWNER", null, contentValues);
+        if(insert==1)
+            return false;
+        else
+            return true;
+    }
+
+    //checking if email address already exists
+    public Boolean checkEmail(String acc_email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM ACCOUNT WHERE COL_ACCT_EMAIL=?", new String[]{acc_email});
+        if(cursor.getCount() > 0)
+            return false;
+        else
+            return true;
+    }
+
+    //check if username already exists
+    public Boolean checkUsername(String acc_username){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM ACCOUNT WHERE COL_ACCT_UNAME=?", new String[]{acc_username});
+        if(cursor.getCount() > 0)
+            return false;
+        else
+            return true;
+    }
+
+    //check if username/email and passw match the record for login
+    public Boolean useramailpassw(String acc_username, String acc_email, String acc_passw){
+        SQLiteDatabase db =this.getReadableDatabase();
+        Cursor cursor  = db.rawQuery("SELECT * FROM ACCOUNT WHERE COL_ACCT_EMAIL=? AND COL_ACCT_UNAME=? AND COL_ACCT_PASSW=?",
+                new String[]{acc_username, acc_email, acc_passw});
+        if(cursor.getCount() > 0)
+            return false;
+        else
+            return true;
     }
 
 
