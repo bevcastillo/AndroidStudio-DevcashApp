@@ -29,4 +29,6 @@
     <color name="color_itemcount">#E1E6E9</color>
     <color name="colorGray">#424949</color>
 
+    <color name="colorBlack">#000000</color>
+
 </resources>
