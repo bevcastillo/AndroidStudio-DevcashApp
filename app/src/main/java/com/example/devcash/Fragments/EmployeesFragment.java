@@ -15,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddEmployeeActivity;
+import com.example.devcash.ADD_UI.AddProductActivity;
 import com.example.devcash.R;
 
 
@@ -52,21 +54,22 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
         emp_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // when add fab is pressed, go to add product activity
+//                // when add fab is pressed, go to add product activity
                 Intent addprod = new Intent(getActivity(), AddEmployeeActivity.class);
                 startActivity(addprod);
+
             }
         });
 
-        //handles listview
-        ListView lvemployees = view.findViewById(R.id.emplist_listview);
-
-        //set adapter
-        // set click listener
-
-        //show no data found text when listview is empty
-        lvemployees.setEmptyView(view.findViewById(R.id.emptyemployees_face));
-        lvemployees.setEmptyView(view.findViewById(R.id.empty_employees));
+//        //handles listview
+//        ListView lvemployees = view.findViewById(R.id.emplist_listview);
+//
+//        //set adapter
+//        // set click listener
+//
+//        //show no data found text when listview is empty
+//        lvemployees.setEmptyView(view.findViewById(R.id.emptyemployees_face));
+//        lvemployees.setEmptyView(view.findViewById(R.id.empty_employees));
 
         return view;
     }

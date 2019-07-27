@@ -3,53 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.EmployeesFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.EmployeesFragment"
+    android:orientation="vertical">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/product_pulltorefresh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ListView
-            android:id="@+id/emplist_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:dividerHeight="1dp"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <LinearLayout
-        android:id="@+id/employeelist_layout"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_purchaseitemlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical">
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        style="@style/PrimaryHeaderBar"
+        android:elevation="4dp"
+        app:title="@string/employees"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Title">
 
-        <ImageView
-            android:id="@+id/emptyemployees_face"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_cry_face"
-            android:layout_gravity="center"/>
+    </android.support.v7.widget.Toolbar>
 
-        <TextView
-            android:id="@+id/empty_employees"
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/product_pulltorefresh"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/emplist_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+,
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addemp_fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/nodata_employees"
-            android:layout_marginTop="15dp"/>
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_add"
+            android:tint="@color/whiteBG"
+            android:backgroundTint="@color/colorPrimary"/>
 
-    </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addemp_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add"
-        android:tint="@color/whiteBG"
-        android:backgroundTint="@color/colorPrimary"/>
 
 </FrameLayout>

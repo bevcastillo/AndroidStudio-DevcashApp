@@ -128,7 +128,8 @@
                 android:background="@color/whiteBG"
                 android:padding="10dp"
                 android:layout_marginRight="@dimen/padding_30"
-                android:layout_marginLeft="@dimen/padding_30">
+                android:layout_marginLeft="@dimen/padding_30"
+                android:layout_marginTop="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -166,7 +167,8 @@
                 android:background="@color/whiteBG"
                 android:padding="10dp"
                 android:layout_marginLeft="@dimen/padding_30"
-                android:layout_marginRight="@dimen/padding_30">
+                android:layout_marginRight="@dimen/padding_30"
+                android:layout_marginTop="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -204,7 +206,8 @@
                 android:background="@color/whiteBG"
                 android:padding="10dp"
                 android:layout_marginRight="@dimen/padding_30"
-                android:layout_marginLeft="@dimen/padding_30">
+                android:layout_marginLeft="@dimen/padding_30"
+                android:layout_marginTop="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -242,7 +245,8 @@
                 android:background="@color/whiteBG"
                 android:padding="10dp"
                 android:layout_marginLeft="@dimen/padding_30"
-                android:layout_marginRight="@dimen/padding_30">
+                android:layout_marginRight="@dimen/padding_30"
+                android:layout_marginTop="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -281,7 +285,8 @@
                 android:padding="10dp"
                 android:layout_marginBottom="@dimen/padding_50"
                 android:layout_marginRight="@dimen/padding_30"
-                android:layout_marginLeft="@dimen/padding_30">
+                android:layout_marginLeft="@dimen/padding_30"
+                android:layout_marginTop="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -7,14 +7,18 @@ import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +31,9 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
     ImageView empphoto;
     TextView takephoto, choosephoto;
-    EditText txtEmpLname, txtEmpFname, txtEmpEmail, txtEmpPhone;
+    TextInputEditText txtEmpLname, txtEmpFname, txtEmpEmail, txtEmpPhone;
+    RadioGroup grpTask;
+    RadioButton selectedTask;
 
     private static final int PICK_IMAGE = 100;
 
@@ -43,12 +49,17 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
         //
         empphoto = (ImageView) findViewById(R.id.emp_photo) ;
+
         takephoto = (TextView) findViewById(R.id.txt_emptakephoto);
         choosephoto = (TextView) findViewById(R.id.txt_empchoosephoto);
-        txtEmpLname = (EditText) findViewById(R.id.text_input_emp_lname);
-        txtEmpFname = (EditText) findViewById(R.id.text_input_emp_fname);
-        txtEmpEmail = (EditText) findViewById(R.id.text_input_emp_email_address);
-        txtEmpPhone = (EditText) findViewById(R.id.text_input_emp_pnumber);
+
+        txtEmpLname = (TextInputEditText) findViewById(R.id.text_input_emp_lname);
+        txtEmpFname = (TextInputEditText) findViewById(R.id.text_input_emp_fname);
+        txtEmpEmail = (TextInputEditText) findViewById(R.id.text_input_emp_email_address);
+        txtEmpPhone = (TextInputEditText) findViewById(R.id.text_input_emp_pnumber);
+
+        grpTask = (RadioGroup) findViewById(R.id.radio_group_emp_task);
+
         //
 
         //add listeners to the textviews
@@ -143,6 +154,9 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         }
 
     }
+
+
+
 
 
 }

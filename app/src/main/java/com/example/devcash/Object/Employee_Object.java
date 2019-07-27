@@ -3,29 +3,75 @@ package com.example.devcash.Object;
 import android.net.Uri;
 
 public class Employee_Object {
-    Uri emp_imageUri;
-    String emp_lname, emp_fname, emp_dob, emp_gender, emp_email, emp_ctcnum, emp_task;
+    private Uri emp_imageUri;
+    //PK emp_id
+    //FK owner_id, acct_id, task_id
+    private int emp_id, owner_id, acct_id, task_id, emp_ctcnum;
+    private String emp_lname, emp_fname, emp_dob, emp_gender, emp_email, emp_task;
 
-    //contructor
-    public Employee_Object(Uri emp_imageUri, String emp_lname, String emp_fname, String emp_dob,
-                           String emp_gender, String emp_email, String emp_ctcnum, String emp_task) {
+    public Employee_Object(Uri emp_imageUri, int emp_id, int owner_id, int acct_id, int task_id,
+                           int emp_ctcnum, String emp_lname, String emp_fname, String emp_dob,
+                           String emp_gender, String emp_email, String emp_task) {
         this.emp_imageUri = emp_imageUri;
+        this.emp_id = emp_id;
+        this.owner_id = owner_id;
+        this.acct_id = acct_id;
+        this.task_id = task_id;
+        this.emp_ctcnum = emp_ctcnum;
         this.emp_lname = emp_lname;
         this.emp_fname = emp_fname;
         this.emp_dob = emp_dob;
         this.emp_gender = emp_gender;
         this.emp_email = emp_email;
-        this.emp_ctcnum = emp_ctcnum;
         this.emp_task = emp_task;
     }
 
-    //getters and setters
     public Uri getEmp_imageUri() {
         return emp_imageUri;
     }
 
     public void setEmp_imageUri(Uri emp_imageUri) {
         this.emp_imageUri = emp_imageUri;
+    }
+
+    public int getEmp_id() {
+        return emp_id;
+    }
+
+    public void setEmp_id(int emp_id) {
+        this.emp_id = emp_id;
+    }
+
+    public int getOwner_id() {
+        return owner_id;
+    }
+
+    public void setOwner_id(int owner_id) {
+        this.owner_id = owner_id;
+    }
+
+    public int getAcct_id() {
+        return acct_id;
+    }
+
+    public void setAcct_id(int acct_id) {
+        this.acct_id = acct_id;
+    }
+
+    public int getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(int task_id) {
+        this.task_id = task_id;
+    }
+
+    public int getEmp_ctcnum() {
+        return emp_ctcnum;
+    }
+
+    public void setEmp_ctcnum(int emp_ctcnum) {
+        this.emp_ctcnum = emp_ctcnum;
     }
 
     public String getEmp_lname() {
@@ -66,14 +112,6 @@ public class Employee_Object {
 
     public void setEmp_email(String emp_email) {
         this.emp_email = emp_email;
-    }
-
-    public String getEmp_ctcnum() {
-        return emp_ctcnum;
-    }
-
-    public void setEmp_ctcnum(String emp_ctcnum) {
-        this.emp_ctcnum = emp_ctcnum;
     }
 
     public String getEmp_task() {

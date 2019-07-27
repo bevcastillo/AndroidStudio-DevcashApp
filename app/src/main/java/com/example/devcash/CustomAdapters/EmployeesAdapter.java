@@ -47,7 +47,7 @@ public class EmployeesAdapter extends BaseAdapter {
         if(convertView == null){
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.employee_customlayout, null, true);
+            convertView = inflater.inflate(R.layout.customlayout_employee, null, true);
 
             holder.emp_img = (ImageView) convertView.findViewById(R.id.imgemp_image);
             holder.text_emplname = (TextView) convertView.findViewById(R.id.txtemp_lname);
