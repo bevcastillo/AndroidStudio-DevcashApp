@@ -74,6 +74,23 @@
 
                     </android.support.design.widget.TextInputLayout>
 
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/text_input_dob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/birthdate"
+                            android:inputType="text"
+                            android:padding="@dimen/text_padding"
+                            android:textColorHint="@color/colorPrimary"
+                            android:textSize="@dimen/text_inputs" />
+
+                    </android.support.design.widget.TextInputLayout>
+
                     <LinearLayout
                         android:id="@+id/emp_emailaddress_layout"
                         android:layout_width="match_parent"

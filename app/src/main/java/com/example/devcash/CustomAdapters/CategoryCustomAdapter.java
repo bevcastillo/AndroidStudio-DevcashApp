@@ -5,17 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.devcash.Object.Category_Object;
+import com.example.devcash.Object.CategoryObj;
 import com.example.devcash.R;
 
 import java.util.ArrayList;
 
 public class CategoryCustomAdapter extends RecyclerView.Adapter<CategoryCustomAdapter.CategoryViewHolder> {
 
-    private ArrayList<Category_Object> mCatArrayList;
+    private ArrayList<CategoryObj> mCatArrayList;
 
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder{
@@ -41,7 +40,7 @@ public class CategoryCustomAdapter extends RecyclerView.Adapter<CategoryCustomAd
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder categoryViewHolder, int i) {
-        Category_Object currentItem = mCatArrayList.get(i);
+        CategoryObj currentItem = mCatArrayList.get(i);
 
         categoryViewHolder.mCatName.setText(currentItem.getCategory_name());
 

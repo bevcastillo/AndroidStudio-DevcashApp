@@ -314,7 +314,7 @@
     <string name="customer_type_label">Customer Type</string>
 
     <string name="scan_code_label">Scan QR code</string>
-
+    <string name="birthdate">Birthdate</string>
     <!-- array strings -->
 
     <string-array name="enterprise_type">

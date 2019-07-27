@@ -2,16 +2,21 @@ package com.example.devcash.Object;
 
 import android.net.Uri;
 
-public class Employee_Object {
+/*
+       created by Beverly Castillo on July 7, 2019
+ */
+
+
+public class EmployeeObj {
     private Uri emp_imageUri;
     //PK emp_id
     //FK owner_id, acct_id, task_id
     private int emp_id, owner_id, acct_id, task_id, emp_ctcnum;
     private String emp_lname, emp_fname, emp_dob, emp_gender, emp_email, emp_task;
 
-    public Employee_Object(Uri emp_imageUri, int emp_id, int owner_id, int acct_id, int task_id,
-                           int emp_ctcnum, String emp_lname, String emp_fname, String emp_dob,
-                           String emp_gender, String emp_email, String emp_task) {
+    public EmployeeObj(Uri emp_imageUri, int emp_id, int owner_id, int acct_id, int task_id,
+                       int emp_ctcnum, String emp_lname, String emp_fname, String emp_dob,
+                       String emp_gender, String emp_email, String emp_task) {
         this.emp_imageUri = emp_imageUri;
         this.emp_id = emp_id;
         this.owner_id = owner_id;

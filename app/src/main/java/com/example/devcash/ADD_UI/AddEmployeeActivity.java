@@ -1,5 +1,6 @@
 package com.example.devcash.ADD_UI;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -27,13 +29,16 @@ import com.example.devcash.R;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
+
 public class AddEmployeeActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView empphoto;
     TextView takephoto, choosephoto;
-    TextInputEditText txtEmpLname, txtEmpFname, txtEmpEmail, txtEmpPhone;
+    TextInputEditText txtEmpLname, txtEmpFname, txtEmpEmail, txtEmpPhone, txtEmpDob;
     RadioGroup grpTask;
     RadioButton selectedTask;
+    DatePickerDialog bdatePickerDia;
 
     private static final int PICK_IMAGE = 100;
 
@@ -57,12 +62,14 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         txtEmpFname = (TextInputEditText) findViewById(R.id.text_input_emp_fname);
         txtEmpEmail = (TextInputEditText) findViewById(R.id.text_input_emp_email_address);
         txtEmpPhone = (TextInputEditText) findViewById(R.id.text_input_emp_pnumber);
+        txtEmpDob = (TextInputEditText) findViewById(R.id.text_input_dob);
 
         grpTask = (RadioGroup) findViewById(R.id.radio_group_emp_task);
 
         //
 
         //add listeners to the textviews
+        txtEmpDob.setOnClickListener(this);
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
 
@@ -126,8 +133,9 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     // handles camera clicks
     @Override
     public void onClick(View v) {
+        int sid = v.getId();
 
-        switch (v.getId()){
+        switch (sid){
 
             case R.id.txt_empchoosephoto:
                 Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -136,6 +144,25 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             case R.id.txt_emptakephoto:
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(camera, 0);
+                break;
+            case R.id.text_input_dob:
+                //calendar class's instance and get current date, month and year from calendar
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); //current year
+                int mMonth = c.get(Calendar.MONTH); //current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); //current date of the month
+
+                //date picker dialog
+                bdatePickerDia = new DatePickerDialog(AddEmployeeActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                //set day month, month and year value in the textinputedittext
+                                txtEmpDob.setText(dayOfMonth + "/"
+                                                + (month + 1) + "/" + year);
+                            }
+                        }, mYear, mMonth, mDay);
+                            bdatePickerDia.show();
                 break;
         }
     }
