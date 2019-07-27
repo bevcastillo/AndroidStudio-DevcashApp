@@ -25,7 +25,7 @@
             android:id="@+id/txtservice_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Employee name"
+            android:text="Discount Name"
             android:textColor="@color/dark_text"
             android:textSize="@dimen/text_inputs"
             android:layout_marginLeft="@dimen/text_padding"/>

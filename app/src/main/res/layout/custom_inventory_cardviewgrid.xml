@@ -25,6 +25,7 @@
             android:layout_alignParentRight="true">
 
             <TextView
+                android:id="@+id/prod_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -43,6 +44,7 @@
             android:layout_alignParentBottom="true">
 
             <TextView
+                android:id="@+id/prod_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
