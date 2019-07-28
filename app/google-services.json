@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "946062674376",
+    "firebase_url": "https://devcashpos-app.firebaseio.com",
+    "project_id": "devcashpos-app",
+    "storage_bucket": "devcashpos-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946062674376:android:df43c07251166a70",
+        "android_client_info": {
+          "package_name": "com.example.devcash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946062674376-kqfm7007035llbtvopq9bmtosglcm5c0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.devcash",
+            "certificate_hash": "d29b713ff219ed2cf70deb8a986716577672a83b"
+          }
+        },
+        {
+          "client_id": "946062674376-jomf6p8obipl8sfs93n78r0rl5e1or7h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrhekGtnQOD7aRtU70zISBjSgzDs3C8ek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946062674376-jomf6p8obipl8sfs93n78r0rl5e1or7h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

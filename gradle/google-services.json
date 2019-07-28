@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "639889029152",
+    "firebase_url": "https://androidlistviewlocation.firebaseio.com",
+    "project_id": "androidlistviewlocation",
+    "storage_bucket": "androidlistviewlocation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639889029152:android:e50a2a62a1593274",
+        "android_client_info": {
+          "package_name": "com.example.listviewlocation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639889029152-6618idhuhg0fijv1iufh3ge28iclapue.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOcxdJ8ZeG8tDB6L4qCiEuZ3NG9XGfqcE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

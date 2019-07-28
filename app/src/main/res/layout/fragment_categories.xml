@@ -23,55 +23,36 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/category_pulltorefresh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/category_pulltorefresh"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ListView
-                android:id="@+id/categorylist_listview"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/catrecyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:dividerHeight="1dp"/>
+                android:layout_height="wrap_content"
+                android:dividerHeight="1dp" />
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:id="@+id/empty_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="310dp"
-                    android:gravity="center"
-                    android:text="@string/nodata_categories" />
-
-            </RelativeLayout>
-
-
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/addcategories_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/ic_add"
+                android:tint="@color/whiteBG"
+                android:backgroundTint="@color/colorPrimary"/>
         </FrameLayout>
 
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addcategories_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add"
-        android:tint="@color/whiteBG"
-        android:backgroundTint="@color/colorPrimary"/>
+
 
 
 </LinearLayout>

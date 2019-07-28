@@ -56,6 +56,16 @@
 
                     </android.support.design.widget.TextInputLayout>
 
+                    <Button
+                        android:id="@+id/btnaddcategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:text="ADD"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="@dimen/padding_15"/>
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

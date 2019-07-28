@@ -1,10 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
 
 android {
     compileSdkVersion 28
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+    }
+
     defaultConfig {
         applicationId "com.example.devcash"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -31,11 +39,15 @@ dependencies {
     implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
 
     implementation 'com.github.bumptech.glide:glide:4.4.0' //library for GLIDER
+//    implementation 'com.google.firebase:firebase-database:16.0.4'
+//    implementation 'com.google.firebase:firebase-core:17.0.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-database:16.0.6'
+    implementation 'com.firebase:firebase-client-android:2.5.2'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
-    implementation 'com.google.android.gms:play-services:9.8.0'
 }

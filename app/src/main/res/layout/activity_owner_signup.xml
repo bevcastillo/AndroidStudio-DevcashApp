@@ -49,7 +49,6 @@
                     android:paddingRight="@dimen/padding_30">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_enterprise_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -81,7 +80,6 @@
                         android:paddingTop="@dimen/padding_top" />
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_number_employees"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -100,7 +98,6 @@
 
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -118,7 +115,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_TIN"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -136,7 +132,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_permit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -154,7 +149,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_firstname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -172,7 +166,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_lastname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -190,7 +183,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_mobile_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -208,7 +200,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -226,7 +217,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -244,7 +234,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
@@ -262,7 +251,6 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_confirm_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">

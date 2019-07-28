@@ -2,11 +2,13 @@ package com.example.devcash.ADD_UI;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,26 +17,67 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.devcash.Database.DatabaseHelper;
+import com.example.devcash.Fragments.CategoriesFragment;
+import com.example.devcash.Object.Category;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class AddCategoryActivity extends AppCompatActivity {
 
-    TextInputEditText txtCategoryName;
-    DatabaseHelper db;
+    private DatabaseReference firebaseDatabase;
+    private FirebaseDatabase firebaseInstance;
+    private String CategoryId;
 
+    TextInputEditText categoryName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
 
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //
-        db = new DatabaseHelper(this);
-
-        txtCategoryName = (TextInputEditText) findViewById(R.id.text_categoryname);
+        categoryName = (TextInputEditText) findViewById(R.id.text_categoryname);
+        firebaseInstance = FirebaseDatabase.getInstance();
+        firebaseDatabase = firebaseInstance.getReference("DataDevcash");
+        CategoryId = firebaseDatabase.push().getKey();
 
     }
+
+    public void addCategory (String categoryName){
+        Category category = new Category(categoryName);
+        firebaseDatabase.child("Category").child(CategoryId).setValue(category);
+    }
+
+    public void insertCategory(){
+        addCategory(categoryName.getText().toString().trim());
+        Toast.makeText(getApplicationContext(), "Category Successfully Added!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+//    public void viewData(){
+//        firebaseDatabase.child("Users").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                    String dbcategoryname = ds.child("categoryName").getValue(String.class);
+//                    Log.d("TAG", dbcategoryname);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,16 +109,6 @@ public class AddCategoryActivity extends AppCompatActivity {
         builder.show();
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if(item.getItemId() == android.R.id.home){
-//            onBackPressed();
-//            return true;
-//        }else
-//        return super.onOptionsItemSelected(item);
-//    }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -87,21 +120,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
-            //collect the inputted data
-            String category_name = txtCategoryName.getEditableText().toString();
-
-            //validate
-            if(!category_name.equals("")){
-                //save to database
-                long result = db.addCategory(category_name);
-                if(result > 0){
-                    Toast.makeText(this, "Category Successfully added.", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }else{
-                Toast.makeText(this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
-            }
-
+            insertCategory();
 
         }
             return super.onOptionsItemSelected(item);

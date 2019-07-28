@@ -99,14 +99,14 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
         });
 
         //handles listview
-        ListView lvdiscounts = view.findViewById(R.id.discountlist_listview);
+//        ListView lvdiscounts = view.findViewById(R.id.discountlist_listview);
 
         //set adapter
         // set click listener
 
-        //show no data found text when listview is empty
-        lvdiscounts.setEmptyView(view.findViewById(R.id.emptydiscount_face));
-        lvdiscounts.setEmptyView(view.findViewById(R.id.empty_discount));
+//        //show no data found text when listview is empty
+//        lvdiscounts.setEmptyView(view.findViewById(R.id.emptydiscount_face));
+//        lvdiscounts.setEmptyView(view.findViewById(R.id.empty_discount));
 
         return view;
     }

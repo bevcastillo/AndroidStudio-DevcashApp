@@ -341,15 +341,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
+    //insert into enterprise table
+    public boolean insert_ent(String ent_name, String ent_type, String ent_addr){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("ent_name", ent_name);
+        contentValues.put("ent_type", ent_type);
+        contentValues.put("ent_addr", ent_addr);
+
+        long insert = db.insert("ENTERPRISE", null, contentValues);
+        if(insert==1)
+            return false;
+        else
+            return true;
+
+    }
+
     //insert into owner table
-    public boolean insert_owner(String owner_lname, String owner_fname, String owner_image, String owner_dob, String owner_gender, String owner_ctcnum){
+    public boolean insert_owner(String owner_lname, String owner_fname, String owner_ctcnum){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("owner_lname", owner_lname);
         contentValues.put("owner_fname", owner_fname);
-        contentValues.put("owner_image", owner_image);
-        contentValues.put("owner_dob", owner_dob);
-        contentValues.put("owner_gender", owner_gender);
         contentValues.put("owner_ctcnum", owner_ctcnum);
 
         long insert = db.insert("OWNER", null, contentValues);
