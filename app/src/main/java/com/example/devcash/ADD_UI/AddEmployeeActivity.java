@@ -25,7 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.Database.DatabaseHelper;
+import com.example.devcash.Object.Employee;
 import com.example.devcash.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
@@ -33,16 +36,19 @@ import java.util.Calendar;
 
 public class AddEmployeeActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private DatabaseReference dbreference;
+    private FirebaseDatabase firebasedb;
+    private String EmployeeId;
+    TextInputEditText empLname, empFname, empEmail, empPhone, empDOB;
+    Uri empimageUri;
     ImageView empphoto;
     TextView takephoto, choosephoto;
-    TextInputEditText txtEmpLname, txtEmpFname, txtEmpEmail, txtEmpPhone, txtEmpDob;
     RadioGroup grpTask;
     RadioButton selectedTask;
     DatePickerDialog bdatePickerDia;
 
     private static final int PICK_IMAGE = 100;
 
-    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,26 +60,36 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
         //
         empphoto = (ImageView) findViewById(R.id.emp_photo) ;
-
         takephoto = (TextView) findViewById(R.id.txt_emptakephoto);
         choosephoto = (TextView) findViewById(R.id.txt_empchoosephoto);
-
-        txtEmpLname = (TextInputEditText) findViewById(R.id.text_input_emp_lname);
-        txtEmpFname = (TextInputEditText) findViewById(R.id.text_input_emp_fname);
-        txtEmpEmail = (TextInputEditText) findViewById(R.id.text_input_emp_email_address);
-        txtEmpPhone = (TextInputEditText) findViewById(R.id.text_input_emp_pnumber);
-        txtEmpDob = (TextInputEditText) findViewById(R.id.text_input_dob);
+        empLname = (TextInputEditText) findViewById(R.id.text_input_emp_lname);
+        empFname = (TextInputEditText) findViewById(R.id.text_input_emp_fname);
+        empEmail = (TextInputEditText) findViewById(R.id.text_input_emp_email_address);
+        empPhone = (TextInputEditText) findViewById(R.id.text_input_emp_pnumber);
+        empDOB = (TextInputEditText) findViewById(R.id.text_input_dob);
 
         grpTask = (RadioGroup) findViewById(R.id.radio_group_emp_task);
 
         //
 
         //add listeners to the textviews
-        txtEmpDob.setOnClickListener(this);
+        empDOB.setOnClickListener(this);
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
 
+        dbreference = firebasedb.getReference("/datadevcash");
+        EmployeeId = dbreference.push().getKey();
 
+
+    }
+
+    public void addEmployee(Uri empImageUri, String empLname, String empFname, String empTask, String empDOB, String empGender, String empBdate, int empCtcnum){
+        Employee employee = new Employee(empImageUri, empLname, empFname, empTask, empDOB, empGender, empBdate, empCtcnum);
+        dbreference.child("/employees").child(String.valueOf(EmployeeId)).setValue(employee);
+    }
+
+    public void insertEmployee(){
+//        addEmployee(imageUri, txtEmpLname, );
     }
 
     @Override
@@ -117,11 +133,11 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
-            //collect the inputted data
-            String emplname = this.txtEmpLname.getText().toString();
-            String empfname = this.txtEmpFname.getText().toString();
-            String empemail = this.txtEmpEmail.getText().toString();
-            String empphone = this.txtEmpPhone.getText().toString();
+//            //collect the inputted data
+//            String emplname = this.txtEmpLname.getText().toString();
+//            String empfname = this.txtEmpFname.getText().toString();
+//            String empemail = this.txtEmpEmail.getText().toString();
+//            String empphone = this.txtEmpPhone.getText().toString();
 
 
         }
@@ -138,7 +154,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         switch (sid){
 
             case R.id.txt_empchoosephoto:
-                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                Intent gallery = new Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                 startActivityForResult(gallery, PICK_IMAGE);
                 break;
             case R.id.txt_emptakephoto:
@@ -158,7 +174,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 //set day month, month and year value in the textinputedittext
-                                txtEmpDob.setText(dayOfMonth + "/"
+                                empDOB.setText(dayOfMonth + "/"
                                                 + (month + 1) + "/" + year);
                             }
                         }, mYear, mMonth, mDay);
@@ -173,8 +189,8 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
-            imageUri = data.getData();
-            empphoto.setImageURI(imageUri);
+            empimageUri = data.getData();
+            empphoto.setImageURI(empimageUri);
         }else{
             Bitmap bitmap = (Bitmap)data.getExtras().get("data");
             empphoto.setImageBitmap(bitmap);

@@ -1,6 +1,8 @@
 package com.example.devcash.CustomAdapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,67 +11,50 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.devcash.Model.EmployeeList;
+import com.example.devcash.Object.Employee;
 import com.example.devcash.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class EmployeesAdapter extends BaseAdapter {
+public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.ViewHolder> {
+    Context context;
+    ArrayList<Employee> employeeArrayList;
 
-    private Context context;
-    private ArrayList<EmployeeList> employeeListArrayList;
+    public EmployeesAdapter(Context c, ArrayList<Employee> employees) {
+        context = c;
+        employeeArrayList = employees;
+    }
 
-
-    public EmployeesAdapter(Context context, ArrayList<EmployeeList> employeeListArrayList) {
-        this.context = context;
-        this.employeeListArrayList = employeeListArrayList;
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_employee,viewGroup,false);
+        return new ViewHolder(v);
     }
 
     @Override
-    public int getCount() {
-        return employeeListArrayList.size();
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+
     }
 
     @Override
-    public Object getItem(int position) {
-        return employeeListArrayList.get(position);
+    public int getItemCount() {
+        return employeeArrayList.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
+    class ViewHolder extends RecyclerView.ViewHolder{
+        TextView emplname, empfname, empusername, emptask;
+        ImageView empImage;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder;
-
-        if(convertView == null){
-            holder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.customlayout_employee, null, true);
-
-            holder.emp_img = (ImageView) convertView.findViewById(R.id.imgemp_image);
-            holder.text_emplname = (TextView) convertView.findViewById(R.id.txtemp_lname);
-            holder.text_empfname = (TextView) convertView.findViewById(R.id.txtemp_fname);
-            holder.text_emptask = (TextView) convertView.findViewById(R.id.txtemp_task);
-
-            convertView.setTag(holder);
-        }else{
-            //the getTag returns the viewHolder object set as a tag
-            holder = (ViewHolder)convertView.getTag();
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            empImage = (ImageView) itemView.findViewById(R.id.imgemp_image);
+            emplname = (TextView) itemView.findViewById(R.id.txtemp_lname);
+            empfname = (TextView) itemView.findViewById(R.id.txtemp_fname);
+            emptask = (TextView) itemView.findViewById(R.id.txtemp_task);
         }
-
-        //display the data into the EmployeeListFragment
-        holder.emp_img.setImageResource(employeeListArrayList.get(position).getEmp_img());
-        holder.text_emplname.setText(employeeListArrayList.get(position).getEmp_lname());
-        holder.text_empfname.setText(employeeListArrayList.get(position).getEmp_fname());
-
-        return convertView;
     }
 
-    private class ViewHolder{
-        protected ImageView emp_img;
-        protected TextView text_emplname, text_empfname, text_emptask;
-    }
 }

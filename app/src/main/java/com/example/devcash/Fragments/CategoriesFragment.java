@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -62,6 +64,8 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
     RecyclerView categoryrecyclerView;
     ArrayList<Category> catlist;
     CategoryAdapter adapter;
+    FirebaseDatabase firebaseInstance;
+
 
 
     public CategoriesFragment() {
@@ -74,37 +78,46 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
 
         setHasOptionsMenu(true);
 
+        firebaseInstance = FirebaseDatabase.getInstance();
+        reference = firebaseInstance.getReference("DataUsers");
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
-        //
         categoryrecyclerView = (RecyclerView) view.findViewById(R.id.catrecyclerview);
-        categoryrecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        catlist = new ArrayList<Category>();
-
-        reference = FirebaseDatabase.getInstance().getReference().child("Category");
-
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Category c = dataSnapshot1.getValue(Category.class);
-//                    catlist.add(c);
-//                }
-//                adapter = new CategoryAdapter(getContext(), catlist);
-//                categoryrecyclerView.setAdapter(adapter);
-//            }
+//        categoryrecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        catlist = new ArrayList<Category>();
+        adapter = new CategoryAdapter(getActivity(),catlist);
+        categoryrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        categoryrecyclerView.setAdapter(adapter );
+
+        reference = FirebaseDatabase
+                .getInstance()
+                .getReference().child("Category");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    Category c = dataSnapshot1.getValue(Category.class);
+                    catlist.add(c);
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), "Hey", Toast.LENGTH_SHORT).show();
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
+            }
+        });
         //
 //        categoriesToolbar = (Toolbar) view.findViewById(R.id.toolbar_categories);
         categoriesSpinner = (Spinner) view.findViewById(R.id.spinner_categories);

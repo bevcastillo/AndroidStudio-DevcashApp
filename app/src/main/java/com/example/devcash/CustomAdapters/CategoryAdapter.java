@@ -15,6 +15,7 @@ import com.example.devcash.Object.Category;
 import com.example.devcash.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
@@ -29,8 +30,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.customlayout_category, viewGroup, false));
-
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_category, viewGroup, false);
+        return new ViewHolder(v);
     }
 
     @Override
@@ -51,4 +52,5 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             categoryname = (TextView) itemView.findViewById(R.id.txtcategory_name);
         }
     }
+
 }

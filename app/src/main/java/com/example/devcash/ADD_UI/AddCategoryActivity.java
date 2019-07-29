@@ -29,7 +29,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 public class AddCategoryActivity extends AppCompatActivity {
 
-    private DatabaseReference firebaseDatabase;
+    private DatabaseReference dbreference;
     private FirebaseDatabase firebaseInstance;
     private String CategoryId;
 
@@ -45,14 +45,28 @@ public class AddCategoryActivity extends AppCompatActivity {
         //
         categoryName = (TextInputEditText) findViewById(R.id.text_categoryname);
         firebaseInstance = FirebaseDatabase.getInstance();
-        firebaseDatabase = firebaseInstance.getReference("DataDevcash");
-        CategoryId = firebaseDatabase.push().getKey();
+        dbreference = firebaseInstance.getReference("/datadevcash");
+        CategoryId = dbreference.push().getKey();
+
+        dbreference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+//                    id=(dataSnapshot.getChildrenCount());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
     public void addCategory (String categoryName){
         Category category = new Category(categoryName);
-        firebaseDatabase.child("Category").child(CategoryId).setValue(category);
+        dbreference.child("/category").child(String.valueOf(CategoryId)).setValue(category);
     }
 
     public void insertCategory(){
@@ -62,7 +76,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
 //    public void viewData(){
-//        firebaseDatabase.child("Users").addValueEventListener(new ValueEventListener() {
+//        firebaseDatabase.child("Category").addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                for(DataSnapshot ds: dataSnapshot.getChildren()){
@@ -121,7 +135,6 @@ public class AddCategoryActivity extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
             insertCategory();
-
         }
             return super.onOptionsItemSelected(item);
 
