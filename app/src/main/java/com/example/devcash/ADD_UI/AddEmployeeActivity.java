@@ -12,6 +12,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +20,10 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,21 +37,20 @@ import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
-public class AddEmployeeActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddEmployeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private DatabaseReference dbreference;
     private FirebaseDatabase firebasedb;
     private String EmployeeId;
     TextInputEditText empLname, empFname, empEmail, empPhone, empDOB;
-    Uri empimageUri;
-    ImageView empphoto;
-    TextView takephoto, choosephoto;
-    RadioGroup grpTask;
-    RadioButton selectedTask;
+    private Uri empimageUri;
+    ImageView empimage;
+    LinearLayout takephoto, choosephoto;
+    Spinner emptask;
+    String selectedemptask;
     DatePickerDialog bdatePickerDia;
 
     private static final int PICK_IMAGE = 100;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +61,17 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
 
         //
-        empphoto = (ImageView) findViewById(R.id.emp_photo) ;
-        takephoto = (TextView) findViewById(R.id.txt_emptakephoto);
-        choosephoto = (TextView) findViewById(R.id.txt_empchoosephoto);
+        empimage = (ImageView) findViewById(R.id.emp_photo) ;
+        takephoto = (LinearLayout) findViewById(R.id.emptakephoto);
+        choosephoto = (LinearLayout) findViewById(R.id.empchoosephoto);
         empLname = (TextInputEditText) findViewById(R.id.text_input_emp_lname);
         empFname = (TextInputEditText) findViewById(R.id.text_input_emp_fname);
         empEmail = (TextInputEditText) findViewById(R.id.text_input_emp_email_address);
         empPhone = (TextInputEditText) findViewById(R.id.text_input_emp_pnumber);
         empDOB = (TextInputEditText) findViewById(R.id.text_input_dob);
+        emptask = (Spinner) findViewById(R.id.spinner_emptask);
 
-        grpTask = (RadioGroup) findViewById(R.id.radio_group_emp_task);
+//        grpTask = (RadioGroup) findViewById(R.id.radio_group_emp_task);
 
         //
 
@@ -76,26 +79,25 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         empDOB.setOnClickListener(this);
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
+        emptask.setOnItemSelectedListener(this);
 
-        dbreference = firebasedb.getReference("/datadevcash");
-        EmployeeId = dbreference.push().getKey();
+//        dbreference = firebasedb.getReference("/datadevcash");
+//        EmployeeId = dbreference.push().getKey();
 
 
     }
+//
+//    public void addEmployee(Uri empImageUri, String empLname, String empFname, String empTask, String empDOB, String empGender, String empBdate, int empCtcnum){
+//        Employee employee = new Employee(empImageUri, empLname, empFname, empTask, empDOB, empGender, empBdate, empCtcnum);
+//        dbreference.child("/employees").child(String.valueOf(EmployeeId)).setValue(employee);
+//    }
 
-    public void addEmployee(Uri empImageUri, String empLname, String empFname, String empTask, String empDOB, String empGender, String empBdate, int empCtcnum){
-        Employee employee = new Employee(empImageUri, empLname, empFname, empTask, empDOB, empGender, empBdate, empCtcnum);
-        dbreference.child("/employees").child(String.valueOf(EmployeeId)).setValue(employee);
-    }
-
-    public void insertEmployee(){
-//        addEmployee(imageUri, txtEmpLname, );
-    }
+//    public void insertEmployee(){
+////        addEmployee(imageUri, txtEmpLname, );
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //inflate SAVE menu
         getMenuInflater().inflate(R.menu.savemenu, menu);
         return true;
     }
@@ -127,17 +129,10 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
         int id = item.getItemId();
 
-        //menu item click handling
-        //if back button is clicked
         if (id == android.R.id.home){
             onBackPressed();
             return true;
-        }else if(id == R.id.action_save){ //if SAVE is clicked
-//            //collect the inputted data
-//            String emplname = this.txtEmpLname.getText().toString();
-//            String empfname = this.txtEmpFname.getText().toString();
-//            String empemail = this.txtEmpEmail.getText().toString();
-//            String empphone = this.txtEmpPhone.getText().toString();
+        }else if(id == R.id.action_save){
 
 
         }
@@ -152,17 +147,20 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         int sid = v.getId();
 
         switch (sid){
-
-            case R.id.txt_empchoosephoto:
-                Intent gallery = new Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, PICK_IMAGE);
+            case R.id.empchoosephoto:
+//                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+//                startActivityForResult(gallery, PICK_IMAGE);
+                Intent gallery = new Intent();
+                gallery.setType("image/*");
+                gallery.setAction(Intent.ACTION_GET_CONTENT);
+                Toast.makeText(getApplicationContext(), "Choose photo!", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.txt_emptakephoto:
+            case R.id.emptakephoto:
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(camera, 0);
+                Toast.makeText(getApplicationContext(), "Image successfully added!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.text_input_dob:
-                //calendar class's instance and get current date, month and year from calendar
                 final Calendar c = Calendar.getInstance();
                 int mYear = c.get(Calendar.YEAR); //current year
                 int mMonth = c.get(Calendar.MONTH); //current month
@@ -183,23 +181,35 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    //handles opening the camera and gallery
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
-            empimageUri = data.getData();
-            empphoto.setImageURI(empimageUri);
+        if(requestCode!=0){
+            if(data!=null){
+                empimageUri = data.getData();
+                empimage.setImageURI(empimageUri);
+            }
         }else{
             Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-            empphoto.setImageBitmap(bitmap);
+            empimage.setImageBitmap(bitmap);
         }
 
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            int sid = parent.getId();
+            switch (sid){
+                case R.id.spinner_emptask:
+                    selectedemptask = this.emptask.getItemAtPosition(position).toString();
+                    break;
+            }
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
-
+    }
 }

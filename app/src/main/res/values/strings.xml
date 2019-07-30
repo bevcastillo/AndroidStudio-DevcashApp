@@ -345,6 +345,7 @@
         <item>kilograms</item>
         <item>meters</item>
         <item>grams</item>
+        <item>pieces</item>
     </string-array>
 
     <string-array name="discount">
@@ -388,6 +389,12 @@
 
     <string-array name="dropdownallservices">
         <item>All Services</item>
+    </string-array>
+
+    <string-array name="task_assign">
+        <item>Cashiering</item>
+        <item>Inventory Monitoring</item>
+        <item>Unassign Employee</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

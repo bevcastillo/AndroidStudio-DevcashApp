@@ -66,7 +66,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     public void addCategory (String categoryName){
         Category category = new Category(categoryName);
-        dbreference.child("/category").child(String.valueOf(CategoryId)).setValue(category);
+        dbreference.child("/category").child(CategoryId).setValue(category);
     }
 
     public void insertCategory(){

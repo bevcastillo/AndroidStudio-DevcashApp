@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/padding_30"
+                android:layout_marginTop="@dimen/padding_50"
                 android:layout_marginBottom="@dimen/padding_top"
                 android:background="@color/whiteBG"
                 android:padding="@dimen/text_padding"
@@ -51,7 +51,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/lname"
                             android:inputType="text"
-                            android:padding="@dimen/text_padding"
+                            android:padding="10dp"
                             android:textColorHint="@color/colorPrimary"
                             android:textSize="@dimen/text_inputs" />
 
@@ -83,6 +83,9 @@
                             android:id="@+id/text_input_dob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_date_range"
+                            android:drawablePadding="@dimen/text_padding"
+                            android:drawableTint="@color/icon_light"
                             android:hint="@string/birthdate"
                             android:inputType="text"
                             android:padding="@dimen/text_padding"
@@ -154,48 +157,24 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
                             android:paddingTop="@dimen/padding_top">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/task" />
-
-                            <RadioGroup
-                                android:id="@+id/radio_group_emp_task"
-                                android:layout_width="0dp"
+                                android:text="@string/task"
+                                android:textSize="@dimen/small_title"/>
+                            
+                            <Spinner
+                                android:id="@+id/spinner_emptask"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:orientation="horizontal"
-                                android:paddingLeft="@dimen/text_padding">
+                                android:entries="@array/task_assign"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
+                                android:paddingTop="@dimen/padding_top"/>
 
-                                <RadioButton
-                                    android:id="@+id/radio_button_task_cashier"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:buttonTint="@color/colorPrimary"
-                                    android:checked="true"
-                                    android:text="@string/cashier" />
 
-                                <RadioButton
-                                    android:id="@+id/radio_button_task_inventory"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:buttonTint="@color/colorPrimary"
-                                    android:text="@string/inventory" />
-
-                                <RadioButton
-                                    android:id="@+id/radio_button_unassign"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:buttonTint="@color/colorPrimary"
-                                    android:text="Unassign" />
-
-                            </RadioGroup>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -274,6 +253,7 @@
                             android:paddingLeft="@dimen/padding_30">
 
                             <LinearLayout
+                                android:id="@+id/empchoosephoto"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -287,7 +267,6 @@
                                     android:tint="@color/icon_light" />
 
                                 <TextView
-                                    android:id="@+id/txt_empchoosephoto"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="@dimen/text_padding"
@@ -297,6 +276,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/emptakephoto"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
@@ -310,7 +290,6 @@
                                     android:tint="@color/icon_light" />
 
                                 <TextView
-                                    android:id="@+id/txt_emptakephoto"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="@dimen/text_padding"
