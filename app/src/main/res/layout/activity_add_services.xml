@@ -87,7 +87,7 @@
                         android:paddingTop="@dimen/padding_top">
 
                         <CheckBox
-                            android:id="@+id/service_check_availavility"
+                            android:id="@+id/cbox_serv_avail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/colorPrimary"
@@ -265,8 +265,7 @@
                             android:id="@+id/services_photo"
                             android:layout_width="150dp"
                             android:layout_height="150dp"
-                            android:src="@drawable/ic_photo"
-                            android:background="@color/whiteDarker"
+                            android:src="@drawable/picture"
                             android:maxHeight="@dimen/text_padding"
                             android:maxWidth="@dimen/text_padding"/>
 

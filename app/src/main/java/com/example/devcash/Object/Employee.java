@@ -9,21 +9,20 @@ import android.net.Uri;
 public class Employee {
 
     public Uri emp_imageUri;
-    public String emp_lname, emp_fname, emp_task, emp_dob, emp_gender, emp_bdate;
-    public int emp_ctcnum;
+    public String emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone;
+//    public int emp_phone;
 
     public Employee() {
     }
 
-    public Employee(Uri emp_imageUri, String emp_lname, String emp_fname, String emp_task, String emp_dob, String emp_gender, String emp_bdate, int emp_ctcnum) {
+    public Employee(Uri emp_imageUri, String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone) {
         this.emp_imageUri = emp_imageUri;
         this.emp_lname = emp_lname;
         this.emp_fname = emp_fname;
         this.emp_task = emp_task;
-        this.emp_dob = emp_dob;
         this.emp_gender = emp_gender;
         this.emp_bdate = emp_bdate;
-        this.emp_ctcnum = emp_ctcnum;
+        this.emp_phone = emp_phone;
     }
 
     public Uri getEmp_imageUri() {
@@ -58,14 +57,6 @@ public class Employee {
         this.emp_task = emp_task;
     }
 
-    public String getEmp_dob() {
-        return emp_dob;
-    }
-
-    public void setEmp_dob(String emp_dob) {
-        this.emp_dob = emp_dob;
-    }
-
     public String getEmp_gender() {
         return emp_gender;
     }
@@ -82,11 +73,11 @@ public class Employee {
         this.emp_bdate = emp_bdate;
     }
 
-    public int getEmp_ctcnum() {
-        return emp_ctcnum;
+    public String getEmp_ctcnum() {
+        return emp_phone;
     }
 
-    public void setEmp_ctcnum(int emp_ctcnum) {
-        this.emp_ctcnum = emp_ctcnum;
+    public void setEmp_ctcnum(String emp_ctcnum) {
+        this.emp_phone = emp_ctcnum;
     }
 }

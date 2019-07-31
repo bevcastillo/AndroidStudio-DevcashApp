@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -36,6 +37,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     RadioGroup soldby;
     RadioButton soldbybtn;
     String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby;
+    CheckBox chkavail;
 
     private static final int PICK_IMAGE = 100;
 
@@ -62,6 +64,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         soldby = (RadioGroup) findViewById(R.id.radio_group_soldby);
 
+        chkavail = (CheckBox) findViewById(R.id.cbox_prod_avail);
+
         //adding listeners to the textviews
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
@@ -70,17 +74,22 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         prodcondition.setOnItemSelectedListener(this);
         produnit.setOnItemSelectedListener(this);
         discname.setOnItemSelectedListener(this);
-
-
-        //
-        addRadioGroupListener();
-
     }
 
     public void addRadioGroupListener(){
         int radioid=soldby.getCheckedRadioButtonId();
         soldbybtn=(RadioButton)findViewById(radioid);
         selectedsoldby=soldbybtn.getText().toString();
+    }
+
+    private void addCheckBoxListener() {
+        if(chkavail.isChecked()){
+            String chkres = "Available";
+            Toast.makeText(getApplicationContext(), chkres+"", Toast.LENGTH_SHORT).show();
+        }else{
+            String chkres = "Not Available";
+            Toast.makeText(getApplicationContext(), chkres+"", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -117,17 +126,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
-        //menu item click handling
-        //if back button is clicked
         if (id == android.R.id.home){
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
-            Toast.makeText(this, "Product Successfully added.", Toast.LENGTH_SHORT).show();
-            finish();
+            addRadioGroupListener();
+            addCheckBoxListener();
         }
         return super.onOptionsItemSelected(item);
 

@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,18 +40,22 @@ import java.util.Calendar;
 
 public class AddEmployeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private DatabaseReference dbreference;
+    private DatabaseReference employeeref;
     private FirebaseDatabase firebasedb;
     private String EmployeeId;
-    TextInputEditText empLname, empFname, empEmail, empPhone, empDOB;
+    TextInputEditText empLname, empFname, empEmail, empPhone, empbdate;
     private Uri empimageUri;
     ImageView empimage;
     LinearLayout takephoto, choosephoto;
     Spinner emptask;
-    String selectedemptask;
+    String selectedemptask, selectedgender;
     DatePickerDialog bdatePickerDia;
+    RadioGroup gender;
+    RadioButton genderbtn;
 
     private static final int PICK_IMAGE = 100;
+
+    private static final String TAG = "AddEmployeeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,33 +73,46 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         empFname = (TextInputEditText) findViewById(R.id.text_input_emp_fname);
         empEmail = (TextInputEditText) findViewById(R.id.text_input_emp_email_address);
         empPhone = (TextInputEditText) findViewById(R.id.text_input_emp_pnumber);
-        empDOB = (TextInputEditText) findViewById(R.id.text_input_dob);
+        empbdate = (TextInputEditText) findViewById(R.id.text_input_dob);
         emptask = (Spinner) findViewById(R.id.spinner_emptask);
-
-//        grpTask = (RadioGroup) findViewById(R.id.radio_group_emp_task);
-
+        gender = (RadioGroup) findViewById(R.id.radiogroup_gender);
         //
 
         //add listeners to the textviews
-        empDOB.setOnClickListener(this);
+        empbdate.setOnClickListener(this);
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
         emptask.setOnItemSelectedListener(this);
 
-//        dbreference = firebasedb.getReference("/datadevcash");
-//        EmployeeId = dbreference.push().getKey();
-
+        firebasedb = FirebaseDatabase.getInstance();
+        employeeref = firebasedb.getReference("/datadevcash");
+        EmployeeId = employeeref.push().getKey();
 
     }
-//
-//    public void addEmployee(Uri empImageUri, String empLname, String empFname, String empTask, String empDOB, String empGender, String empBdate, int empCtcnum){
-//        Employee employee = new Employee(empImageUri, empLname, empFname, empTask, empDOB, empGender, empBdate, empCtcnum);
-//        dbreference.child("/employees").child(String.valueOf(EmployeeId)).setValue(employee);
-//    }
 
-//    public void insertEmployee(){
-////        addEmployee(imageUri, txtEmpLname, );
-//    }
+    public void addRadioGroupListener(){
+        int radioid = gender.getCheckedRadioButtonId();
+        genderbtn=(RadioButton)findViewById(radioid);
+        selectedgender=genderbtn.getText().toString();
+    }
+
+    public void addEmployee(Uri emp_imageUri, String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone){
+        Log.d(TAG,"addEmployee()");
+        Employee employee = new Employee(emp_imageUri, emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone);
+        employeeref.child("employees").child(EmployeeId).setValue(employee);
+    }
+
+    public void insertEmployee(){
+        Log.d(TAG,"insertEmployee()");
+        String lname = empLname.getText().toString();
+        String fname = empFname.getText().toString();
+        String bdate = empbdate.getText().toString();
+        String textphone = empPhone.getText().toString();
+        addEmployee(empimageUri, lname, fname, selectedemptask, selectedgender, bdate, textphone);
+        Toast.makeText(getApplicationContext(), "Employee Successfully Added!", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), lname+"\n"+fname+"\n"+selectedemptask+"\n"+selectedgender+"\n"+bdate+"\n"+textphone, Toast.LENGTH_LONG).show();
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,8 +151,8 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-
-
+            addRadioGroupListener();
+            insertEmployee();
         }
         return super.onOptionsItemSelected(item);
 
@@ -148,8 +166,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
         switch (sid){
             case R.id.empchoosephoto:
-//                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-//                startActivityForResult(gallery, PICK_IMAGE);
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -171,7 +187,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 //set day month, month and year value in the textinputedittext
-                                empDOB.setText(dayOfMonth + "/"
+                                empbdate.setText(dayOfMonth + "/"
                                                 + (month + 1) + "/" + year);
                             }
                         }, mYear, mMonth, mDay);

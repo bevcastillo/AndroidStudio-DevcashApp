@@ -1,16 +1,31 @@
 package com.example.devcash.ADD_UI;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.devcash.R;
 
-public class AddDiscountActivity extends AppCompatActivity {
+import java.util.Calendar;
+
+public class AddDiscountActivity extends AppCompatActivity implements View.OnClickListener {
+
+    RadioGroup disctype;
+    RadioButton discbtn;
+    String selecteddisc;
+    TextInputEditText startdate,enddate;
+
+    DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +33,26 @@ public class AddDiscountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_discount);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //
+        disctype = (RadioGroup) findViewById(R.id.rgroup_disctype);
+
+        startdate = (TextInputEditText) findViewById(R.id.textdisc_startdate);
+        enddate = (TextInputEditText) findViewById(R.id.textdisc_enddate);
+
+        //
+        startdate.setOnClickListener(this);
+        enddate.setOnClickListener(this);
+    }
+
+    public void addRadioGroupListener(){
+        int radioid = disctype.getCheckedRadioButtonId();
+        discbtn = (RadioButton) findViewById(radioid);
+        selecteddisc = discbtn.getText().toString();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //inflate SAVE menu
         getMenuInflater().inflate(R.menu.savemenu, menu);
         return true;
     }
@@ -52,19 +81,55 @@ public class AddDiscountActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
-        //menu item click handling
-        //if back button is clicked
         if (id == android.R.id.home){
             onBackPressed();
             return true;
-        }else if(id == R.id.action_save){ //if SAVE is clicked
-            Toast.makeText(this, "Discount Successfully added.", Toast.LENGTH_SHORT).show();
-            finish();
+        }else if(id == R.id.action_save){
+            addRadioGroupListener();
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.textdisc_startdate:
+                final Calendar scalendar = Calendar.getInstance();
+                int mYear = scalendar.get(Calendar.YEAR);
+                int mMonth = scalendar.get(Calendar.MONTH);
+                int mDay = scalendar.get(Calendar.DAY_OF_MONTH);
+
+                //date picker dialog
+                datePickerDialog = new DatePickerDialog(AddDiscountActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                //set day, month and year in the textinputedittext
+                                startdate.setText(dayOfMonth + "/"
+                                        + (month + 1) + "/" + year);
+                            }
+                        },mYear,mMonth,mDay);
+                datePickerDialog.show();
+                break;
+            case R.id.textdisc_enddate:
+                final Calendar endcalendar = Calendar.getInstance().getInstance();
+                int eYear = endcalendar.get(Calendar.YEAR);
+                int eMonth = endcalendar.get(Calendar.MONTH);
+                int eDay = endcalendar.get(Calendar.DAY_OF_MONTH);
+
+                datePickerDialog = new DatePickerDialog(AddDiscountActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                enddate.setText(dayOfMonth + "/"
+                                                + (month + 1) + "/" +year);
+                            }
+                        },eYear, eMonth, eDay);
+                datePickerDialog.show();
+                break;
+        }
     }
 }

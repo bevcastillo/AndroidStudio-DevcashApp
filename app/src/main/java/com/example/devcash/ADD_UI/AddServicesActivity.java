@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
     ImageView servicesphoto;
     TextView takephoto, choosephoto;
+    CheckBox chkavail;
 
     private static final int PICK_IMAGE = 100;
 
@@ -40,10 +42,22 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         takephoto = (TextView) findViewById(R.id.txt_servicestakephoto);
         choosephoto = (TextView) findViewById(R.id.txt_serviceschoosephoto);
 
+        chkavail = (CheckBox) findViewById(R.id.cbox_serv_avail);
+
         //adding listeners to the textviews
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
 
+    }
+
+    public void addCheckBoxListener(){
+        if(chkavail.isChecked()){
+            String chkres = "Available";
+            Toast.makeText(getApplicationContext(), chkres+"", Toast.LENGTH_SHORT).show();
+        }else{
+            String chkres = "Not Available";
+            Toast.makeText(getApplicationContext(), chkres+"", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -81,14 +95,11 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
         int id = item.getItemId();
 
-        //menu item click handling
-        //if back button is clicked
         if (id == android.R.id.home){
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
-            Toast.makeText(this, "Services Successfully added.", Toast.LENGTH_SHORT).show();
-            finish();
+            addCheckBoxListener();
         }
         return super.onOptionsItemSelected(item);
 

@@ -315,6 +315,13 @@
 
     <string name="scan_code_label">Scan QR code</string>
     <string name="birthdate">Birthdate</string>
+    <string name="account">Account Details</string>
+    <string name="username">Username</string>
+    <string name="confpassw">Confirm Password</string>
+    <string name="basic_info">Basic Information</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
     <!-- array strings -->
 
     <string-array name="enterprise_type">
