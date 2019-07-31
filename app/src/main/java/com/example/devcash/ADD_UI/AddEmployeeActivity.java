@@ -150,15 +150,14 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             case R.id.empchoosephoto:
 //                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
 //                startActivityForResult(gallery, PICK_IMAGE);
-                Intent gallery = new Intent();
-                gallery.setType("image/*");
-                gallery.setAction(Intent.ACTION_GET_CONTENT);
-                Toast.makeText(getApplicationContext(), "Choose photo!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Picture"),PICK_IMAGE);
                 break;
             case R.id.emptakephoto:
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(camera, 0);
-                Toast.makeText(getApplicationContext(), "Image successfully added!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.text_input_dob:
                 final Calendar c = Calendar.getInstance();

@@ -138,8 +138,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         switch (v.getId()){
             case R.id.txt_prodchoosephoto:
-                Intent gallery = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, PICK_IMAGE);
+//                Intent gallery = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+//                startActivityForResult(gallery, PICK_IMAGE);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Picture"),PICK_IMAGE);
                 break;
             case R.id.txt_prodtakephoto:
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
