@@ -48,6 +48,8 @@ public class AddCategoryActivity extends AppCompatActivity {
         dbreference = firebaseInstance.getReference("/datadevcash");
         CategoryId = dbreference.push().getKey();
 
+        viewData();
+
         dbreference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -75,28 +77,26 @@ public class AddCategoryActivity extends AppCompatActivity {
         finish();
     }
 
-//    public void viewData(){
-//        firebaseDatabase.child("Category").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot ds: dataSnapshot.getChildren()){
-//                    String dbcategoryname = ds.child("categoryName").getValue(String.class);
-//                    Log.d("TAG", dbcategoryname);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+    public void viewData(){
+        dbreference.child("Category").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    String dbcategoryname = ds.child("categoryName").getValue(String.class);
+                    Log.d("TAG", dbcategoryname);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //inflate SAVE menu
         getMenuInflater().inflate(R.menu.savemenu, menu);
         return true;
     }
@@ -127,13 +127,10 @@ public class AddCategoryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
-        //menu item click handling
-        //if back button is clicked
         if (id == android.R.id.home){
             onBackPressed();
             return true;
-        }else if(id == R.id.action_save){ //if SAVE is clicked
+        }else if(id == R.id.action_save){
             insertCategory();
         }
             return super.onOptionsItemSelected(item);

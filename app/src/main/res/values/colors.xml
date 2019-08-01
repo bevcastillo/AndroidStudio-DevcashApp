@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#EC4E20</color>
-    <color name="colorPrimaryDark">#BC3E19</color>
+    <color name="colorPrimary">#EC6920</color>
+    <color name="colorPrimaryDark">#EC5520</color>
     <color name="colorAccent">#D81B60</color>
 
     <!-- bg colors -->
@@ -10,6 +10,9 @@
     <color name="whiteDarker">#F5F5F5</color>
     <color name="whiteDark">#F0F0F0</color>
     <color name="grainsboro">#DCDCDC</color>
+
+    <color name="secondary">#20A3EC</color>
+    <color name="tertiary">#95D3F6</color>
 
     <!-- other colors used -->
     <color name="blue_link">#0033CC</color>

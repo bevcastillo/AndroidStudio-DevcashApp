@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IndexActivity"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/backdropimage" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/tertiary"
+        android:alpha="0.6"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:srcCompat="@drawable/another_devcash_logo" />
+
+        <Button
+            android:id="@+id/btnforowners"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_cornered"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="@string/forowners"
+            android:textColor="@color/white"
+            android:layout_marginTop="100dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/page_title"/>
+
+        <Button
+            android:id="@+id/btnforemp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_cornered_stroke"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:text="@string/foremp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="20dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/page_title"/>
+
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

@@ -322,6 +322,8 @@
     <string name="gender">Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="forowners">For Enterprise Owners</string>
+    <string name="foremp">For Employees</string>
     <!-- array strings -->
 
     <string-array name="enterprise_type">
