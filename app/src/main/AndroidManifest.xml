@@ -18,8 +18,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".EmployeeLoginActivity"
             android:parentActivityName=".IndexActivity"
-            android:label="@string/login"></activity>
-        <activity android:name=".IndexActivity" />
+            android:label="@string/login"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".IndexActivity"
+            android:screenOrientation="landscape"/>
         <activity android:name=".WhyDevcash" />
         <activity android:name=".HelpCenterEmployees" />
         <activity android:name=".HelpCenterInventory" />

@@ -8,29 +8,19 @@ import android.net.Uri;
 
 public class Employee {
 
-    public Uri emp_imageUri;
     public String emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone;
 //    public int emp_phone;
 
     public Employee() {
     }
 
-    public Employee(Uri emp_imageUri, String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone) {
-        this.emp_imageUri = emp_imageUri;
+    public Employee(String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone) {
         this.emp_lname = emp_lname;
         this.emp_fname = emp_fname;
         this.emp_task = emp_task;
         this.emp_gender = emp_gender;
         this.emp_bdate = emp_bdate;
         this.emp_phone = emp_phone;
-    }
-
-    public Uri getEmp_imageUri() {
-        return emp_imageUri;
-    }
-
-    public void setEmp_imageUri(Uri emp_imageUri) {
-        this.emp_imageUri = emp_imageUri;
     }
 
     public String getEmp_lname() {

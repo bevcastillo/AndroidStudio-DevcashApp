@@ -39,12 +39,12 @@
                     android:paddingRight="@dimen/padding_30">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_service_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
+                            android:id="@+id/textinput_servname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/service_name"
@@ -103,7 +103,6 @@
                         android:paddingTop="@dimen/padding_top">
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/text_input_price"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -112,31 +111,12 @@
                             app:errorEnabled="true">
 
                             <android.support.design.widget.TextInputEditText
+                                android:id="@+id/textinput_servprice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/price"
                                 android:text="@string/money"
                                 android:inputType="date"
-                                android:padding="@dimen/text_padding"
-                                android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/text_inputs" />
-
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/text_input_QRCode"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:paddingLeft="@dimen/padding_30"
-                            android:paddingTop="@dimen/text_padding"
-                            app:errorEnabled="true">
-
-                            <android.support.design.widget.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/qr_code"
-                                android:inputType="number"
                                 android:padding="@dimen/text_padding"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/text_inputs" />
@@ -260,14 +240,30 @@
                         android:layout_marginTop="@dimen/padding_top"
                         android:gravity="center|left">
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
 
-                        <ImageView
-                            android:id="@+id/services_photo"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
-                            android:src="@drawable/picture"
-                            android:maxHeight="@dimen/text_padding"
-                            android:maxWidth="@dimen/text_padding"/>
+                            <ImageView
+                                android:id="@+id/services_photo"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                android:src="@drawable/picture"
+                                android:maxHeight="@dimen/text_padding"
+                                android:maxWidth="@dimen/text_padding"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upload photo size up to 10 MB"
+                                android:textSize="6dp"
+                                android:padding="@dimen/padding_10"/>
+                        </LinearLayout>
+
+
+
 
                         <LinearLayout
                             android:layout_width="0dp"

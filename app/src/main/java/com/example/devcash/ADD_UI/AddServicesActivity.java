@@ -1,11 +1,14 @@
 package com.example.devcash.ADD_UI;
 
+import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,17 +20,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.devcash.Object.Services;
 import com.example.devcash.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AddServicesActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private DatabaseReference dbreference;
+    private FirebaseDatabase firebaseDatabase;
+//    private StorageReference storageReference;
+    private String ServicesId;
+
 
     ImageView servicesphoto;
     TextView takephoto, choosephoto;
     CheckBox chkavail;
+    TextInputEditText servicename, serviceprice;
 
     private static final int PICK_IMAGE = 100;
 
-    Uri imageUri;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +50,35 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //
+        servicename = (TextInputEditText) findViewById(R.id.textinput_servname);
+        serviceprice = (TextInputEditText) findViewById(R.id.textinput_servprice);
         servicesphoto = (ImageView) findViewById(R.id.services_photo);
-
         takephoto = (TextView) findViewById(R.id.txt_servicestakephoto);
         choosephoto = (TextView) findViewById(R.id.txt_serviceschoosephoto);
-
         chkavail = (CheckBox) findViewById(R.id.cbox_serv_avail);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dbreference = firebaseDatabase.getReference("/datadevcash");
+        ServicesId = dbreference.push().getKey();
 
         //adding listeners to the textviews
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
 
     }
+
+    public void addServices(String service_name, double service_price){
+//        Services services = new Services(service_name,service_price);
+//        dbreference.child("/services").child(ServicesId).setValue(services);
+    }
+
+    public void insertServices(){
+        addServices(servicename.getText().toString().trim(), Double.parseDouble(serviceprice.getText().toString()));
+        Toast.makeText(getApplicationContext(), "Services Successfully added!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+
 
     public void addCheckBoxListener(){
         if(chkavail.isChecked()){
@@ -100,6 +130,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
             addCheckBoxListener();
+            insertServices();
         }
         return super.onOptionsItemSelected(item);
 
@@ -110,8 +141,9 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
         switch (v.getId()){
             case R.id.txt_serviceschoosephoto:
-                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, PICK_IMAGE);
+//                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+//                startActivityForResult(gallery, PICK_IMAGE);
+                choosePhoto();
                 break;
             case R.id.txt_servicestakephoto:
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -134,4 +166,22 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         }
 
     }
+
+    private void choosePhoto(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE);
+    }
+
+    private void uploadPhoto(){
+        if(imageUri!=null){
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Adding..");
+            progressDialog.show();
+
+
+        }
+    }
+
 }

@@ -2,12 +2,12 @@ package com.example.devcash.Object;
 /*
     created by Beverly Castillo on July 7, 2019
  */
-public class AccountObj {
+public class Account {
     private int acct_id;
     private String acct_uname, acct_email, acct_passw, acct_type, acct_status;
 
-    public AccountObj(int acct_id, String acct_uname, String acct_email, String acct_passw,
-                      String acct_type, String acct_status) {
+    public Account(int acct_id, String acct_uname, String acct_email, String acct_passw,
+                   String acct_type, String acct_status) {
         this.acct_id = acct_id;
         this.acct_uname = acct_uname;
         this.acct_email = acct_email;
