@@ -23,7 +23,7 @@ public class CategoryCustomAdapter extends RecyclerView.Adapter<CategoryCustomAd
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            mCatName = (TextView)itemView.findViewById(R.id.txtcategory_name);
+            mCatName = (TextView)itemView.findViewById(R.id.txtcatname);
         }
     }
 

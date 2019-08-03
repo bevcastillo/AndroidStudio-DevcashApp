@@ -36,7 +36,7 @@
                 android:id="@+id/catrecyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:dividerHeight="1dp" />
+                android:layout_marginTop="5dp"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/addcategories_fab"

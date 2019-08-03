@@ -11,10 +11,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,17 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddCategoryActivity;
 import com.example.devcash.CustomAdapters.CategoryAdapter;
-import com.example.devcash.Database.DatabaseHelper;
-import com.example.devcash.Model.CategoryList;
 import com.example.devcash.Object.Category;
+import com.example.devcash.Object.Categorylistdata;
 import com.example.devcash.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -49,8 +47,6 @@ import java.util.ArrayList;
  */
 public class CategoriesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-//    DatabaseHelper db;
-    CategoryAdapter categoryAdapter;
     SwipeRefreshLayout pullToRefresh;
 
     Toolbar categoriesToolbar;
@@ -60,11 +56,16 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
     Toolbar toolbar;
 
     //
-    DatabaseReference reference;
+    DatabaseReference dbreference;
+    DatabaseReference categoryfirebaseDatabase;
+    FirebaseDatabase firebaseDatabase;
+
     RecyclerView categoryrecyclerView;
-    ArrayList<Category> catlist;
+    List<Categorylistdata> list;
+
+    ArrayList<Category> categoryArrayList;
     CategoryAdapter adapter;
-    FirebaseDatabase firebaseInstance;
+
 
 
 
@@ -78,10 +79,6 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
 
         setHasOptionsMenu(true);
 
-        firebaseInstance = FirebaseDatabase.getInstance();
-        reference = firebaseInstance.getReference("DataUsers");
-
-
     }
 
     @Override
@@ -91,25 +88,29 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
         categoryrecyclerView = (RecyclerView) view.findViewById(R.id.catrecyclerview);
-//        categoryrecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//
-        catlist = new ArrayList<Category>();
-        adapter = new CategoryAdapter(getActivity(),catlist);
-        categoryrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        categoryrecyclerView.setAdapter(adapter );
 
-        reference = FirebaseDatabase
-                .getInstance()
-                .getReference().child("Category");
-        reference.addValueEventListener(new ValueEventListener() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dbreference = firebaseDatabase.getReference("/datadevcash");
+        categoryfirebaseDatabase = firebaseDatabase.getReference("/datadevcash/category");
+
+        categoryfirebaseDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                list = new ArrayList<>();
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Category c = dataSnapshot1.getValue(Category.class);
-                    catlist.add(c);
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Hey", Toast.LENGTH_SHORT).show();
+                    Category category = dataSnapshot1.getValue(Category.class);
+                    Categorylistdata listdata = new Categorylistdata();
+                    String catname = category.getCategory_name();
+                    listdata.setCategory_name(catname);
+                    list.add(listdata);
                 }
+
+                CategoryAdapter adapter = new CategoryAdapter(list);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                categoryrecyclerView.setLayoutManager(layoutManager);
+                categoryrecyclerView.setItemAnimator(new DefaultItemAnimator());
+                categoryrecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
 

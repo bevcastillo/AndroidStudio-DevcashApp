@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/whiteBG">
+    android:layout_height="60dp"
+    android:background="@color/whiteBG"
+    android:layout_marginBottom="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginLeft="5dp">
 
     <LinearLayout
-        android:layout_width="30dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:orientation="horizontal"
         android:gravity="left|center"
-        android:padding="@dimen/text_padding">
+        android:padding="@dimen/padding_10">
 
         <ImageView
             android:id="@+id/imgemp_image"
@@ -21,7 +24,7 @@
             android:layout_gravity="left|center"
             android:layout_margin="8dp"
             android:scaleType="fitCenter"
-            tools:srcCompat="@tools:sample/avatars[0]" />
+            android:src="@drawable/employee_avatar" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -50,11 +53,23 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/txtemp_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/email"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_inputs"
+            android:layout_marginLeft="@dimen/text_padding"
+            android:gravity="right"
+            android:paddingRight="@dimen/text_padding"/>
+
+        <TextView
             android:id="@+id/txtemp_username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="@string/task"
+            android:text="@string/username"
             android:textColor="@color/dark_text"
             android:textSize="@dimen/text_inputs"
             android:layout_marginLeft="@dimen/text_padding"
@@ -76,4 +91,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.v7.widget.CardView>

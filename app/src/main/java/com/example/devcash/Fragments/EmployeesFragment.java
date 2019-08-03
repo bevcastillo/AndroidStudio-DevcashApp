@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,13 +22,32 @@ import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddEmployeeActivity;
 import com.example.devcash.ADD_UI.AddProductActivity;
+import com.example.devcash.CustomAdapters.EmployeesAdapter;
+import com.example.devcash.Object.Employee;
+import com.example.devcash.Object.Employeelistdata;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class EmployeesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+
+    DatabaseReference dbreference;
+    DatabaseReference employeedfirebaesreference;
+    FirebaseDatabase firebaseDatabase;
+
+    RecyclerView emprecyclerview;
+
+    List<Employeelistdata> list;
 
 
     public EmployeesFragment() {
@@ -40,8 +62,45 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_employees, container, false);
+
+        emprecyclerview = (RecyclerView) view.findViewById(R.id.emplist_recyclerview);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dbreference = firebaseDatabase.getReference("/datadevcash");
+        employeedfirebaesreference = firebaseDatabase.getReference("/datadevcash/employee");
+
+        employeedfirebaesreference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                list = new ArrayList<>();
+                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                    Employee employee = dataSnapshot1.getValue(Employee.class);
+                    Employeelistdata listdata = new Employeelistdata();
+                    String emplname = employee.getEmp_lname();
+                    String empfname = employee.getEmp_fname();
+                    String emptask = employee.getEmp_task();
+                    listdata.setEmplname(emplname);
+                    listdata.setEmpfname(empfname);
+                    listdata.setEmptask(emptask);
+                    list.add(listdata);
+                }
+                EmployeesAdapter adapter = new EmployeesAdapter(list);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                emprecyclerview.setLayoutManager(layoutManager);
+                emprecyclerview.setItemAnimator(new DefaultItemAnimator());
+                emprecyclerview.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Something is wrong!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         //
         getActivity().setTitle("Employee");

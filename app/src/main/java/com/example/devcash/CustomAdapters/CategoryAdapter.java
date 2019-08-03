@@ -1,30 +1,23 @@
 package com.example.devcash.CustomAdapters;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.devcash.Model.CategoryList;
-import com.example.devcash.Object.Category;
+import com.example.devcash.Object.Categorylistdata;
 import com.example.devcash.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
-    Context context;
-    ArrayList<Category> categoryArrayList;
+    List<Categorylistdata> list;
 
-    public CategoryAdapter(Context c, ArrayList<Category> categories){
-        context = c;
-        categoryArrayList = categories;
+    public CategoryAdapter(List<Categorylistdata> list) {
+        this.list = list;
     }
 
     @NonNull
@@ -36,12 +29,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.categoryname.setText(categoryArrayList.get(i).getCategory_name());
+        Categorylistdata data = list.get(i);
+        viewHolder.categoryname.setText(data.getCategory_name());
     }
 
     @Override
     public int getItemCount() {
-        return categoryArrayList.size();
+        return list.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -49,7 +43,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            categoryname = (TextView) itemView.findViewById(R.id.txtcategory_name);
+            categoryname = (TextView) itemView.findViewById(R.id.txtcatname);
         }
     }
 

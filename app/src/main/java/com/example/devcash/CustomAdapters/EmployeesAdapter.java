@@ -12,19 +12,20 @@ import android.widget.TextView;
 
 import com.example.devcash.Model.EmployeeList;
 import com.example.devcash.Object.Employee;
+import com.example.devcash.Object.Employeelistdata;
 import com.example.devcash.R;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.ViewHolder> {
-    Context context;
-    ArrayList<Employee> employeeArrayList;
 
-    public EmployeesAdapter(Context c, ArrayList<Employee> employees) {
-        context = c;
-        employeeArrayList = employees;
+    List<Employeelistdata> list;
+
+    public EmployeesAdapter(List<Employeelistdata> list) {
+        this.list = list;
     }
 
     @NonNull
@@ -36,25 +37,22 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.emplname.setText(employeeArrayList.get(i).getEmp_lname());
-        viewHolder.empfname.setText(employeeArrayList.get(i).getEmp_fname());
-        viewHolder.emptask.setText(employeeArrayList.get(i).getEmp_task());
-
-
+        Employeelistdata data = list.get(i);
+        viewHolder.emplname.setText(data.getEmplname());
+        viewHolder.empfname.setText(data.getEmpfname());
+        viewHolder.emptask.setText(data.getEmptask());
     }
 
     @Override
     public int getItemCount() {
-        return employeeArrayList.size();
+        return list.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView emplname, empfname, empusername, emptask;
-        ImageView empImage;
+        TextView emplname, empfname, emptask;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            empImage = (ImageView) itemView.findViewById(R.id.imgemp_image);
             emplname = (TextView) itemView.findViewById(R.id.txtemp_lname);
             empfname = (TextView) itemView.findViewById(R.id.txtemp_fname);
             emptask = (TextView) itemView.findViewById(R.id.txtemp_task);

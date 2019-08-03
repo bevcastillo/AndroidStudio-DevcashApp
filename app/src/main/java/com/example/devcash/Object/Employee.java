@@ -9,13 +9,11 @@ import android.net.Uri;
 public class Employee {
 
     public String emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone;
-//    public int emp_phone;
     public Account account;
 
     public Employee() {
+
     }
-
-
 
     public Employee(String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone) {
         this.emp_lname = emp_lname;
