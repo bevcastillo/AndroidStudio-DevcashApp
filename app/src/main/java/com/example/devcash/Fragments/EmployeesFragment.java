@@ -22,7 +22,9 @@ import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddEmployeeActivity;
 import com.example.devcash.ADD_UI.AddProductActivity;
+import com.example.devcash.CustomAdapters.CategoryAdapter;
 import com.example.devcash.CustomAdapters.EmployeesAdapter;
+import com.example.devcash.Object.Categorylistdata;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.Object.Employeelistdata;
 import com.example.devcash.R;
@@ -42,12 +44,13 @@ import java.util.List;
 public class EmployeesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
     DatabaseReference dbreference;
-    DatabaseReference employeedfirebaesreference;
+    DatabaseReference employeedfirebasereference;
     FirebaseDatabase firebaseDatabase;
 
     RecyclerView emprecyclerview;
 
-    List<Employeelistdata> list;
+    List<Employeelistdata> emplist;
+    ArrayList<Employee> employeeArrayList;
 
 
     public EmployeesFragment() {
@@ -68,36 +71,37 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
-        employeedfirebaesreference = firebaseDatabase.getReference("/datadevcash/employee");
+        employeedfirebasereference = firebaseDatabase.getReference("/datadevcash/employees");
 
-        employeedfirebaesreference.addValueEventListener(new ValueEventListener() {
+        employeedfirebasereference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                list = new ArrayList<>();
-                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                emplist = new ArrayList<>();
+                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                     Employee employee = dataSnapshot1.getValue(Employee.class);
-                    Employeelistdata listdata = new Employeelistdata();
-                    String emplname = employee.getEmp_lname();
-                    String empfname = employee.getEmp_fname();
-                    String emptask = employee.getEmp_task();
-                    listdata.setEmplname(emplname);
-                    listdata.setEmpfname(empfname);
-                    listdata.setEmptask(emptask);
-                    list.add(listdata);
+                    Employeelistdata employeelistdata = new Employeelistdata();
+                    String lname = employee.getEmp_lname();
+                    String fname = employee.getEmp_fname();
+                    String task = employee.getEmp_task();
+                    employeelistdata.setEmplname(lname);
+                    employeelistdata.setEmpfname(fname);
+                    employeelistdata.setEmptask(task);
+                    emplist.add(employeelistdata);
                 }
-                EmployeesAdapter adapter = new EmployeesAdapter(list);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                emprecyclerview.setLayoutManager(layoutManager);
+
+                EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                emprecyclerview.setLayoutManager(mLayoutManager);
                 emprecyclerview.setItemAnimator(new DefaultItemAnimator());
-                emprecyclerview.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                emprecyclerview.setAdapter(employeesAdapter);
+                employeesAdapter.notifyDataSetChanged();
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Something is wrong!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
             }
         });
 

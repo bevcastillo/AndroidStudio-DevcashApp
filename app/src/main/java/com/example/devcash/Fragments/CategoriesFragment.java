@@ -64,10 +64,6 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
     List<Categorylistdata> list;
 
     ArrayList<Category> categoryArrayList;
-    CategoryAdapter adapter;
-
-
-
 
     public CategoriesFragment() {
         // Required empty public constructor

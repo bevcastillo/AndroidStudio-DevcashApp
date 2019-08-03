@@ -80,7 +80,7 @@
             android:id="@+id/txtemp_task"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:text="@string/task"
             android:textColor="@color/dark_text"
             android:textSize="@dimen/text_inputs"
