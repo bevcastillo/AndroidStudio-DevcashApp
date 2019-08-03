@@ -36,6 +36,10 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        viewHolder.emplname.setText(employeeArrayList.get(i).getEmp_lname());
+        viewHolder.empfname.setText(employeeArrayList.get(i).getEmp_fname());
+        viewHolder.emptask.setText(employeeArrayList.get(i).getEmp_task());
+
 
     }
 

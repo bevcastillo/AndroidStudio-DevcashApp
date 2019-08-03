@@ -260,7 +260,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_input_emp_username"
+                            android:id="@+id/textinput_empuname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/username"
@@ -274,7 +274,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/emp_emailaddress_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -286,7 +285,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_input_emp_email_address"
+                            android:id="@+id/textinput_empemail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/email_address"
@@ -298,30 +297,31 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_passw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true"
                         app:passwordToggleEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
+                            android:id="@+id/textinput_emppassw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/passw"
                             android:inputType="textPassword"
                             android:padding="@dimen/text_padding"
-                            android:textSize="@dimen/page_title"/>
+                            android:textColorHint="@color/colorPrimary"
+                            android:textSize="@dimen/page_title" />
 
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_confpassw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true"
                         app:passwordToggleEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
+                            android:id="@+id/textinput_empconfpassw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/confpassw"
@@ -330,6 +330,20 @@
                             android:textSize="@dimen/page_title"/>
 
                     </android.support.design.widget.TextInputLayout>
+
+                    <EditText
+                        android:id="@+id/acct_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Employee"
+                        android:visibility="gone"/>
+
+                    <EditText
+                        android:id="@+id/acct_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Active"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 

@@ -10,9 +10,12 @@ public class Employee {
 
     public String emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone;
 //    public int emp_phone;
+    public Account account;
 
     public Employee() {
     }
+
+
 
     public Employee(String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone) {
         this.emp_lname = emp_lname;
@@ -21,6 +24,14 @@ public class Employee {
         this.emp_gender = emp_gender;
         this.emp_bdate = emp_bdate;
         this.emp_phone = emp_phone;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public String getEmp_lname() {

@@ -33,5 +33,7 @@
     <color name="colorGray">#424949</color>
 
     <color name="colorBlack">#000000</color>
+    
+    <color name="whiteSmoke">#F5F5F5</color>
 
 </resources>

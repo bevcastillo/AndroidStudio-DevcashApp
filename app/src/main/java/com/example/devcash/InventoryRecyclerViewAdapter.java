@@ -72,7 +72,7 @@ public class InventoryRecyclerViewAdapter extends RecyclerView.Adapter<Inventory
 
             viewHolder.label.setText(mLabel.get(i));
             if(selectedPosition == i || selectedItem == i){
-                viewHolder.itemView.setBackgroundColor(Color.parseColor("#DCDCDC"));
+                viewHolder.itemView.setBackgroundColor(Color.parseColor("#F5F5F5"));
                 viewHolder.label.setTextColor(Color.parseColor("#ec4e20"));
                 viewHolder.icon.setColorFilter(Color.parseColor("#ec4e20"));
             }else{

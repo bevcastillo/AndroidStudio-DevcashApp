@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
@@ -29,10 +30,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.Database.DatabaseHelper;
+import com.example.devcash.Object.Account;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -40,10 +45,11 @@ import java.util.Calendar;
 
 public class AddEmployeeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private DatabaseReference employeeref;
+    private DatabaseReference databaseReference;
     private FirebaseDatabase firebasedb;
-    private String EmployeeId;
-    TextInputEditText empLname, empFname, empEmail, empPhone, empbdate;
+    private DatabaseReference accountFirebaseReference;
+    TextInputEditText empLname, empFname, empEmail, empPhone, empbdate, empuname, emppassw, empconfpass;
+    EditText acctstatus, accttype;
     private Uri empimageUri;
     ImageView empimage;
     LinearLayout takephoto, choosephoto;
@@ -52,6 +58,8 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     DatePickerDialog bdatePickerDia;
     RadioGroup gender;
     RadioButton genderbtn;
+    private String EmployeeId, AccountId;
+
 
     private static final int PICK_IMAGE = 100;
 
@@ -64,19 +72,24 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         //
         empimage = (ImageView) findViewById(R.id.emp_photo) ;
         takephoto = (LinearLayout) findViewById(R.id.emptakephoto);
         choosephoto = (LinearLayout) findViewById(R.id.empchoosephoto);
         empLname = (TextInputEditText) findViewById(R.id.text_input_emp_lname);
         empFname = (TextInputEditText) findViewById(R.id.text_input_emp_fname);
-        empEmail = (TextInputEditText) findViewById(R.id.text_input_emp_email_address);
+        empuname = (TextInputEditText) findViewById(R.id.textinput_empuname);
+        empEmail = (TextInputEditText) findViewById(R.id.textinput_empemail);
         empPhone = (TextInputEditText) findViewById(R.id.text_input_emp_pnumber);
         empbdate = (TextInputEditText) findViewById(R.id.text_input_dob);
         emptask = (Spinner) findViewById(R.id.spinner_emptask);
         gender = (RadioGroup) findViewById(R.id.radiogroup_gender);
+        acctstatus = (EditText) findViewById(R.id.acct_status);
+        accttype = (EditText) findViewById(R.id.acct_type);
         //
+
+        emppassw = (TextInputEditText) findViewById(R.id.textinput_emppassw);
+        empconfpass = (TextInputEditText) findViewById(R.id.textinput_empconfpassw);
 
         //add listeners to the textviews
         empbdate.setOnClickListener(this);
@@ -85,8 +98,10 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         emptask.setOnItemSelectedListener(this);
 
         firebasedb = FirebaseDatabase.getInstance();
-        employeeref = firebasedb.getReference("/datadevcash");
-        EmployeeId = employeeref.push().getKey();
+        databaseReference = firebasedb.getReference("/datadevcash");
+        accountFirebaseReference = firebasedb.getReference("/datadevcash/account");
+        EmployeeId = databaseReference.push().getKey();
+        AccountId = databaseReference.push().getKey();
 
     }
 
@@ -96,10 +111,58 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         selectedgender=genderbtn.getText().toString();
     }
 
-    public void addEmployee(Uri emp_imageUri, String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone){
+    public void addEmployee(final String emp_lname, final String emp_fname, final String emp_task, final String emp_gender, final String emp_bdate, final String emp_phone, final String accountEmail){
         Log.d(TAG,"addEmployee()");
-        Employee employee = new Employee(emp_imageUri, emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone);
-        employeeref.child("employees").child(EmployeeId).setValue(employee);
+
+        accountFirebaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String acctEmail;
+                String acctUname;
+                String acctPassw;
+                String acctType;
+                String acctStatus;
+
+                Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone);
+
+                // create an account object
+                Account acct = new Account();
+
+               for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                   if (childSnapshot.child("acct_email").getValue().equals(accountEmail)) {
+                       acctEmail = childSnapshot.child("acct_email").getValue().toString();
+                       acctUname = childSnapshot.child("acct_uname").getValue().toString();
+                       acctPassw = childSnapshot.child("acct_passw").getValue().toString();
+                       acctType = childSnapshot.child("acct_type").getValue().toString();
+                       acctStatus = childSnapshot.child("acct_status").getValue().toString();
+
+                       acct.setAcct_email(acctEmail);
+                       acct.setAcct_uname(acctUname);
+                       acct.setAcct_passw(acctPassw);
+                       acct.setAcct_type(acctType);
+                       acct.setAcct_status(acctStatus);
+                       employee.setAccount(acct);
+
+                       databaseReference.child("employees").child(EmployeeId).setValue(employee);
+                   }
+               }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    public void addAccount(String acct_uname, final String acct_email, final String acct_passw, final String acct_type, final String acct_status){
+        final Account account = new Account(acct_uname, acct_email, acct_passw, acct_type, acct_status);
+        databaseReference.child("account").child(AccountId).setValue(account);
+        databaseReference.child("employees").child(EmployeeId).child("account").child(AccountId).setValue(account);
+
     }
 
     public void insertEmployee(){
@@ -108,10 +171,37 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         String fname = empFname.getText().toString();
         String bdate = empbdate.getText().toString();
         String textphone = empPhone.getText().toString();
-        addEmployee(empimageUri, lname, fname, selectedemptask, selectedgender, bdate, textphone);
+        String email = empEmail.getText().toString();
+        String passw = emppassw.getText().toString();
+        acctstatus.setText("Active");
+        accttype.setText("Employee");
+        String status = acctstatus.getText().toString();
+        String type = accttype.getText().toString();
+        addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, email);
         Toast.makeText(getApplicationContext(), "Employee Successfully Added!", Toast.LENGTH_SHORT).show();
 //        Toast.makeText(getApplicationContext(), lname+"\n"+fname+"\n"+selectedemptask+"\n"+selectedgender+"\n"+bdate+"\n"+textphone, Toast.LENGTH_LONG).show();
         finish();
+    }
+
+    public void insertAccount(){
+        String uname = empuname.getText().toString();
+        String email = empEmail.getText().toString();
+        String passw = emppassw.getText().toString();
+        acctstatus.setText("Active");
+        accttype.setText("Employee");
+        String status = acctstatus.getText().toString();
+        String type = accttype.getText().toString();
+        addAccount(uname, email, passw, type, status);
+    }
+
+    public boolean checkPassw(){
+        String passw = emppassw.getText().toString();
+        String confpass = empconfpass.getText().toString();
+        if(!passw.equals(confpass)){
+            errorDialog();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -142,6 +232,28 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         builder.show();
     }
 
+//    public void errorDialog(){
+//        AlertDialog.Builder errorbuilder = new AlertDialog.Builder(this);
+//
+//        errorbuilder.setMessage("Password did not match!");
+//        errorbuilder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//    }
+
+    public void errorDialog(){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Password did not match");
+        builder.setNeutralButton("OKAY", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -152,7 +264,12 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             return true;
         }else if(id == R.id.action_save){
             addRadioGroupListener();
-            insertEmployee();
+            if(checkPassw()){
+                insertAccount();
+                insertEmployee();
+            }else{
+                errorDialog();
+            }
         }
         return super.onOptionsItemSelected(item);
 
@@ -183,7 +300,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
                 //date picker dialog
                 bdatePickerDia = new DatePickerDialog(AddEmployeeActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
+                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 //set day month, month and year value in the textinputedittext

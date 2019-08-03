@@ -29,14 +29,11 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
 
 
     public EmployeesFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //inflate the  menu
         setHasOptionsMenu(true);
     }
 
@@ -60,17 +57,6 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
 
             }
         });
-
-//        //handles listview
-//        ListView lvemployees = view.findViewById(R.id.emplist_listview);
-//
-//        //set adapter
-//        // set click listener
-//
-//        //show no data found text when listview is empty
-//        lvemployees.setEmptyView(view.findViewById(R.id.emptyemployees_face));
-//        lvemployees.setEmptyView(view.findViewById(R.id.empty_employees));
-
         return view;
     }
 
@@ -80,7 +66,6 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
 
     }
 
-    //handles the search menu
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.searchmenu, menu);
