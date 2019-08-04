@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".Fragments.ServicesFragment">
 
     <android.support.v7.widget.Toolbar
@@ -22,40 +23,21 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/product_pulltorefresh"
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/product_pulltorefresh"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/serviceslist_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:dividerHeight="1dp"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical">
-
-        <ImageView
-            android:id="@+id/emptyservices_face"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_cry_face"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/empty_services"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_servlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/nodata_services"
-            android:layout_marginTop="15dp"/>
-
-    </LinearLayout>
+            android:layout_marginTop="5dp"/>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
 
     <android.support.design.widget.FloatingActionButton
@@ -67,5 +49,5 @@
         android:src="@drawable/ic_add"
         android:tint="@color/whiteBG"
         android:backgroundTint="@color/colorPrimary"/>
-
-</FrameLayout>
+    </FrameLayout>
+</LinearLayout>

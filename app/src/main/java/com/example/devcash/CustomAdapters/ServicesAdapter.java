@@ -10,17 +10,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.devcash.Object.Services;
+import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHolder> {
-    Context context;
-    ArrayList<Services> list;
+    List<Serviceslistdata> list;
 
-    public ServicesAdapter(Context c, ArrayList<Services> services) {
-        context = c;
-        list = services;
+    public ServicesAdapter(List<Serviceslistdata> list) {
+        this.list = list;
     }
 
     @NonNull
@@ -32,9 +32,10 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.servicename.setText(list.get(i).getService_name());
-        viewHolder.serviceprice.setText((int) list.get(i).getService_price());
-
+        Serviceslistdata data = list.get(i);
+        viewHolder.servicename.setText(data.getServname());
+        viewHolder.serviceprice.setText(String.valueOf(data.getServprice()));
+//        viewHolder.serviceprice.setText((int) data.getServprice());
     }
 
     @Override
@@ -44,11 +45,9 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView servicename, serviceprice;
-        ImageView serviceimage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            serviceimage = (ImageView) itemView.findViewById(R.id.service_image);
             servicename = (TextView) itemView.findViewById(R.id.txtservice_name);
             serviceprice = (TextView) itemView.findViewById(R.id.txtservice_price);
         }

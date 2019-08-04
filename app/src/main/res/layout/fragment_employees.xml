@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,38 +15,37 @@
         style="@style/PrimaryHeaderBar"
         android:elevation="4dp"
         app:title="@string/employees"
-        app:titleTextAppearance="@style/TextAppearance.AppCompat.Title">
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <!--app:titleTextAppearance="@style/TextAppearance.AppCompat.Title">-->
 
     </android.support.v7.widget.Toolbar>
 
+        <!--<android.support.v4.widget.SwipeRefreshLayout-->
+            <!--android:id="@+id/product_pulltorefresh"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/product_pulltorefresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/emplist_recyclerview"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:dividerHeight="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_height="match_parent">
 
-        </android.support.v4.widget.SwipeRefreshLayout>
-,
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/emplist_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/addemp_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_add"
-            android:tint="@color/whiteBG"
-            android:backgroundTint="@color/colorPrimary"/>
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/addemp_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/whiteBG"
+                    android:backgroundTint="@color/colorPrimary"/>
 
+            </FrameLayout>
 
-</FrameLayout>
+        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+</LinearLayout>

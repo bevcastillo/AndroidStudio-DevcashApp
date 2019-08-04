@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -84,8 +85,12 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                     String lname = employee.getEmp_lname();
                     String fname = employee.getEmp_fname();
                     String task = employee.getEmp_task();
+                    String uname = employee.getAccount().getAcct_uname();
+                    String email = employee.getAccount().getAcct_email();
                     employeelistdata.setEmplname(lname);
                     employeelistdata.setEmpfname(fname);
+                    employeelistdata.setAcctuname(uname);
+                    employeelistdata.setAcctemail(email);
                     employeelistdata.setEmptask(task);
                     emplist.add(employeelistdata);
                 }
@@ -158,5 +163,17 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 }

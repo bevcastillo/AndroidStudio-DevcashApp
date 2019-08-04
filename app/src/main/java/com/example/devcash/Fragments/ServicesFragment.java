@@ -8,6 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +26,21 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddServicesActivity;
+import com.example.devcash.CustomAdapters.EmployeesAdapter;
+import com.example.devcash.CustomAdapters.ServicesAdapter;
+import com.example.devcash.Object.Category;
+import com.example.devcash.Object.Employee;
+import com.example.devcash.Object.Services;
+import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -34,6 +51,15 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
 
     Toolbar servicesToolbar;
     Spinner servicesSpinner;
+
+    DatabaseReference dbreference;
+    DatabaseReference servicesdbreference;
+    FirebaseDatabase firebaseDatabase;
+
+    RecyclerView servrecyclerview;
+
+    List<Serviceslistdata> serviceslist;
+    ArrayList<Services> employeeArrayList;
 
     public ServicesFragment() {
         // Required empty public constructor
@@ -55,6 +81,42 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
 
         servicesToolbar = (Toolbar) view.findViewById(R.id.toolbar_services);
         servicesSpinner = (Spinner) view.findViewById(R.id.spinner_services);
+
+        servrecyclerview = (RecyclerView) view.findViewById(R.id.recycler_servlist);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dbreference = firebaseDatabase.getReference("datadevcash");
+        servicesdbreference = firebaseDatabase.getReference("datadevcash/services");
+
+        servicesdbreference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                serviceslist = new ArrayList<>();
+                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    Services services = dataSnapshot1.getValue(Services.class);
+                    Serviceslistdata serviceslistdata = new Serviceslistdata();
+                    String sname = services.getService_name();
+                    double sprice = services.getService_price();
+                    serviceslistdata.setServname(sname);
+                    serviceslistdata.setServprice(sprice);
+                    serviceslist.add(serviceslistdata);
+                }
+
+                ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
+                servrecyclerview.setLayoutManager(sLayoutManager);
+                servrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                servrecyclerview.setAdapter(servicesAdapter);
+                servicesAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
@@ -87,16 +149,12 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                 startActivity(addservices);
             }
         });
-
-        //handles listview
-        ListView lvservices = view.findViewById(R.id.serviceslist_listview);
-
         //set adapter
         // set click listener
 
         //show no data found text when listview is empty
-        lvservices.setEmptyView(view.findViewById(R.id.emptyservices_face));
-        lvservices.setEmptyView(view.findViewById(R.id.empty_services));
+//        lvservices.setEmptyView(view.findViewById(R.id.emptyservices_face));
+//        lvservices.setEmptyView(view.findViewById(R.id.empty_services));
 
         return view;
     }

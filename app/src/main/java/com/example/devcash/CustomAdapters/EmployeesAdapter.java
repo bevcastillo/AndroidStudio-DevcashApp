@@ -41,6 +41,8 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
         viewHolder.emplname.setText(data.getEmplname());
         viewHolder.empfname.setText(data.getEmpfname());
         viewHolder.emptask.setText(data.getEmptask());
+        viewHolder.acctuname.setText(data.getAcctuname());
+        viewHolder.acctemail.setText(data.getAcctemail());
     }
 
     @Override
@@ -49,13 +51,15 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView emplname, empfname, emptask;
+        TextView emplname, empfname, emptask, acctuname, acctemail;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             emplname = (TextView) itemView.findViewById(R.id.txtemp_lname);
             empfname = (TextView) itemView.findViewById(R.id.txtemp_fname);
             emptask = (TextView) itemView.findViewById(R.id.txtemp_task);
+            acctemail = (TextView) itemView.findViewById(R.id.txtemp_email);
+            acctuname = (TextView) itemView.findViewById(R.id.txtemp_username);
         }
     }
 

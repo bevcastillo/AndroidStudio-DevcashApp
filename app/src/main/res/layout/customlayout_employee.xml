@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="80dp"
     android:background="@color/whiteBG"
     android:layout_marginBottom="5dp"
     android:layout_marginRight="5dp"
@@ -29,7 +29,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:orientation="horizontal">
 
             <TextView
@@ -38,8 +38,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/lname"
                 android:textColor="@color/dark_text"
-                android:textSize="@dimen/text_inputs"
+                android:textSize="@dimen/page_title"
                 android:layout_marginLeft="@dimen/text_padding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=", "
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/page_title"/>
 
             <TextView
                 android:id="@+id/txtemp_fname"
@@ -47,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fname"
                 android:textColor="@color/dark_text"
-                android:textSize="@dimen/text_inputs"
+                android:textSize="@dimen/page_title"
                 android:layout_marginLeft="@dimen/text_spacing"/>
 
         </LinearLayout>
@@ -58,11 +65,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@string/email"
-            android:textColor="@color/dark_text"
+            android:textColor="@color/icon_light"
             android:textSize="@dimen/text_inputs"
-            android:layout_marginLeft="@dimen/text_padding"
-            android:gravity="right"
-            android:paddingRight="@dimen/text_padding"/>
+            android:layout_marginLeft="@dimen/padding_50"
+            android:gravity="left"/>
 
         <TextView
             android:id="@+id/txtemp_username"
@@ -70,23 +76,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@string/username"
-            android:textColor="@color/dark_text"
+            android:textColor="@color/icon_light"
             android:textSize="@dimen/text_inputs"
-            android:layout_marginLeft="@dimen/text_padding"
-            android:gravity="right"
+            android:layout_marginLeft="@dimen/padding_50"
+            android:gravity="left"
             android:paddingRight="@dimen/text_padding"/>
 
         <TextView
             android:id="@+id/txtemp_task"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:text="@string/task"
-            android:textColor="@color/dark_text"
+            android:textColor="@color/colorGray"
             android:textSize="@dimen/text_inputs"
-            android:layout_marginLeft="@dimen/text_padding"
-            android:gravity="right"
-            android:paddingRight="@dimen/text_padding"/>
+            android:layout_marginLeft="@dimen/padding_50"
+            android:gravity="left"/>
 
 
     </LinearLayout>
