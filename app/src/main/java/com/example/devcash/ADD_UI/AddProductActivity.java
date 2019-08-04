@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -24,19 +26,32 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.devcash.Object.Category;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class AddProductActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
+    DatabaseReference dbreference;
+    DatabaseReference categoryfirebasereference;
+    FirebaseDatabase firebaseDatabase;
 
     ImageView prodphoto;
     TextView takephoto, choosephoto;
     TextInputEditText prodexpdate;
-    Spinner prodcondition, produnit, discname;
+    Spinner prodcondition, produnit, discname, spinnerprodcategory;
     RadioGroup soldby;
     RadioButton soldbybtn;
-    String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby;
+    String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory;
     CheckBox chkavail;
 
     private static final int PICK_IMAGE = 100;
@@ -66,7 +81,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         chkavail = (CheckBox) findViewById(R.id.cbox_prod_avail);
 
-        //adding listeners to the textviews
+        //
+        spinnerprodcategory = (Spinner) findViewById(R.id.spinner_prodcat);
+
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
         prodexpdate.setOnClickListener(this);
@@ -74,6 +91,34 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         prodcondition.setOnItemSelectedListener(this);
         produnit.setOnItemSelectedListener(this);
         discname.setOnItemSelectedListener(this);
+        spinnerprodcategory.setOnItemSelectedListener(this);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dbreference = firebaseDatabase.getReference("/datadevcash");
+        categoryfirebasereference = firebaseDatabase.getReference("/datadevcash/category");
+
+        final ArrayList<String> categories = new ArrayList<String>();
+
+        categoryfirebasereference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    Category category1 = dataSnapshot1.getValue(Category.class);
+                    categories.add(category1.getCategory_name());
+                }
+
+                //initializing the adapter
+                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_categoryitem, categories);
+                spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
+                spinnerprodcategory.setAdapter(spinnerArrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public void addRadioGroupListener(){
@@ -134,6 +179,18 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         }else if(id == R.id.action_save){ //if SAVE is clicked
             addRadioGroupListener();
             addCheckBoxListener();
+            Toast.makeText(this, selectedcategory, Toast.LENGTH_SHORT).show();
+
+//            String newcategory = null;
+//            if(spinnerprodcategory.getSelectedItem() !=null){
+//                newcategory = (String) spinnerprodcategory.getSelectedItem();
+//                Toast.makeText(getApplicationContext(), newcategory+"", Toast.LENGTH_LONG).show();
+//            }else{
+//                Toast.makeText(getApplicationContext(), "Null", Toast.LENGTH_LONG).show();
+////            }
+//            String newcategory = spinnerprodcategory.getSelectedItem().toString();
+//            Toast.makeText(getApplicationContext(), newcategory, Toast.LENGTH_LONG).show();
+
         }
         return super.onOptionsItemSelected(item);
 
@@ -205,6 +262,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.spinner_prod_discount:
                 selecteddisc = this.discname.getItemAtPosition(position).toString();
+                break;
+            case R.id.spinner_prodcat:
+                selectedcategory = this.spinnerprodcategory.getItemAtPosition(position).toString();
+                Toast.makeText(this, selectedcategory, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

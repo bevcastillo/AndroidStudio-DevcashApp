@@ -60,7 +60,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     RadioButton genderbtn;
     private String EmployeeId, AccountId;
 
-
     private static final int PICK_IMAGE = 100;
 
     private static final String TAG = "AddEmployeeActivity";

@@ -324,6 +324,7 @@
     <string name="female">Female</string>
     <string name="forowners">For Enterprise Owners</string>
     <string name="foremp">For Employees</string>
+    <string name="status">Status</string>
     <!-- array strings -->
 
     <string-array name="enterprise_type">
@@ -404,6 +405,11 @@
         <item>Cashiering</item>
         <item>Inventory Monitoring</item>
         <item>Unassign Employee</item>
+    </string-array>
+
+    <string-array name="disc_status">
+        <item>Active</item>
+        <item>Deactivate</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

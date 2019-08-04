@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="80dp"
     android:background="@color/whiteBG"
     android:layout_marginBottom="5dp"
     android:layout_marginRight="5dp"
@@ -19,12 +19,12 @@
 
         <ImageView
             android:id="@+id/category_color"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_gravity="left|center"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_local_offer"
-            android:tint="@color/icon_light"/>
+            android:tint="@color/icon_bg"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="Category name"
             android:textColor="@color/dark_text"
-            android:textSize="18dp"
+            android:textSize="@dimen/page_title"
             android:layout_marginLeft="@dimen/text_padding"
             />
     </LinearLayout>

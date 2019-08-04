@@ -9,21 +9,31 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.devcash.Object.Discount;
 import com.example.devcash.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
-public class AddDiscountActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddDiscountActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
+    private DatabaseReference dbreference;
+    private FirebaseDatabase firebaseInstance;
+    private String DiscountId;
 
     RadioGroup disctype;
     RadioButton discbtn;
-    String selecteddisc;
-    TextInputEditText startdate,enddate;
+    String selecteddisc, selectedstatus;
+    TextInputEditText disc_code, disc_value, disc_startdate, disc_enddate;
+    Spinner spinnerstatus;
 
     DatePickerDialog datePickerDialog;
 
@@ -35,15 +45,39 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //
+        disc_code = (TextInputEditText) findViewById(R.id.textinput_discode);
+        disc_value = (TextInputEditText) findViewById(R.id.textinput_amt);
+        disc_startdate = (TextInputEditText) findViewById(R.id.textdisc_startdate);
+        disc_enddate = (TextInputEditText) findViewById(R.id.textdisc_enddate);
         disctype = (RadioGroup) findViewById(R.id.rgroup_disctype);
-
-        startdate = (TextInputEditText) findViewById(R.id.textdisc_startdate);
-        enddate = (TextInputEditText) findViewById(R.id.textdisc_enddate);
+        spinnerstatus = (Spinner) findViewById(R.id.spinner_discstatus);
 
         //
-        startdate.setOnClickListener(this);
-        enddate.setOnClickListener(this);
+        disc_startdate.setOnClickListener(this);
+        disc_enddate.setOnClickListener(this);
+        spinnerstatus.setOnItemSelectedListener(this);
+
+        firebaseInstance = FirebaseDatabase.getInstance();
+        dbreference = firebaseInstance.getReference("/datadevcash");
+        DiscountId = dbreference.push().getKey();
     }
+
+    public void addDiscount(String disc_code, String disc_type, String disc_start, String disc_end, String disc_status, double disc_value){
+        Discount discount = new Discount(disc_code, disc_type, disc_start, disc_end, disc_status, disc_value);
+        dbreference.child("/discount").child(DiscountId).setValue(discount);
+    }
+
+    public void insertDiscount(){
+        String code = disc_code.getText().toString();
+        double value = Double.parseDouble(disc_value.getText().toString());
+        String start = disc_startdate.getText().toString();
+        String end = disc_enddate.getText().toString();
+        addDiscount(code, selecteddisc, start, end, selectedstatus, value);
+        Toast.makeText(getApplicationContext(), "Discount Successfully added!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+
 
     public void addRadioGroupListener(){
         int radioid = disctype.getCheckedRadioButtonId();
@@ -87,6 +121,7 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
             return true;
         }else if(id == R.id.action_save){
             addRadioGroupListener();
+            insertDiscount();
         }
         return super.onOptionsItemSelected(item);
 
@@ -108,7 +143,7 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 //set day, month and year in the textinputedittext
-                                startdate.setText(dayOfMonth + "/"
+                                disc_startdate.setText(dayOfMonth + "/"
                                         + (month + 1) + "/" + year);
                             }
                         },mYear,mMonth,mDay);
@@ -124,12 +159,27 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                enddate.setText(dayOfMonth + "/"
+                                disc_enddate.setText(dayOfMonth + "/"
                                                 + (month + 1) + "/" +year);
                             }
                         },eYear, eMonth, eDay);
                 datePickerDialog.show();
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int sid = parent.getId();
+        switch (sid){
+            case R.id.spinner_discstatus:
+                selectedstatus = this.spinnerstatus.getItemAtPosition(position).toString();
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
