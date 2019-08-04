@@ -116,6 +116,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     Category category1 = dataSnapshot1.getValue(Category.class);
                     categories.add(category1.getCategory_name());
                 }
+                categories.add("No Category");
+                categories.add("Create Category");
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_categoryitem, categories);
                 spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
                 spinnerprodcategory.setAdapter(spinnerArrayAdapter);
@@ -136,6 +138,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     Discount discount1 = dataSnapshot1.getValue(Discount.class);
                     discounts.add(discount1.getDisc_code());
                 }
+                discounts.add("No Discount");
+                discounts.add("Create Discount");
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_discountitem, discounts);
                 spinnerdiscount.setAdapter(spinnerArrayAdapter);
             }
@@ -292,9 +296,17 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.spinner_proddisc:
                 selecteddisc = this.spinnerdiscount.getItemAtPosition(position).toString();
+                if(selecteddisc.equals("Create Discount")){
+                    Intent create = new Intent(AddProductActivity.this, AddDiscountActivity.class);
+                    startActivity(create);
+                }
                 break;
             case R.id.spinner_prodcat:
                 selectedcategory = this.spinnerprodcategory.getItemAtPosition(position).toString();
+                if(selectedcategory.equals("Create Category")){
+                    Intent create = new Intent(AddProductActivity.this, AddCategoryActivity.class);
+                    startActivity(create);
+                }
                 break;
         }
     }
