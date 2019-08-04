@@ -409,7 +409,7 @@
 
     <string-array name="disc_status">
         <item>Active</item>
-        <item>Deactivate</item>
+        <item>Inactive</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
