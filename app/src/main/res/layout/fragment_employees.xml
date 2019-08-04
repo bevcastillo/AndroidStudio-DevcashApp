@@ -26,6 +26,27 @@
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content">-->
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_search"
+                android:drawableTint="#808080"
+                android:background="@drawable/search_btnstroke"
+                android:hint="Search.."
+                android:padding="15dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"/>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -34,7 +55,7 @@
                     android:id="@+id/emplist_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp" />
+                    android:layout_marginTop="10dp" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/addemp_fab"
@@ -49,4 +70,6 @@
             </FrameLayout>
 
         <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

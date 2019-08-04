@@ -27,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.Object.Category;
+import com.example.devcash.Object.Discount;
+import com.example.devcash.Object.Product;
 import com.example.devcash.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,16 +41,23 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+/*
+created by Beverly Castillo on August 4, 2019
+ */
+
 public class AddProductActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    DatabaseReference dbreference;
-    DatabaseReference categoryfirebasereference;
-    FirebaseDatabase firebaseDatabase;
+    private DatabaseReference dbreference;
+    private DatabaseReference categoryfirebasereference;
+    private DatabaseReference discountfirebasereference;
+    private FirebaseDatabase firebaseDatabase;
+    private String ProductId;
+
 
     ImageView prodphoto;
     TextView takephoto, choosephoto;
-    TextInputEditText prodexpdate;
-    Spinner prodcondition, produnit, discname, spinnerprodcategory;
+    TextInputEditText prodexpdate, prodname, prodprice, prodrop;
+    Spinner prodcondition, produnit, spinnerprodcategory, spinnerdiscount;
     RadioGroup soldby;
     RadioButton soldbybtn;
     String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory;
@@ -67,22 +76,20 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         prodphoto = (ImageView) findViewById(R.id.prod_photo);
-
         takephoto = (TextView) findViewById(R.id.txt_prodtakephoto);
         choosephoto = (TextView) findViewById(R.id.txt_prodchoosephoto);
-
         prodexpdate = (TextInputEditText) findViewById(R.id.textprod_exp_date);
-
+        prodname = (TextInputEditText) findViewById(R.id.textinput_prodname);
+        prodprice = (TextInputEditText) findViewById(R.id.textinput_price);
+        prodrop = (TextInputEditText) findViewById(R.id.textinput_ROP);
         prodcondition = (Spinner) findViewById(R.id.spinner_prod_condition);
         produnit = (Spinner) findViewById(R.id.spinner_unit);
-        discname = (Spinner) findViewById(R.id.spinner_prod_discount);
-
         soldby = (RadioGroup) findViewById(R.id.radio_group_soldby);
-
         chkavail = (CheckBox) findViewById(R.id.cbox_prod_avail);
 
         //
         spinnerprodcategory = (Spinner) findViewById(R.id.spinner_prodcat);
+        spinnerdiscount = (Spinner) findViewById(R.id.spinner_proddisc);
 
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
@@ -90,12 +97,15 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         prodcondition.setOnItemSelectedListener(this);
         produnit.setOnItemSelectedListener(this);
-        discname.setOnItemSelectedListener(this);
+        spinnerdiscount.setOnItemSelectedListener(this);
         spinnerprodcategory.setOnItemSelectedListener(this);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
+        ProductId = dbreference.push().getKey();
+
         categoryfirebasereference = firebaseDatabase.getReference("/datadevcash/category");
+        discountfirebasereference = firebaseDatabase.getReference("/datadevcash/discount");
 
         final ArrayList<String> categories = new ArrayList<String>();
 
@@ -106,8 +116,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     Category category1 = dataSnapshot1.getValue(Category.class);
                     categories.add(category1.getCategory_name());
                 }
-
-                //initializing the adapter
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_categoryitem, categories);
                 spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
                 spinnerprodcategory.setAdapter(spinnerArrayAdapter);
@@ -119,21 +127,57 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
+        final ArrayList<String> discounts = new ArrayList<String>();
+
+        discountfirebasereference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    Discount discount1 = dataSnapshot1.getValue(Discount.class);
+                    discounts.add(discount1.getDisc_code());
+                }
+                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_discountitem, discounts);
+                spinnerdiscount.setAdapter(spinnerArrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void addProduct(String prod_name, String prod_unitof_measure, String prod_status, String prod_soldby, double prod_price, double prod_rop){
+        Product product = new Product(prod_name, prod_unitof_measure, prod_status, prod_soldby, prod_price, prod_rop);
+        dbreference.child("/products").child(ProductId).setValue(product);
+    }
+
+    public void insertProduct(){
+        String pname = prodname.getText().toString();
+        String pstatus = chkavail.getText().toString();
+        double pprice = Double.parseDouble(prodprice.getText().toString());
+        double prop = Double.parseDouble(prodrop.getText().toString());
+        addProduct(pname, selectedprodunit, pstatus, selectedsoldby, pprice, prop);
+        Toast.makeText(getApplicationContext(), "Product Successfully Added!", Toast.LENGTH_SHORT).show();
+        finish();
+
     }
 
     public void addRadioGroupListener(){
         int radioid=soldby.getCheckedRadioButtonId();
         soldbybtn=(RadioButton)findViewById(radioid);
         selectedsoldby=soldbybtn.getText().toString();
+
     }
 
     private void addCheckBoxListener() {
         if(chkavail.isChecked()){
-            String chkres = "Available";
-            Toast.makeText(getApplicationContext(), chkres+"", Toast.LENGTH_SHORT).show();
+            String avail = "Available";
+            chkavail.setText(avail);
         }else{
-            String chkres = "Not Available";
-            Toast.makeText(getApplicationContext(), chkres+"", Toast.LENGTH_SHORT).show();
+            String notavail = "Not Available";
+            chkavail.setText(notavail);
         }
     }
 
@@ -176,21 +220,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         if (id == android.R.id.home){
             onBackPressed();
             return true;
-        }else if(id == R.id.action_save){ //if SAVE is clicked
+        }else if(id == R.id.action_save){
             addRadioGroupListener();
             addCheckBoxListener();
-            Toast.makeText(this, selectedcategory, Toast.LENGTH_SHORT).show();
-
-//            String newcategory = null;
-//            if(spinnerprodcategory.getSelectedItem() !=null){
-//                newcategory = (String) spinnerprodcategory.getSelectedItem();
-//                Toast.makeText(getApplicationContext(), newcategory+"", Toast.LENGTH_LONG).show();
-//            }else{
-//                Toast.makeText(getApplicationContext(), "Null", Toast.LENGTH_LONG).show();
-////            }
-//            String newcategory = spinnerprodcategory.getSelectedItem().toString();
-//            Toast.makeText(getApplicationContext(), newcategory, Toast.LENGTH_LONG).show();
-
+            insertProduct();
         }
         return super.onOptionsItemSelected(item);
 
@@ -201,8 +234,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         switch (v.getId()){
             case R.id.txt_prodchoosephoto:
-//                Intent gallery = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-//                startActivityForResult(gallery, PICK_IMAGE);
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -223,7 +254,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                //set day, month and year in the textinputedittext
                                 prodexpdate.setText(dayOfMonth + "/"
                                                     + (month + 1) + "/" + year);
                             }
@@ -260,12 +290,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             case R.id.spinner_unit:
                 selectedprodunit = this.produnit.getItemAtPosition(position).toString();
                 break;
-            case R.id.spinner_prod_discount:
-                selecteddisc = this.discname.getItemAtPosition(position).toString();
+            case R.id.spinner_proddisc:
+                selecteddisc = this.spinnerdiscount.getItemAtPosition(position).toString();
                 break;
             case R.id.spinner_prodcat:
                 selectedcategory = this.spinnerprodcategory.getItemAtPosition(position).toString();
-                Toast.makeText(this, selectedcategory, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

@@ -24,7 +24,7 @@
             android:layout_gravity="left|center"
             android:layout_margin="8dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/employee_avatar" />
+            android:src="@drawable/percentage" />
 
         <TextView
             android:id="@+id/text_disccode"
