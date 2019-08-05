@@ -412,6 +412,11 @@
         <item>Inactive</item>
     </string-array>
 
+    <string-array name="inventory_type">
+        <item>Products</item>
+        <item>Services</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

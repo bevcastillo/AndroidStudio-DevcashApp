@@ -17,10 +17,11 @@
         android:elevation="4dp">
 
         <Spinner
-            android:id="@+id/spinner_allcategories"
+            android:id="@+id/spinner_inventorytype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:entries="@array/inventory_type"/>
 
     </android.support.v7.widget.Toolbar>
 
@@ -28,36 +29,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_purchitemlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical">
+            android:layout_marginTop="5dp" />
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_cry_face"
-                android:layout_gravity="center"/>
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_gravity="center_vertical">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/no_items"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/text_padding"/>
+            <!--<ImageView-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:src="@drawable/ic_cry_face"-->
+                <!--android:layout_gravity="center"/>-->
 
-            <Button
-                android:layout_width="150dp"
-                android:layout_height="30dp"
-                android:text="@string/go_inventory"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/text_padding"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/whiteBG"
-                android:textSize="@dimen/small_title"/>
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/no_items"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_marginTop="@dimen/text_padding"/>-->
 
-        </LinearLayout>
+            <!--<Button-->
+                <!--android:layout_width="150dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:text="@string/go_inventory"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_marginTop="@dimen/text_padding"-->
+                <!--android:background="@color/colorPrimary"-->
+                <!--android:textColor="@color/whiteBG"-->
+                <!--android:textSize="@dimen/small_title"/>-->
+
+        <!--</LinearLayout>-->
 
 
     </FrameLayout>
