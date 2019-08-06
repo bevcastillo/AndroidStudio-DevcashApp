@@ -165,6 +165,23 @@
 
                         </android.support.design.widget.TextInputLayout>
 
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/text_input_empaddr"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Home Address"
+                                android:inputType="number"
+                                android:padding="@dimen/text_padding"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/page_title" />
+
+                        </android.support.design.widget.TextInputLayout>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -215,7 +232,8 @@
                             android:background="@drawable/custom_btn_stroke"
                             android:padding="@dimen/text_padding"
                             android:text="@string/add_pincode"
-                            android:textColor="@color/colorPrimary" />
+                            android:textColor="@color/colorPrimary"
+                            android:visibility="gone"/>
 
                     </LinearLayout>
 
@@ -300,7 +318,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true"
-                        app:passwordToggleEnabled="true">
+                        app:passwordToggleEnabled="true"
+                        app:counterEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/textinput_emppassw"

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
@@ -15,19 +16,31 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.devcash.Object.Category;
+import com.example.devcash.Object.Discount;
 import com.example.devcash.Object.Services;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class AddServicesActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
+
+public class AddServicesActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private DatabaseReference dbreference;
+    private DatabaseReference categorydbreference;
+    private DatabaseReference discountsdbreference;
     private FirebaseDatabase firebaseDatabase;
 //    private StorageReference storageReference;
     private String ServicesId;
@@ -37,6 +50,8 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     TextView takephoto, choosephoto;
     CheckBox chkavail;
     TextInputEditText servicename, serviceprice;
+    Spinner spinnercategory, spinnerdiscounts;
+    String selectedcategory, selecteddiscount;
 
     private static final int PICK_IMAGE = 100;
 
@@ -57,13 +72,65 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         choosephoto = (TextView) findViewById(R.id.txt_serviceschoosephoto);
         chkavail = (CheckBox) findViewById(R.id.cbox_serv_avail);
 
+        spinnercategory = (Spinner) findViewById(R.id.spinner_servcat);
+        spinnerdiscounts = (Spinner) findViewById(R.id.spinner_serdisc);
+
+
+        //adding listeners
+        takephoto.setOnClickListener(this);
+        choosephoto.setOnClickListener(this);
+        spinnercategory.setOnItemSelectedListener(this);
+        spinnerdiscounts.setOnItemSelectedListener(this);
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
         ServicesId = dbreference.push().getKey();
 
-        //adding listeners to the textviews
-        takephoto.setOnClickListener(this);
-        choosephoto.setOnClickListener(this);
+        categorydbreference = firebaseDatabase.getReference("datadevcash/category");
+        discountsdbreference = firebaseDatabase.getReference("datadevcash/discount");
+
+        final ArrayList<String> categories = new ArrayList<String>();
+
+        categorydbreference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    Category category = dataSnapshot1.getValue(Category.class);
+                    categories.add(category.getCategory_name());
+                }
+                categories.add("No Category");
+                categories.add("Create Category");
+                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddServicesActivity.this, R.layout.spinner_categoryitem, categories);
+                spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
+                spinnercategory.setAdapter(spinnerArrayAdapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        final ArrayList<String> discounts = new ArrayList<String>();
+        discountsdbreference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    Discount discount = dataSnapshot1.getValue(Discount.class);
+                    discounts.add(discount.getDisc_code());
+                }
+                discounts.add("No Discount");
+                discounts.add("Create Discount");
+                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddServicesActivity.this, R.layout.spinner_discountitem, discounts);
+                spinnerdiscounts.setAdapter(spinnerArrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -184,4 +251,29 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int sid = parent.getId();
+        switch (sid){
+            case R.id.spinner_servcat:
+                selectedcategory = this.spinnercategory.getItemAtPosition(position).toString();
+                if(selectedcategory.equals("Create Category")){
+                    Intent create = new Intent(AddServicesActivity.this, AddCategoryActivity.class);
+                    startActivity(create);
+                }
+                break;
+            case R.id.spinner_serdisc:
+                selecteddiscount = this.spinnerdiscounts.getItemAtPosition(position).toString();
+                if(selecteddiscount.equals("Create Discount")){
+                    Intent create = new Intent(AddServicesActivity.this, AddDiscountActivity.class);
+                    startActivity(create);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

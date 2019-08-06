@@ -38,6 +38,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import java.util.UUID;
 
 import org.w3c.dom.Text;
 
@@ -171,26 +172,35 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         String bdate = empbdate.getText().toString();
         String textphone = empPhone.getText().toString();
         String email = empEmail.getText().toString();
-        String passw = emppassw.getText().toString();
         acctstatus.setText("Active");
         accttype.setText("Employee");
-        String status = acctstatus.getText().toString();
-        String type = accttype.getText().toString();
+        //
         addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, email);
         Toast.makeText(getApplicationContext(), "Employee Successfully Added!", Toast.LENGTH_SHORT).show();
-//        Toast.makeText(getApplicationContext(), lname+"\n"+fname+"\n"+selectedemptask+"\n"+selectedgender+"\n"+bdate+"\n"+textphone, Toast.LENGTH_LONG).show();
         finish();
     }
 
     public void insertAccount(){
-        String uname = empuname.getText().toString();
+//        String uname = empuname.getText().toString();
         String email = empEmail.getText().toString();
-        String passw = emppassw.getText().toString();
+//        String passw = emppassw.getText().toString();
         acctstatus.setText("Active");
         accttype.setText("Employee");
         String status = acctstatus.getText().toString();
         String type = accttype.getText().toString();
-        addAccount(uname, email, passw, type, status);
+        String lname = empLname.getText().toString();
+        String fname = empFname.getText().toString();
+        String newfname = fname.substring(0,1).toLowerCase();
+        String newuname = newfname+lname.toLowerCase();
+        empuname.setText(newuname);
+        String uname = empuname.getText().toString();
+        String passw = UUID.randomUUID().toString().substring(0,5);
+        emppassw.setText(passw);
+        String newpassw = emppassw.getText().toString();
+        //
+//        addAccount(uname, email, passw, type, status);
+        addAccount(uname, email, newpassw, type, status);
+
     }
 
     public boolean checkPassw(){

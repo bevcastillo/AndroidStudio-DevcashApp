@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ADD_UI.AddProductActivity"
     android:orientation="vertical"
-    android:background="@color/whiteDarker">
+    android:background="@color/whiteDarker"
+    android:id="@+id/addplayout">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -311,7 +312,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/price"
-                                android:inputType="date"
+                                android:inputType="numberDecimal"
                                 android:padding="@dimen/text_padding"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/text_inputs" />

@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -97,7 +98,8 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
 
                 EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                emprecyclerview.setLayoutManager(mLayoutManager);
+//                emprecyclerview.setLayoutManager(mLayoutManager);
+                emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
                 emprecyclerview.setItemAnimator(new DefaultItemAnimator());
                 emprecyclerview.setAdapter(employeesAdapter);
                 employeesAdapter.notifyDataSetChanged();

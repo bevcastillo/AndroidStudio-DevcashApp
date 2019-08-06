@@ -4,10 +4,13 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -68,6 +72,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     Uri imageUri;
     DatePickerDialog expdatePicker;
 
+    LinearLayout addlayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +96,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //
         spinnerprodcategory = (Spinner) findViewById(R.id.spinner_prodcat);
         spinnerdiscount = (Spinner) findViewById(R.id.spinner_proddisc);
+
+        //
+        addlayout = (LinearLayout) findViewById(R.id.addplayout);
 
         takephoto.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
@@ -163,7 +172,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         double pprice = Double.parseDouble(prodprice.getText().toString());
         double prop = Double.parseDouble(prodrop.getText().toString());
         addProduct(pname, selectedprodunit, pstatus, selectedsoldby, pprice, prop);
-        Toast.makeText(getApplicationContext(), "Product Successfully Added!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
         finish();
 
     }
@@ -228,6 +237,15 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             addRadioGroupListener();
             addCheckBoxListener();
             insertProduct();
+//            Snackbar.make(addlayout, "New Product Added", Snackbar.LENGTH_LONG)
+//                    .setAction("UNDO", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//                        }
+//                    })
+//                    .setActionTextColor(Color.RED)
+//                    .show();
         }
         return super.onOptionsItemSelected(item);
 
