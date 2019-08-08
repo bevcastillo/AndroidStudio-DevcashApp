@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,11 +34,14 @@ import com.example.devcash.Database.DatabaseHelper;
 import com.example.devcash.Object.Account;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.R;
+import com.firebase.client.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.w3c.dom.Text;
@@ -49,7 +53,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebasedb;
     private DatabaseReference accountFirebaseReference;
-    TextInputEditText empLname, empFname, empEmail, empPhone, empbdate, empuname, emppassw, empconfpass;
+    TextInputEditText empLname, empFname, empEmail, empPhone, empbdate, empuname, emppassw, empconfpass, empaddr;
     EditText acctstatus, accttype;
     private Uri empimageUri;
     ImageView empimage;
@@ -82,6 +86,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         empEmail = (TextInputEditText) findViewById(R.id.textinput_empemail);
         empPhone = (TextInputEditText) findViewById(R.id.text_input_emp_pnumber);
         empbdate = (TextInputEditText) findViewById(R.id.text_input_dob);
+        empaddr = (TextInputEditText) findViewById(R.id.textinp_empaddress);
         emptask = (Spinner) findViewById(R.id.spinner_emptask);
         gender = (RadioGroup) findViewById(R.id.radiogroup_gender);
         acctstatus = (EditText) findViewById(R.id.acct_status);
@@ -111,33 +116,34 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         selectedgender=genderbtn.getText().toString();
     }
 
-    public void addEmployee(final String emp_lname, final String emp_fname, final String emp_task, final String emp_gender, final String emp_bdate, final String emp_phone, final String accountEmail){
-        Log.d(TAG,"addEmployee()");
+    public void addEmployee(final String emp_lname, final String emp_fname, final String emp_task, final String emp_gender, final String emp_bdate, final String emp_phone, final String emp_addr, final String accountUsername){
+    Log.d(TAG,"addEmployee()");
 
         accountFirebaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String acctEmail;
+//                String acctEmail;
+//                String acctUsername;
                 String acctUname;
                 String acctPassw;
                 String acctType;
                 String acctStatus;
 
-                Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone);
+                Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr);
 
                 // create an account object
                 Account acct = new Account();
 
                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                   if (childSnapshot.child("acct_email").getValue().equals(accountEmail)) {
-                       acctEmail = childSnapshot.child("acct_email").getValue().toString();
+                   if (childSnapshot.child("acct_uname").getValue().equals(accountUsername)) {
+//                       acctEmail = childSnapshot.child("acct_email").getValue().toString();
                        acctUname = childSnapshot.child("acct_uname").getValue().toString();
                        acctPassw = childSnapshot.child("acct_passw").getValue().toString();
                        acctType = childSnapshot.child("acct_type").getValue().toString();
                        acctStatus = childSnapshot.child("acct_status").getValue().toString();
 
-                       acct.setAcct_email(acctEmail);
+//                       acct.setAcct_email(acctEmail);
                        acct.setAcct_uname(acctUname);
                        acct.setAcct_passw(acctPassw);
                        acct.setAcct_type(acctType);
@@ -158,8 +164,9 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-    public void addAccount(String acct_uname, final String acct_email, final String acct_passw, final String acct_type, final String acct_status){
-        final Account account = new Account(acct_uname, acct_email, acct_passw, acct_type, acct_status);
+    public void addAccount(String acct_uname, final String acct_passw, final String acct_type, final String acct_status){
+
+    final Account account = new Account(acct_uname, acct_passw, acct_type, acct_status);
         databaseReference.child("account").child(AccountId).setValue(account);
         databaseReference.child("employees").child(EmployeeId).child("account").child(AccountId).setValue(account);
 
@@ -171,46 +178,71 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         String fname = empFname.getText().toString();
         String bdate = empbdate.getText().toString();
         String textphone = empPhone.getText().toString();
+        String addr = empaddr.getText().toString();
         String email = empEmail.getText().toString();
-        acctstatus.setText("Active");
-        accttype.setText("Employee");
-        //
-        addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, email);
-        Toast.makeText(getApplicationContext(), "Employee Successfully Added!", Toast.LENGTH_SHORT).show();
-        finish();
-    }
 
-    public void insertAccount(){
-//        String uname = empuname.getText().toString();
-        String email = empEmail.getText().toString();
-//        String passw = emppassw.getText().toString();
         acctstatus.setText("Active");
         accttype.setText("Employee");
-        String status = acctstatus.getText().toString();
-        String type = accttype.getText().toString();
-        String lname = empLname.getText().toString();
-        String fname = empFname.getText().toString();
+
         String newfname = fname.substring(0,1).toLowerCase();
         String newuname = newfname+lname.toLowerCase();
         empuname.setText(newuname);
-        String uname = empuname.getText().toString();
-        String passw = UUID.randomUUID().toString().substring(0,5);
-        emppassw.setText(passw);
-        String newpassw = emppassw.getText().toString();
+        final String uname = empuname.getText().toString();
         //
-//        addAccount(uname, email, passw, type, status);
-        addAccount(uname, email, newpassw, type, status);
-
+//        addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, addr, uname);
+//        Toast.makeText(getApplicationContext(), "Employee Successfully Added!", Toast.LENGTH_SHORT).show();
+//        finish();
     }
 
-    public boolean checkPassw(){
-        String passw = emppassw.getText().toString();
-        String confpass = empconfpass.getText().toString();
-        if(!passw.equals(confpass)){
-            errorDialog();
-            return false;
-        }
-        return true;
+    public void insertAccount(){
+        acctstatus.setText("Active");
+        accttype.setText("Employee");
+        final String status = acctstatus.getText().toString();
+        final String type = accttype.getText().toString();
+        final String lname = empLname.getText().toString();
+        final String fname = empFname.getText().toString();
+        final String newfname = fname.substring(0,1).toLowerCase();
+        final String newuname = newfname+lname.toLowerCase();
+
+//        empuname.setText(newuname);
+//        final String uname = empuname.getText().toString();
+//        String passw = UUID.randomUUID().toString().substring(0,5);
+//        emppassw.setText(passw);
+//        String newpassw = emppassw.getText().toString();
+        String newpassw = newuname;
+
+        //
+        final int num = 0;
+
+        accountFirebaseReference.orderByChild("acct_uname").equalTo(newuname)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+//                            for(int i=0; i<num; i++){
+//                                num+=Integer.valueOf(empuname[i]);
+//                            }
+                            String username = newuname+num+1;
+                            empuname.setText(username);
+                            final String acctuname = empuname.getText().toString();
+                            Toast.makeText(getApplicationContext(), "Username: "+acctuname, Toast.LENGTH_LONG).show();
+                        }else{
+                            String username = newuname;
+                            empuname.setText(username);
+                            Toast.makeText(getApplicationContext(), "Username: "+empuname, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    final String acctuname = empuname.getText().toString();
+                    final String acctpassw = empuname.getText().toString();
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+        //addAccount(newuname, newpassw, type, status);
+
     }
 
     @Override
@@ -241,18 +273,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         builder.show();
     }
 
-//    public void errorDialog(){
-//        AlertDialog.Builder errorbuilder = new AlertDialog.Builder(this);
-//
-//        errorbuilder.setMessage("Password did not match!");
-//        errorbuilder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//    }
-
     public void errorDialog(){
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
@@ -263,6 +283,35 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         dialog.show();
     }
 
+    public void successDialog(){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.customdia_accountdetails,null);
+        builder.setView(dialogView);
+
+        final TextView fullname = (TextView) dialogView.findViewById(R.id.employeename);
+        final TextView username = (TextView) dialogView.findViewById(R.id.employeeusername);
+        final TextView password = (TextView) dialogView.findViewById(R.id.employeepassword);
+
+        Account account = new Account();
+        String lname = empLname.getText().toString();
+        String fname = empFname.getText().toString();
+        String mfullname = fname+" "+lname;
+        String uname = account.getAcct_uname();
+        String mpassword = account.getAcct_passw();
+
+
+        fullname.setText(mfullname);
+        username.setText(uname);
+        password.setText(mpassword);
+        builder.setNeutralButton("OKAY", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -272,20 +321,16 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-            addRadioGroupListener();
-            if(checkPassw()){
+                addRadioGroupListener();
                 insertAccount();
                 insertEmployee();
-            }else{
-                errorDialog();
-            }
+//                successDialog();
+            Toast.makeText(getApplicationContext(), "New employee has been added!", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
 
     }
 
-
-    // handles camera clicks
     @Override
     public void onClick(View v) {
         int sid = v.getId();

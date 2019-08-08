@@ -35,5 +35,6 @@
     <color name="colorBlack">#000000</color>
     
     <color name="whiteSmoke">#F5F5F5</color>
+    <color name="greenSuccess">#359245</color>
 
 </resources>

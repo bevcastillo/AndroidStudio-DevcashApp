@@ -8,21 +8,25 @@ import android.net.Uri;
 
 public class Employee {
 
-    public String emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone;
+    public String emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr;
     public Account account;
 
     public Employee() {
-
     }
 
-    public Employee(String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone) {
+
+
+    public Employee(String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone, String emp_addr) {
         this.emp_lname = emp_lname;
         this.emp_fname = emp_fname;
         this.emp_task = emp_task;
         this.emp_gender = emp_gender;
         this.emp_bdate = emp_bdate;
         this.emp_phone = emp_phone;
+        this.emp_addr = emp_addr;
+        this.account = account;
     }
+
 
     public Account getAccount() {
         return account;
@@ -78,5 +82,21 @@ public class Employee {
 
     public void setEmp_ctcnum(String emp_ctcnum) {
         this.emp_phone = emp_ctcnum;
+    }
+
+    public String getEmp_phone() {
+        return emp_phone;
+    }
+
+    public void setEmp_phone(String emp_phone) {
+        this.emp_phone = emp_phone;
+    }
+
+    public String getEmp_addr() {
+        return emp_addr;
+    }
+
+    public void setEmp_addr(String emp_addr) {
+        this.emp_addr = emp_addr;
     }
 }

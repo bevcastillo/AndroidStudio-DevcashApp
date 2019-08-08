@@ -86,6 +86,7 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                     String lname = employee.getEmp_lname();
                     String fname = employee.getEmp_fname();
                     String task = employee.getEmp_task();
+                    String addr = employee.getEmp_addr();
                     String uname = employee.getAccount().getAcct_uname();
                     String email = employee.getAccount().getAcct_email();
                     employeelistdata.setEmplname(lname);
@@ -93,6 +94,7 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                     employeelistdata.setAcctuname(uname);
                     employeelistdata.setAcctemail(email);
                     employeelistdata.setEmptask(task);
+                    employeelistdata.setEmpaddr(addr);
                     emplist.add(employeelistdata);
                 }
 

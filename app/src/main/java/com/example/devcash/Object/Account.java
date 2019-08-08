@@ -16,6 +16,13 @@ public class Account {
         this.acct_status = acct_status;
     }
 
+    public Account(String acct_uname, String acct_passw, String acct_type, String acct_status) {
+        this.acct_uname = acct_uname;
+        this.acct_passw = acct_passw;
+        this.acct_type = acct_type;
+        this.acct_status = acct_status;
+    }
+
     public String getAcct_uname() {
         return acct_uname;
     }
