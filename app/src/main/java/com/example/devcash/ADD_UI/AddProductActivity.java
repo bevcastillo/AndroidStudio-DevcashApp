@@ -66,7 +66,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     RadioButton soldbybtn;
     String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory;
     CheckBox chkavail;
-    LinearLayout prodcondlayout;
+    LinearLayout prodcondlayout, prodexpdatelayout;
 
     private static final int PICK_IMAGE = 100;
 
@@ -108,7 +108,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         addexpdate.setOnClickListener(this);
         addcondition.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
-        prodexpdate.setOnClickListener(this);
+//        prodexpdate.setOnClickListener(this);
 
 //        prodcondition.setOnItemSelectedListener(this);
         produnit.setOnItemSelectedListener(this);
@@ -261,32 +261,34 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(camera, 0);
                 break;
-            case R.id.textprod_exp_date:
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                //date picker dialog
-                expdatePicker = new DatePickerDialog(AddProductActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                prodexpdate.setText(dayOfMonth + "/"
-                                                    + (month + 1) + "/" + year);
-                            }
-                        },mYear,mMonth,mDay);
-                            expdatePicker.show();
-                break;
+//            case R.id.textprod_exp_date:
+//                final Calendar c = Calendar.getInstance();
+//                int mYear = c.get(Calendar.YEAR);
+//                int mMonth = c.get(Calendar.MONTH);
+//                int mDay = c.get(Calendar.DAY_OF_MONTH);
+//
+//                //date picker dialog
+//                expdatePicker = new DatePickerDialog(AddProductActivity.this,
+//                        new DatePickerDialog.OnDateSetListener() {
+//                            @Override
+//                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                                prodexpdate.setText(dayOfMonth + "/"
+//                                                    + (month + 1) + "/" + year);
+//                            }
+//                        },mYear,mMonth,mDay);
+//                            expdatePicker.show();
+//                break;
             case R.id.imgview_addcond:
 //                 mClickCounter++;
 //                 Toast.makeText(getApplicationContext(), Integer.toString(mClickCounter), Toast.LENGTH_SHORT).show();
-                prodcondlayout = (LinearLayout) findViewById(R.id.container_expdate);
-                View child = getLayoutInflater().inflate(R.layout.customcard_prodcond, null);
-                prodcondlayout.addView(child);
+                prodcondlayout = (LinearLayout) findViewById(R.id.container_prodcond);
+                View conditionchild = getLayoutInflater().inflate(R.layout.customcard_prodcond, null);
+                prodcondlayout.addView(conditionchild);
                 break;
             case R.id.imgview_addexpdate:
-                Toast.makeText(getApplicationContext(), "Add expiration date is clicked", Toast.LENGTH_SHORT).show();
+                prodexpdatelayout = (LinearLayout) findViewById(R.id.container_expdate);
+                View expdatechild = getLayoutInflater().inflate(R.layout.customcard_prodexpdate, null);
+                prodexpdatelayout.addView(expdatechild);
                 break;
         }
     }

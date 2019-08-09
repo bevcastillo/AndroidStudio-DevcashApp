@@ -91,79 +91,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/exp_date_item_count_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/padding_top">
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:paddingTop="@dimen/text_padding"
-                            android:paddingRight="@dimen/padding_30"
-                            app:errorEnabled="true">
-
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/textprod_exp_date"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawableRight="@drawable/ic_date_range"
-                                android:drawablePadding="@dimen/text_padding"
-                                android:drawableTint="@color/icon_light"
-                                android:hint="@string/exp_date"
-                                android:padding="@dimen/text_padding"
-                                android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/text_inputs" />
-
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:paddingLeft="@dimen/padding_30"
-                            android:paddingTop="@dimen/text_padding"
-                            app:errorEnabled="true">
-
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/textinput_expdatecount"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/item_count"
-                                android:inputType="number"
-                                android:padding="@dimen/text_padding"
-                                android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/text_inputs" />
-
-                        </android.support.design.widget.TextInputLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/padding_top">
-
-                        <ImageView
-                            android:id="@+id/imgview_addexpdate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_add_circle"
-                            android:tint="@color/colorPrimary" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:paddingLeft="@dimen/text_padding"
-                            android:text="@string/add_exp_date"
-                            android:textColor="@color/dark_text" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/sold_by_unit_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -299,24 +226,11 @@
                         android:textColor="@color/dark_text"/>
 
                     <LinearLayout
-                        android:id="@+id/layout_prodcondition2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="@dimen/padding_top">
-
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/container_expdate"
+                        android:id="@+id/container_prodcond"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingTop="@dimen/padding_top">
-
-                    </LinearLayout>
+                        android:paddingTop="@dimen/padding_top"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -336,6 +250,67 @@
                             android:layout_height="match_parent"
                             android:paddingLeft="@dimen/text_padding"
                             android:text="add product condition"
+                            android:textAllCaps="true"
+                            android:textColor="@color/dark_text" />
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="650dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/text_padding"
+                android:layout_marginTop="@dimen/padding_top"
+                android:layout_marginBottom="@dimen/padding_top"
+                android:background="@color/whiteBG"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/top"
+                    android:layout_marginBottom="@dimen/top"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/padding_30"
+                    android:paddingRight="@dimen/padding_30">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Expiration Date"
+                        android:textColor="@color/colorPrimary"/>
+                    <TextView
+                        android:paddingTop="@dimen/padding_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Use expiration date if you items with different expiration dates."
+                        android:textColor="@color/dark_text"/>
+
+                    <LinearLayout
+                        android:id="@+id/container_expdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding_top"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <ImageView
+                            android:id="@+id/imgview_addexpdate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_add_circle"
+                            android:tint="@color/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/text_padding"
+                            android:text="add product expiration date"
                             android:textAllCaps="true"
                             android:textColor="@color/dark_text" />
                     </LinearLayout>
