@@ -58,7 +58,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private String ProductId;
 
 
-    ImageView prodphoto;
+    ImageView prodphoto, addexpdate, addcondition;
     TextView takephoto, choosephoto;
     TextInputEditText prodexpdate, prodname, prodprice, prodrop;
     Spinner prodcondition, produnit, spinnerprodcategory, spinnerdiscount;
@@ -66,6 +66,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     RadioButton soldbybtn;
     String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory;
     CheckBox chkavail;
+    LinearLayout prodcondlayout;
 
     private static final int PICK_IMAGE = 100;
 
@@ -73,6 +74,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     DatePickerDialog expdatePicker;
 
     LinearLayout addlayout;
+    private int mClickCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         prodphoto = (ImageView) findViewById(R.id.prod_photo);
+        addexpdate = (ImageView) findViewById(R.id.imgview_addexpdate);
+        addcondition = (ImageView) findViewById(R.id.imgview_addcond);
         takephoto = (TextView) findViewById(R.id.txt_prodtakephoto);
         choosephoto = (TextView) findViewById(R.id.txt_prodchoosephoto);
         prodexpdate = (TextInputEditText) findViewById(R.id.textprod_exp_date);
@@ -92,7 +96,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         produnit = (Spinner) findViewById(R.id.spinner_unit);
         soldby = (RadioGroup) findViewById(R.id.radio_group_soldby);
         chkavail = (CheckBox) findViewById(R.id.cbox_prod_avail);
-
         //
         spinnerprodcategory = (Spinner) findViewById(R.id.spinner_prodcat);
         spinnerdiscount = (Spinner) findViewById(R.id.spinner_proddisc);
@@ -100,11 +103,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //
         addlayout = (LinearLayout) findViewById(R.id.addplayout);
 
+        //adding listeners to views
         takephoto.setOnClickListener(this);
+        addexpdate.setOnClickListener(this);
+        addcondition.setOnClickListener(this);
         choosephoto.setOnClickListener(this);
         prodexpdate.setOnClickListener(this);
 
-        prodcondition.setOnItemSelectedListener(this);
+//        prodcondition.setOnItemSelectedListener(this);
         produnit.setOnItemSelectedListener(this);
         spinnerdiscount.setOnItemSelectedListener(this);
         spinnerprodcategory.setOnItemSelectedListener(this);
@@ -184,6 +190,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    //method to check if the available checkbox is checked by the user
     private void addCheckBoxListener() {
         if(chkavail.isChecked()){
             String avail = "Available";
@@ -196,8 +203,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //inflate SAVE menu
         getMenuInflater().inflate(R.menu.savemenu, menu);
         return true;
 
@@ -237,15 +242,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             addRadioGroupListener();
             addCheckBoxListener();
             insertProduct();
-//            Snackbar.make(addlayout, "New Product Added", Snackbar.LENGTH_LONG)
-//                    .setAction("UNDO", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    })
-//                    .setActionTextColor(Color.RED)
-//                    .show();
         }
         return super.onOptionsItemSelected(item);
 
@@ -282,6 +278,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         },mYear,mMonth,mDay);
                             expdatePicker.show();
                 break;
+            case R.id.imgview_addcond:
+//                 mClickCounter++;
+//                 Toast.makeText(getApplicationContext(), Integer.toString(mClickCounter), Toast.LENGTH_SHORT).show();
+                prodcondlayout = (LinearLayout) findViewById(R.id.container_expdate);
+                View child = getLayoutInflater().inflate(R.layout.customcard_prodcond, null);
+                prodcondlayout.addView(child);
+                break;
+            case R.id.imgview_addexpdate:
+                Toast.makeText(getApplicationContext(), "Add expiration date is clicked", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -307,7 +313,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         switch (sid){
             case R.id.spinner_prod_condition:
-                selectedprodcond = this.prodcondition.getItemAtPosition(position).toString();
+//                selectedprodcond = this.prodcondition.getItemAtPosition(position).toString();
                 break;
             case R.id.spinner_unit:
                 selectedprodunit = this.produnit.getItemAtPosition(position).toString();
