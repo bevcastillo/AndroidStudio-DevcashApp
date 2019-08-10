@@ -51,7 +51,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView emplname, empfname, emptask, acctuname, acctemail, empaddr;
+        TextView emplname, empfname, emptask, acctuname, acctemail;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,5 +62,4 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
             acctuname = (TextView) itemView.findViewById(R.id.txtemp_username);
         }
     }
-
 }

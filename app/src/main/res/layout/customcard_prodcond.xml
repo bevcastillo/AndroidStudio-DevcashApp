@@ -20,7 +20,7 @@
             android:textSize="@dimen/small_title" />
 
         <Spinner
-            android:id="@+id/spinner_prod_condition"
+            android:id="@+id/spinner_prodcondition"
             style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

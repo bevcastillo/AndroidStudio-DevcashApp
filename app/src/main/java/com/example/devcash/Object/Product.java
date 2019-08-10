@@ -4,21 +4,38 @@ public class Product {
     String prod_name, prod_unitof_measure, prod_status, prod_soldby;
     double prod_price, prod_rop;
     public Category category;
+    int prod_stock;
+    public ProductCondition productCondition;
 
     public Product() {
     }
 
-    public Product(String prod_name, String prod_unitof_measure, String prod_status, String prod_soldby, double prod_price, double prod_rop) {
+//    public Product(String prod_name, String prod_unitof_measure, String prod_status, String prod_soldby, double prod_price, double prod_rop) {
+//        this.prod_name = prod_name;
+//        this.prod_unitof_measure = prod_unitof_measure;
+//        this.prod_status = prod_status;
+//        this.prod_soldby = prod_soldby;
+//        this.prod_price = prod_price;
+//        this.prod_rop = prod_rop;
+//    }
+
+
+    public Product(String prod_name, String prod_unitof_measure, String prod_status, String prod_soldby, double prod_price, double prod_rop, int prod_stock) {
         this.prod_name = prod_name;
         this.prod_unitof_measure = prod_unitof_measure;
         this.prod_status = prod_status;
         this.prod_soldby = prod_soldby;
         this.prod_price = prod_price;
         this.prod_rop = prod_rop;
+        this.prod_stock = prod_stock;
     }
 
     public Category getCategory() {
         return category;
+    }
+
+    public Product(ProductCondition productCondition) {
+        this.productCondition = productCondition;
     }
 
     public void setCategory(Category category) {
@@ -72,5 +89,21 @@ public class Product {
 
     public void setProd_soldby(String prod_soldby) {
         this.prod_soldby = prod_soldby;
+    }
+
+    public ProductCondition getProductCondition() {
+        return productCondition;
+    }
+
+    public void setProductCondition(ProductCondition productCondition) {
+        this.productCondition = productCondition;
+    }
+
+    public int getProd_stock() {
+        return prod_stock;
+    }
+
+    public void setProd_stock(int prod_stock) {
+        this.prod_stock = prod_stock;
     }
 }

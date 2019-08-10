@@ -1,8 +1,10 @@
 package com.example.devcash.Object;
 
 public class Productslistdata {
-    String prod_name, prod_unitof_measure, prod_status,prod_soldby, category_name;
+    String prod_name, prod_unitof_measure, prod_status,prod_soldby, category_name, cond_name;
     double prod_price, prod_rop;
+    int prod_stock;
+
 
     public String getProd_name() {
         return prod_name;
@@ -58,5 +60,21 @@ public class Productslistdata {
 
     public void setCategory_name(String category_name) {
         this.category_name = category_name;
+    }
+
+    public int getProd_stock() {
+        return prod_stock;
+    }
+
+    public void setProd_stock(int prod_stock) {
+        this.prod_stock = prod_stock;
+    }
+
+    public String getCond_name() {
+        return cond_name;
+    }
+
+    public void setCond_name(String cond_name) {
+        this.cond_name = cond_name;
     }
 }

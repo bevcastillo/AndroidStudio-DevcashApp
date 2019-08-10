@@ -76,14 +76,6 @@ public class Employee {
         this.emp_bdate = emp_bdate;
     }
 
-    public String getEmp_ctcnum() {
-        return emp_phone;
-    }
-
-    public void setEmp_ctcnum(String emp_ctcnum) {
-        this.emp_phone = emp_ctcnum;
-    }
-
     public String getEmp_phone() {
         return emp_phone;
     }
