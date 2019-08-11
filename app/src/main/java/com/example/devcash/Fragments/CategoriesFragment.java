@@ -2,6 +2,7 @@ package com.example.devcash.Fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +42,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +61,8 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
     //
     DatabaseReference dbreference;
     DatabaseReference categoryfirebaseDatabase;
+    DatabaseReference ownerdbreference;
+    DatabaseReference mydbreference;
     FirebaseDatabase firebaseDatabase;
 
     RecyclerView categoryrecyclerView;
@@ -88,33 +93,77 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
         categoryfirebaseDatabase = firebaseDatabase.getReference("/datadevcash/category");
+        ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
 
-        categoryfirebaseDatabase.addValueEventListener(new ValueEventListener() {
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/category").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                list = new ArrayList<>();
+                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                Category category = dataSnapshot1.getValue(Category.class);
+                                Categorylistdata listdata = new Categorylistdata();
+                                String catname = category.getCategory_name();
+                                listdata.setCategory_name(catname);
+                                list.add(listdata);
+                            }
+                                CategoryAdapter adapter = new CategoryAdapter(list);
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                categoryrecyclerView.setLayoutManager(layoutManager);
+                                categoryrecyclerView.setItemAnimator(new DefaultItemAnimator());
+                                categoryrecyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+                            }
 
-                list = new ArrayList<>();
-                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Category category = dataSnapshot1.getValue(Category.class);
-                    Categorylistdata listdata = new Categorylistdata();
-                    String catname = category.getCategory_name();
-                    listdata.setCategory_name(catname);
-                    list.add(listdata);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
-
-                CategoryAdapter adapter = new CategoryAdapter(list);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                categoryrecyclerView.setLayoutManager(layoutManager);
-                categoryrecyclerView.setItemAnimator(new DefaultItemAnimator());
-                categoryrecyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
+
             }
         });
+
+//        categoryfirebaseDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                list = new ArrayList<>();
+//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                    Category category = dataSnapshot1.getValue(Category.class);
+//                    Categorylistdata listdata = new Categorylistdata();
+//                    String catname = category.getCategory_name();
+//                    listdata.setCategory_name(catname);
+//                    list.add(listdata);
+//                }
+//
+//                CategoryAdapter adapter = new CategoryAdapter(list);
+//                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//                categoryrecyclerView.setLayoutManager(layoutManager);
+//                categoryrecyclerView.setItemAnimator(new DefaultItemAnimator());
+//                categoryrecyclerView.setAdapter(adapter);
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
         //
 //        categoriesToolbar = (Toolbar) view.findViewById(R.id.toolbar_categories);
         categoriesSpinner = (Spinner) view.findViewById(R.id.spinner_categories);

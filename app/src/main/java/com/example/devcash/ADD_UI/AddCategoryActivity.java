@@ -2,6 +2,7 @@ package com.example.devcash.ADD_UI;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
@@ -30,6 +31,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 public class AddCategoryActivity extends AppCompatActivity {
 
     private DatabaseReference dbreference;
+    private DatabaseReference mydbreference;
+    private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseInstance;
     private String CategoryId;
 
@@ -46,7 +49,9 @@ public class AddCategoryActivity extends AppCompatActivity {
         categoryName = (TextInputEditText) findViewById(R.id.text_categoryname);
 
         firebaseInstance = FirebaseDatabase.getInstance();
+        mydbreference = firebaseInstance.getReference("/datadevcash");
         dbreference = firebaseInstance.getReference("/datadevcash/owner/enterprise");
+        ownerdbreference = firebaseInstance.getReference("/datadevcash/owner");
         CategoryId = dbreference.push().getKey();
 
         viewData();
@@ -68,8 +73,30 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
     public void addCategory (String categoryName){
-        Category category = new Category(categoryName);
-        dbreference.child("/category").child(CategoryId).setValue(category);
+        final Category category = new Category(categoryName);
+//        dbreference.child("/category").child(CategoryId).setValue(category);
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        mydbreference.child("owner/"+key+"/business/category").child(CategoryId).setValue(category);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     public void insertCategory(){
