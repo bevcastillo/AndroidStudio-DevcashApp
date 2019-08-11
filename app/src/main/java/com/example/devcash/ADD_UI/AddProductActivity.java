@@ -140,6 +140,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         categoryfirebasereference = firebaseDatabase.getReference("/datadevcash/category");
         discountfirebasereference = firebaseDatabase.getReference("/datadevcash/discount");
+
+        //
         businessprodfirebasereference = firebaseDatabase.getReference("/datadevcash/owner");
 
 

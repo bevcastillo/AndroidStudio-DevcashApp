@@ -2,6 +2,7 @@ package com.example.devcash.Fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,6 +39,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +49,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
 
     DatabaseReference dbreference;
     DatabaseReference productsfirebaseDatabase;
+    DatabaseReference businessprodfirebasereference;
     FirebaseDatabase firebaseDatabase;
 
     RecyclerView prodrecyclerview;
@@ -83,42 +87,102 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
         productsfirebaseDatabase = firebaseDatabase.getReference("/datadevcash/products");
+        businessprodfirebasereference = firebaseDatabase.getReference("/datadevcash/owner");
 
-        productsfirebaseDatabase.addValueEventListener(new ValueEventListener() {
+
+        ///
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list = new ArrayList<>();
-                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Product product = dataSnapshot1.getValue(Product.class);
-                    Productslistdata listdata = new Productslistdata();
-                    String pname = product.getProd_name();
-                    double prop = product.getProd_rop();
-                    double pprice = product.getProd_price();
-                    int pstock = product.getProd_stock();
-                    String condname = product.getProductCondition().getCond_name();
-                    String pstatus = product.getProd_status();
-                    listdata.setProd_name(pname);
-                    listdata.setProd_rop(prop);
-                    listdata.setProd_status(pstatus);
-                    listdata.setProd_price(pprice);
-                    listdata.setProd_stock(pstock);
-                    listdata.setCond_name(condname);
-                    list.add(listdata);
+                if(dataSnapshot.exists()){
+                   for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                       dbreference.child("owner/"+key+"/business/product").addValueEventListener(new ValueEventListener() {
+                           @Override
+                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                list = new ArrayList<>();
+                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                Product product = dataSnapshot1.getValue(Product.class);
+                                Productslistdata listdata = new Productslistdata();
+                                String pname = product.getProd_name();
+                                double prop = product.getProd_rop();
+                                double pprice = product.getProd_price();
+                                int pstock = product.getProd_stock();
+                                String condname = product.getProductCondition().getCond_name();
+                                String pstatus = product.getProd_status();
+                                listdata.setProd_name(pname);
+                                listdata.setProd_rop(prop);
+                                listdata.setProd_status(pstatus);
+                                listdata.setProd_price(pprice);
+                                listdata.setProd_stock(pstock);
+                                listdata.setCond_name(condname);
+                                list.add(listdata);
+                            }
+                                ProductsAdapter adapter = new ProductsAdapter(list);
+                                RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
+                                prodrecyclerview.setLayoutManager(pLayoutManager);
+                                prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                prodrecyclerview.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+
+                           }
+
+                           @Override
+                           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                           }
+                       });
+                   }
                 }
-                ProductsAdapter adapter = new ProductsAdapter(list);
-                RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
-                prodrecyclerview.setLayoutManager(pLayoutManager);
-                prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
-                prodrecyclerview.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
 
             }
         });
+
+
+
+//        productsfirebaseDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                list = new ArrayList<>();
+//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                    Product product = dataSnapshot1.getValue(Product.class);
+//                    Productslistdata listdata = new Productslistdata();
+//                    String pname = product.getProd_name();
+//                    double prop = product.getProd_rop();
+//                    double pprice = product.getProd_price();
+//                    int pstock = product.getProd_stock();
+//                    String condname = product.getProductCondition().getCond_name();
+//                    String pstatus = product.getProd_status();
+//                    listdata.setProd_name(pname);
+//                    listdata.setProd_rop(prop);
+//                    listdata.setProd_status(pstatus);
+//                    listdata.setProd_price(pprice);
+//                    listdata.setProd_stock(pstock);
+//                    listdata.setCond_name(condname);
+//                    list.add(listdata);
+//                }
+//                ProductsAdapter adapter = new ProductsAdapter(list);
+//                RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
+//                prodrecyclerview.setLayoutManager(pLayoutManager);
+//                prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+//                prodrecyclerview.setAdapter(adapter);
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
 
         ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
