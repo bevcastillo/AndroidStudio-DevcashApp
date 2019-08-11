@@ -1,11 +1,12 @@
 package com.example.devcash.Object;
 
 public class Product {
-    String prod_name, prod_unitof_measure, prod_status, prod_soldby;
+    String prod_name, prod_unitof_measure, prod_status, prod_soldby, prod_datetimeadded;
     double prod_price, prod_rop;
     public Category category;
     int prod_stock;
     public ProductCondition productCondition;
+    public Discount discount;
 
     public Product() {
     }
@@ -17,6 +18,18 @@ public class Product {
 //        this.prod_soldby = prod_soldby;
 //        this.prod_price = prod_price;
 //        this.prod_rop = prod_rop;
+//    }
+
+
+//    public Product(String prod_name, String prod_unitof_measure, String prod_status, String prod_soldby, String prod_datetimeadded, double prod_price, double prod_rop, int prod_stock) {
+//        this.prod_name = prod_name;
+//        this.prod_unitof_measure = prod_unitof_measure;
+//        this.prod_status = prod_status;
+//        this.prod_soldby = prod_soldby;
+//        this.prod_datetimeadded = prod_datetimeadded;
+//        this.prod_price = prod_price;
+//        this.prod_rop = prod_rop;
+//        this.prod_stock = prod_stock;
 //    }
 
 
@@ -36,6 +49,14 @@ public class Product {
 
     public Product(ProductCondition productCondition) {
         this.productCondition = productCondition;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
     }
 
     public void setCategory(Category category) {
@@ -105,5 +126,13 @@ public class Product {
 
     public void setProd_stock(int prod_stock) {
         this.prod_stock = prod_stock;
+    }
+
+    public String getProd_datetimeadded() {
+        return prod_datetimeadded;
+    }
+
+    public void setProd_datetimeadded(String prod_datetimeadded) {
+        this.prod_datetimeadded = prod_datetimeadded;
     }
 }

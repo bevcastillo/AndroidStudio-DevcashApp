@@ -12,6 +12,10 @@ public class ProductCondition {
         this.cond_count = cond_count;
     }
 
+    public ProductCondition(String cond_name) {
+        this.cond_name = cond_name;
+    }
+
     public String getCond_name() {
         return cond_name;
     }

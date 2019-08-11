@@ -46,7 +46,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         categoryName = (TextInputEditText) findViewById(R.id.text_categoryname);
 
         firebaseInstance = FirebaseDatabase.getInstance();
-        dbreference = firebaseInstance.getReference("/datadevcash");
+        dbreference = firebaseInstance.getReference("/datadevcash/owner/enterprise");
         CategoryId = dbreference.push().getKey();
 
         viewData();

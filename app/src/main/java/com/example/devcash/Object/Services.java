@@ -8,6 +8,8 @@ import android.net.Uri;
 public class Services {
     String service_name;
     double service_price;
+    public Discount discount;
+    public Category category;
 
     public Services() {
     }
@@ -31,5 +33,21 @@ public class Services {
 
     public void setService_price(double service_price) {
         this.service_price = service_price;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

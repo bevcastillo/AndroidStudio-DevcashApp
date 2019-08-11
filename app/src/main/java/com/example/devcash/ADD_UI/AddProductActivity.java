@@ -3,6 +3,7 @@ package com.example.devcash.ADD_UI;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -54,9 +55,12 @@ created by Beverly Castillo on August 4, 2019
 public class AddProductActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private DatabaseReference dbreference;
+    private DatabaseReference mydbreference;
     private DatabaseReference categoryfirebasereference;
     private DatabaseReference discountfirebasereference;
     private DatabaseReference prodcondfirebasereference;
+    //
+    private DatabaseReference businessprodfirebasereference;
     private FirebaseDatabase firebaseDatabase;
     private String ProductId;
     private String ProductCondId;
@@ -71,8 +75,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory;
     CheckBox chkavail;
     LinearLayout prodcondlayout, prodexpdatelayout;
-    int expdate_count = 0;
-    int cond_count = 0;
+    int conditioncount;
 
     private static final int PICK_IMAGE = 100;
 
@@ -137,10 +140,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         categoryfirebasereference = firebaseDatabase.getReference("/datadevcash/category");
         discountfirebasereference = firebaseDatabase.getReference("/datadevcash/discount");
-        prodcondfirebasereference = firebaseDatabase.getReference("/datadevcash/products/condition");
+        businessprodfirebasereference = firebaseDatabase.getReference("/datadevcash/owner");
+
 
         final ArrayList<String> categories = new ArrayList<String>();
         final ArrayList<String> prodcond = new ArrayList<String>();
+
+        ///
+
 
         categoryfirebasereference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -185,56 +192,46 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void addProductCondition(String prod_cond, int prod_condcount){
-//        final ProductCondition productCondition = new ProductCondition(prod_cond, prod_condcount);
-//        dbreference.child("products").child(ProductId).child("prod_condition").child(ProductCondId).setValue(productCondition);
-
-
-    }
-
-//    public void addProduct(final String prod_name, final String prod_unitof_measure, final String prod_status, final String prod_soldby, final double prod_price, final double prod_rop, final String prodcondId){
     public void addProduct(final String prod_name, final String prod_unitof_measure, final String prod_status, final String prod_soldby, final double prod_price, final double prod_rop, int prod_stock){
-        //        Product product = new Product(prod_name, prod_unitof_measure, prod_status, prod_soldby, prod_price, prod_rop);
-//        dbreference.child("/products").child(ProductId).setValue(product);
 
         ProductCondition condition = new ProductCondition();
+        Category category = new Category();
+        Discount discount = new Discount();
+        discount.setDisc_code(selecteddisc);
+        category.setCategory_name(selectedcategory);
         condition.setCond_name(selectedprodcond);
-        int count = Integer.parseInt(condcount.getText().toString());
-        condition.setCond_count(count);
+        if(condcount.getText().toString().equals("") && selectedprodcond.equals("New")){
+            int count = 0;
+            condition.setCond_count(count);
+        }else{
+            int count = Integer.parseInt(condcount.getText().toString());
+            condition.setCond_count(count);
+        }
 
-        Product product = new Product(prod_name, prod_unitof_measure, prod_status, prod_soldby, prod_price, prod_rop, prod_stock);
+        final Product product = new Product(prod_name, prod_unitof_measure, prod_status, prod_soldby, prod_price, prod_rop, prod_stock);
         product.setProductCondition(condition);
+        product.setCategory(category);
+        product.setDiscount(discount);
 
-        dbreference.child("products").child(ProductId).setValue(product);
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
 
-//        prodcondfirebasereference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                String cond_name;
-//                int cond_count;
-//
-//                Product product = new Product(prod_name, prod_unitof_measure, prod_status, prod_soldby, prod_price, prod_rop);
-//                ProductCondition condition = new ProductCondition();
-//
-//                for(DataSnapshot childSnapshot:dataSnapshot.getChildren()){
-//                    if(childSnapshot.child("cond_id").getValue().equals(prodcondId)){
-//                        cond_name = childSnapshot.child("cond_name").getValue().toString();
-//                        cond_count = Integer.parseInt(childSnapshot.child("cond_count").getValue().toString());
-//
-//                        condition.setCond_name(cond_name);
-//                        condition.setCond_count(cond_count);
-//
-//                        dbreference.child("products").child(ProductId).setValue(product);
-//                    }
-//                }//end for
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void insertProduct(){

@@ -135,7 +135,14 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void addServices(String service_name, double service_price){
+        Discount discount = new Discount();
+        Category category = new Category();
+        discount.setDisc_code(selecteddiscount);
+        category.setCategory_name(selectedcategory);
+
         Services services = new Services(service_name,service_price);
+        services.setDiscount(discount);
+        services.setCategory(category);
         dbreference.child("/services").child(ServicesId).setValue(services);
     }
 
