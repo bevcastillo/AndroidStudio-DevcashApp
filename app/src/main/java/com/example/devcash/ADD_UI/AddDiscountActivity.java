@@ -2,6 +2,8 @@ package com.example.devcash.ADD_UI;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,14 +20,18 @@ import android.widget.Toast;
 
 import com.example.devcash.Object.Discount;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
 public class AddDiscountActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private DatabaseReference dbreference;
+    private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseInstance;
     private String DiscountId;
 
@@ -59,12 +65,33 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
 
         firebaseInstance = FirebaseDatabase.getInstance();
         dbreference = firebaseInstance.getReference("/datadevcash");
+        ownerdbreference = firebaseInstance.getReference("/datadevcash/owner");
         DiscountId = dbreference.push().getKey();
     }
 
     public void addDiscount(String disc_code, String disc_type, String disc_start, String disc_end, String disc_status, double disc_value){
-        Discount discount = new Discount(disc_code, disc_type, disc_start, disc_end, disc_status, disc_value);
-        dbreference.child("/discount").child(DiscountId).setValue(discount);
+        final Discount discount = new Discount(disc_code, disc_type, disc_start, disc_end, disc_status, disc_value);
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/discount").child(DiscountId).setValue(discount);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void insertDiscount(){

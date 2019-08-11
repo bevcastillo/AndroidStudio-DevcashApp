@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -42,6 +43,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     private DatabaseReference categorydbreference;
     private DatabaseReference discountsdbreference;
     private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference ownerdbreference;
 //    private StorageReference storageReference;
     private String ServicesId;
 
@@ -88,6 +90,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
         categorydbreference = firebaseDatabase.getReference("datadevcash/category");
         discountsdbreference = firebaseDatabase.getReference("datadevcash/discount");
+        ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
 
         final ArrayList<String> categories = new ArrayList<String>();
 
@@ -140,10 +143,30 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         discount.setDisc_code(selecteddiscount);
         category.setCategory_name(selectedcategory);
 
-        Services services = new Services(service_name,service_price);
+        final Services services = new Services(service_name,service_price);
         services.setDiscount(discount);
         services.setCategory(category);
-        dbreference.child("/services").child(ServicesId).setValue(services);
+//        dbreference.child("/services").child(ServicesId).setValue(services);
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/services").child(ServicesId).setValue(services);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void insertServices(){

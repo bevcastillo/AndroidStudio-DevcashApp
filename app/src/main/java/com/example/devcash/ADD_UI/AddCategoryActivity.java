@@ -85,7 +85,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                 if(dataSnapshot.exists()){
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
-                        mydbreference.child("owner/"+key+"/business/category").child(CategoryId).setValue(category);
+                            mydbreference.child("owner/"+key+"/business/category").child(CategoryId).setValue(category);
 
                     }
                 }
