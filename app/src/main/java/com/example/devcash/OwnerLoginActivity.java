@@ -99,13 +99,16 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                     for(DataSnapshot ds1 : dataSnapshot.getChildren()) {
                                         final String passkey = ds1.getKey();
                                         Account account = ds1.getValue(Account.class);
-                                        String accountJson = gson.toJson(account);
-                                        editor.putString("account", accountJson);
-                                        editor.commit();
-                                            Toast.makeText(getApplication(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
+                                        if (account.getAcct_passw().equals(ownerpassword)) {
+                                            Toast.makeText(OwnerLoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
                                             Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
                                             startActivity(owner_dashboard);
-//                                        Toast.makeText(OwnerLoginActivity.this, account.getAcct_email()+account.getAcct_passw(), Toast.LENGTH_SHORT).show();
+                                            String accountJson = gson.toJson(account);
+                                            editor.putString("account", accountJson);
+                                            editor.commit();
+                                        } else {
+                                            Toast.makeText(OwnerLoginActivity.this, "Account not found", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
 //                                if(dataSnapshot.exists()){

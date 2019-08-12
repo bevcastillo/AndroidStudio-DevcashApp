@@ -100,11 +100,11 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                                 String fname = employee.getEmp_fname();
                                 String task = employee.getEmp_task();
                                 String addr = employee.getEmp_addr();
-//                                String uname = employee.getAccount().getAcct_uname();
+                                String uname = employee.getAccount().getAcct_uname();
 //                                String email = employee.getAccount().getAcct_email();
                                 employeelistdata.setEmplname(lname);
                                 employeelistdata.setEmpfname(fname);
-//                                employeelistdata.setAcctuname(uname);
+                                employeelistdata.setAcctuname(uname);
 //                                employeelistdata.setAcctemail(email);
                                 employeelistdata.setEmptask(task);
                                 employeelistdata.setEmpaddr(addr);

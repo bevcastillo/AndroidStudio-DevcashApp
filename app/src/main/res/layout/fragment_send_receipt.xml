@@ -153,6 +153,25 @@
                     android:orientation="vertical">
 
                     <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/textinput_custmessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Message"
+                            android:inputType="text"
+                            android:padding="@dimen/text_padding"
+                            android:drawableLeft="@drawable/ic_smartphone"
+                            android:drawableTint="@color/icon_light"
+                            android:drawablePadding="@dimen/text_padding"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <android.support.design.widget.TextInputLayout
                         android:id="@+id/editText_customer_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -163,7 +182,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/enter_number"
-                            android:inputType="text"
+                            android:inputType="phone"
                             android:padding="@dimen/text_padding"
                             android:drawableLeft="@drawable/ic_smartphone"
                             android:drawableTint="@color/icon_light"

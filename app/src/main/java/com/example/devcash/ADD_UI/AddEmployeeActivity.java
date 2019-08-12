@@ -120,10 +120,22 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void addEmployee(final String emp_lname, final String emp_fname, final String emp_task, final String emp_gender,
-                            final String emp_bdate, final String emp_phone, final String emp_addr, final String accountUsername){
-    Log.d(TAG,"addEmployee()");
+                            final String emp_bdate, final String emp_phone, final String emp_addr, final String accountUsername, final String accountPassw){
+    Log.i(TAG,"addEmployee()");
 
     //
+
+        final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr);
+        final Account acct = new Account();
+
+
+        acct.setAcct_uname(accountUsername);
+        acct.setAcct_passw(accountPassw);
+        acct.setAcct_status("Active");
+        acct.setAcct_type("Employee");
+        employee.setAccount(acct);
+
+
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
@@ -133,17 +145,9 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
                 if(dataSnapshot.exists()){
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
-                        databaseReference.child("owner/"+key+"/business/employee").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                        ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
+                        ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
                     }
                 }
             }
@@ -153,44 +157,28 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
             }
         });
+    }
 
 
-
-//        accountFirebaseReference.addValueEventListener(new ValueEventListener() {
+//    public void addAccount(String acct_uname, final String acct_passw, final String acct_type, final String acct_status){
+//
+//    final Account account = new Account(acct_uname, acct_passw, acct_type, acct_status);
+////        databaseReference.child("account").child(AccountId).setValue(account);
+////        databaseReference.child("employees").child(EmployeeId).child("account").child(AccountId).setValue(account);
+//
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-////                String acctEmail;
-////                String acctUsername;
-//                String acctUname;
-//                String acctPassw;
-//                String acctType;
-//                String acctStatus;
-//
-//                Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr);
-//
-//                // create an account object
-//                Account acct = new Account();
-//
-//               for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-//                   if (childSnapshot.child("acct_uname").getValue().equals(accountUsername)) {
-////                       acctEmail = childSnapshot.child("acct_email").getValue().toString();
-//                       acctUname = childSnapshot.child("acct_uname").getValue().toString();
-//                       acctPassw = childSnapshot.child("acct_passw").getValue().toString();
-//                       acctType = childSnapshot.child("acct_type").getValue().toString();
-//                       acctStatus = childSnapshot.child("acct_status").getValue().toString();
-//
-////                       acct.setAcct_email(acctEmail);
-//                       acct.setAcct_uname(acctUname);
-//                       acct.setAcct_passw(acctPassw);
-//                       acct.setAcct_type(acctType);
-//                       acct.setAcct_status(acctStatus);
-//                       employee.setAccount(acct);
-//
-//                       databaseReference.child("employees").child(EmployeeId).setValue(employee);
-//                   }
-//               }
-//
+//                if(dataSnapshot.exists()){
+//                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                        String key = ds.getKey();
+//                        databaseReference.child("owner/"+key+"business/account").child(AccountId).setValue(account);
+//                        databaseReference.child("owner/"+key+"business/employee").child(EmployeeId).setValue(account);
+//                    }
+//                }
 //            }
 //
 //            @Override
@@ -198,38 +186,9 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 //
 //            }
 //        });
-    }
-
-
-    public void addAccount(String acct_uname, final String acct_passw, final String acct_type, final String acct_status){
-
-    final Account account = new Account(acct_uname, acct_passw, acct_type, acct_status);
-//        databaseReference.child("account").child(AccountId).setValue(account);
-//        databaseReference.child("employees").child(EmployeeId).child("account").child(AccountId).setValue(account);
-
-        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
-
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        String key = ds.getKey();
-                        databaseReference.child("owner/"+key+"business/account").child(AccountId).setValue(account);
-                        databaseReference.child("owner/"+key+"business/employee").child(EmployeeId).setValue(account);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
+//
+//
+//    }
 
     public void insertEmployee(){
         Log.d(TAG,"insertEmployee()");
@@ -240,17 +199,19 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         String addr = empaddr.getText().toString();
         String email = empEmail.getText().toString();
 
-        acctstatus.setText("Active");
-        accttype.setText("Employee");
-
         String newfname = fname.substring(0,1).toLowerCase();
         String newuname = newfname+lname.toLowerCase();
-        empuname.setText(newuname);
+        String generatedNum = Integer.toString(generateRandomNumber(1, 999));
+        empuname.setText(newuname+generatedNum);
         final String uname = empuname.getText().toString();
-        //
-//        addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, addr, uname);
-//        Toast.makeText(getApplicationContext(), "Employee Successfully Added!", Toast.LENGTH_SHORT).show();
-//        finish();
+
+        addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, addr, uname, uname);
+        finish();
+    }
+
+    public int generateRandomNumber(int min, int max) {
+        int x = (int)(Math.random()*((max-min)+1))+min;
+        return x;
     }
 
     public void insertAccount(){

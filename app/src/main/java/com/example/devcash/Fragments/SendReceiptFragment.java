@@ -28,7 +28,7 @@ import com.example.devcash.R;
  */
 public class SendReceiptFragment extends Fragment implements View.OnClickListener {
 
-    TextInputEditText custphone;
+    TextInputEditText custphone, custmessage;
     TextView sendcustphone;
     String message, phone;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
@@ -50,15 +50,16 @@ public class SendReceiptFragment extends Fragment implements View.OnClickListene
         ImageView sendemail = view.findViewById(R.id.send_email);
         ImageView sendtext = view.findViewById(R.id.send_text);
         custphone = (TextInputEditText) view.findViewById(R.id.textinput_custphone);
+        custmessage = (TextInputEditText) view.findViewById(R.id.textinput_custmessage);
         sendcustphone = (TextView) view.findViewById(R.id.textsendcustphone);
         //handles buttons
         Button btnnewpurchase = view.findViewById(R.id.btn_newPurchase);
-        sendcustphone.setEnabled(false);
-        if(checkPermission(Manifest.permission.SEND_SMS)){
-            sendcustphone.setEnabled(true);
-        }else{
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQUEST_CODE);
-        }
+//        sendcustphone.setEnabled(false);
+//        if(checkPermission(Manifest.permission.SEND_SMS)){
+//            sendcustphone.setEnabled(true);
+//        }else{
+//            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQUEST_CODE);
+//        }
 
         sendcustphone.setOnClickListener(this);
 
@@ -96,20 +97,72 @@ public class SendReceiptFragment extends Fragment implements View.OnClickListene
 
     public void sendSMS(){
         phone = custphone.getText().toString();
-        message = "Welcome to Devcash!";
+        message = custmessage.getText().toString();
 
-        if(phone == null || phone.length() == 0){
-            return;
-        }
-        if(checkPermission(Manifest.permission.SEND_SMS)){
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phone,null,phone,null,null);
-            Toast.makeText(getActivity(), "SMS sent", Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(getActivity(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
+//        if(phone == null || phone.length() == 0){
+//            return;
+//        }
+//        if(checkPermission(Manifest.permission.SEND_SMS)){
+//            SmsManager smsManager = SmsManager.getDefault();
+//            smsManager.sendTextMessage(phone,null,phone,null,null);
+//            Toast.makeText(getActivity(), "SMS sent", Toast.LENGTH_LONG).show();
+//        }else{
+//            Toast.makeText(getActivity(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
+//        }
+
+        int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),  Manifest.permission.SEND_SMS);
+        if(permissionCheck==PackageManager.PERMISSION_GRANTED){
+            MyMessage();
+        } else{
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS}, 0);
+
         }
 
     }
+
+    private void MyMessage() {
+        String phonenumber = custphone.getText().toString().trim();
+        String message = custmessage.getText().toString().trim();
+
+        if(!custphone.getText().toString().equals("") || !custmessage.getText().toString().equals("")){
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phonenumber,null,message,null,null);
+
+            Toast.makeText(getActivity(), "Message sent.", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getActivity(), "Fields can not be empty!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        switch (requestCode){
+//            case MY_PERMISSIONS_REQUEST_SEND_SMS:
+//                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                    SmsManager smsManager = SmsManager.getDefault();
+//                    smsManager.sendTextMessage(phone,null,message,null,null);
+//                    Toast.makeText(getActivity(), "SMS sent", Toast.LENGTH_LONG).show();
+//                }else{
+//                    Toast.makeText(getActivity(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case 0:
+                if(grantResults.length >= 0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    MyMessage();
+                } else {
+                    Toast.makeText(getActivity(), "You do note the permission is the people!", Toast.LENGTH_SHORT).show();
+                }
+//                break;
+        }
+    }
+
+
 
     public boolean checkPermission(String permission){
         int check = ContextCompat.checkSelfPermission(getActivity(), permission);
@@ -135,22 +188,7 @@ public class SendReceiptFragment extends Fragment implements View.OnClickListene
         }//endif
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case MY_PERMISSIONS_REQUEST_SEND_SMS:
-                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(phone,null,message,null,null);
-                    Toast.makeText(getActivity(), "SMS sent", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(getActivity(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-        }
 
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 
     @Override
     public void onClick(View v) {
