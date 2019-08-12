@@ -85,9 +85,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-//                    Toast.makeText(getApplicationContext(), owneruser+" exists", Toast.LENGTH_SHORT).show();
                     editor.putString("owner_username", owneruser);
-//                    editor.commit();
 
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         final String key = ds.getKey();

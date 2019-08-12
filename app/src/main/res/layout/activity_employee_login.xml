@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".EmployeeLoginActivity">
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/backdrop3"
-        android:alpha="0.5"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView10"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:srcCompat="@mipmap/backdrop3"-->
+        <!--android:alpha="0.5"/>-->
 
     <android.support.v7.widget.CardView
         android:layout_width="500dp"
@@ -76,7 +76,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_login"
+                android:id="@+id/btn_loginemp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_cornered"
