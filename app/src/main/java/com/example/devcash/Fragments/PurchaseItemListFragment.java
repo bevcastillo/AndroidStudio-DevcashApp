@@ -2,6 +2,8 @@ package com.example.devcash.Fragments;
 
 
 import android.app.Service;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +43,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,6 +56,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
     DatabaseReference dbreference;
     DatabaseReference productsdbreference;
     DatabaseReference servicesdbreference;
+    DatabaseReference businessownerdbreference;
     FirebaseDatabase firebaseDatabase;
 
     List<Productslistdata> list;
@@ -95,68 +100,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
         dbreference = firebaseDatabase.getReference("/datadevcash");
         productsdbreference = firebaseDatabase.getReference("datadevcash/products");
         servicesdbreference = firebaseDatabase.getReference("datadevcash/services");
-
-//        productsdbreference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                list = new ArrayList<>();
-//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Product product = dataSnapshot1.getValue(Product.class);
-//                    Productslistdata listdata = new Productslistdata();
-//                    String prodname = product.getProd_name();
-//                    double prodprice = product.getProd_price();
-//                    listdata.setProd_name(prodname);
-//                    listdata.setProd_price(prodprice);
-//                    list.add(listdata);
-//                }
-//                PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(list);
-//                GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),4);
-//                gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//                recyclerViewitemlist.setLayoutManager(gridLayoutManager);
-//                recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
-//                recyclerViewitemlist.setAdapter(adapter);
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-//        servicesdbreference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                slist = new ArrayList<>();
-//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Services services = dataSnapshot1.getValue(Services.class);
-//                    Serviceslistdata slistdata = new Serviceslistdata();
-//                    String sname = services.getService_name();
-//                    double sprice = services.getService_price();
-//                    slistdata.setServname(sname);
-//                    slistdata.setServprice(sprice);
-//                    slist.add(slistdata);
-//
-//
-//                }
-//                PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(list);
-//                GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),4);
-//                gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//                recyclerViewitemlist.setLayoutManager(gridLayoutManager);
-//                recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
-//                recyclerViewitemlist.setAdapter(adapter);
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
+        businessownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
 
         ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
@@ -189,28 +133,48 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
         return view;
     }
 
+    //
+
+
     public void viewAllProducts(){
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
 
-        productsdbreference.addValueEventListener(new ValueEventListener() {
+        businessownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list = new ArrayList<>();
-                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Product product = dataSnapshot1.getValue(Product.class);
-                    Productslistdata listdata = new Productslistdata();
-                    String prodname = product.getProd_name();
-                    double prodprice = product.getProd_price();
-                    listdata.setProd_name(prodname);
-                    listdata.setProd_price(prodprice);
-                    list.add(listdata);
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/product").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                list = new ArrayList<>();
+                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                        Product product = dataSnapshot1.getValue(Product.class);
+                                        Productslistdata listdata = new Productslistdata();
+                                        String prodname = product.getProd_name();
+                                        double prodprice = product.getProd_price();
+                                        listdata.setProd_name(prodname);
+                                        listdata.setProd_price(prodprice);
+                                        list.add(listdata);
+                                    }
+                                        PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(list);
+                                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),4);
+                                        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                                        recyclerViewitemlist.setLayoutManager(gridLayoutManager);
+                                        recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
+                                        recyclerViewitemlist.setAdapter(adapter);
+                                        adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
-                PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(list);
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),4);
-                gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                recyclerViewitemlist.setLayoutManager(gridLayoutManager);
-                recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
-                recyclerViewitemlist.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -218,32 +182,49 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
 
             }
         });
-
     }
 
-    public void  viewAllServices(){
-        servicesdbreference.addValueEventListener(new ValueEventListener() {
+
+    public void viewAllServices(){
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        businessownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                slist = new ArrayList<>();
-                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Services services = dataSnapshot1.getValue(Services.class);
-                    Serviceslistdata slistdata = new Serviceslistdata();
-                    String sname = services.getService_name();
-                    double sprice = services.getService_price();
-                    slistdata.setServname(sname);
-                    slistdata.setServprice(sprice);
-                    slist.add(slistdata);
-                }
-                PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist);
-                GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),4);
-                sgridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                recyclerViewitemlist.setLayoutManager(sgridLayoutManager);
-                recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
-                recyclerViewitemlist.setAdapter(sadapter);
-                sadapter.notifyDataSetChanged();
-            }
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/services").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                slist = new ArrayList<>();
+                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                        Services services = dataSnapshot1.getValue(Services.class);
+                                        Serviceslistdata slistdata = new Serviceslistdata();
+                                        String sname = services.getService_name();
+                                        double sprice = services.getService_price();
+                                        slistdata.setServname(sname);
+                                        slistdata.setServprice(sprice);
+                                        slist.add(slistdata);
+                                    }
+                                        PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist);
+                                        GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),4);
+                                        sgridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                                        recyclerViewitemlist.setLayoutManager(sgridLayoutManager);
+                                        recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
+                                        recyclerViewitemlist.setAdapter(sadapter);
+                                        sadapter.notifyDataSetChanged();
+                            }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -251,6 +232,37 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
             }
         });
     }
+
+//    public void  viewAllServices(){
+//        servicesdbreference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                slist = new ArrayList<>();
+//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                    Services services = dataSnapshot1.getValue(Services.class);
+//                    Serviceslistdata slistdata = new Serviceslistdata();
+//                    String sname = services.getService_name();
+//                    double sprice = services.getService_price();
+//                    slistdata.setServname(sname);
+//                    slistdata.setServprice(sprice);
+//                    slist.add(slistdata);
+//                }
+//                PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist);
+//                GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),4);
+//                sgridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//                recyclerViewitemlist.setLayoutManager(sgridLayoutManager);
+//                recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
+//                recyclerViewitemlist.setAdapter(sadapter);
+//                sadapter.notifyDataSetChanged();
+//            }
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     //handles the search menu
     @Override
