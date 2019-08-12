@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class Serviceslistdata {
-    public String servname;
+    public String servname, servstatus;
     double servprice;
 
     public String getServname() {
@@ -18,5 +18,13 @@ public class Serviceslistdata {
 
     public void setServprice(double servprice) {
         this.servprice = servprice;
+    }
+
+    public String getServstatus() {
+        return servstatus;
+    }
+
+    public void setServstatus(String servstatus) {
+        this.servstatus = servstatus;
     }
 }

@@ -3,6 +3,7 @@ package com.example.devcash.ADD_UI;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
@@ -53,6 +54,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebasedb;
     private DatabaseReference accountFirebaseReference;
+    private DatabaseReference ownerdbreference;
     TextInputEditText empLname, empFname, empEmail, empPhone, empbdate, empuname, emppassw, empconfpass, empaddr;
     EditText acctstatus, accttype;
     private Uri empimageUri;
@@ -105,6 +107,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         firebasedb = FirebaseDatabase.getInstance();
         databaseReference = firebasedb.getReference("/datadevcash");
         accountFirebaseReference = firebasedb.getReference("/datadevcash/account");
+        ownerdbreference = firebasedb.getReference("/datadevcash/owner");
         EmployeeId = databaseReference.push().getKey();
         AccountId = databaseReference.push().getKey();
 
@@ -120,41 +123,29 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
                             final String emp_bdate, final String emp_phone, final String emp_addr, final String accountUsername){
     Log.d(TAG,"addEmployee()");
 
-        accountFirebaseReference.addValueEventListener(new ValueEventListener() {
+    //
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        databaseReference.child("owner/"+key+"/business/employee").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-//                String acctEmail;
-//                String acctUsername;
-                String acctUname;
-                String acctPassw;
-                String acctType;
-                String acctStatus;
+                            }
 
-                Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                // create an account object
-                Account acct = new Account();
-
-               for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                   if (childSnapshot.child("acct_uname").getValue().equals(accountUsername)) {
-//                       acctEmail = childSnapshot.child("acct_email").getValue().toString();
-                       acctUname = childSnapshot.child("acct_uname").getValue().toString();
-                       acctPassw = childSnapshot.child("acct_passw").getValue().toString();
-                       acctType = childSnapshot.child("acct_type").getValue().toString();
-                       acctStatus = childSnapshot.child("acct_status").getValue().toString();
-
-//                       acct.setAcct_email(acctEmail);
-                       acct.setAcct_uname(acctUname);
-                       acct.setAcct_passw(acctPassw);
-                       acct.setAcct_type(acctType);
-                       acct.setAcct_status(acctStatus);
-                       employee.setAccount(acct);
-
-                       databaseReference.child("employees").child(EmployeeId).setValue(employee);
-                   }
-               }
-
+                            }
+                        });
+                    }
+                }
             }
 
             @Override
@@ -162,14 +153,81 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
             }
         });
+
+
+
+//        accountFirebaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+////                String acctEmail;
+////                String acctUsername;
+//                String acctUname;
+//                String acctPassw;
+//                String acctType;
+//                String acctStatus;
+//
+//                Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr);
+//
+//                // create an account object
+//                Account acct = new Account();
+//
+//               for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+//                   if (childSnapshot.child("acct_uname").getValue().equals(accountUsername)) {
+////                       acctEmail = childSnapshot.child("acct_email").getValue().toString();
+//                       acctUname = childSnapshot.child("acct_uname").getValue().toString();
+//                       acctPassw = childSnapshot.child("acct_passw").getValue().toString();
+//                       acctType = childSnapshot.child("acct_type").getValue().toString();
+//                       acctStatus = childSnapshot.child("acct_status").getValue().toString();
+//
+////                       acct.setAcct_email(acctEmail);
+//                       acct.setAcct_uname(acctUname);
+//                       acct.setAcct_passw(acctPassw);
+//                       acct.setAcct_type(acctType);
+//                       acct.setAcct_status(acctStatus);
+//                       employee.setAccount(acct);
+//
+//                       databaseReference.child("employees").child(EmployeeId).setValue(employee);
+//                   }
+//               }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
 
     public void addAccount(String acct_uname, final String acct_passw, final String acct_type, final String acct_status){
 
     final Account account = new Account(acct_uname, acct_passw, acct_type, acct_status);
-        databaseReference.child("account").child(AccountId).setValue(account);
-        databaseReference.child("employees").child(EmployeeId).child("account").child(AccountId).setValue(account);
+//        databaseReference.child("account").child(AccountId).setValue(account);
+//        databaseReference.child("employees").child(EmployeeId).child("account").child(AccountId).setValue(account);
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        databaseReference.child("owner/"+key+"business/account").child(AccountId).setValue(account);
+                        databaseReference.child("owner/"+key+"business/employee").child(EmployeeId).setValue(account);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 

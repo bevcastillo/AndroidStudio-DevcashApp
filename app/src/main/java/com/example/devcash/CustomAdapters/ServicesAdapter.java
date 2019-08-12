@@ -34,6 +34,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Serviceslistdata data = list.get(i);
         viewHolder.servicename.setText(data.getServname());
+        viewHolder.servicestatus.setText(data.getServstatus());
         viewHolder.serviceprice.setText(String.valueOf(data.getServprice()));
     }
 
@@ -43,12 +44,13 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView servicename, serviceprice;
+        TextView servicename, serviceprice, servicestatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             servicename = (TextView) itemView.findViewById(R.id.txtservice_name);
             serviceprice = (TextView) itemView.findViewById(R.id.txtservice_price);
+            servicestatus = (TextView) itemView.findViewById(R.id.txtservice_status);
         }
     }
 }

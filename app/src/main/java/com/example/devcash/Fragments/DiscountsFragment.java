@@ -90,7 +90,7 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
         discountSpinner = (Spinner) view.findViewById(R.id.spinner_discounts);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        dbreference = firebaseDatabase.getReference("datadevcash");
+        dbreference = firebaseDatabase.getReference("/datadevcash");
         discountdbreference = firebaseDatabase.getReference("datadevcash/discount");
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
 
@@ -101,35 +101,32 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    for (DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
-                        dbreference.child("owner"+key+"business/discount").addValueEventListener(new ValueEventListener() {
+                        dbreference.child("owner/"+key+"/business/discount").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                list = new ArrayList<>();
-                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                Discount discount = dataSnapshot1.getValue(Discount.class);
-                                Discountlistdata listdata = new Discountlistdata();
-                                String dcode = discount.getDisc_code();
-                                String type = discount.getDisc_type();
-                                double value = discount.getDisc_value();
-                                String start = discount.getDisc_start();
-                                String end = discount.getDisc_end();
-                                String status = discount.getDisc_status();
-                                listdata.setDisc_code(dcode);
-                                listdata.setDisc_type(type);
-                                listdata.setDisc_value(value);
-                                listdata.setDisc_start(start);
-                                listdata.setDisc_end(end);
-                                listdata.setDisc_status(status);
-                                list.add(listdata);
-                            }
-                                DiscountAdapter discountAdapter = new DiscountAdapter(list);
-                                RecyclerView.LayoutManager dlayoutManager = new LinearLayoutManager(getActivity());
-                                discountrecycler.setLayoutManager(dlayoutManager);
-                                discountrecycler.setItemAnimator(new DefaultItemAnimator());
-                                discountrecycler.setAdapter(discountAdapter);
-                                discountAdapter.notifyDataSetChanged();
+                               list = new ArrayList<>();
+                               for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                   Discount discount = dataSnapshot1.getValue(Discount.class);
+                                   Discountlistdata listdata = new Discountlistdata();
+                                    // discount code, discount start date, discount end date, status, value
+                                   String dcode = discount.getDisc_code();
+                                   String dstart = discount.getDisc_start();
+                                   String dend = discount.getDisc_end();
+                                   String dstatus = discount.getDisc_status();
+                                   listdata.setDisc_code(dcode);
+                                   listdata.setDisc_start(dstart);
+                                   listdata.setDisc_end(dend);
+                                   listdata.setDisc_status(dstatus);
+                                   list.add(listdata);
+                               }
+                                    DiscountAdapter discountAdapter = new DiscountAdapter(list);
+                                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                    discountrecycler.setLayoutManager(layoutManager);
+                                    discountrecycler.setItemAnimator(new DefaultItemAnimator());
+                                    discountrecycler.setAdapter(discountAdapter);
+                                    discountAdapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -146,6 +143,56 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
 
             }
         });
+
+//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()){
+//                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                        String key = ds.getKey();
+//                        dbreference.child("owner"+key+"business/discount").addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                list = new ArrayList<>();
+//                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                                Discount discount = dataSnapshot1.getValue(Discount.class);
+//                                Discountlistdata listdata = new Discountlistdata();
+//                                String dcode = discount.getDisc_code();
+//                                String type = discount.getDisc_type();
+//                                double value = discount.getDisc_value();
+//                                String start = discount.getDisc_start();
+//                                String end = discount.getDisc_end();
+//                                String status = discount.getDisc_status();
+//                                listdata.setDisc_code(dcode);
+//                                listdata.setDisc_type(type);
+//                                listdata.setDisc_value(value);
+//                                listdata.setDisc_start(start);
+//                                listdata.setDisc_end(end);
+//                                listdata.setDisc_status(status);
+//                                list.add(listdata);
+//                            }
+//                                DiscountAdapter discountAdapter = new DiscountAdapter(list);
+//                                RecyclerView.LayoutManager dlayoutManager = new LinearLayoutManager(getActivity());
+//                                discountrecycler.setLayoutManager(dlayoutManager);
+//                                discountrecycler.setItemAnimator(new DefaultItemAnimator());
+//                                discountrecycler.setAdapter(discountAdapter);
+//                                discountAdapter.notifyDataSetChanged();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 //        discountdbreference.addValueEventListener(new ValueEventListener() {
 //            @Override

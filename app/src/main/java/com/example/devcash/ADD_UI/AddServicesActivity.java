@@ -137,16 +137,15 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void addServices(String service_name, double service_price){
+    public void addServices(String service_name, String service_status, double service_price){
         Discount discount = new Discount();
         Category category = new Category();
         discount.setDisc_code(selecteddiscount);
         category.setCategory_name(selectedcategory);
 
-        final Services services = new Services(service_name,service_price);
+        final Services services = new Services(service_name, service_status, service_price);
         services.setDiscount(discount);
         services.setCategory(category);
-//        dbreference.child("/services").child(ServicesId).setValue(services);
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
@@ -170,20 +169,23 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void insertServices(){
-        addServices(servicename.getText().toString().trim(), Double.parseDouble(serviceprice.getText().toString()));
+        String servname = servicename.getText().toString();
+        double servprce = Double.parseDouble(serviceprice.getText().toString());
+        String servstatus = chkavail.getText().toString();
+//        addServices(servicename.getText().toString().trim(), Double.parseDouble(serviceprice.getText().toString()));
+        addServices(servname, servstatus, servprce);
         Toast.makeText(getApplicationContext(), "Services Successfully added!", Toast.LENGTH_SHORT).show();
         finish();
     }
 
 
-
-    public void addCheckBoxListener(){
+    private void addCheckBoxListener() {
         if(chkavail.isChecked()){
-            String chkres = "Available";
-            Toast.makeText(getApplicationContext(), chkres+"", Toast.LENGTH_SHORT).show();
+            String avail = "Available";
+            chkavail.setText(avail);
         }else{
-            String chkres = "Not Available";
-            Toast.makeText(getApplicationContext(), chkres+"", Toast.LENGTH_SHORT).show();
+            String notavail = "Not Available";
+            chkavail.setText(notavail);
         }
     }
 

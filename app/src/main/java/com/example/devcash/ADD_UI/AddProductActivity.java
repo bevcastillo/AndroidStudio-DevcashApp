@@ -150,19 +150,36 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         ///
 
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
 
-        categoryfirebasereference.addValueEventListener(new ValueEventListener() {
+        businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Category category1 = dataSnapshot1.getValue(Category.class);
-                    categories.add(category1.getCategory_name());
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner"+key+"/business/category").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                    Category category = dataSnapshot1.getValue(Category.class);
+                                    categories.add(category.getCategory_name());
+                                }
+                                    categories.add("No Category");
+                                    categories.add("Create Category");
+                                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_categoryitem, categories);
+                                    spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
+                                    spinnerprodcategory.setAdapter(spinnerArrayAdapter);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
-                categories.add("No Category");
-                categories.add("Create Category");
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_categoryitem, categories);
-                spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
-                spinnerprodcategory.setAdapter(spinnerArrayAdapter);
             }
 
             @Override
@@ -170,6 +187,26 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
+
+//        categoryfirebasereference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                    Category category1 = dataSnapshot1.getValue(Category.class);
+//                    categories.add(category1.getCategory_name());
+//                }
+//                categories.add("No Category");
+//                categories.add("Create Category");
+//                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_categoryitem, categories);
+//                spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
+//                spinnerprodcategory.setAdapter(spinnerArrayAdapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         final ArrayList<String> discounts = new ArrayList<String>();
 

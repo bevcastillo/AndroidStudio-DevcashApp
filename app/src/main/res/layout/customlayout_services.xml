@@ -48,6 +48,17 @@
             android:gravity="left"/>
 
         <TextView
+            android:id="@+id/txtservice_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Status"
+            android:textColor="@color/icon_light"
+            android:textSize="@dimen/text_inputs"
+            android:layout_marginLeft="@dimen/padding_50"
+            android:gravity="left"/>
+
+        <TextView
             android:id="@+id/txtservice_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

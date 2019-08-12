@@ -87,24 +87,76 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                 if(dataSnapshot.exists()){
 //                    Toast.makeText(getApplicationContext(), owneruser+" exists", Toast.LENGTH_SHORT).show();
                     editor.putString("owner_username", owneruser);
-                    editor.putString("owner_passw", ownerpassword);
-                    editor.commit();
+//                    editor.commit();
 
-                    ownerbusinessReference.orderByChild("business/account/acct_passw").equalTo(ownerpassword).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                Toast.makeText(getApplication(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
-                                Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
-                                startActivity(owner_dashboard);
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        final String key = ds.getKey();
+
+                        ownerbusinessReference.child(key+"/business/account").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    for(DataSnapshot ds1 : dataSnapshot.getChildren()) {
+                                        final String passkey = ds1.getKey();
+                                        Account account = ds1.getValue(Account.class);
+                                        String accountJson = gson.toJson(account);
+                                        editor.putString("account", accountJson);
+                                        editor.commit();
+                                            Toast.makeText(getApplication(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
+                                            Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
+                                            startActivity(owner_dashboard);
+//                                        Toast.makeText(OwnerLoginActivity.this, account.getAcct_email()+account.getAcct_passw(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+//                                if(dataSnapshot.exists()){
+////                                    editor.putString("owner_passw", ownerpassword);
+////                                    editor.commit();
+////                                    for(DataSnapshot ds1: dataSnapshot.getChildren()){
+////                                        String passkey = ds1.getKey();
+////                                        Toast.makeText(OwnerLoginActivity.this, key+"", Toast.LENGTH_SHORT).show();
+////                                        Toast.makeText(OwnerLoginActivity.this, passkey+"", Toast.LENGTH_SHORT).show();
+////
+////                                        ownerbusinessReference.orderByChild(key+"/business/account/"+passkey+"/acct_passw").equalTo(ownerpassword).addListenerForSingleValueEvent(new ValueEventListener() {
+////                                            @Override
+////                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                                                if(dataSnapshot.exists()){
+////                                                    Toast.makeText(OwnerLoginActivity.this, ownerpassword+"", Toast.LENGTH_SHORT).show();
+////                                                }
+////                                            }
+////
+////                                            @Override
+////                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+////
+////                                            }
+////                                        });
+////                                    }
+//                                }else{
+//                                    Toast.makeText(OwnerLoginActivity.this, ownerpassword+" does not exist!", Toast.LENGTH_SHORT).show();
+//                                }
                             }
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
 
-                        }
-                    });
+                    }
+
+//                    ownerbusinessReference.orderByChild("business/account"+"/acct_passw").equalTo(ownerpassword).addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            if (dataSnapshot.exists()) {
+//                                Toast.makeText(getApplication(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
+//                                Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
+//                                startActivity(owner_dashboard);
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
 
                     // iterate
 //                    for (DataSnapshot ds : dataSnapshot.getChildren()) {

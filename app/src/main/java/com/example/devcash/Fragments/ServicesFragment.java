@@ -2,6 +2,7 @@ package com.example.devcash.Fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,6 +43,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +57,7 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
 
     DatabaseReference dbreference;
     DatabaseReference servicesdbreference;
+    DatabaseReference businessownerdbreference;
     FirebaseDatabase firebaseDatabase;
 
     RecyclerView servrecyclerview;
@@ -87,28 +91,49 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("datadevcash");
         servicesdbreference = firebaseDatabase.getReference("datadevcash/services");
+        businessownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
 
-        servicesdbreference.addValueEventListener(new ValueEventListener() {
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+
+        businessownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                serviceslist = new ArrayList<>();
-                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Services services = dataSnapshot1.getValue(Services.class);
-                    Serviceslistdata serviceslistdata = new Serviceslistdata();
-                    String sname = services.getService_name();
-                    double sprice = services.getService_price();
-                    serviceslistdata.setServname(sname);
-                    serviceslistdata.setServprice(sprice);
-                    serviceslist.add(serviceslistdata);
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/services").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                serviceslist = new ArrayList<>();
+                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                Services services = dataSnapshot1.getValue(Services.class);
+                                Serviceslistdata serviceslistdata = new Serviceslistdata();
+                                String sname = services.getService_name();
+                                double sprice = services.getService_price();
+                                String sstatus = services.getService_status();
+                                serviceslistdata.setServname(sname);
+                                serviceslistdata.setServprice(sprice);
+                                serviceslistdata.setServstatus(sstatus);
+                                serviceslist.add(serviceslistdata);
+                            }
+
+                                ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
+                                servrecyclerview.setLayoutManager(sLayoutManager);
+                                servrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                servrecyclerview.setAdapter(servicesAdapter);
+                                servicesAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
-
-                ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
-                RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
-                servrecyclerview.setLayoutManager(sLayoutManager);
-                servrecyclerview.setItemAnimator(new DefaultItemAnimator());
-                servrecyclerview.setAdapter(servicesAdapter);
-                servicesAdapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -116,6 +141,38 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
 
             }
         });
+
+
+//        servicesdbreference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                serviceslist = new ArrayList<>();
+//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                    Services services = dataSnapshot1.getValue(Services.class);
+//                    Serviceslistdata serviceslistdata = new Serviceslistdata();
+//                    String sname = services.getService_name();
+//                    double sprice = services.getService_price();
+//                    String sstatus = services.getService_status();
+//                    serviceslistdata.setServname(sname);
+//                    serviceslistdata.setServprice(sprice);
+//                    serviceslistdata.setServstatus(sstatus);
+//                    serviceslist.add(serviceslistdata);
+//                }
+//
+//                ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+//                RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
+//                servrecyclerview.setLayoutManager(sLayoutManager);
+//                servrecyclerview.setItemAnimator(new DefaultItemAnimator());
+//                servrecyclerview.setAdapter(servicesAdapter);
+//                servicesAdapter.notifyDataSetChanged();
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         ///

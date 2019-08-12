@@ -6,7 +6,7 @@ package com.example.devcash.Object;
 import android.net.Uri;
 
 public class Services {
-    String service_name;
+    String service_name, service_status;
     double service_price;
     public Discount discount;
     public Category category;
@@ -14,8 +14,9 @@ public class Services {
     public Services() {
     }
 
-    public Services(String service_name, double service_price) {
+    public Services(String service_name, String service_status, double service_price) {
         this.service_name = service_name;
+        this.service_status = service_status;
         this.service_price = service_price;
     }
 
@@ -49,5 +50,13 @@ public class Services {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getService_status() {
+        return service_status;
+    }
+
+    public void setService_status(String service_status) {
+        this.service_status = service_status;
     }
 }

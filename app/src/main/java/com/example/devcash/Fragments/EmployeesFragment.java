@@ -2,6 +2,7 @@ package com.example.devcash.Fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,6 +40,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +50,7 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
 
     DatabaseReference dbreference;
     DatabaseReference employeedfirebasereference;
+    DatabaseReference businessownerfirebasereference;
     FirebaseDatabase firebaseDatabase;
 
     RecyclerView emprecyclerview;
@@ -73,46 +77,104 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
+        businessownerfirebasereference = firebaseDatabase.getReference("datadevcash/owner");
         employeedfirebasereference = firebaseDatabase.getReference("/datadevcash/employees");
 
-        employeedfirebasereference.addValueEventListener(new ValueEventListener() {
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        businessownerfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/employee").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                emplist = new ArrayList<>();
+                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                Employee employee = dataSnapshot1.getValue(Employee.class);
+                                Employeelistdata employeelistdata = new Employeelistdata();
+                                String lname = employee.getEmp_lname();
+                                String fname = employee.getEmp_fname();
+                                String task = employee.getEmp_task();
+                                String addr = employee.getEmp_addr();
+//                                String uname = employee.getAccount().getAcct_uname();
+//                                String email = employee.getAccount().getAcct_email();
+                                employeelistdata.setEmplname(lname);
+                                employeelistdata.setEmpfname(fname);
+//                                employeelistdata.setAcctuname(uname);
+//                                employeelistdata.setAcctemail(email);
+                                employeelistdata.setEmptask(task);
+                                employeelistdata.setEmpaddr(addr);
+                                emplist.add(employeelistdata);
+                            }
 
-                emplist = new ArrayList<>();
-                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Employee employee = dataSnapshot1.getValue(Employee.class);
-                    Employeelistdata employeelistdata = new Employeelistdata();
-                    String lname = employee.getEmp_lname();
-                    String fname = employee.getEmp_fname();
-                    String task = employee.getEmp_task();
-                    String addr = employee.getEmp_addr();
-                    String uname = employee.getAccount().getAcct_uname();
-                    String email = employee.getAccount().getAcct_email();
-                    employeelistdata.setEmplname(lname);
-                    employeelistdata.setEmpfname(fname);
-                    employeelistdata.setAcctuname(uname);
-                    employeelistdata.setAcctemail(email);
-                    employeelistdata.setEmptask(task);
-                    employeelistdata.setEmpaddr(addr);
-                    emplist.add(employeelistdata);
+                                EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                                emprecyclerview.setLayoutManager(mLayoutManager);
+                                emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                emprecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                emprecyclerview.setAdapter(employeesAdapter);
+                                employeesAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
-
-                EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-//                emprecyclerview.setLayoutManager(mLayoutManager);
-                emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
-                emprecyclerview.setItemAnimator(new DefaultItemAnimator());
-                emprecyclerview.setAdapter(employeesAdapter);
-                employeesAdapter.notifyDataSetChanged();
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
+
             }
         });
+
+
+//
+//        employeedfirebasereference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                emplist = new ArrayList<>();
+//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                    Employee employee = dataSnapshot1.getValue(Employee.class);
+//                    Employeelistdata employeelistdata = new Employeelistdata();
+//                    String lname = employee.getEmp_lname();
+//                    String fname = employee.getEmp_fname();
+//                    String task = employee.getEmp_task();
+//                    String addr = employee.getEmp_addr();
+//                    String uname = employee.getAccount().getAcct_uname();
+//                    String email = employee.getAccount().getAcct_email();
+//                    employeelistdata.setEmplname(lname);
+//                    employeelistdata.setEmpfname(fname);
+//                    employeelistdata.setAcctuname(uname);
+//                    employeelistdata.setAcctemail(email);
+//                    employeelistdata.setEmptask(task);
+//                    employeelistdata.setEmpaddr(addr);
+//                    emplist.add(employeelistdata);
+//                }
+//
+//                EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+//                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+////                emprecyclerview.setLayoutManager(mLayoutManager);
+//                emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+//                emprecyclerview.setItemAnimator(new DefaultItemAnimator());
+//                emprecyclerview.setAdapter(employeesAdapter);
+//                employeesAdapter.notifyDataSetChanged();
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
         //
