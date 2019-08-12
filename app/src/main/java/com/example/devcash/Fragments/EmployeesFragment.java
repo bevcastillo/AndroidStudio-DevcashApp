@@ -135,57 +135,11 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
             }
         });
 
-
-//
-//        employeedfirebasereference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                emplist = new ArrayList<>();
-//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Employee employee = dataSnapshot1.getValue(Employee.class);
-//                    Employeelistdata employeelistdata = new Employeelistdata();
-//                    String lname = employee.getEmp_lname();
-//                    String fname = employee.getEmp_fname();
-//                    String task = employee.getEmp_task();
-//                    String addr = employee.getEmp_addr();
-//                    String uname = employee.getAccount().getAcct_uname();
-//                    String email = employee.getAccount().getAcct_email();
-//                    employeelistdata.setEmplname(lname);
-//                    employeelistdata.setEmpfname(fname);
-//                    employeelistdata.setAcctuname(uname);
-//                    employeelistdata.setAcctemail(email);
-//                    employeelistdata.setEmptask(task);
-//                    employeelistdata.setEmpaddr(addr);
-//                    emplist.add(employeelistdata);
-//                }
-//
-//                EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
-//                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-////                emprecyclerview.setLayoutManager(mLayoutManager);
-//                emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
-//                emprecyclerview.setItemAnimator(new DefaultItemAnimator());
-//                emprecyclerview.setAdapter(employeesAdapter);
-//                employeesAdapter.notifyDataSetChanged();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
-        //
         getActivity().setTitle("Employee");
-
-        //add floating action button
         FloatingActionButton emp_fab = view.findViewById(R.id.addemp_fab);
         emp_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                // when add fab is pressed, go to add product activity
                 Intent addprod = new Intent(getActivity(), AddEmployeeActivity.class);
                 startActivity(addprod);
 

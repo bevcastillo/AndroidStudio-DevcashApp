@@ -1,6 +1,7 @@
 package com.example.devcash;
 
 import android.accounts.OnAccountsUpdateListener;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -202,7 +204,11 @@ public class DashboardActivity extends AppCompatActivity
                 Intent tosettings = new Intent(DashboardActivity.this, SettingsActivity.class);
                 startActivity(tosettings);
                 break;
+            case R.id.nav_logout:
+                logoutDialog();
+                break;
         }
+
 
         if (fragment != null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -213,6 +219,31 @@ public class DashboardActivity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
+    }
+
+    public void logoutDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to logout?");
+        builder.setPositiveButton("LEAVE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = shared.edit();
+                editor.clear();
+                editor.commit();
+                Intent logout = new Intent(DashboardActivity.this, OwnerLoginActivity.class);
+                startActivity(logout);
+                Toast.makeText(DashboardActivity.this, "You have been logged out!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

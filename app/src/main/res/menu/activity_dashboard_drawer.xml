@@ -42,5 +42,15 @@
                 android:title="@string/settings" />
         </menu>
     </item>
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Logout"
+                />
+        </menu>
+
+    </item>
 
 </menu>
