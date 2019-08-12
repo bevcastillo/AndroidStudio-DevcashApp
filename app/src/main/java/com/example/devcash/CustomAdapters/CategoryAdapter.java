@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.devcash.Object.Categorylistdata;
 import com.example.devcash.R;
@@ -22,9 +23,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_category, viewGroup, false);
-        return new ViewHolder(v);
+    public ViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
+        View v;
+        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_category, viewGroup,false);
+        final ViewHolder viewHolder = new ViewHolder(v);
+
+        viewHolder.categoryname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(viewGroup.getContext(), (list.get(viewHolder.getAdapterPosition()).getCategory_name()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        return viewHolder;
+
+        //
+
     }
 
     @Override

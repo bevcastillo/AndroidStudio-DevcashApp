@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EDIT_UI.EditDiscount"
+    android:background="@color/whiteDarker"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clipToPadding="false">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="650dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/text_padding"
+                android:layout_marginTop="@dimen/padding_50"
+                android:layout_marginBottom="@dimen/padding_20"
+                android:background="@color/whiteBG"
+                android:layout_gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_30"
+                    android:layout_marginBottom="@dimen/padding_top"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/padding_30"
+                    android:paddingRight="@dimen/padding_30">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/textinput_discode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/disc_code"
+                            android:inputType="text"
+                            android:padding="@dimen/text_padding"
+                            android:textColorHint="@color/colorPrimary"
+                            android:textSize="@dimen/text_inputs" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:id="@+id/disc_type_value_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/text_padding"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/type" />
+
+                            <RadioGroup
+                                android:id="@+id/rgroup_disctype"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:paddingLeft="@dimen/text_padding">
+
+                                <RadioButton
+                                    android:id="@+id/radiobtn_percent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:buttonTint="@color/colorPrimary"
+                                    android:checked="true"
+                                    android:text="@string/percentage"
+                                    android:paddingRight="@dimen/text_padding"/>
+
+                                <RadioButton
+                                    android:id="@+id/radiobtn_amt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:buttonTint="@color/colorPrimary"
+                                    android:text="@string/amount" />
+
+                            </RadioGroup>
+                        </LinearLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingTop="@dimen/text_padding"
+                            android:paddingRight="@dimen/padding_30"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/textinput_amt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/value"
+                                android:autofillHints="0.00"
+                                android:inputType="numberDecimal"
+                                android:padding="@dimen/text_padding"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/text_inputs" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/exp_date_item_count_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingTop="@dimen/text_padding"
+                            android:paddingRight="@dimen/padding_30"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/textdisc_startdate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/ic_date_range"
+                                android:drawablePadding="@dimen/text_padding"
+                                android:drawableTint="@color/icon_light"
+                                android:hint="@string/start_date"
+                                android:padding="@dimen/text_padding"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/text_inputs" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/padding_30"
+                            android:paddingTop="@dimen/text_padding"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/textdisc_enddate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/ic_date_range"
+                                android:drawablePadding="@dimen/text_padding"
+                                android:drawableTint="@color/icon_light"
+                                android:hint="@string/end_date"
+                                android:padding="@dimen/text_padding"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/text_inputs" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/text_padding"
+                            android:text="@string/status" />
+
+                        <Spinner
+                            android:id="@+id/spinner_discstatus"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="@dimen/padding_top"
+                            android:entries="@array/disc_status"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="650dp"
+                android:layout_height="40dp"
+                android:padding="@dimen/text_padding"
+                android:layout_marginBottom="@dimen/padding_top"
+                android:background="@color/whiteBG">
+
+                <LinearLayout
+                    android:id="@+id/layout_delcategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_delete"
+                        android:tint="@color/colorGray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="delete discount"
+                        android:textAllCaps="true"
+                        android:paddingLeft="20dp"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

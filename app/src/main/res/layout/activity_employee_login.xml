@@ -42,13 +42,13 @@
                 android:layout_marginBottom="@dimen/padding_30"/>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input_user_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_top"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textinput_empemail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/user_email"
@@ -59,13 +59,13 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input_passw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true"
                 app:passwordToggleEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
+                    android:id="@+id/textinput_emppassw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/passw"
