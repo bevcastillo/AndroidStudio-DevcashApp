@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -110,15 +109,16 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                    Discount discount = dataSnapshot1.getValue(Discount.class);
                                    Discountlistdata listdata = new Discountlistdata();
-                                    // discount code, discount start date, discount end date, status, value
                                    String dcode = discount.getDisc_code();
                                    String dstart = discount.getDisc_start();
                                    String dend = discount.getDisc_end();
                                    String dstatus = discount.getDisc_status();
+                                   double dvalue = discount.getDisc_value();
                                    listdata.setDisc_code(dcode);
                                    listdata.setDisc_start(dstart);
                                    listdata.setDisc_end(dend);
                                    listdata.setDisc_status(dstatus);
+                                   listdata.setDisc_value(dvalue);
                                    list.add(listdata);
                                }
                                     DiscountAdapter discountAdapter = new DiscountAdapter(list);

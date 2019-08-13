@@ -99,17 +99,6 @@ public class SendReceiptFragment extends Fragment implements View.OnClickListene
         phone = custphone.getText().toString();
         message = custmessage.getText().toString();
 
-//        if(phone == null || phone.length() == 0){
-//            return;
-//        }
-//        if(checkPermission(Manifest.permission.SEND_SMS)){
-//            SmsManager smsManager = SmsManager.getDefault();
-//            smsManager.sendTextMessage(phone,null,phone,null,null);
-//            Toast.makeText(getActivity(), "SMS sent", Toast.LENGTH_LONG).show();
-//        }else{
-//            Toast.makeText(getActivity(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
-//        }
-
         int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),  Manifest.permission.SEND_SMS);
         if(permissionCheck==PackageManager.PERMISSION_GRANTED){
             MyMessage();
@@ -137,17 +126,6 @@ public class SendReceiptFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        switch (requestCode){
-//            case MY_PERMISSIONS_REQUEST_SEND_SMS:
-//                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                    SmsManager smsManager = SmsManager.getDefault();
-//                    smsManager.sendTextMessage(phone,null,message,null,null);
-//                    Toast.makeText(getActivity(), "SMS sent", Toast.LENGTH_LONG).show();
-//                }else{
-//                    Toast.makeText(getActivity(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//        }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -168,26 +146,6 @@ public class SendReceiptFragment extends Fragment implements View.OnClickListene
         int check = ContextCompat.checkSelfPermission(getActivity(), permission);
         return (check == PackageManager.PERMISSION_GRANTED);
     }
-
-    //this is the method for sending the message
-    public void sendCustSMS(){
-        phone = custphone.getText().toString();
-        message = "Welcome to Devcash!";
-
-        if(ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.SEND_SMS)
-                != PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.SEND_SMS)){
-
-            }else{
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.SEND_SMS},
-                        MY_PERMISSIONS_REQUEST_SEND_SMS);
-            }
-        }//endif
-    }
-
 
 
     @Override

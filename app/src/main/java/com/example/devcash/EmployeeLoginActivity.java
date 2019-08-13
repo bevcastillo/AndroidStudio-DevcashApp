@@ -55,56 +55,60 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
         final String emppassword = emppassw.getText().toString();
 
 
-        databaseReference.child("owner").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        final String ownerKey = ds.getKey();
-                        if (ds.exists()) {
-                            databaseReference.child("owner/"+ownerKey+"/business/account").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    Log.i("ACCOUNT SNAPSHOT!!!", dataSnapshot.getKey());
 
-                                    if (dataSnapshot.exists()) {
-                                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                            String accountKey = dataSnapshot1.getKey();
 
-                                            businessownerdbreference.orderByChild("business/account/"+accountKey+"/acct_uname").equalTo(empuser)
-                                                .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        if (dataSnapshot.exists()) {
-                                                            Log.i("Account Tag!!", dataSnapshot.getKey());
-                                                            Toast.makeText(EmployeeLoginActivity.this, "exists "+empuser, Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
 
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                    }
-                                                });
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        databaseReference.child("owner").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                        final String ownerKey = ds.getKey();
+//                        if (ds.exists()) {
+//                            databaseReference.child("owner/"+ownerKey+"/business/account").addValueEventListener(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                    Log.i("ACCOUNT SNAPSHOT!!!", dataSnapshot.getKey());
+//
+//                                    if (dataSnapshot.exists()) {
+//                                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                                            String accountKey = dataSnapshot1.getKey();
+//
+//                                            businessownerdbreference.orderByChild("business/account/"+accountKey+"/acct_uname").equalTo(empuser)
+//                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                    @Override
+//                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                        if (dataSnapshot.exists()) {
+//                                                            Log.i("Account Tag!!", dataSnapshot.getKey());
+//                                                            Toast.makeText(EmployeeLoginActivity.this, "exists "+empuser, Toast.LENGTH_SHORT).show();
+//                                                        }
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                    }
+//                                                });
+//                                        }
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 //        businessownerdbreference.child("business/account").startAt(empuser).addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
