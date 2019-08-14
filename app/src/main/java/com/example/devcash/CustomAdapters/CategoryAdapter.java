@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.EDIT_UI.EditCategory;
+import com.example.devcash.MainActivity;
 import com.example.devcash.Object.Categorylistdata;
 import com.example.devcash.R;
 
@@ -34,8 +35,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             @Override
             public void onClick(View v) {
 //                Toast.makeText(viewGroup.getContext(), (list.get(viewHolder.getAdapterPosition()).getCategory_name()), Toast.LENGTH_SHORT).show();
-                Intent edit = new Intent(v.getContext(), EditCategory.class);
-                v.getContext().startActivity(edit);
+                String catname = list.get(viewHolder.getAdapterPosition()).getCategory_name();
+                Intent intent = new Intent(v.getContext(), EditCategory.class);
+                intent.putExtra("categoryname", catname);
+                v.getContext().startActivity(intent);
+
+//                Intent edit = new Intent(v.getContext(), EditCategory.class);
+//                v.getContext().startActivity(edit);
+
             }
         });
 

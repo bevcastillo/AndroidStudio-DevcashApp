@@ -218,12 +218,6 @@
                         android:layout_height="wrap_content"
                         android:text="Product Condition"
                         android:textColor="@color/colorPrimary"/>
-                    <TextView
-                        android:paddingTop="@dimen/padding_10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Use product condition if you add different conditions."
-                        android:textColor="@color/dark_text"/>
 
                     <LinearLayout
                         android:orientation="horizontal"

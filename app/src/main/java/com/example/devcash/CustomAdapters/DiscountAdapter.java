@@ -1,12 +1,15 @@
 package com.example.devcash.CustomAdapters;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.devcash.EDIT_UI.EditDiscount;
 import com.example.devcash.Object.Discountlistdata;
 import com.example.devcash.R;
 
@@ -22,8 +25,23 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_discount, viewGroup, false);
-        return new ViewHolder(view);
+        View v;
+        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_discount, viewGroup, false);
+        final ViewHolder viewHolder = new ViewHolder(v);
+
+        viewHolder.disccode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent edit = new Intent(v.getContext(), EditDiscount.class);
+                v.getContext().startActivity(edit);
+            }
+        });
+
+
+        return viewHolder;
+
+//        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_discount, viewGroup, false);
+//        return new ViewHolder(view);
     }
 
     @Override

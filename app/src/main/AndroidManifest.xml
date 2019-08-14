@@ -18,8 +18,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EDIT_UI.EditEmployee"
-            android:label="Edit Employee"></activity>
+        <activity android:name=".EmployeeAccountInfo"></activity>
+        <activity
+            android:name=".OwnerInformation"
+            android:label="Account Information"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".Settings_UI.SettingsActivity"/>
+        <activity
+            android:name=".EnterpriseInfo"
+            android:label="Enterprise Information"
+            android:parentActivityName=".Settings_UI.SettingsActivity"/>
+        <activity
+            android:name=".EDIT_UI.EditEmployee"
+            android:label="Edit Employee" />
         <activity
             android:name=".EDIT_UI.EditProduct"
             android:label="Edit Product" />

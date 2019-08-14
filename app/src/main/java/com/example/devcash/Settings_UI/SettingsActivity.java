@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.devcash.CustomAdapters.SettingsAdapter;
+import com.example.devcash.EnterpriseInfo;
+import com.example.devcash.OwnerInformation;
 import com.example.devcash.R;
 import com.example.devcash.Model.SettingsList;
 import com.example.devcash.SubscriptionActivity;
@@ -41,7 +43,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         //populate the list
         list.add(new SettingsList(R.drawable.employee, "Account"));
         list.add(new SettingsList(R.drawable.store, "Enterprise"));
-        list.add(new SettingsList(R.drawable.password, "Password"));
         list.add(new SettingsList(R.drawable.cash_billing, "Subscription"));
         list.add(new SettingsList(R.drawable.notification, "Notifications Settings"));
         list.add(new SettingsList(R.drawable.order, "Terms and Conditions"));
@@ -82,30 +83,26 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         //switch
         switch (position){
             case 0:
-                Intent profile = new Intent(SettingsActivity.this, OwnerProfileActivity.class);
+                Intent profile = new Intent(SettingsActivity.this, OwnerInformation.class);
                 startActivity(profile);
                 break;
             case 1:
-                Intent enterpise = new Intent(SettingsActivity.this, EnterpriseActivity.class);
+                Intent enterpise = new Intent(SettingsActivity.this, EnterpriseInfo.class);
                 startActivity(enterpise);
                 break;
             case 2:
-                Intent passw = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
-                startActivity(passw);
-                break;
-            case 3:
                 Intent subs = new Intent(SettingsActivity.this, SubscriptionActivity.class);
                 startActivity(subs);
                 break;
-            case 4:
+            case 3:
                 Intent notifications = new Intent(SettingsActivity.this, NotificationsSettingsActivity.class);
                 startActivity(notifications);
                 break;
-            case 5:
+            case 4:
                 Intent terms = new Intent(SettingsActivity.this, TermsActivity.class);
                 startActivity(terms);
                 break;
-            case 6:
+            case 5:
                 Intent about = new Intent(SettingsActivity.this, AboutActivity.class);
                 startActivity(about);
                 break;

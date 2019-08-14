@@ -1,13 +1,16 @@
 package com.example.devcash.CustomAdapters;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.devcash.EDIT_UI.EditProduct;
 import com.example.devcash.Object.ProductConditionlistdata;
 import com.example.devcash.Object.Productslistdata;
 import com.example.devcash.R;
@@ -26,8 +29,39 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_products, viewGroup, false);
-        return new ViewHolder(view);
+        View v;
+        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_products, viewGroup, false);
+        final ViewHolder viewHolder = new ViewHolder(v);
+
+        Intent pintent = new Intent(v.getContext(), EditProduct.class);
+
+        String pname = list.get(viewHolder.getAdapterPosition()).getProd_name();
+        double pprice = list.get(viewHolder.getAdapterPosition()).getProd_price();
+        int pstock = list.get(viewHolder.getAdapterPosition()).getProd_stock();
+        double prop = list.get(viewHolder.getAdapterPosition()).getProd_rop();
+        String pcat = list.get(viewHolder.getAdapterPosition()).getCategory_name();
+        String pavail = list.get(viewHolder.getAdapterPosition()).getProd_status();
+        String psoldby = list.get(viewHolder.getAdapterPosition()).getProd_soldby();
+        String punit = list.get(viewHolder.getAdapterPosition()).getProd_unitof_measure();
+        String pcond = list.get(viewHolder.getAdapterPosition()).getCond_name();
+
+        pintent.putExtra("eprodname", pname);
+        pintent.putExtra("eprodprice", pprice);
+        pintent.putExtra("eprodstock", pstock);
+        pintent.putExtra("eprodrop", prop);
+        pintent.putExtra("eprodcat", pcat);
+        pintent.putExtra("eprodavail", pavail);
+        pintent.putExtra("eprodsoldby", psoldby);
+        pintent.putExtra("eprodunit", punit);
+        pintent.putExtra("eprodcond", pcond);
+
+        v.getContext().startActivity(pintent);
+
+        return viewHolder;
+
+
+//        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_products, viewGroup, false);
+//        return new ViewHolder(view);
     }
 
     @Override
