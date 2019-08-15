@@ -352,10 +352,10 @@
     </string-array>
 
     <string-array name="unit">
+        <item>pieces</item>
         <item>kilograms</item>
         <item>meters</item>
         <item>grams</item>
-        <item>pieces</item>
     </string-array>
 
     <string-array name="discount">
@@ -387,6 +387,8 @@
     <string-array name="dropdownallcondition">
         <item>All Condition</item>
         <item>New</item>
+        <item>Used</item>
+        <item>Good as new</item>
         <item>Lost</item>
         <item>Disposed of</item>
         <item>Damaged</item>
@@ -413,8 +415,8 @@
     </string-array>
 
     <string-array name="inventory_type">
-        <item>Products</item>
-        <item>Services</item>
+        <item>All Products</item>
+        <item>All Services</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -71,7 +71,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     TextInputEditText prodexpdate, prodname, prodprice, prodrop, condcount, prodstock;
     Spinner prodcondition, produnit, spinnerprodcategory, spinnerdiscount;
     RadioGroup soldby;
-    RadioButton soldbybtn;
+    RadioButton soldbybtn, radioeach, radioweight;
     String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory;
     CheckBox chkavail;
     LinearLayout prodcondlayout, prodexpdatelayout;
@@ -87,6 +87,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     Button btnshow;
     Spinner spinnercondition;
+
+    LinearLayout measurementlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         addlayout = (LinearLayout) findViewById(R.id.addplayout);
 
         btnshow = (Button) findViewById(R.id.btnshow);
+
+        radioeach = (RadioButton) findViewById(R.id.radiobtn_each);
+        radioweight = (RadioButton) findViewById(R.id.radiobtn_weight);
+
+        measurementlayout = (LinearLayout) findViewById(R.id.layout_measurement);
+
         //adding listeners to views
         takephoto.setOnClickListener(this);
         addexpdate.setOnClickListener(this);
@@ -132,6 +140,23 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         spinnerdiscount.setOnItemSelectedListener(this);
         spinnerprodcategory.setOnItemSelectedListener(this);
         spinnercondition.setOnItemSelectedListener(this);
+
+        ///
+
+        soldby.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(radioeach.isChecked()){
+                    selectedsoldby = radioeach.getText().toString();
+                    measurementlayout.setVisibility(View.INVISIBLE);
+                }else{
+                    selectedsoldby = radioweight.getText().toString();
+                    measurementlayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        ///
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
@@ -224,28 +249,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-//        discountfirebasereference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Discount discount1 = dataSnapshot1.getValue(Discount.class);
-//                    discounts.add(discount1.getDisc_code());
-//                }
-//                discounts.add("No Discount");
-//                discounts.add("Create Discount");
-//                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddProductActivity.this, R.layout.spinner_discountitem, discounts);
-//                spinnerdiscount.setAdapter(spinnerArrayAdapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
     }
 
-    public void addProduct(final String prod_name, final String prod_unitof_measure, final String prod_status, final String prod_soldby, final double prod_price, final double prod_rop, int prod_stock){
+    public void addProduct(final String prod_name, final String prod_unitof_measure, final String prod_status, final double prod_price, final double prod_rop, int prod_stock){
 
         ProductCondition condition = new ProductCondition();
         Category category = new Category();
@@ -261,7 +267,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             condition.setCond_count(count);
         }
 
-        final Product product = new Product(prod_name, prod_unitof_measure, prod_status, prod_soldby, prod_price, prod_rop, prod_stock);
+        final Product product = new Product(prod_name, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock);
         product.setProductCondition(condition);
         product.setCategory(category);
         product.setDiscount(discount);
@@ -293,16 +299,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         int pstock = Integer.parseInt(prodstock.getText().toString());
         double pprice = Double.parseDouble(prodprice.getText().toString());
         double prop = Double.parseDouble(prodrop.getText().toString());
-        addProduct(pname, selectedprodunit, pstatus, selectedsoldby, pprice, prop, pstock);
+        addProduct(pname, selectedprodunit, pstatus, pprice, prop, pstock);
         Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
         finish();
-
-    }
-
-    public void addRadioGroupListener(){
-        int radioid=soldby.getCheckedRadioButtonId();
-        soldbybtn=(RadioButton)findViewById(radioid);
-        selectedsoldby=soldbybtn.getText().toString();
 
     }
 
@@ -354,7 +353,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-            addRadioGroupListener();
+//            addRadioGroupListener();
             addCheckBoxListener();
             insertProduct();
         }
@@ -376,62 +375,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(camera, 0);
                 break;
-//            case R.id.textprod_exp_date:
-//                final Calendar c = Calendar.getInstance();
-//                int mYear = c.get(Calendar.YEAR);
-//                int mMonth = c.get(Calendar.MONTH);
-//                int mDay = c.get(Calendar.DAY_OF_MONTH);
-//
-//                //date picker dialog
-//                expdatePicker = new DatePickerDialog(AddProductActivity.this,
-//                        new DatePickerDialog.OnDateSetListener() {
-//                            @Override
-//                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                                prodexpdate.setText(dayOfMonth + "/"
-//                                                    + (month + 1) + "/" + year);
-//                            }
-//                        },mYear,mMonth,mDay);
-//                            expdatePicker.show();
-//                break;
-//            case R.id.imgview_addcond:
-////                 mClickCounter++;
-////                 Toast.makeText(getApplicationContext(), Integer.toString(mClickCounter), Toast.LENGTH_SHORT).show();
-//                prodcondlayout = (LinearLayout) findViewById(R.id.container_prodcond);
-//                View conditionchild = getLayoutInflater().inflate(R.layout.customcard_prodcond, null);
-//                prodcondlayout.addView(conditionchild);
-//
-//                final Spinner spinnercondition = (Spinner) conditionchild.findViewById(R.id.spinner_prodcondition);
-//                final TextInputEditText cond_itemcount = (TextInputEditText) conditionchild.findViewById(R.id.textinput_itemcount);
-//                String item = cond_itemcount.getText().toString();
-//                if(!cond_itemcount.getText().toString().equals("")){
-//                    cond_count = Integer.parseInt(item);
-//                    Toast.makeText(getApplicationContext(), cond_count, Toast.LENGTH_LONG).show();
-//                }else{
-//                    cond_count = 0;
-//                }
-//
-//                spinnercondition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                        selectedprodcond = spinnercondition.getItemAtPosition(position).toString();
-//                    }
-//
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> parent) {
-//
-//                    }
-//                });
-////                item_count = cond_itemcount.getText().toString();
-//
-//                btnshow.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(getApplicationContext(), "Condition: "+selectedprodcond+"\nItem Count: "+cond_count+"", Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//
-//
-//                break;
             case R.id.imgview_addexpdate:
                 prodexpdatelayout = (LinearLayout) findViewById(R.id.container_expdate);
                 View expdatechild = getLayoutInflater().inflate(R.layout.customcard_prodexpdate, null);

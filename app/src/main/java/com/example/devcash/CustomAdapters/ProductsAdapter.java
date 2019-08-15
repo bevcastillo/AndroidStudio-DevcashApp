@@ -33,29 +33,29 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_products, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(v);
 
-        Intent pintent = new Intent(v.getContext(), EditProduct.class);
-
-        String pname = list.get(viewHolder.getAdapterPosition()).getProd_name();
-        double pprice = list.get(viewHolder.getAdapterPosition()).getProd_price();
-        int pstock = list.get(viewHolder.getAdapterPosition()).getProd_stock();
-        double prop = list.get(viewHolder.getAdapterPosition()).getProd_rop();
-        String pcat = list.get(viewHolder.getAdapterPosition()).getCategory_name();
-        String pavail = list.get(viewHolder.getAdapterPosition()).getProd_status();
-        String psoldby = list.get(viewHolder.getAdapterPosition()).getProd_soldby();
-        String punit = list.get(viewHolder.getAdapterPosition()).getProd_unitof_measure();
-        String pcond = list.get(viewHolder.getAdapterPosition()).getCond_name();
-
-        pintent.putExtra("eprodname", pname);
-        pintent.putExtra("eprodprice", pprice);
-        pintent.putExtra("eprodstock", pstock);
-        pintent.putExtra("eprodrop", prop);
-        pintent.putExtra("eprodcat", pcat);
-        pintent.putExtra("eprodavail", pavail);
-        pintent.putExtra("eprodsoldby", psoldby);
-        pintent.putExtra("eprodunit", punit);
-        pintent.putExtra("eprodcond", pcond);
-
-        v.getContext().startActivity(pintent);
+//        Intent pintent = new Intent(v.getContext(), EditProduct.class);
+//
+//        String pname = list.get(viewHolder.getAdapterPosition()).getProd_name();
+//        double pprice = list.get(viewHolder.getAdapterPosition()).getProd_price();
+//        int pstock = list.get(viewHolder.getAdapterPosition()).getProd_stock();
+//        double prop = list.get(viewHolder.getAdapterPosition()).getProd_rop();
+//        String pcat = list.get(viewHolder.getAdapterPosition()).getCategory_name();
+//        String pavail = list.get(viewHolder.getAdapterPosition()).getProd_status();
+//        String psoldby = list.get(viewHolder.getAdapterPosition()).getProd_soldby();
+//        String punit = list.get(viewHolder.getAdapterPosition()).getProd_unitof_measure();
+//        String pcond = list.get(viewHolder.getAdapterPosition()).getCond_name();
+//
+//        pintent.putExtra("eprodname", pname);
+//        pintent.putExtra("eprodprice", pprice);
+//        pintent.putExtra("eprodstock", pstock);
+//        pintent.putExtra("eprodrop", prop);
+//        pintent.putExtra("eprodcat", pcat);
+//        pintent.putExtra("eprodavail", pavail);
+//        pintent.putExtra("eprodsoldby", psoldby);
+//        pintent.putExtra("eprodunit", punit);
+//        pintent.putExtra("eprodcond", pcond);
+//
+//        v.getContext().startActivity(pintent);
 
         return viewHolder;
 
