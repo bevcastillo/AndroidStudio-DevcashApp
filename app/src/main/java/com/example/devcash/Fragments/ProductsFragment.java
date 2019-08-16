@@ -28,7 +28,7 @@ import android.widget.Toast;
 import com.example.devcash.ADD_UI.AddProductActivity;
 import com.example.devcash.CustomAdapters.ProductsAdapter;
 import com.example.devcash.Object.Product;
-import com.example.devcash.Object.Productslistdata;
+import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,7 +53,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
     FirebaseDatabase firebaseDatabase;
 
     RecyclerView prodrecyclerview;
-    List<Productslistdata> list;
+    List<Productlistdata> list;
     ArrayList<Product> productArrayList;
 
     Toolbar productsToolbar;
@@ -107,7 +107,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                 list = new ArrayList<>();
                                 for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                 Product product = dataSnapshot1.getValue(Product.class);
-                                Productslistdata listdata = new Productslistdata();
+                                Productlistdata listdata = new Productlistdata();
                                 String pname = product.getProd_name();
                                 double prop = product.getProd_rop();
                                 double pprice = product.getProd_price();
@@ -125,7 +125,8 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                 ProductsAdapter adapter = new ProductsAdapter(list);
                                 RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
                                 prodrecyclerview.setLayoutManager(pLayoutManager);
-                                prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                               prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                               prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
                                 prodrecyclerview.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();
 
@@ -154,7 +155,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
 //                list = new ArrayList<>();
 //                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
 //                    Product product = dataSnapshot1.getValue(Product.class);
-//                    Productslistdata listdata = new Productslistdata();
+//                    Productlistdata listdata = new Productlistdata();
 //                    String pname = product.getProd_name();
 //                    double prop = product.getProd_rop();
 //                    double pprice = product.getProd_price();

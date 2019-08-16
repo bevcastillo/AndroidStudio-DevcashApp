@@ -1,28 +1,22 @@
 package com.example.devcash.CustomAdapters;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.devcash.EDIT_UI.EditProduct;
-import com.example.devcash.Object.ProductConditionlistdata;
-import com.example.devcash.Object.Productslistdata;
+import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.R;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
-    List<Productslistdata> list;
+    List<Productlistdata> list;
 
-    public ProductsAdapter(List<Productslistdata> list) {
+    public ProductsAdapter(List<Productlistdata> list) {
         this.list = list;
     }
 
@@ -66,7 +60,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Productslistdata data = list.get(i);
+        Productlistdata data = list.get(i);
         viewHolder.prodname.setText(data.getProd_name());
         viewHolder.prodstatus.setText(data.getProd_status());
         viewHolder.prodprice.setText(String.valueOf(data.getProd_price()));

@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -119,6 +120,7 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
                                 CategoryAdapter adapter = new CategoryAdapter(list);
                                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
                                 categoryrecyclerView.setLayoutManager(layoutManager);
+                                categoryrecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
                                 categoryrecyclerView.setItemAnimator(new DefaultItemAnimator());
                                 categoryrecyclerView.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();

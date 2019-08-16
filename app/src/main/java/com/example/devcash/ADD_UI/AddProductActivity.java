@@ -42,6 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,11 +69,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     ImageView prodphoto, addexpdate, addcondition;
     TextView takephoto, choosephoto;
-    TextInputEditText prodexpdate, prodname, prodprice, prodrop, condcount, prodstock;
+    TextInputEditText prodexpdate, prodname, prodprice, prodrop, condcount, prodstock, prodbrand;
     Spinner prodcondition, produnit, spinnerprodcategory, spinnerdiscount;
     RadioGroup soldby;
     RadioButton soldbybtn, radioeach, radioweight;
-    String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory;
+    String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory, pbrand;
     CheckBox chkavail;
     LinearLayout prodcondlayout, prodexpdatelayout;
     int conditioncount;
@@ -116,6 +117,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         spinnercondition = (Spinner) findViewById(R.id.spinner_prodcondition);
         condcount = (TextInputEditText) findViewById(R.id.textinput_itemcount);
         prodstock = (TextInputEditText) findViewById(R.id.textinput_instock);
+        prodbrand = (TextInputEditText) findViewById(R.id.textinput_prodbrand);
 
         //
         addlayout = (LinearLayout) findViewById(R.id.addplayout);
@@ -251,7 +253,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void addProduct(final String prod_name, final String prod_unitof_measure, final String prod_status, final double prod_price, final double prod_rop, int prod_stock){
+    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final double prod_rop, int prod_stock){
 
         ProductCondition condition = new ProductCondition();
         Category category = new Category();
@@ -267,7 +269,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             condition.setCond_count(count);
         }
 
-        final Product product = new Product(prod_name, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock);
+        final Product product = new Product(prod_name, prod_brand, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock);
         product.setProductCondition(condition);
         product.setCategory(category);
         product.setDiscount(discount);
@@ -275,13 +277,22 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
+        SharedPreferences productshared = getSharedPreferences("ProductPref",MODE_PRIVATE); //creating a shared preference for products
+        final SharedPreferences.Editor product_editor = productshared.edit();
+
+        final Gson gson = new Gson();
+
         businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+                    product_editor.putString("product_id", ProductId); //saving the ProductId to shared preference
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
                         dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
+                        String categoryJson = gson.toJson(product);
+                        product_editor.putString("product", categoryJson);
+                        product_editor.commit();
                     }
                 }
             }
@@ -295,11 +306,19 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     public void insertProduct(){
         String pname = prodname.getText().toString();
+        if(prodbrand.getText().toString().equals("")){
+            prodbrand.setText("No Brand");
+            pbrand =prodbrand.getText().toString();
+
+        }else{
+            pbrand = prodbrand.getText().toString();
+        }
         String pstatus = chkavail.getText().toString();
         int pstock = Integer.parseInt(prodstock.getText().toString());
         double pprice = Double.parseDouble(prodprice.getText().toString());
         double prop = Double.parseDouble(prodrop.getText().toString());
-        addProduct(pname, selectedprodunit, pstatus, pprice, prop, pstock);
+
+        addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock);
         Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
         finish();
 

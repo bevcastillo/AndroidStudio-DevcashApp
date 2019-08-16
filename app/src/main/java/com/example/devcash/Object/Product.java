@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class    Product {
-    String prod_name, prod_unitof_measure, prod_status, prod_datetimeadded;
+    String prod_name, prod_brand, prod_unitof_measure, prod_status, prod_datetimeadded;
     double prod_price, prod_rop;
     public Category category;
     int prod_stock;
@@ -33,8 +33,9 @@ public class    Product {
 //    }
 
 
-    public Product(String prod_name, String prod_unitof_measure, String prod_status, double prod_price, double prod_rop, int prod_stock) {
+    public Product(String prod_name, String prod_brand, String prod_unitof_measure, String prod_status, double prod_price, double prod_rop, int prod_stock) {
         this.prod_name = prod_name;
+        this.prod_brand = prod_brand;
         this.prod_unitof_measure = prod_unitof_measure;
         this.prod_status = prod_status;
         this.prod_price = prod_price;
@@ -125,5 +126,13 @@ public class    Product {
 
     public void setProd_datetimeadded(String prod_datetimeadded) {
         this.prod_datetimeadded = prod_datetimeadded;
+    }
+
+    public String getProd_brand() {
+        return prod_brand;
+    }
+
+    public void setProd_brand(String prod_brand) {
+        this.prod_brand = prod_brand;
     }
 }

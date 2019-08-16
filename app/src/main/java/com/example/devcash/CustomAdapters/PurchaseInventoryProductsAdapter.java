@@ -7,15 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.devcash.Object.Productslistdata;
+import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.R;
 
 import java.util.List;
 
 public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<PurchaseInventoryProductsAdapter.ViewHolder> {
-    List<Productslistdata> list;
+    List<Productlistdata> list;
 
-    public PurchaseInventoryProductsAdapter(List<Productslistdata> list) {
+    public PurchaseInventoryProductsAdapter(List<Productlistdata> list) {
         this.list = list;
     }
 
@@ -28,7 +28,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Productslistdata data = list.get(i);
+        Productlistdata data = list.get(i);
         viewHolder.prodname.setText(data.getProd_name());
         viewHolder.prodprice.setText(String.valueOf(data.getProd_price()));
 

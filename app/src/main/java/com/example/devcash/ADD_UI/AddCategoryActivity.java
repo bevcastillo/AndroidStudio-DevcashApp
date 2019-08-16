@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 
 public class AddCategoryActivity extends AppCompatActivity {
 
@@ -79,13 +80,23 @@ public class AddCategoryActivity extends AppCompatActivity {
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
+        SharedPreferences categoryshared = getSharedPreferences("CategoryPref", MODE_PRIVATE);
+        final SharedPreferences.Editor category_editor = categoryshared.edit();
+
+        final Gson gson = new Gson();
+
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+                    category_editor.putString("category_id", CategoryId);
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
                             mydbreference.child("owner/"+key+"/business/category").child(CategoryId).setValue(category);
+                            String categoryJson = gson.toJson(category);
+                            category_editor.putString("category", categoryJson);
+                            category_editor.commit();
+
 
                     }
                 }

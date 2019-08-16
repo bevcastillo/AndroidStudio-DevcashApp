@@ -122,6 +122,7 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                 ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
                                 RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
                                 servrecyclerview.setLayoutManager(sLayoutManager);
+                                servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
                                 servrecyclerview.setItemAnimator(new DefaultItemAnimator());
                                 servrecyclerview.setAdapter(servicesAdapter);
                                 servicesAdapter.notifyDataSetChanged();

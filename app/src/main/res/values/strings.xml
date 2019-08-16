@@ -415,8 +415,8 @@
     </string-array>
 
     <string-array name="inventory_type">
-        <item>All Products</item>
-        <item>All Services</item>
+        <item>Products</item>
+        <item>Services</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

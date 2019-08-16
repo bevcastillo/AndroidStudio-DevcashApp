@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
-public class Productslistdata {
-    String prod_name, prod_unitof_measure, prod_status, category_name, cond_name;
+public class Productlistdata {
+    String prod_name, prod_brand, prod_unitof_measure, prod_status, category_name, cond_name;
     double prod_price, prod_rop;
     int prod_stock;
 
@@ -68,5 +68,13 @@ public class Productslistdata {
 
     public void setCond_name(String cond_name) {
         this.cond_name = cond_name;
+    }
+
+    public String getProd_brand() {
+        return prod_brand;
+    }
+
+    public void setProd_brand(String prod_brand) {
+        this.prod_brand = prod_brand;
     }
 }

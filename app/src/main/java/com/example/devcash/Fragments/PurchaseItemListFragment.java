@@ -1,8 +1,6 @@
 package com.example.devcash.Fragments;
 
 
-import android.app.Service;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,12 +23,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.CustomAdapters.PurchaseInventoryServicesAdapter;
 import com.example.devcash.Object.Product;
-import com.example.devcash.Object.Productslistdata;
+import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.Object.Services;
 import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
@@ -59,7 +56,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
     DatabaseReference businessownerdbreference;
     FirebaseDatabase firebaseDatabase;
 
-    List<Productslistdata> list;
+    List<Productlistdata> list;
     List<Serviceslistdata> slist;
     //
     Toolbar itemListToolbar;
@@ -152,7 +149,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
                                 list = new ArrayList<>();
                                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                         Product product = dataSnapshot1.getValue(Product.class);
-                                        Productslistdata listdata = new Productslistdata();
+                                        Productlistdata listdata = new Productlistdata();
                                         String prodname = product.getProd_name();
                                         double prodprice = product.getProd_price();
                                         listdata.setProd_name(prodname);
