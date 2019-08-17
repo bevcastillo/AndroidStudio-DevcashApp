@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,15 +23,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 public class EditCategory extends AppCompatActivity implements View.OnClickListener {
 
     private DatabaseReference dbreference;
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference rootRef;
+
+
 
     TextInputEditText editcatname;
     LinearLayout layoutdelete;
+
+    String name;
 
     String category_id;
 
@@ -47,43 +54,139 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
-        dbreference = firebaseDatabase.getReference("/datadevcash/owner");
+        ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
+        rootRef = firebaseDatabase.getReference("/datadevcash");
+
+
 
         //
         layoutdelete.setOnClickListener(this);
 
         Bundle bundle = this.getIntent().getExtras();
         if(bundle!=null){
-            String cat = bundle.getString("categoryname");
-            editcatname.setText(cat);
+            name = bundle.getString("categoryname");
+            editcatname.setText(name);
         }
     }
 
-    public void updateCategory(){
 
+
+//    public void updateCategory(){
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        SharedPreferences categoryshared = getSharedPreferences("CategoryPref", MODE_PRIVATE);
+//        final String catId = (categoryshared.getString("category_id",""));
+//
+//
+//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()){
+//                    for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+//                        final String ownerkey = dataSnapshot1.getKey();
+//                        ownerdbreference.child(ownerkey+"/business/category").addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                if(dataSnapshot.exists()){
+//                                    for(DataSnapshot dataSnapshot2:dataSnapshot.getChildren()){
+//                                        final String categorykey = dataSnapshot2.getKey();
+//                                        dbreference.child("owner/"+ownerkey+"/business/category").orderByKey().equalTo(catId).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                            @Override
+//                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                if(dataSnapshot.exists()){
+//                                                    Toast.makeText(EditCategory.this, ""+categorykey, Toast.LENGTH_SHORT).show();
+//                                                    for(DataSnapshot dataSnapshot3:dataSnapshot.getChildren()){
+//                                                        String key = dataSnapshot3.getKey();
+//                                                        Toast.makeText(EditCategory.this, ""+key, Toast.LENGTH_SHORT).show();
+//                                                    }
+//                                                }else{
+//                                                    Toast.makeText(EditCategory.this, "does not exist", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            }
+//
+//                                            @Override
+//                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                            }
+//                                        });
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//
+//                    }
+//                } else {
+//                    Toast.makeText(EditCategory.this, "Does not exist", Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//    }
+
+
+    public void updateCategory(){
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
         SharedPreferences categoryshared = getSharedPreferences("CategoryPref", MODE_PRIVATE);
-        final String categoryId = (categoryshared.getString("category_id",""));
+        final String catId = (categoryshared.getString("category_id",""));
 
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        final String ownerkey = ds.getKey();
-                        ownerdbreference.child("owner/"+ownerkey+"/business/category").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                        String categorykey = dataSnapshot1.getKey();
-                                        ownerdbreference.child("owner/"+ownerkey+"business/category"+categorykey).equalTo(categoryId).addListenerForSingleValueEvent(new ValueEventListener() {
+
+        ownerdbreference.orderByChild("business/owner_username")
+                .equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                final String ownerKey = ds.getKey();
+                                ownerdbreference.child(ownerKey+"/business/category")
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                ownerdbreference.child("owner/"+ownerkey+"/business/category").child(categoryId).setValue(editcatname);
-                                                Toast.makeText(EditCategory.this, "Category Successfully updated!", Toast.LENGTH_SHORT).show();
+                                                if (dataSnapshot.exists()) {
+                                                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                                        ownerdbreference.child(ownerKey+"/business/category")
+                                                                .orderByChild("category_name")
+                                                                .equalTo(name)
+                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                        if (snapshot.exists()) {
+                                                                            for (DataSnapshot dSnapshot : snapshot.getChildren()) {
+                                                                                Category category = dSnapshot.getValue(Category.class);
+                                                                                if(category.getCategory_name().equals(name)){
+//                                                                                    category.setCategory_name(editcatname.getText().toString());
+                                                                                    dbreference.child("owner/"+ownerKey+"/business/category").child(dSnapshot.getKey()+"/category_name").setValue(editcatname.getText().toString());
+                                                                                    Toast.makeText(EditCategory.this, name+" is updated.", Toast.LENGTH_SHORT).show();
+                                                                                    finish();
+                                                                                }
+                                                                            }
+
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+//
+                                                    }
+                                                }
                                             }
 
                                             @Override
@@ -91,33 +194,92 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
 
                                             }
                                         });
-                                    }
-                                }
                             }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
+
     }
+
 
     public void deleteCategory(){
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
         SharedPreferences categoryshared = getSharedPreferences("CategoryPref", MODE_PRIVATE);
-        final String categoryId = (categoryshared.getString("category_id",""));
+        final String catId = (categoryshared.getString("category_id",""));
+
+
+        ownerdbreference.orderByChild("business/owner_username")
+                .equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                final String ownerKey = ds.getKey();
+                                ownerdbreference.child(ownerKey+"/business/category")
+                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    if (dataSnapshot.exists()) {
+                                                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                                            ownerdbreference.child(ownerKey+"/business/category")
+                                                                    .orderByChild("category_name")
+                                                                    .equalTo(name)
+                                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                            if (snapshot.exists()) {
+                                                                                for (DataSnapshot dSnapshot : snapshot.getChildren()) {
+                                                                                    Category category = dSnapshot.getValue(Category.class);
+                                                                                    if(category.getCategory_name().equals(name)){
+                                                                                        dbreference.child("owner/"+ownerKey+"/business/category").child(dSnapshot.getKey()+"/category_name").setValue(null);
+                                                                                        Toast.makeText(EditCategory.this, name+" is deleted.", Toast.LENGTH_SHORT).show();
+                                                                                        finish();
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                        }
+                                                                    });
+//
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
+                            }
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,17 +317,8 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
                 return true;
             case R.id.action_save:
-//                updateCategory();
-            case R.id.layout_delcategory:
                 updateCategory();
-
-                SharedPreferences categoryshared = getSharedPreferences("CategoryPref", MODE_PRIVATE);
-                final String categoryId = (categoryshared.getString("category_id",""));
-
-                Toast.makeText(this, "Item deleted!"+categoryId, Toast.LENGTH_SHORT).show();
-
-
-                break;
+            break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -176,9 +329,7 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         switch (id){
             case R.id.layout_delcategory:
-                SharedPreferences categoryshared = getSharedPreferences("CategoryPref", MODE_PRIVATE);
-                final String categoryId = (categoryshared.getString("category_id",""));
-                Toast.makeText(this, "You have clicked delete!"+categoryId, Toast.LENGTH_SHORT).show();
+                deleteCategory();
                 break;
         }
     }

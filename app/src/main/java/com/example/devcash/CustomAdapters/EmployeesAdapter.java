@@ -1,6 +1,7 @@
 package com.example.devcash.CustomAdapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.devcash.EDIT_UI.EditEmployee;
 import com.example.devcash.Model.EmployeeList;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.Object.Employeelistdata;
@@ -30,9 +33,31 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_employee,viewGroup,false);
-        return new ViewHolder(v);
+    public ViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
+        final View view;
+        view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_employee, viewGroup, false);
+        final ViewHolder viewHolder = new ViewHolder(view);
+
+        viewHolder.emplname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String emplastname =  list.get(viewHolder.getAdapterPosition()).getEmplname();
+                String empfirstname = list.get(viewHolder.getAdapterPosition()).getEmpfname();
+
+                Intent intent = new Intent(view.getContext(), EditEmployee.class);
+                intent.putExtra("employeelname", emplastname);
+                intent.putExtra("employeefname", empfirstname);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+
+        return viewHolder;
+
+
+
+//        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_employee,viewGroup,false);
+//        return new ViewHolder(v);
     }
 
     @Override

@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.Database.DatabaseHelper;
+import com.example.devcash.GettingStarted;
 import com.example.devcash.Object.Account;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.R;
@@ -41,6 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -139,15 +141,31 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
+        SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
+        final SharedPreferences.Editor emp_editor = empshared.edit();
+
+        SharedPreferences acctshared = getSharedPreferences("AcctShared", MODE_PRIVATE);
+        final SharedPreferences.Editor acct_editor = acctshared.edit();
+
+        final Gson gson = new Gson();
+
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+                    emp_editor.putString("employee_id", EmployeeId);
+                    acct_editor.putString("acct_id", AccountId);
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
-
                         ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
+                        String acctJson = gson.toJson(acct);
+                        acct_editor.putString("employee", acctJson);
+                        acct_editor.commit();
+
                         ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
+                        String empJson = gson.toJson(employee);
+                        emp_editor.putString("employee", empJson);
+                        emp_editor.commit();
                     }
                 }
             }
@@ -300,16 +318,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         builder.show();
     }
 
-    public void errorDialog(){
-        AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(this);
-
-        builder.setMessage("Password did not match");
-        builder.setNeutralButton("OKAY", null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
     public void successDialog(){
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
@@ -349,10 +357,10 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             return true;
         }else if(id == R.id.action_save){
                 addRadioGroupListener();
-                insertAccount();
+//                insertAccount();
                 insertEmployee();
 //                successDialog();
-            Toast.makeText(getApplicationContext(), "New employee has been added!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "New employee has been added!", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
 

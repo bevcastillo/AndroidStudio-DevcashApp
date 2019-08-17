@@ -105,7 +105,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                             editor.putString("account", accountJson);
                                             editor.commit();
                                         } else {
-                                            Toast.makeText(OwnerLoginActivity.this, "Account not found", Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(OwnerLoginActivity.this, "Account not found", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }
