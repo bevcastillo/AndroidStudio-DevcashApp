@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.CustomAdapters.PurchaseInventoryServicesAdapter;
@@ -137,6 +138,8 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
+        Toast.makeText(getActivity(), username, Toast.LENGTH_SHORT).show();
+
         businessownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -229,37 +232,6 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
             }
         });
     }
-
-//    public void  viewAllServices(){
-//        servicesdbreference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                slist = new ArrayList<>();
-//                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Services services = dataSnapshot1.getValue(Services.class);
-//                    Serviceslistdata slistdata = new Serviceslistdata();
-//                    String sname = services.getService_name();
-//                    double sprice = services.getService_price();
-//                    slistdata.setServname(sname);
-//                    slistdata.setServprice(sprice);
-//                    slist.add(slistdata);
-//                }
-//                PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist);
-//                GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),4);
-//                sgridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//                recyclerViewitemlist.setLayoutManager(sgridLayoutManager);
-//                recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
-//                recyclerViewitemlist.setAdapter(sadapter);
-//                sadapter.notifyDataSetChanged();
-//            }
-//
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     //handles the search menu
     @Override

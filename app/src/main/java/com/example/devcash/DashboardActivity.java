@@ -53,8 +53,6 @@ public class DashboardActivity extends AppCompatActivity
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
 
-    TextView txtowneremail, txtownername;
-
     List<Accountlistdata> list;
 
     @Override
@@ -66,20 +64,17 @@ public class DashboardActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        //
+
+        invalidateOptionsMenu();
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
         View header = navigationView.getHeaderView(0);
         TextView owneremail = (TextView) header.findViewById(R.id.header_owneremail);
+
+
         //
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -152,6 +147,12 @@ public class DashboardActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.dashboard, menu);
+
+//        MenuItem item = menu.findItem(R.id.nav_inventory);
+//        item.findItem(setVisible(false));
+
+
+
         return true;
     }
 
@@ -169,6 +170,7 @@ public class DashboardActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
 
     //switch for nav drawer menu
     private void displaySelectedScreen(int id){

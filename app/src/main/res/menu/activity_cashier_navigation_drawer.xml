@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_cashiersales"
+            android:icon="@drawable/ic_shopping_basket"
+            android:title="@string/sales" />
+        <item
+            android:id="@+id/nav_cashierprof"
+            android:icon="@drawable/ic_user_profile"
+            android:title="My Profile" />
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_cashierlogout"
+                android:icon="@drawable/ic_logout"
+                android:title="Logout"
+                />
+        </menu>
+
+    </item>
+
+</menu>

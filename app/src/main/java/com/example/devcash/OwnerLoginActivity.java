@@ -75,8 +75,10 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
         SharedPreferences ownerPref = getApplicationContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final SharedPreferences.Editor editor = ownerPref.edit();
 
-        final Gson gson = new Gson();
+        SharedPreferences businessPref = getApplicationContext().getSharedPreferences("BusinessPref", MODE_PRIVATE);
+        final SharedPreferences.Editor businessEditor = businessPref.edit();
 
+        final Gson gson = new Gson();
 
         final String owneruser = owneruname.getText().toString();
         final String ownerpassword = ownerpassw.getText().toString();
@@ -89,6 +91,24 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         final String key = ds.getKey();
+
+                        ownerbusinessReference.child(key+"/business").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    Business business = dataSnapshot.getValue(Business.class);
+
+                                    String businessJson = gson.toJson(business);
+                                    businessEditor.putString("business", businessJson);
+                                    businessEditor.commit();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
 
                         ownerbusinessReference.child(key+"/business/account").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override

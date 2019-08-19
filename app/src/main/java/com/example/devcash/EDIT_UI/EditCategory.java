@@ -164,13 +164,36 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
                                                                 .equalTo(name)
                                                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                                                     @Override
-                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                    public void onDataChange(@NonNull final DataSnapshot snapshot) {
                                                                         if (snapshot.exists()) {
                                                                             for (DataSnapshot dSnapshot : snapshot.getChildren()) {
                                                                                 Category category = dSnapshot.getValue(Category.class);
                                                                                 if(category.getCategory_name().equals(name)){
 //                                                                                    category.setCategory_name(editcatname.getText().toString());
                                                                                     dbreference.child("owner/"+ownerKey+"/business/category").child(dSnapshot.getKey()+"/category_name").setValue(editcatname.getText().toString());
+//                                                                                    dbreference.child("owner/"+ownerKey+"/business/product").child("category/category_name").setValue(editcatname.getText().toString());
+                                                                                    ownerdbreference.child(ownerKey+"/business/product")
+                                                                                            .orderByChild("category/category_name")
+                                                                                            .equalTo(name)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                        @Override
+                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                            if(dataSnapshot.exists()){
+                                                                                                for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                                                                    dbreference.child("owner/"+ownerKey+"/business/product").child(dataSnapshot2.getKey()+"/category/category_name").setValue(editcatname.getText().toString());
+                                                                                                }
+                                                                                            } else {
+                                                                                                Toast.makeText(EditCategory.this, dataSnapshot.getChildrenCount()+"", Toast.LENGTH_SHORT).show();
+                                                                                            }
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                        }
+                                                                                    });
+
+
                                                                                     Toast.makeText(EditCategory.this, name+" is updated.", Toast.LENGTH_SHORT).show();
                                                                                     finish();
                                                                                 }
@@ -208,14 +231,12 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     public void deleteCategory(){
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
         SharedPreferences categoryshared = getSharedPreferences("CategoryPref", MODE_PRIVATE);
         final String catId = (categoryshared.getString("category_id",""));
-
 
         ownerdbreference.orderByChild("business/owner_username")
                 .equalTo(username)
@@ -227,45 +248,66 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                 final String ownerKey = ds.getKey();
                                 ownerdbreference.child(ownerKey+"/business/category")
-                                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                    if (dataSnapshot.exists()) {
-                                                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                                            ownerdbreference.child(ownerKey+"/business/category")
-                                                                    .orderByChild("category_name")
-                                                                    .equalTo(name)
-                                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                        @Override
-                                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                            if (snapshot.exists()) {
-                                                                                for (DataSnapshot dSnapshot : snapshot.getChildren()) {
-                                                                                    Category category = dSnapshot.getValue(Category.class);
-                                                                                    if(category.getCategory_name().equals(name)){
-                                                                                        dbreference.child("owner/"+ownerKey+"/business/category").child(dSnapshot.getKey()+"/category_name").setValue(null);
-                                                                                        Toast.makeText(EditCategory.this, name+" is deleted.", Toast.LENGTH_SHORT).show();
-                                                                                        finish();
-                                                                                    }
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.exists()) {
+                                                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                                        ownerdbreference.child(ownerKey+"/business/category")
+                                                                .orderByChild("category_name")
+                                                                .equalTo(name)
+                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull final DataSnapshot snapshot) {
+                                                                        if (snapshot.exists()) {
+                                                                            for (DataSnapshot dSnapshot : snapshot.getChildren()) {
+                                                                                Category category = dSnapshot.getValue(Category.class);
+                                                                                if(category.getCategory_name().equals(name)){
+//                                                                                    category.setCategory_name(editcatname.getText().toString());
+                                                                                    dbreference.child("owner/"+ownerKey+"/business/category").child(dSnapshot.getKey()+"/category_name").setValue(null);
+                                                                                    ownerdbreference.child(ownerKey+"/business/product")
+                                                                                            .orderByChild("category/category_name")
+                                                                                            .equalTo(name)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                                    if(dataSnapshot.exists()){
+                                                                                                        for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                                                                            dbreference.child("owner/"+ownerKey+"/business/product").child(dataSnapshot2.getKey()+"/category/category_name").setValue("No Category");
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        Toast.makeText(EditCategory.this, dataSnapshot.getChildrenCount()+"", Toast.LENGTH_SHORT).show();
+                                                                                                    }
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+                                                                                    Toast.makeText(EditCategory.this, name+" is deleted.", Toast.LENGTH_SHORT).show();
+                                                                                    finish();
                                                                                 }
-
                                                                             }
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                                                         }
-                                                                    });
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
 //
-                                                        }
                                                     }
                                                 }
+                                            }
 
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                }
-                                            });
+                                            }
+                                        });
                             }
 
 
@@ -279,6 +321,79 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
                 });
 
     }
+
+
+
+//    public void deleteCategory(){
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        SharedPreferences categoryshared = getSharedPreferences("CategoryPref", MODE_PRIVATE);
+//        final String catId = (categoryshared.getString("category_id",""));
+//
+//
+//        ownerdbreference.orderByChild("business/owner_username")
+//                .equalTo(username)
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                        if (dataSnapshot.exists()) {
+//                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                                final String ownerKey = ds.getKey();
+//                                ownerdbreference.child(ownerKey+"/business/category")
+//                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                @Override
+//                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                    if (dataSnapshot.exists()) {
+//                                                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                                                            ownerdbreference.child(ownerKey+"/business/category")
+//                                                                    .orderByChild("category_name")
+//                                                                    .equalTo(name)
+//                                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                                        @Override
+//                                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                                                            if (snapshot.exists()) {
+//                                                                                for (DataSnapshot dSnapshot : snapshot.getChildren()) {
+//                                                                                    Category category = dSnapshot.getValue(Category.class);
+//                                                                                    if(category.getCategory_name().equals(name)){
+//                                                                                        dbreference.child("owner/"+ownerKey+"/business/category").child(dSnapshot.getKey()+"/category_name").setValue(null);
+//                                                                                        Toast.makeText(EditCategory.this, name+" is deleted.", Toast.LENGTH_SHORT).show();
+//                                                                                        finish();
+//                                                                                    }
+//                                                                                }
+//
+//                                                                            }
+//                                                                        }
+//
+//                                                                        @Override
+//                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                                        }
+//                                                                    });
+////
+//                                                        }
+//                                                    }
+//                                                }
+//
+//                                                @Override
+//                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                }
+//                                            });
+//                            }
+//
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+//
+//    }
 
 
     @Override

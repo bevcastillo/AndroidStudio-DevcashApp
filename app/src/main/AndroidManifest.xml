@@ -18,16 +18,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EmployeeAccountInfo"></activity>
+        <activity
+            android:name=".InventoryNav"
+            android:label="@string/title_activity_inventory_nav"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".CashierNavigation$NoTask" />
+        <activity
+            android:name=".CashierNavigation"
+            android:label="@string/title_activity_cashier_navigation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EmployeeAccountInfo" />
         <activity
             android:name=".OwnerInformation"
             android:label="Account Information"
-            android:screenOrientation="landscape"
-            android:parentActivityName=".Settings_UI.SettingsActivity"/>
+            android:parentActivityName=".Settings_UI.SettingsActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".EnterpriseInfo"
             android:label="Enterprise Information"
-            android:parentActivityName=".Settings_UI.SettingsActivity"/>
+            android:parentActivityName=".Settings_UI.SettingsActivity" />
         <activity
             android:name=".EDIT_UI.EditEmployee"
             android:label="Edit Employee" />
@@ -51,7 +60,7 @@
         <activity android:name=".WhyDevcash" />
         <activity android:name=".HelpCenterEmployees" />
         <activity android:name=".HelpCenterInventory" />
-        <activity android:name=".HelpCenterSales" />
+        <activity android:name=".Settings_UI.HelpCenterSales" />
         <activity android:name=".GettingStarted" />
         <activity android:name=".OwnerSignupActivity" />
         <activity
@@ -68,7 +77,7 @@
             android:label="@string/refund"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".DetailedReceiptActivity"
+            android:name=".Purchase_Transaction.DetailedReceiptActivity"
             android:label="@string/receipt_detail"
             android:screenOrientation="landscape" />
         <activity

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_invInventory"
+            android:icon="@drawable/ic_store"
+            android:title="@string/inventory" />
+        <item
+            android:id="@+id/nav_invprof"
+            android:icon="@drawable/ic_user_profile"
+            android:title="My Profile" />
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_invlogout"
+                android:icon="@drawable/ic_logout"
+                android:title="Logout"
+                />
+        </menu>
+
+    </item>
+
+</menu>

@@ -122,12 +122,12 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void addEmployee(final String emp_lname, final String emp_fname, final String emp_task, final String emp_gender,
-                            final String emp_bdate, final String emp_phone, final String emp_addr, final String accountUsername, final String accountPassw){
+                            final String emp_bdate, final String emp_phone, final String emp_addr, final String accountUsername, final String accountPassw, final String emp_workfor){
     Log.i(TAG,"addEmployee()");
 
     //
 
-        final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr);
+        final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr, emp_workfor);
         final Account acct = new Account();
 
 
@@ -217,14 +217,24 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         String addr = empaddr.getText().toString();
         String email = empEmail.getText().toString();
 
+        Account account = new Account();
+
         String newfname = fname.substring(0,1).toLowerCase();
         String newuname = newfname+lname.toLowerCase();
         String generatedNum = Integer.toString(generateRandomNumber(1, 999));
         empuname.setText(newuname+generatedNum);
         final String uname = empuname.getText().toString();
+//
+        account.setAcct_uname(uname);
+        account.setAcct_passw(uname);
 
-        addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, addr, uname, uname);
-        finish();
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+
+        addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, addr, uname, uname, username);
+        successDialog(account);
+//        finish();
     }
 
     public int generateRandomNumber(int min, int max) {
@@ -318,7 +328,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         builder.show();
     }
 
-    public void successDialog(){
+    public void successDialog(Account account){
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -329,7 +339,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         final TextView username = (TextView) dialogView.findViewById(R.id.employeeusername);
         final TextView password = (TextView) dialogView.findViewById(R.id.employeepassword);
 
-        Account account = new Account();
         String lname = empLname.getText().toString();
         String fname = empFname.getText().toString();
         String mfullname = fname+" "+lname;

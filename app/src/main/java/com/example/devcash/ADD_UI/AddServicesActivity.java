@@ -94,19 +94,37 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
         final ArrayList<String> categories = new ArrayList<String>();
 
-        categorydbreference.addValueEventListener(new ValueEventListener() {
+        //
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Category category = dataSnapshot1.getValue(Category.class);
-                    categories.add(category.getCategory_name());
-                }
-                categories.add("No Category");
-                categories.add("Create Category");
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddServicesActivity.this, R.layout.spinner_categoryitem, categories);
-                spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
-                spinnercategory.setAdapter(spinnerArrayAdapter);
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/category").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                    Category category = dataSnapshot1.getValue(Category.class);
+                                    categories.add(category.getCategory_name());
+                                }
+                                categories.add("No Category");
+                                categories.add("Create Category");
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddServicesActivity.this, R.layout.spinner_categoryitem, categories);
+                                spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
+                                spinnercategory.setAdapter(spinnerArrayAdapter);
+                            }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
             }
 
             @Override
@@ -116,17 +134,33 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         });
 
         final ArrayList<String> discounts = new ArrayList<String>();
-        discountsdbreference.addValueEventListener(new ValueEventListener() {
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    Discount discount = dataSnapshot1.getValue(Discount.class);
-                    discounts.add(discount.getDisc_code());
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/discount").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                    Discount discount1 = dataSnapshot1.getValue(Discount.class);
+                                    discounts.add(discount1.getDisc_code());
+                                }
+                                discounts.add("No Discount");
+                                discounts.add("Create Discount");
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddServicesActivity.this, R.layout.spinner_discountitem, discounts);
+                                spinnerdiscounts.setAdapter(spinnerArrayAdapter);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
-                discounts.add("No Discount");
-                discounts.add("Create Discount");
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(AddServicesActivity.this, R.layout.spinner_discountitem, discounts);
-                spinnerdiscounts.setAdapter(spinnerArrayAdapter);
             }
 
             @Override

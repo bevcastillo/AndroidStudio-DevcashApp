@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.devcash.Settings_UI.HelpCenterSales;
+
 public class HelpCenterActivity extends AppCompatActivity implements View.OnClickListener {
 
     LinearLayout gettingstarted, sales, inventory, employees, reports, payments;

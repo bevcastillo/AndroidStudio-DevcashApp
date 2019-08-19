@@ -95,6 +95,8 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
+        Toast.makeText(getActivity(), username+"", Toast.LENGTH_SHORT).show();
+
         businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

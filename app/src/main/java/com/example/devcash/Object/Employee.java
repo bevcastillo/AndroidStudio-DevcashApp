@@ -8,7 +8,7 @@ import android.net.Uri;
 
 public class Employee {
 
-    public String emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr;
+    public String emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr, emp_workfor;
     public Account account;
 
     public Employee() {
@@ -16,7 +16,7 @@ public class Employee {
 
 
 
-    public Employee(String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone, String emp_addr) {
+    public Employee(String emp_lname, String emp_fname, String emp_task, String emp_gender, String emp_bdate, String emp_phone, String emp_addr, String emp_workfor) {
         this.emp_lname = emp_lname;
         this.emp_fname = emp_fname;
         this.emp_task = emp_task;
@@ -25,6 +25,7 @@ public class Employee {
         this.emp_phone = emp_phone;
         this.emp_addr = emp_addr;
         this.account = account;
+        this.emp_workfor = emp_workfor;
     }
 
 
@@ -90,5 +91,13 @@ public class Employee {
 
     public void setEmp_addr(String emp_addr) {
         this.emp_addr = emp_addr;
+    }
+
+    public String getEmp_workfor() {
+        return emp_workfor;
+    }
+
+    public void setEmp_workfor(String emp_workfor) {
+        this.emp_workfor = emp_workfor;
     }
 }

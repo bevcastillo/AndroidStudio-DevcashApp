@@ -1,6 +1,8 @@
 package com.example.devcash.Object;
 
 public class Business {
+    public String owner_lname, owner_fname, owner_mobileno, owner_username;
+
     public Account account;
     public Enterprise enterprise;
     public ProductCondition productCondition;
@@ -75,5 +77,37 @@ public class Business {
 
     public void setDiscount(Discount discount) {
         this.discount = discount;
+    }
+
+    public String getOwner_lname() {
+        return owner_lname;
+    }
+
+    public void setOwner_lname(String owner_lname) {
+        this.owner_lname = owner_lname;
+    }
+
+    public String getOwner_fname() {
+        return owner_fname;
+    }
+
+    public void setOwner_fname(String owner_fname) {
+        this.owner_fname = owner_fname;
+    }
+
+    public String getOwner_mobileno() {
+        return owner_mobileno;
+    }
+
+    public void setOwner_mobileno(String owner_mobileno) {
+        this.owner_mobileno = owner_mobileno;
+    }
+
+    public String getOwner_username() {
+        return owner_username;
+    }
+
+    public void setOwner_username(String owner_username) {
+        this.owner_username = owner_username;
     }
 }
