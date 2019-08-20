@@ -1,6 +1,7 @@
 package com.example.devcash.CustomAdapters;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -32,16 +33,31 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
         viewHolder.disccode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String discode = list.get(viewHolder.getAdapterPosition()).getDisc_code();
+                double discvalue = list.get(viewHolder.getAdapterPosition()).getDisc_value();
+                String discstart = list.get(viewHolder.getAdapterPosition()).getDisc_start();
+                String discend = list.get(viewHolder.getAdapterPosition()).getDisc_end();
+                String discstatus = list.get(viewHolder.getAdapterPosition()).getDisc_status();
+                String disctype = list.get(viewHolder.getAdapterPosition()).getDisc_type();
+
                 Intent edit = new Intent(v.getContext(), EditDiscount.class);
+                edit.putExtra("discountcode", discode);
+                edit.putExtra("discountstart", discstart);
+                edit.putExtra("discountend", discend);
+//                edit.putExtra("discountvalue", discvalue);
+
+                // intent will not store double variables so we store them in bundle and pass them to the intent
+                Bundle b = new Bundle();
+                b.putDouble("discountvalue", discvalue);
+                edit.putExtras(b);
+                edit.putExtra("discountstatus", discstatus);
+                edit.putExtra("discounttype", disctype);
                 v.getContext().startActivity(edit);
             }
         });
 
 
         return viewHolder;
-
-//        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_discount, viewGroup, false);
-//        return new ViewHolder(view);
     }
 
     @Override
