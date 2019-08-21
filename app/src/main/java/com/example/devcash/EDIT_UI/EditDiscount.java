@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.devcash.Object.Discount;
 import com.example.devcash.Object.Discountlistdata;
@@ -22,18 +24,17 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class EditDiscount extends AppCompatActivity implements View.OnClickListener {
+public class EditDiscount extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private TextInputEditText code, value, startdate, enddate;
-    private String selectedtype, selectedstatus,dcode, dstart, dend;
+    private String dtype, selecteddstatus,dcode, dstart, dend;
     private double dvalue;
-    private Spinner spinnerstatus;
+    private Spinner status;
     private RadioGroup radioGrouptype;
     RadioButton radioButtonpercentage, radioButtonamount;
     private LinearLayout deletelayout;
     private int pos;
 
-    ArrayList<Discount> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +50,14 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
         value = (TextInputEditText) findViewById(R.id.textinput_amt);
         startdate = (TextInputEditText) findViewById(R.id.textdisc_startdate);
         enddate = (TextInputEditText) findViewById(R.id.textdisc_enddate);
-        spinnerstatus = (Spinner) findViewById(R.id.spinner_discstatus);
+        status = (Spinner) findViewById(R.id.spinner_discstatus);
 
         deletelayout = (LinearLayout) findViewById(R.id.layout_delcategory);
 
+        //listeners
         deletelayout.setOnClickListener(this);
-
-
+        status.setOnItemSelectedListener(this);
         //
-
-
 
     }
 
@@ -72,23 +71,23 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
 
+        String [] statuslist = getResources().getStringArray(R.array.disc_status);
+
         Bundle bundle = this.getIntent().getExtras();
         if(bundle!=null){
             dcode = bundle.getString("discountcode");
             dvalue = bundle.getDouble("discountvalue");
-            selectedtype = bundle.getString("discountstatus");
+            selecteddstatus = bundle.getString("discountstatus");
 
-            for (int i=0; i<list.size(); i++){
-                if(list.get(i).equals(selectedtype)){
+            this.code.setText(dcode);
+            this.value.setText(Double.toString(dvalue));
+
+            for (int i=0; i<statuslist.length; i++){
+                if(statuslist[i].equals(selecteddstatus)){
                     pos = i;
-                    break;
                 }
-
-                spinnerstatus.setSelection(pos);
-                code.setText(dcode);
-                value.setText(Double.toString(dvalue));
+                status.setSelection(pos);
             }
-
         }
     }
 
@@ -135,5 +134,20 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
             case R.id.layout_delcategory:
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int sid = parent.getId();
+        switch (sid){
+            case R.id.spinner_discstatus:
+                selecteddstatus = this.status.getItemAtPosition(position).toString();  
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
