@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class Employeelistdata {
-    public String emplname, empfname, emptask, empaddr, acctuname, acctemail;
+    public String emplname, empfname, emptask, empaddr, emp_phone, emp_gender, acctuname, acctemail;
 
     public String getEmplname() {
         return emplname;
@@ -49,5 +49,21 @@ public class Employeelistdata {
 
     public void setAcctemail(String acctemail) {
         this.acctemail = acctemail;
+    }
+
+    public String getEmp_phone() {
+        return emp_phone;
+    }
+
+    public void setEmp_phone(String emp_phone) {
+        this.emp_phone = emp_phone;
+    }
+
+    public String getEmp_gender() {
+        return emp_gender;
+    }
+
+    public void setEmp_gender(String emp_gender) {
+        this.emp_gender = emp_gender;
     }
 }

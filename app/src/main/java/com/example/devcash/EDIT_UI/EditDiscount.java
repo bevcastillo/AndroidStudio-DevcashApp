@@ -1,7 +1,10 @@
 package com.example.devcash.EDIT_UI;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,21 +23,33 @@ import android.widget.Toast;
 import com.example.devcash.Object.Discount;
 import com.example.devcash.Object.Discountlistdata;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class EditDiscount extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private TextInputEditText code, value, startdate, enddate;
-    private String dtype, selecteddstatus,dcode, dstart, dend;
+    private String selectedtype, selecteddstatus,dcode, dstart, dend;
     private double dvalue;
     private Spinner status;
     private RadioGroup radioGrouptype;
-    RadioButton radioButtonpercentage, radioButtonamount;
+    RadioButton radioButtonpercentage, radioButtonamount, btntype;
     private LinearLayout deletelayout;
     private int pos;
+
+    private DatePickerDialog datePickerDialog;
+
+    private DatabaseReference dbreference;
+    private DatabaseReference ownerdbreference;
+    private FirebaseDatabase firebaseDatabase;
 
 
     @Override
@@ -55,10 +71,16 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
         deletelayout = (LinearLayout) findViewById(R.id.layout_delcategory);
 
         //listeners
+        startdate.setOnClickListener(this);
+        enddate.setOnClickListener(this);
         deletelayout.setOnClickListener(this);
         status.setOnItemSelectedListener(this);
         //
 
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dbreference = firebaseDatabase.getReference("/datadevcash");
+        ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
     }
 
     @Override
@@ -78,17 +100,73 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
             dcode = bundle.getString("discountcode");
             dvalue = bundle.getDouble("discountvalue");
             selecteddstatus = bundle.getString("discountstatus");
+            dstart = bundle.getString("discountstart");
+            dend = bundle.getString("discountend");
+            selectedtype = bundle.getString("discounttype");
 
-            this.code.setText(dcode);
-            this.value.setText(Double.toString(dvalue));
 
             for (int i=0; i<statuslist.length; i++){
                 if(statuslist[i].equals(selecteddstatus)){
                     pos = i;
                 }
+                code.setText(dcode);
+                value.setText(Double.toString(dvalue));
                 status.setSelection(pos);
+                startdate.setText(dstart);
+                enddate.setText(dend);
+                getDiscDetails();
+
             }
         }
+    }
+
+    public void getDiscDetails(){
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username")
+                .equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        final String ownerkey = ds.getKey();
+                        ownerdbreference.child(ownerkey+"/business/discount")
+                                        .orderByChild("disc_code")
+                                        .equalTo(dcode)
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                               if (dataSnapshot.exists()){
+                                                   for (DataSnapshot ds1: dataSnapshot.getChildren()){
+                                                       Discount discount = ds1.getValue(Discount.class);
+                                                       selectedtype = discount.getDisc_type();
+                                                       if(selectedtype.equals(radioButtonamount.getText())){
+                                                           radioButtonamount.setChecked(true);
+                                                           radioButtonpercentage.setChecked(false);
+                                                       } else {
+                                                           radioButtonamount.setChecked(false);
+                                                           radioButtonpercentage.setChecked(true);
+                                                       }
+                                                   }
+                                               }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -121,17 +199,56 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
                 return true;
             case R.id.action_save:
+                addRadioGroupListener();
 
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+     public void addRadioGroupListener(){
+        int radioid = radioGrouptype.getCheckedRadioButtonId();
+         btntype = (RadioButton) findViewById(radioid);
+         selectedtype = btntype.getText().toString();
+     }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
             case R.id.layout_delcategory:
+                break;
+            case R.id.textdisc_startdate:
+                final Calendar scalendar = Calendar.getInstance();
+                int sYear = scalendar.get(Calendar.YEAR);
+                int sMonth = scalendar.get(Calendar.MONTH);
+                int sDay = scalendar.get(Calendar.DAY_OF_MONTH);
+
+                //
+                datePickerDialog = new DatePickerDialog(EditDiscount.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        startdate.setText(dayOfMonth + "/"
+                                            + (month + 1) + "/" + year) ;
+                    }
+                }, sYear, sMonth, sDay);
+                datePickerDialog.show();
+                break;
+            case R.id.textdisc_enddate:
+                final Calendar ecalendar = Calendar.getInstance();
+                int eYear = ecalendar.get(Calendar.YEAR);
+                int eMonth = ecalendar.get(Calendar.MONTH);
+                int eDay = ecalendar.get(Calendar.DAY_OF_MONTH);
+
+                //
+                datePickerDialog = new DatePickerDialog(EditDiscount.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        enddate.setText(dayOfMonth + "/"
+                                        + (month + 1) + "/" + year);
+                    }
+                }, eYear, eMonth, eDay);
+                datePickerDialog.show();
                 break;
         }
     }

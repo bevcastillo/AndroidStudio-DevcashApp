@@ -43,10 +43,18 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
             public void onClick(View v) {
                 String emplastname =  list.get(viewHolder.getAdapterPosition()).getEmplname();
                 String empfirstname = list.get(viewHolder.getAdapterPosition()).getEmpfname();
+                String emptask = list.get(viewHolder.getAdapterPosition()).getEmptask();
+                String empphone = list.get(viewHolder.getAdapterPosition()).getEmp_phone();
+                String empgender = list.get(viewHolder.getAdapterPosition()).getEmp_gender();
 
                 Intent intent = new Intent(view.getContext(), EditEmployee.class);
                 intent.putExtra("employeelname", emplastname);
                 intent.putExtra("employeefname", empfirstname);
+                intent.putExtra("employeetask", emptask);
+                intent.putExtra("employeephone", empphone);
+                intent.putExtra("employeegender", empgender);
+
+                Toast.makeText(v.getContext(), "Phone: "+empphone+"\nGender: "+empgender, Toast.LENGTH_SHORT).show();
                 v.getContext().startActivity(intent);
             }
         });

@@ -83,7 +83,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:errorEnabled="true">
+                        app:errorEnabled="true"
+                        android:visibility="gone">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/text_input_dob"
@@ -168,7 +169,8 @@
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorEnabled="true">
+                            app:errorEnabled="true"
+                            android:visibility="gone">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/textinp_empaddress"

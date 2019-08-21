@@ -122,16 +122,17 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void addEmployee(final String emp_lname, final String emp_fname, final String emp_task, final String emp_gender,
-                            final String emp_bdate, final String emp_phone, final String emp_addr, final String accountUsername, final String accountPassw, final String emp_workfor){
+                             final String emp_phone, final String accountUsername, final String accountEmail, final String accountPassw, final String emp_workfor){
     Log.i(TAG,"addEmployee()");
 
     //
 
-        final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_bdate, emp_phone, emp_addr, emp_workfor);
+        final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_phone, emp_workfor);
         final Account acct = new Account();
 
 
         acct.setAcct_uname(accountUsername);
+        acct.setAcct_email("");
         acct.setAcct_passw(accountPassw);
         acct.setAcct_status("Active");
         acct.setAcct_type("Employee");
@@ -212,13 +213,9 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         Log.d(TAG,"insertEmployee()");
         String lname = empLname.getText().toString();
         String fname = empFname.getText().toString();
-        String bdate = empbdate.getText().toString();
         String textphone = empPhone.getText().toString();
-        String addr = empaddr.getText().toString();
-        String email = empEmail.getText().toString();
 
         Account account = new Account();
-
         String newfname = fname.substring(0,1).toLowerCase();
         String newuname = newfname+lname.toLowerCase();
         String generatedNum = Integer.toString(generateRandomNumber(1, 999));
@@ -227,12 +224,13 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 //
         account.setAcct_uname(uname);
         account.setAcct_passw(uname);
+        account.setAcct_email("");
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
 
-        addEmployee(lname, fname, selectedemptask, selectedgender, bdate, textphone, addr, uname, uname, username);
+        addEmployee(lname, fname, selectedemptask, selectedgender, textphone, uname, null, uname, username);
         successDialog(account);
 //        finish();
     }

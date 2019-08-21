@@ -8,15 +8,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.R;
 
-public class EditEmployee extends AppCompatActivity implements View.OnClickListener {
+import org.w3c.dom.Text;
 
-    TextInputEditText emplname, empfname;
-    LinearLayout layoutdelete;
+public class EditEmployee extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
+    private TextInputEditText emplname, empfname;
+    private LinearLayout layoutdelete;
+    private Spinner emptask;
+    private String lastname, firstname, selectedtask, gender, phone;
+    private int pos;
+
+    private TextView txtempname, txtempgender, txtempphone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +39,43 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         emplname = (TextInputEditText) findViewById(R.id.textinput_editemplname);
         empfname = (TextInputEditText) findViewById(R.id.textinput_editempfname);
         layoutdelete = (LinearLayout) findViewById(R.id.layout_delemployee);
-
-        layoutdelete.setOnClickListener(this);
+        emptask = (Spinner) findViewById(R.id.spinner_emptask);
 
         //
+        txtempname = (TextView) findViewById(R.id.editempname);
+        txtempgender = (TextView) findViewById(R.id.editempgender);
+        txtempphone = (TextView) findViewById(R.id.editempnumber);
+
+        layoutdelete.setOnClickListener(this);
+        emptask.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        String [] tasklist = getResources().getStringArray(R.array.task_assign);
+
         Bundle bundle = this.getIntent().getExtras();
         if(bundle!=null){
-            String lname = bundle.getString("employeelname");
-            String fname = bundle.getString("employeefname");
+            lastname = bundle.getString("employeelname");
+            firstname = bundle.getString("employeefname");
+            selectedtask = bundle.getString("employeetask");
+            gender = bundle.getString("employeegender");
+            phone = bundle.getString("employeephone");
 
-            emplname.setText(lname);
-            empfname.setText(fname);
+            for (int i=0; i<tasklist.length; i++){
+                if(tasklist[i].equals(selectedtask)){
+                    pos = i;
+                }
+
+                txtempname.setText(lastname+", "+firstname);
+                emptask.setSelection(pos);
+                txtempgender.setText(gender);
+                txtempphone.setText(phone);
+            }
+
         }
-
     }
 
     @Override
@@ -84,10 +118,22 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         switch (id){
             case R.id.layout_delemployee:
-                SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
-                final String employeeId =(empshared.getString("employee_id",""));
-
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            int sid = parent.getId();
+            switch (sid){
+                case R.id.spinner_emptask:
+                    selectedtask = emptask.getItemAtPosition(position).toString();
+                    break;
+            }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

@@ -8,6 +8,7 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.devcash.EDIT_UI.EditDiscount;
@@ -17,6 +18,7 @@ import com.example.devcash.R;
 import java.util.List;
 
 public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHolder> {
+
     List<Discountlistdata> list;
 
     public DiscountAdapter(List<Discountlistdata> list) {
@@ -44,8 +46,6 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
                 edit.putExtra("discountcode", discode);
                 edit.putExtra("discountstart", discstart);
                 edit.putExtra("discountend", discend);
-//                edit.putExtra("discountvalue", discvalue);
-
                 // intent will not store double variables so we store them in bundle and pass them to the intent
                 Bundle b = new Bundle();
                 b.putDouble("discountvalue", discvalue);
