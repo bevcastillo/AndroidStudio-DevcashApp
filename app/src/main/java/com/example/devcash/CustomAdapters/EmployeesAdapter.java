@@ -46,6 +46,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
                 String emptask = list.get(viewHolder.getAdapterPosition()).getEmptask();
                 String empphone = list.get(viewHolder.getAdapterPosition()).getEmp_phone();
                 String empgender = list.get(viewHolder.getAdapterPosition()).getEmp_gender();
+                String empuser = list.get(viewHolder.getAdapterPosition()).getAcctuname();
 
                 Intent intent = new Intent(view.getContext(), EditEmployee.class);
                 intent.putExtra("employeelname", emplastname);
@@ -53,8 +54,8 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
                 intent.putExtra("employeetask", emptask);
                 intent.putExtra("employeephone", empphone);
                 intent.putExtra("employeegender", empgender);
+                intent.putExtra("employeeusername", empuser);
 
-                Toast.makeText(v.getContext(), "Phone: "+empphone+"\nGender: "+empgender, Toast.LENGTH_SHORT).show();
                 v.getContext().startActivity(intent);
             }
         });

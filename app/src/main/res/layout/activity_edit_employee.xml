@@ -275,6 +275,29 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="@dimen/small_title"/>
+
+                <TextView
+                    android:id="@+id/editempusername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/page_title"
+                    android:text="johndoe123"
+                    android:textColor="@color/dark_text"
+                    android:paddingTop="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/padding_top">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Name"
                     android:textSize="@dimen/small_title"/>
 
@@ -626,11 +649,13 @@
                 <TextView
                     android:id="@+id/txtempdeactivate"
                     android:layout_width="0dp"
-                    android:layout_height="55dp"
-                    android:layout_weight="1"
-                    android:text="DEACTIVATE"
+                    android:layout_height="45dp"
                     android:layout_marginLeft="@dimen/padding_150"
-                    android:gravity="center"/>
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="DEACTIVATE EMPLOYEE"
+                    android:textColor="@color/color_red"
+                    android:textStyle="bold" />
 
                 <android.support.v7.widget.CardView
                     android:layout_width="0dp"
@@ -639,8 +664,7 @@
                     android:padding="@dimen/text_padding"
                     android:layout_marginBottom="@dimen/padding_top"
                     android:background="@color/whiteBG"
-                    android:layout_marginRight="@dimen/padding_150"
-                    android:layout_marginLeft="@dimen/padding_150">
+                    android:layout_marginRight="@dimen/padding_150">
 
                     <LinearLayout
                         android:id="@+id/layout_delemployee"

@@ -38,7 +38,7 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
 
     private TextInputEditText code, value, startdate, enddate;
     private String selectedtype, selecteddstatus,dcode, dstart, dend;
-    private double dvalue;
+    double dvalue;
     private Spinner status;
     private RadioGroup radioGrouptype;
     RadioButton radioButtonpercentage, radioButtonamount, btntype;
@@ -77,7 +77,6 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
         status.setOnItemSelectedListener(this);
         //
 
-
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
         ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
@@ -89,85 +88,289 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        String [] statuslist = getResources().getStringArray(R.array.disc_status);
+//
+//        Bundle bundle = this.getIntent().getExtras();
+//        if(bundle!=null){
+//            dcode = bundle.getString("discountcode");
+//            dvalue = bundle.getDouble("discountvalue");
+//            selecteddstatus = bundle.getString("discountstatus");
+//            dstart = bundle.getString("discountstart");
+//            dend = bundle.getString("discountend");
+//            selectedtype = bundle.getString("discounttype");
+//
+//
+//            for (int i=0; i<statuslist.length; i++){
+//                if(statuslist[i].equals(selecteddstatus)){
+//                    pos = i;
+//                }
+//                code.setText(dcode);
+//                value.setText(Double.toString(dvalue));
+//                status.setSelection(pos);
+//                startdate.setText(dstart);
+//                enddate.setText(dend);
+//                getDiscDetails();
+//
+//            }
+//        }
+//    }
 
-        String [] statuslist = getResources().getStringArray(R.array.disc_status);
+//    public void getDiscDetails(){
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        ownerdbreference.orderByChild("business/owner_username")
+//                .equalTo(username)
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()){
+//                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                        final String ownerkey = ds.getKey();
+//                        ownerdbreference.child(ownerkey+"/business/discount")
+//                                        .orderByChild("disc_code")
+//                                        .equalTo(dcode)
+//                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                            @Override
+//                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                               if (dataSnapshot.exists()){
+//                                                   for (DataSnapshot ds1: dataSnapshot.getChildren()){
+//                                                       Discount discount = ds1.getValue(Discount.class);
+//                                                       selectedtype = discount.getDisc_type();
+//                                                       if(selectedtype.equals(radioButtonamount.getText())){
+//                                                           radioButtonamount.setChecked(true);
+//                                                           radioButtonpercentage.setChecked(false);
+//                                                       } else {
+//                                                           radioButtonamount.setChecked(false);
+//                                                           radioButtonpercentage.setChecked(true);
+//                                                       }
+//                                                   }
+//                                               }
+//                                            }
+//
+//                                            @Override
+//                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                            }
+//                                        });
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-        Bundle bundle = this.getIntent().getExtras();
-        if(bundle!=null){
-            dcode = bundle.getString("discountcode");
-            dvalue = bundle.getDouble("discountvalue");
-            selecteddstatus = bundle.getString("discountstatus");
-            dstart = bundle.getString("discountstart");
-            dend = bundle.getString("discountend");
-            selectedtype = bundle.getString("discounttype");
+//    public void updateDiscount(){
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        ownerdbreference.orderByChild("/business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()){
+//                    for(final DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                        final String ownerkey = dataSnapshot1.getKey();
+//                        ownerdbreference.child(ownerkey+"/business/discount")
+//                                .orderByChild("disc_code")
+//                                .equalTo(dcode).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                if(dataSnapshot.exists()){
+//                                    for (DataSnapshot ds1: dataSnapshot.getChildren()){
+//                                        String discountkey = ds1.getKey();
+//                                        Discount discount = ds1.getValue(Discount.class);
+//                                        String getcode = discount.getDisc_code();
+//                                        if(getcode.equals(dcode)){
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_code").setValue(code.getText().toString());
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_end").setValue(enddate.getText().toString());
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_start").setValue(startdate.getText().toString());
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_status").setValue(selecteddstatus);
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_type").setValue(selectedtype);
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_value").setValue(Double.parseDouble(value.getText().toString()));
+//
+//
+//                                            ownerdbreference.child(ownerkey+"/business/product")
+//                                                    .orderByChild("/discount/disc_code")
+//                                                    .equalTo(dcode)
+//                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                        @Override
+//                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                            if(dataSnapshot.exists()){
+//                                                                for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_code").setValue(code.getText().toString());
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_end").setValue(enddate.getText().toString());
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_start").setValue(startdate.getText().toString());
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_status").setValue(selecteddstatus);
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_type").setValue(selectedtype);
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_value").setValue(Double.parseDouble(value.getText().toString()));
+//
+//                                                                    ownerdbreference.child(ownerkey+"/business/services")
+//                                                                            .orderByChild("/discount/disc_code")
+//                                                                            .equalTo(dcode)
+//                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                                                @Override
+//                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                                                    if(dataSnapshot.exists()){
+//                                                                                        for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_code").setValue(code.getText().toString());
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_end").setValue(enddate.getText().toString());
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_start").setValue(startdate.getText().toString());
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_status").setValue(selecteddstatus);
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_type").setValue(selectedtype);
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_value").setValue(Double.parseDouble(value.getText().toString()));
+//                                                                                        }
+//                                                                                    }
+//                                                                                }
+//
+//                                                                                @Override
+//                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                                                }
+//                                                                            });
+//                                                                }
+//                                                            }
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                        }
+//                                                    });
+//                                        }
+//
+//                                    }
+//                                }
+//
+//                                Toast.makeText(EditDiscount.this, "Discount is updated!", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    Toast.makeText(EditDiscount.this, username+" does not exist!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-
-            for (int i=0; i<statuslist.length; i++){
-                if(statuslist[i].equals(selecteddstatus)){
-                    pos = i;
-                }
-                code.setText(dcode);
-                value.setText(Double.toString(dvalue));
-                status.setSelection(pos);
-                startdate.setText(dstart);
-                enddate.setText(dend);
-                getDiscDetails();
-
-            }
-        }
-    }
-
-    public void getDiscDetails(){
-        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
-
-        ownerdbreference.orderByChild("business/owner_username")
-                .equalTo(username)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        final String ownerkey = ds.getKey();
-                        ownerdbreference.child(ownerkey+"/business/discount")
-                                        .orderByChild("disc_code")
-                                        .equalTo(dcode)
-                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                               if (dataSnapshot.exists()){
-                                                   for (DataSnapshot ds1: dataSnapshot.getChildren()){
-                                                       Discount discount = ds1.getValue(Discount.class);
-                                                       selectedtype = discount.getDisc_type();
-                                                       if(selectedtype.equals(radioButtonamount.getText())){
-                                                           radioButtonamount.setChecked(true);
-                                                           radioButtonpercentage.setChecked(false);
-                                                       } else {
-                                                           radioButtonamount.setChecked(false);
-                                                           radioButtonpercentage.setChecked(true);
-                                                       }
-                                                   }
-                                               }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    public void deleteDiscount(){
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        ownerdbreference.orderByChild("/business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()){
+//                    for(final DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                        final String ownerkey = dataSnapshot1.getKey();
+//                        ownerdbreference.child(ownerkey+"/business/discount")
+//                                .orderByChild("disc_code")
+//                                .equalTo(dcode).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                if(dataSnapshot.exists()){
+//                                    for (DataSnapshot ds1: dataSnapshot.getChildren()){
+//                                        String discountkey = ds1.getKey();
+//                                        Discount discount = ds1.getValue(Discount.class);
+//                                        String getcode = discount.getDisc_code();
+//                                        if(getcode.equals(dcode)){
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_code").setValue(null);
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_end").setValue(null);
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_start").setValue(null);
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_status").setValue(null);
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_type").setValue(null);
+//                                            ownerdbreference.child(ownerkey+"/business/discount/").child(discountkey+"/disc_value").setValue(null);
+//
+//
+//                                            ownerdbreference.child(ownerkey+"/business/product")
+//                                                    .orderByChild("/discount/disc_code")
+//                                                    .equalTo(dcode)
+//                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                        @Override
+//                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                            if(dataSnapshot.exists()){
+//                                                                for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_code").setValue(null);
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_end").setValue(null);
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_start").setValue(null);
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_status").setValue(null);
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_type").setValue(null);
+//                                                                    ownerdbreference.child(ownerkey+"/business/product").child(dataSnapshot2.getKey()+"/discount/disc_value").setValue(null);
+//
+//                                                                    ownerdbreference.child(ownerkey+"/business/services")
+//                                                                            .orderByChild("/discount/disc_code")
+//                                                                            .equalTo(dcode)
+//                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                                                @Override
+//                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                                                    if(dataSnapshot.exists()){
+//                                                                                        for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_code").setValue(null);
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_end").setValue(null);
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_start").setValue(null);
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_status").setValue(null);
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_type").setValue(null);
+//                                                                                            ownerdbreference.child(ownerkey+"/business/services").child(dataSnapshot3.getKey()+"/discount/disc_value").setValue(null);
+//                                                                                        }
+//                                                                                    }
+//                                                                                }
+//
+//                                                                                @Override
+//                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                                                }
+//                                                                            });
+//                                                                }
+//                                                            }
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                        }
+//                                                    });
+//                                        }
+//
+//                                    }
+//                                }
+//
+//                                Toast.makeText(EditDiscount.this, "Discount is updated!", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    Toast.makeText(EditDiscount.this, username+" does not exist!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     @Override
     public void onBackPressed() {
@@ -200,6 +403,7 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
                 return true;
             case R.id.action_save:
                 addRadioGroupListener();
+//                updateDiscount();
 
         }
 
@@ -217,6 +421,7 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         switch (id){
             case R.id.layout_delcategory:
+//                deleteDiscount();
                 break;
             case R.id.textdisc_startdate:
                 final Calendar scalendar = Calendar.getInstance();

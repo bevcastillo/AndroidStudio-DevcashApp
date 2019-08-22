@@ -122,12 +122,11 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void addEmployee(final String emp_lname, final String emp_fname, final String emp_task, final String emp_gender,
-                             final String emp_phone, final String accountUsername, final String accountEmail, final String accountPassw, final String emp_workfor){
+                             final String emp_phone, final String accountUsername, final String accountEmail, final String accountPassw, final String emp_workfor, final String emp_username){
     Log.i(TAG,"addEmployee()");
 
     //
-
-        final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_phone, emp_workfor);
+        final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_phone, emp_workfor, emp_username);
         final Account acct = new Account();
 
 
@@ -230,7 +229,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         final String username = (shared.getString("owner_username", ""));
 
 
-        addEmployee(lname, fname, selectedemptask, selectedgender, textphone, uname, null, uname, username);
+        addEmployee(lname, fname, selectedemptask, selectedgender, textphone, uname, null, uname, username, uname);
         successDialog(account);
 //        finish();
     }
@@ -347,7 +346,12 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         fullname.setText(mfullname);
         username.setText(uname);
         password.setText(mpassword);
-        builder.setNeutralButton("OKAY", null);
+        builder.setNeutralButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
         AlertDialog dialog = builder.create();
         dialog.show();
 
