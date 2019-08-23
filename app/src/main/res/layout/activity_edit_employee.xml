@@ -524,7 +524,7 @@
                     android:textSize="@dimen/small_title"/>
 
                 <Spinner
-                    android:id="@+id/spinner_emptask"
+                    android:id="@+id/spinneredit_emptask"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/task_assign"

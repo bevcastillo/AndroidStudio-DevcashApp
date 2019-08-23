@@ -7,11 +7,13 @@ import android.provider.ContactsContract;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,7 +44,7 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
     private TextInputEditText emplname, empfname;
     private LinearLayout layoutdelete;
     private Spinner emptask;
-    private String lastname, firstname, selectedtask, gender, phone, empusername;
+    private String lastname, firstname, selectedtask, acctstatus, gender, phone, empusername, editselectedtask;
     private int pos;
 
     private TextView txtempname, txtempgender, txtempphone, txtempusername, txtdeactivate;
@@ -58,7 +60,7 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         emplname = (TextInputEditText) findViewById(R.id.textinput_editemplname);
         empfname = (TextInputEditText) findViewById(R.id.textinput_editempfname);
         layoutdelete = (LinearLayout) findViewById(R.id.layout_delemployee);
-        emptask = (Spinner) findViewById(R.id.spinner_emptask);
+        emptask = (Spinner) findViewById(R.id.spinneredit_emptask);
 
         //
         txtempname = (TextView) findViewById(R.id.editempname);
@@ -137,10 +139,6 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
 
                                                         txtempgender.setText(gender);
                                                         txtempphone.setText(phone);
-//                                                        if(employee.getEmp_username().equals(txtempusername.toString())){
-//                                                            ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/emp_task").setValue(selectedtask);
-//                                                            ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/emp_task").setValue(selectedtask);
-//                                                        }
                                                     }
                                                 }
                                             }
@@ -168,8 +166,88 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
 
 
+    public void updateEmployee(){
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String ownerkey = dataSnapshot1.getKey();
+                        ownerdbreference.child(ownerkey+"/business/employee").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        ownerdbreference.child(ownerkey+"/business/employee")
+                                                .orderByChild("emp_username").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.exists()){
+                                                    for(DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                        String empkey = dataSnapshot3.getKey();
+                                                        Employee employee = dataSnapshot3.getValue(Employee.class);
+
+                                                        if(employee.getEmp_username().equals(txtempusername.getText().toString())){
+                                                            ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/emp_task").setValue(selectedtask);
+                                                            ownerdbreference.child(ownerkey+"/business/employee").orderByChild("/emp_username")
+                                                                    .equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                    if(dataSnapshot.exists()){
+                                                                        Toast.makeText(EditEmployee.this, empusername+" exists in account", Toast.LENGTH_SHORT).show();
+                                                                    } else{
+                                                                        Toast.makeText(EditEmployee.this, empusername+" does not exist in account", Toast.LENGTH_SHORT).show();
+
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                        Toast.makeText(EditEmployee.this, "Task is updated!", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.savemenu, menu);
+        return true;
     }
 
     @Override
@@ -198,10 +276,13 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if (id == android.R.id.home){
-            onBackPressed();
-            return true;
-        }else if(id == R.id.action_save){
+        switch (id){
+            case R.id.home:
+                onBackPressed();
+                break;
+            case R.id.action_save:
+                updateEmployee();
+                break;
         }
         return super.onOptionsItemSelected(item);
 
@@ -223,8 +304,9 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             int sid = parent.getId();
             switch (sid){
-                case R.id.spinner_emptask:
+                case R.id.spinneredit_emptask:
                     selectedtask = emptask.getItemAtPosition(position).toString();
+                    Toast.makeText(this, "Selected task is: "+selectedtask, Toast.LENGTH_SHORT).show();
                     break;
             }
     }
@@ -235,6 +317,7 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         final View dialogView = inflater.inflate(R.layout.custom_password, null);
         dialog.setView(dialogView);
 
+        final TextInputLayout layouterror = (TextInputLayout) findViewById(R.id.inputerror);
         final TextInputEditText editconfpassw = (TextInputEditText) dialogView.findViewById(R.id.confirmpassword);
         final Button btnconfirm = (Button) dialogView.findViewById(R.id.btnconfirm);
 
@@ -267,9 +350,16 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
                                                                     Account account = dataSnapshot3.getValue(Account.class);
                                                                     String type = account.getAcct_type();
                                                                     String passw = account.getAcct_passw();
-                                                                    if(passw.equals(editconfpassw.getText().toString()) && type.equals("Owner")){
-                                                                        deactivateDialog();
+                                                                    if (!editconfpassw.getText().toString().equals("")){
+                                                                        if(passw.equals(editconfpassw.getText().toString()) && type.equals("Owner")){
+                                                                            deactivateDialog();
+                                                                        } else{
+                                                                            Toast.makeText(EditEmployee.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    } else{
+                                                                        Toast.makeText(EditEmployee.this, "Fields can not be empty!", Toast.LENGTH_SHORT).show();
                                                                     }
+
                                                                 }
                                                             }
                                                         }
@@ -299,7 +389,68 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
                     });
 
                 } else{
-                    activateDialog();
+
+                    SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                    final String username = (shared.getString("owner_username", ""));
+
+                    ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                    final String ownerkey = dataSnapshot1.getKey();
+                                    ownerdbreference.child(ownerkey+"/business/account").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.exists()){
+                                                for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                    String acctkey = dataSnapshot2.getKey();
+                                                    ownerdbreference.child(ownerkey+"/business/account")
+                                                            .orderByChild("/acct_uname").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if(dataSnapshot.exists()){
+                                                                for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                    Account account = dataSnapshot3.getValue(Account.class);
+                                                                    String type = account.getAcct_type();
+                                                                    String passw = account.getAcct_passw();
+                                                                    if (!editconfpassw.getText().toString().equals("")){
+                                                                        if(passw.equals(editconfpassw.getText().toString()) && type.equals("Owner")){
+                                                                            activateDialog();
+                                                                        } else{
+                                                                            Toast.makeText(EditEmployee.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    } else{
+                                                                        Toast.makeText(EditEmployee.this, "Fields can not be empty!", Toast.LENGTH_SHORT).show();
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         }
@@ -324,6 +475,8 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(EditEmployee.this, "Account has been deactivated.", Toast.LENGTH_SHORT).show();
                 txtdeactivate.setText("ACTIVATE EMPLOYEE");
+
+                dialog.dismiss();
             }
         });
 
@@ -346,6 +499,7 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(EditEmployee.this, "Account has been activated.", Toast.LENGTH_SHORT).show();
                 txtdeactivate.setText("DEACTIVATE EMPLOYEE");
+                dialog.dismiss();
             }
         });
 
