@@ -71,6 +71,18 @@
             android:gravity="left"/>
 
         <TextView
+            android:id="@+id/txtempstatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Status"
+            android:textColor="@color/icon_light"
+            android:textSize="@dimen/text_inputs"
+            android:layout_marginLeft="@dimen/padding_30"
+            android:gravity="left"
+            android:visibility="gone"/>
+
+        <TextView
             android:id="@+id/txtemp_username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

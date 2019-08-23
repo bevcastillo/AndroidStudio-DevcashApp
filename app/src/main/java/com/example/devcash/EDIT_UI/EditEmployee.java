@@ -44,10 +44,10 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
     private TextInputEditText emplname, empfname;
     private LinearLayout layoutdelete;
     private Spinner emptask;
-    private String lastname, firstname, selectedtask, acctstatus, gender, phone, empusername, editselectedtask;
+    private String lastname, firstname, selectedtask, acctstatus, gender, phone, empusername, editselectedtask, status;
     private int pos;
 
-    private TextView txtempname, txtempgender, txtempphone, txtempusername, txtdeactivate;
+    private TextView txtempname, txtempgender, txtempphone, txtempusername, txtdeactivate, txtstatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,8 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         txtempphone = (TextView) findViewById(R.id.editempnumber);
         txtempusername = (TextView) findViewById(R.id.editempusername);
         txtdeactivate = (TextView) findViewById(R.id.txtempdeactivate);
+        txtstatus = (TextView) findViewById(R.id.empeditstatus);
+
 
 
 
@@ -109,6 +111,46 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
             }
 
         }
+    }
+
+    public void getAccount(){
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String ownerkey = dataSnapshot1.getKey();
+                        ownerdbreference.child(ownerkey+"/business/account").orderByChild("acct_uname").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String acct_key = dataSnapshot2.getKey();
+                                        Account account = dataSnapshot2.getValue(Account.class);
+                                        status = account.getAcct_status();
+                                        txtstatus.setText(status);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void showEmpDetails(){
@@ -195,23 +237,25 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
 
                                                         if(employee.getEmp_username().equals(txtempusername.getText().toString())){
                                                             ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/emp_task").setValue(selectedtask);
-                                                            ownerdbreference.child(ownerkey+"/business/employee").orderByChild("/emp_username")
-                                                                    .equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                    if(dataSnapshot.exists()){
-                                                                        Toast.makeText(EditEmployee.this, empusername+" exists in account", Toast.LENGTH_SHORT).show();
-                                                                    } else{
-                                                                        Toast.makeText(EditEmployee.this, empusername+" does not exist in account", Toast.LENGTH_SHORT).show();
 
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                }
-                                                            });
+                                                            //
+//                                                            ownerdbreference.child(ownerkey+"/business/account").orderByChild("acct_uname").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                                @Override
+//                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                                    if(dataSnapshot.exists()){
+//                                                                        for (DataSnapshot dataSnapshot4: dataSnapshot.getChildren()){
+//                                                                            Account account = dataSnapshot4.getValue(Account.class);
+//                                                                            Toast.makeText(EditEmployee.this, account.getAcct_status()+" is the "+empusername+" status.", Toast.LENGTH_SHORT).show();
+//                                                                            Toast.makeText(EditEmployee.this, txtstatus.getText().toString()+" is the status", Toast.LENGTH_SHORT).show();
+//                                                                        }
+//                                                                    }
+//                                                                }
+//
+//                                                                @Override
+//                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                                }
+//                                                            });
                                                         }
                                                     }
                                                 }
@@ -306,7 +350,6 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
             switch (sid){
                 case R.id.spinneredit_emptask:
                     selectedtask = emptask.getItemAtPosition(position).toString();
-                    Toast.makeText(this, "Selected task is: "+selectedtask, Toast.LENGTH_SHORT).show();
                     break;
             }
     }
@@ -473,10 +516,75 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         builder.setPositiveButton("DEACTIVATE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(EditEmployee.this, "Account has been deactivated.", Toast.LENGTH_SHORT).show();
-                txtdeactivate.setText("ACTIVATE EMPLOYEE");
-
                 dialog.dismiss();
+
+                //queryy
+                SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                final String username = (shared.getString("owner_username", ""));
+
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                final String ownerkey = dataSnapshot1.getKey();
+                                ownerdbreference.child(ownerkey+"/business/account").orderByChild("acct_uname").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                String acctkey = dataSnapshot2.getKey();
+                                                Account account = dataSnapshot2.getValue(Account.class);
+                                                account.getAcct_status();
+
+                                                txtdeactivate.setText("ACTIVATE EMPLOYEE");
+                                                txtstatus.setText("Deactivated");
+
+                                                //updating the status from account
+                                                ownerdbreference.child(ownerkey+"/business/account").child(acctkey+"/acct_status").setValue(txtstatus.getText().toString());
+
+                                                ownerdbreference.child(ownerkey+"/business/employee")
+                                                        .orderByChild("/account/acct_uname")
+                                                        .equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if(dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                String empkey = dataSnapshot3.getKey();
+                                                                //updating the status from employee > account
+                                                                ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/account/acct_status").setValue(txtstatus.getText().toString());
+
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                                Toast.makeText(EditEmployee.this, "Employee has been deactivated", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         });
 
@@ -498,8 +606,86 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(EditEmployee.this, "Account has been activated.", Toast.LENGTH_SHORT).show();
-                txtdeactivate.setText("DEACTIVATE EMPLOYEE");
                 dialog.dismiss();
+
+                //queryy
+                SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                final String username = (shared.getString("owner_username", ""));
+
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                final String ownerkey = dataSnapshot1.getKey();
+                                ownerdbreference.child(ownerkey+"/business/account").orderByChild("acct_uname").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                String acctkey = dataSnapshot2.getKey();
+                                                Account account = dataSnapshot2.getValue(Account.class);
+                                                account.getAcct_status();
+
+                                                txtdeactivate.setText("DEACTIVATE EMPLOYEE");
+                                                txtstatus.setText("Active");
+
+                                                //updating the status
+                                                ownerdbreference.child(ownerkey+"/business/account").child(acctkey+"/acct_status").setValue(txtstatus.getText().toString());
+
+                                                //
+                                                ownerdbreference.child(ownerkey+"business/employee").orderByChild("emp_username").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if(dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                final String empkey = dataSnapshot3.getKey();
+                                                                ownerdbreference.orderByChild(ownerkey+"/business/employee/account").orderByChild("acct_uname").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                        if (dataSnapshot.exists()){
+                                                                            for (DataSnapshot dataSnapshot4: dataSnapshot.getChildren()){
+                                                                                Account account1 = dataSnapshot4.getValue(Account.class);
+
+                                                                                //updating the status from emp>acct
+                                                                                ownerdbreference.child(ownerkey+"/business/employee/"+empkey).child("/account/acct_status").setValue(txtstatus.getText().toString());
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                                Toast.makeText(EditEmployee.this, "Employee has been deactivated", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 

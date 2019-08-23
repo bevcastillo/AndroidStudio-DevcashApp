@@ -26,6 +26,7 @@ import java.util.List;
 public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.ViewHolder> {
 
     List<Employeelistdata> list;
+    List<Employee> employeeList;
 
     public EmployeesAdapter(List<Employeelistdata> list) {
         this.list = list;
@@ -47,6 +48,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
                 String empphone = list.get(viewHolder.getAdapterPosition()).getEmp_phone();
                 String empgender = list.get(viewHolder.getAdapterPosition()).getEmp_gender();
                 String empuser = list.get(viewHolder.getAdapterPosition()).getAcctuname();
+                String empstatus = list.get(viewHolder.getAdapterPosition()).getAcctstatus();
 
                 Intent intent = new Intent(view.getContext(), EditEmployee.class);
                 intent.putExtra("employeelname", emplastname);
@@ -55,6 +57,9 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
                 intent.putExtra("employeephone", empphone);
                 intent.putExtra("employeegender", empgender);
                 intent.putExtra("employeeusername", empuser);
+                intent.putExtra("employeestatus",empstatus);
+
+                Toast.makeText(v.getContext(), empstatus+"", Toast.LENGTH_SHORT).show();
 
                 v.getContext().startActivity(intent);
             }
@@ -62,11 +67,6 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
 
 
         return viewHolder;
-
-
-
-//        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_employee,viewGroup,false);
-//        return new ViewHolder(v);
     }
 
     @Override
@@ -77,6 +77,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
         viewHolder.emptask.setText(data.getEmptask());
         viewHolder.acctuname.setText(data.getAcctuname());
         viewHolder.acctemail.setText(data.getAcctemail());
+        viewHolder.acct_status.setText("Test");
     }
 
     @Override
@@ -85,7 +86,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView emplname, empfname, emptask, acctuname, acctemail;
+        TextView emplname, empfname, emptask, acctuname, acctemail, acct_status;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +95,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
             emptask = (TextView) itemView.findViewById(R.id.txtemp_task);
             acctemail = (TextView) itemView.findViewById(R.id.txtemp_email);
             acctuname = (TextView) itemView.findViewById(R.id.txtemp_username);
+            acct_status = (TextView) itemView.findViewById(R.id.txtempstatus);
         }
     }
 }

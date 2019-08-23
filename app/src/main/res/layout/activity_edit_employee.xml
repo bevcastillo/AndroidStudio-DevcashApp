@@ -510,6 +510,12 @@
             android:paddingLeft="@dimen/padding_30"
             android:paddingRight="@dimen/padding_30">
 
+            <TextView
+                android:id="@+id/empeditstatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

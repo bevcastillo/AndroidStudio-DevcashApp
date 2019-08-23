@@ -239,63 +239,63 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         return x;
     }
 
-    public void insertAccount(){
-        acctstatus.setText("Active");
-        accttype.setText("Employee");
-        final String status = acctstatus.getText().toString();
-        final String type = accttype.getText().toString();
-        final String lname = empLname.getText().toString();
-        final String fname = empFname.getText().toString();
-        final String newfname = fname.substring(0,1).toLowerCase();
-        final String username = newfname+lname.toLowerCase();
-
-        accountFirebaseReference.orderByChild("acct_uname").equalTo(username)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-//                            int index = temp_uname.indexOf('0');
-//                            String numberValue = temp_uname.substring(index);
-//                            int counter = Integer.valueOf(numberValue); //duplicate username counter
-//                            int lastnum = 0;
-//                            for(int i; i <counter+1; counter++){
+//    public void insertAccount(){
+//        acctstatus.setText("Active");
+//        accttype.setText("Employee");
+//        final String status = acctstatus.getText().toString();
+//        final String type = accttype.getText().toString();
+//        final String lname = empLname.getText().toString();
+//        final String fname = empFname.getText().toString();
+//        final String newfname = fname.substring(0,1).toLowerCase();
+//        final String username = newfname+lname.toLowerCase();
 //
-//                            }
-//                            String empusername = temp_uname+01;
-
-//                            String empusername = newuname + '0' + countOfDuplicates+1;
-
-//                            String username = newuname+num+1;
+//        accountFirebaseReference.orderByChild("acct_uname").equalTo(username)
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        if(dataSnapshot.exists()){
+////                            int index = temp_uname.indexOf('0');
+////                            String numberValue = temp_uname.substring(index);
+////                            int counter = Integer.valueOf(numberValue); //duplicate username counter
+////                            int lastnum = 0;
+////                            for(int i; i <counter+1; counter++){
+////
+////                            }
+////                            String empusername = temp_uname+01;
+//
+////                            String empusername = newuname + '0' + countOfDuplicates+1;
+//
+////                            String username = newuname+num+1;
+////                            empuname.setText(username);
+////                            final String acctuname = empuname.getText().toString();
+////                            String empusername = temp_uname+01;
+////                            String user = temp_uname+01;
+////                            int index = .indexOf('0');
+//
+//
+//                            //
+//                            String mytemp = username+0; //assign the temporary username to add 0 example bcastillo0
+//                            int index = username.indexOf('0'); //getting the index of that zero from username bcastillo0<--
+//                            String numbervalue = username.substring(index); //using the index to get the number from the document
+//
+//                            Toast.makeText(getApplicationContext(), "Number Value: "+numbervalue, Toast.LENGTH_LONG).show();
+//                        }else{
 //                            empuname.setText(username);
-//                            final String acctuname = empuname.getText().toString();
-//                            String empusername = temp_uname+01;
-//                            String user = temp_uname+01;
-//                            int index = .indexOf('0');
-
-
-                            //
-                            String mytemp = username+0; //assign the temporary username to add 0 example bcastillo0
-                            int index = username.indexOf('0'); //getting the index of that zero from username bcastillo0<--
-                            String numbervalue = username.substring(index); //using the index to get the number from the document
-
-                            Toast.makeText(getApplicationContext(), "Number Value: "+numbervalue, Toast.LENGTH_LONG).show();
-                        }else{
-                            empuname.setText(username);
-                             Toast.makeText(getApplicationContext(), "Username: "+empuname, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    final String acctuname = empuname.getText().toString();
-                    final String acctpassw = empuname.getText().toString();
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-        //addAccount(newuname, newpassw, type, status);
-
-    }
+//                             Toast.makeText(getApplicationContext(), "Username: "+empuname, Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                    final String acctuname = empuname.getText().toString();
+//                    final String acctpassw = empuname.getText().toString();
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+//
+//        //addAccount(newuname, newpassw, type, status);
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
