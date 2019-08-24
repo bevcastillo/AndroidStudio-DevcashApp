@@ -47,8 +47,10 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
     public void empLogin(){
 
         SharedPreferences empPref = getApplicationContext().getSharedPreferences("EmpPref", MODE_PRIVATE);
-        SharedPreferences ownerPref = getApplicationContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final SharedPreferences.Editor editor = empPref.edit();
+
+
+        SharedPreferences ownerPref = getApplicationContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final SharedPreferences.Editor ownerEditor = ownerPref.edit();
 
         final Gson gson = new Gson();
@@ -81,6 +83,7 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
                                                             if (employee.getAccount().getAcct_passw().equals(emppassword)) {
                                                                 String json = gson.toJson(employee);
                                                                 editor.putString("Employee", json);
+                                                                editor.putString("emp_username", employee.getEmp_username());
                                                                 editor.commit();
                                                                 ownerEditor.putString("owner_username", employee.getEmp_workfor());
                                                                 ownerEditor.commit();

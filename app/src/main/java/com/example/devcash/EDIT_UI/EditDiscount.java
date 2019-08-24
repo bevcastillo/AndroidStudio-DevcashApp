@@ -62,7 +62,7 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
         code = (TextInputEditText) findViewById(R.id.textinput_discode);
         radioGrouptype = (RadioGroup) findViewById(R.id.rgroup_disctype);
         radioButtonpercentage = (RadioButton) findViewById(R.id.radiobtn_percent);
-        radioButtonamount = (RadioButton) findViewById(R.id.radiobtn_amt);
+            radioButtonamount = (RadioButton) findViewById(R.id.radiobtn_amt);
         value = (TextInputEditText) findViewById(R.id.textinput_amt);
         startdate = (TextInputEditText) findViewById(R.id.textdisc_startdate);
         enddate = (TextInputEditText) findViewById(R.id.textdisc_enddate);

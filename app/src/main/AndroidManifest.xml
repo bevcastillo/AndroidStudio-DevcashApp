@@ -27,7 +27,9 @@
             android:name=".CashierNavigation"
             android:label="@string/title_activity_cashier_navigation"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EmployeeAccountInfo" />
+        <activity android:name=".EmployeeAccountInfo"
+            android:label="My Profile"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".OwnerInformation"
             android:label="Account Information"
