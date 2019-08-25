@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class Business {
-    public String owner_lname, owner_fname, owner_mobileno, owner_username;
+    public String owner_lname, owner_fname, owner_mobileno, owner_username, owner_gender;
 
     public Account account;
     public Enterprise enterprise;
@@ -109,5 +109,13 @@ public class Business {
 
     public void setOwner_username(String owner_username) {
         this.owner_username = owner_username;
+    }
+
+    public String getOwner_gender() {
+        return owner_gender;
+    }
+
+    public void setOwner_gender(String owner_gender) {
+        this.owner_gender = owner_gender;
     }
 }

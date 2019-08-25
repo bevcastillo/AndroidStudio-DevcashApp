@@ -61,7 +61,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_entname"
+                            android:id="@+id/edittext_entname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Enterprise Name"
@@ -82,13 +82,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/text_padding"
-                            android:text="Enterprise Category" />
+                            android:text="Enterprise Type" />
 
                         <Spinner
-                            android:id="@+id/spinner_prodcat"
+                            android:id="@+id/spinner_enttype"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:entries="@array/ent_types"
                             android:paddingTop="@dimen/padding_top" />
 
                     </LinearLayout>
@@ -99,7 +100,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_numemp"
+                            android:id="@+id/edittext_numemp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Total number of Employees"
@@ -116,7 +117,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_entphone"
+                            android:id="@+id/edittext_entphone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Contact Number (optional)"
@@ -134,7 +135,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_permit"
+                            android:id="@+id/edittext_permit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Business Permit Number/Barangay Permit Number"
@@ -151,7 +152,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_entaddr"
+                            android:id="@+id/edittext_entaddr"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Address"
@@ -168,7 +169,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/text_entemailaddr"
+                            android:id="@+id/edittext_entemailaddr"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Email Address (optional)"

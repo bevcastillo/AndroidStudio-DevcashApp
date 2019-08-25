@@ -94,7 +94,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:errorEnabled="true">
+                        app:errorEnabled="true"
+                        android:visibility="gone">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/owner_dob"
@@ -124,13 +125,13 @@
                             android:text="@string/gender" />
 
                         <RadioGroup
-                            android:id="@+id/radiogroup_gender"
+                            android:id="@+id/radiogroup_ownergender"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <RadioButton
-                                android:id="@+id/radiomale"
+                                android:id="@+id/radio_ownermale"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_20"
@@ -139,7 +140,7 @@
                                 android:text="@string/male" />
 
                             <RadioButton
-                                android:id="@+id/radiofemale"
+                                android:id="@+id/radio_ownerfemale"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/padding_10"
@@ -170,23 +171,6 @@
                                 android:layout_height="wrap_content"
                                 android:hint="@string/pnumber"
                                 android:inputType="number"
-                                android:padding="@dimen/text_padding"
-                                android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/page_title" />
-
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:errorEnabled="true">
-
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/owner_addr"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Home Address"
-                                android:inputType="text"
                                 android:padding="@dimen/text_padding"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/page_title" />
@@ -228,26 +212,24 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="vertical"
                         android:paddingTop="@dimen/padding_top">
 
-                        <android.support.design.widget.TextInputLayout
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorEnabled="true">
+                            android:text="Username"
+                            android:textSize="@dimen/small_title"/>
 
-                            <android.support.design.widget.TextInputEditText
-                                android:id="@+id/owner_username"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/username"
-                                android:inputType="text"
-                                android:padding="@dimen/text_padding"
-                                android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/page_title" />
-
-                        </android.support.design.widget.TextInputLayout>
-
+                        <TextView
+                            android:id="@+id/txtownerusername"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/page_title"
+                            android:text="username123"
+                            android:textColor="@color/dark_text"
+                            android:paddingTop="10dp"/>
                     </LinearLayout>
 
                     <LinearLayout

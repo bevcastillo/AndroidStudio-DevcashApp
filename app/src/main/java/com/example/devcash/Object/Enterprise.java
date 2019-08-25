@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class Enterprise {
-    String ent_addr, ent_cat, ent_name, ent_permitno, ent_telno, ent_type;
+    String ent_addr, ent_cat, ent_name, ent_permitno, ent_telno, ent_type, ent_email;
     Long ent_no_emp;
 
 
@@ -62,5 +62,13 @@ public class Enterprise {
 
     public void setEnt_no_emp(Long ent_no_emp) {
         this.ent_no_emp = ent_no_emp;
+    }
+
+    public String getEnt_email() {
+        return ent_email;
+    }
+
+    public void setEnt_email(String ent_email) {
+        this.ent_email = ent_email;
     }
 }

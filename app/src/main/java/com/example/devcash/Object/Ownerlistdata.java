@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class Ownerlistdata {
-    String owner_lname, owner_fname, owner_username;
+    String owner_lname, owner_fname, owner_username, owner_gender, owner_phone;
     Account account;
     Enterprise enterprise;
 
@@ -43,5 +43,21 @@ public class Ownerlistdata {
 
     public void setEnterprise(Enterprise enterprise) {
         this.enterprise = enterprise;
+    }
+
+    public String getOwner_gender() {
+        return owner_gender;
+    }
+
+    public void setOwner_gender(String owner_gender) {
+        this.owner_gender = owner_gender;
+    }
+
+    public String getOwner_phone() {
+        return owner_phone;
+    }
+
+    public void setOwner_phone(String owner_phone) {
+        this.owner_phone = owner_phone;
     }
 }
