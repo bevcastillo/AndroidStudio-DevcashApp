@@ -16,6 +16,8 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +38,7 @@ import com.example.devcash.Object.Category;
 import com.example.devcash.Object.Discount;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.ProductCondition;
+import com.example.devcash.Object.ProductExpDate;
 import com.example.devcash.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,7 +67,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private DatabaseReference businessprodfirebasereference;
     private FirebaseDatabase firebaseDatabase;
     private String ProductId;
-    private String ProductCondId;
+    private String ProductCondId, pexpdate, count;
 
 
     ImageView prodphoto, addexpdate, addcondition;
@@ -76,6 +79,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory, pbrand;
     CheckBox chkavail;
     LinearLayout prodcondlayout, prodexpdatelayout;
+    TextInputEditText exp_itemcount;
     int conditioncount;
 
     private static final int PICK_IMAGE = 100;
@@ -91,6 +95,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     LinearLayout measurementlayout;
 
+    final List<ProductExpDate> productExpDates = new ArrayList<ProductExpDate>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +109,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         addcondition = (ImageView) findViewById(R.id.imgview_addcond);
         takephoto = (TextView) findViewById(R.id.txt_prodtakephoto);
         choosephoto = (TextView) findViewById(R.id.txt_prodchoosephoto);
-//        prodexpdate = (TextInputEditText) findViewById(R.id.textprod_exp_date);
+        prodexpdate = (TextInputEditText) findViewById(R.id.textprod_exp_date);
         prodname = (TextInputEditText) findViewById(R.id.textinput_prodname);
         prodprice = (TextInputEditText) findViewById(R.id.textinput_price);
         prodrop = (TextInputEditText) findViewById(R.id.textinput_ROP);
@@ -118,6 +124,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         condcount = (TextInputEditText) findViewById(R.id.textinput_itemcount);
         prodstock = (TextInputEditText) findViewById(R.id.textinput_instock);
         prodbrand = (TextInputEditText) findViewById(R.id.textinput_prodbrand);
+
 
         //
         addlayout = (LinearLayout) findViewById(R.id.addplayout);
@@ -258,6 +265,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         ProductCondition condition = new ProductCondition();
         Category category = new Category();
         Discount discount = new Discount();
+
         discount.setDisc_code(selecteddisc);
         category.setCategory_name(selectedcategory);
         condition.setCond_name(selectedprodcond);
@@ -281,6 +289,36 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         final SharedPreferences.Editor product_editor = productshared.edit();
 
         final Gson gson = new Gson();
+
+//        for(ProductExpDate productExpDate : productExpDates) {
+//            Toast.makeText(this, productExpDate.getProd_expdate()+" is the expiration date with a count of "+productExpDate.getProd_expdatecount(), Toast.LENGTH_SHORT).show();
+//
+//            product.setProd_expdate(productExpDate.getProd_expdate());
+//            product.setProdExpCount(productExpDate.getProd_expdatecount());
+//
+//            businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    if(dataSnapshot.exists()){
+//                        product_editor.putString("product_id", ProductId); //saving the ProductId to shared preference
+//                        for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                            String key = ds.getKey();
+//
+//
+//                            dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
+//                            String categoryJson = gson.toJson(product);
+//                            product_editor.putString("product", categoryJson);
+//                            product_editor.commit();
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }
 
         businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -373,8 +411,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             return true;
         }else if(id == R.id.action_save){
 //            addRadioGroupListener();
-            addCheckBoxListener();
+//            addCheckBoxListener();
             insertProduct();
+//            getExpDate();
         }
         return super.onOptionsItemSelected(item);
 
@@ -400,7 +439,34 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 prodexpdatelayout.addView(expdatechild);
 
                 final TextInputEditText expdate = (TextInputEditText) expdatechild.findViewById(R.id.textprod_exp_date);
-                final TextInputEditText exp_itemcount = (TextInputEditText) expdatechild.findViewById(R.id.textinput_expdatecount);
+//                TextInputEditText exp_itemcount = (TextInputEditText) expdatechild.findViewById(R.id.textinput_expdatecount);
+                exp_itemcount = (TextInputEditText) expdatechild.findViewById(R.id.textinput_expdatecount);
+
+                final ProductExpDate productExpDate = new ProductExpDate();
+
+//                count = exp_itemcount.getText().toString();
+//
+//                if(!count.equals("")) {
+//                    productExpDate.setProd_expdatecount(Integer.valueOf(count));
+//                }
+
+                // listen for after typing of user
+                exp_itemcount.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        productExpDate.setProd_expdatecount(Integer.valueOf(s.toString()));
+                    }
+                });
 
                 expdate.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -410,22 +476,42 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         int mMonth = c.get(Calendar.MONTH);
                         int mDay = c.get(Calendar.DAY_OF_MONTH);
 
+//                        final List<ProductExpDate> productExpDates = new ArrayList<ProductExpDate>();
+
                         //date picker dialog
                         expdatePicker = new DatePickerDialog(AddProductActivity.this,
                                 new DatePickerDialog.OnDateSetListener() {
                                     @Override
                                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
                                         expdate.setText(dayOfMonth + "/"
                                                 + (month + 1) + "/" + year);
+
+                                        productExpDate.setProd_expdate(expdate.getText().toString());
+
+//                                        pexpdate = expdate.getText().toString();
                                     }
                                 },mYear,mMonth,mDay);
                         expdatePicker.show();
+
+//                        productExpDate.setProd_expdatecount(Integer.valueOf(exp_itemcount.getText().toString()));
                     }
                 });
 
+                productExpDates.add(productExpDate);
 
                 break;
         }
+    }
+
+    public void getExpDate(){
+
+//        Toast.makeText(this, pexpdate+" is the selected expdate", Toast.LENGTH_SHORT).show();
+        for(ProductExpDate productExpDate : productExpDates) {
+            Toast.makeText(this, productExpDate.getProd_expdate()+" is the selected expdate with a count of: "+productExpDate.getProd_expdatecount(), Toast.LENGTH_SHORT).show();
+        }
+
+//        Toast.makeText(this, exp_itemcount.getText().toString()+" is the count", Toast.LENGTH_SHORT).show();
     }
 
 

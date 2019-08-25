@@ -327,6 +327,12 @@
     <string name="status">Status</string>
     <!-- array strings -->
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_cashier_navigation">CashierNavigation</string>
+
+    <string name="title_activity_inventory_nav">InventoryNav</string>
+
     <string-array name="enterprise_type">
         <item>School Supplies</item>
         <item>Hardware Suppies</item>
@@ -403,23 +409,22 @@
         <item>All Services</item>
     </string-array>
 
+
     <string-array name="task_assign">
         <item>Cashiering</item>
         <item>Inventory Monitoring</item>
         <item>Unassign Employee</item>
     </string-array>
 
+    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="disc_status">
         <item>Active</item>
         <item>Inactive</item>
     </string-array>
-
     <string-array name="inventory_type">
         <item>Products</item>
         <item>Services</item>
     </string-array>
-
-
     <string-array name="ent_types">
         <item>School Supplies</item>
         <item>Wholesale/Retail</item>
@@ -428,9 +433,6 @@
         <item>Others</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_cashier_navigation">CashierNavigation</string>
-    <string name="title_activity_inventory_nav">InventoryNav</string>
+
 
 </resources>

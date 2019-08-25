@@ -1,10 +1,10 @@
 package com.example.devcash.Object;
 
 public class    Product {
-    String prod_name, prod_brand, prod_unitof_measure, prod_status, prod_datetimeadded;
+    String prod_name, prod_brand, prod_unitof_measure, prod_status, prod_datetimeadded, prod_expdate;
     double prod_price, prod_rop;
     public Category category;
-    int prod_stock;
+    int prod_stock, prodExpCount;
     public ProductCondition productCondition;
     public Discount discount;
 
@@ -134,5 +134,21 @@ public class    Product {
 
     public void setProd_brand(String prod_brand) {
         this.prod_brand = prod_brand;
+    }
+
+    public String getProd_expdate() {
+        return prod_expdate;
+    }
+
+    public void setProd_expdate(String prod_expdate) {
+        this.prod_expdate = prod_expdate;
+    }
+
+    public int getProdExpCount() {
+        return prodExpCount;
+    }
+
+    public void setProdExpCount(int prodExpCount) {
+        this.prodExpCount = prodExpCount;
     }
 }
