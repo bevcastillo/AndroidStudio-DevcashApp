@@ -1,5 +1,6 @@
 package com.example.devcash.EDIT_UI;
 
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -36,7 +38,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditServices extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class EditServices extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private DatabaseReference dbreference;
     private DatabaseReference ownerdbreference;
@@ -48,6 +50,7 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
     private String selectedcategory, selecteddiscount, strservname, strchkavail;
     private double strservprice;
     private int pos, pos1;
+    private LinearLayout layoutdelete;
 
     List<Serviceslistdata> serviceslist;
 //    ArrayList<Category> categoryArrayList = new ArrayList<Category>();
@@ -65,9 +68,11 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
         spinnerDiscount = (Spinner) findViewById(R.id.spinner_editserdisc);
         chckavail = (CheckBox) findViewById(R.id.cbox_editservavail);
         servprice = (TextInputEditText) findViewById(R.id.textinput_editservprice);
+        layoutdelete = (LinearLayout) findViewById(R.id.layout_delservices);
 
         spinnerCategory.setOnItemSelectedListener(this);
         spinnerDiscount.setOnItemSelectedListener(this);
+        layoutdelete.setOnClickListener(this);
 
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -98,6 +103,8 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                 }
                                 categories.add("No Category");
                                 categories.add("Create Category");
+                                categoryArrayList.add("No Category");
+                                categoryArrayList.add("Create Category");
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(EditServices.this, R.layout.spinner_categoryitem, categories);
                                 spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_categoryitem);
                                 spinnerCategory.setAdapter(spinnerArrayAdapter);
@@ -138,6 +145,8 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                 }
                                 discounts.add("No Discount");
                                 discounts.add("Create Discount");
+                                discountArrayList.add("No Discount");
+                                discountArrayList.add("Create Discount");
                                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(EditServices.this, R.layout.spinner_discountitem, discounts);
                                 spinnerDiscount.setAdapter(spinnerArrayAdapter);
                             }
@@ -172,6 +181,12 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
 
             servname.setText(strservname);
             servprice.setText(Double.toString(strservprice));
+
+            if(strchkavail.equals("Available")){
+                chckavail.setChecked(true);
+            } else{
+                chckavail.setChecked(false);
+            }
         }
 
     }
@@ -264,6 +279,118 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    public void updateServices(){
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String ownerkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerkey+"/business/services")
+                                .orderByChild("service_name").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String servkey = dataSnapshot2.getKey();
+                                        Services services = dataSnapshot2.getValue(Services.class);
+                                        String name = services.getCategory().getCategory_name();
+//                                        strchkavail = services.getService_status();
+
+                                        ownerdbreference.child(ownerkey+"/business/services")
+                                                .child(servkey+"/service_name").setValue(servname.getText().toString());
+                                        ownerdbreference.child(ownerkey+"/business/services")
+                                                .child(servkey+"/service_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                        //
+                                        if(chckavail.isChecked()){
+                                            strchkavail = "Available";
+                                        } else{
+                                            strchkavail = "Unavailable";
+                                        }
+
+                                        ownerdbreference.child(ownerkey+"/business/services")
+                                                .child(servkey+"/service_status").setValue(strchkavail);
+
+                                        ownerdbreference.child(ownerkey+"/business/services")
+                                                .child(servkey+"/category/category_name").setValue(selectedcategory);
+
+                                        ownerdbreference.child(ownerkey+"/business/services")
+                                                .child(servkey+"/discount/disc_code").setValue(selecteddiscount);
+
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        Toast.makeText(EditServices.this, "Services is updated", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void deleteServices(){
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String ownerkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerkey+"/business/services")
+                                .orderByChild("service_name").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String servkey = dataSnapshot2.getKey();
+
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_name").setValue(null);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_price").setValue(null);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_status").setValue(null);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category/category_name").setValue(null);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_code").setValue(null);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_value").setValue(null);
+
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        Toast.makeText(EditServices.this, "Services is deleted", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -301,6 +428,7 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                 onBackPressed();
                 return true;
             case R.id.action_save:
+                updateServices();
 
         }
 
@@ -323,5 +451,16 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int sid = v.getId();
+        switch (sid){
+            case R.id.layout_delservices:
+                deleteServices();
+                finish();
+                break;
+        }
     }
 }
