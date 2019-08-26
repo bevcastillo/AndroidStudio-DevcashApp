@@ -1,13 +1,19 @@
 package com.example.devcash;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,9 +33,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.BufferOverflowException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class OwnerLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -68,6 +82,12 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 
         //
         ownerbusinessReference = firebasedb.getReference("/datadevcash/owner");
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
     }
 
@@ -366,8 +386,44 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                 startActivity(owner_forgotpassw);
                 break;
             case R.id.btn_login:
-                ownerLogin();
+
+                if(internetConnectionAvailable(5) == true){
+                    ownerLogin();
+                } else{
+                    noInternetDialog();
+                }
                 break;
         }
+    }
+
+    public void noInternetDialog(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Please check your internet connection.");
+        builder.setPositiveButton("OKAY", null);
+
+        builder.show();
+    }
+
+    private boolean internetConnectionAvailable(int timeOut) {
+        InetAddress inetAddress = null;
+        try {
+            Future<InetAddress> future = Executors.newSingleThreadExecutor().submit(new Callable<InetAddress>() {
+                @Override
+                public InetAddress call() {
+                    try {
+                        return InetAddress.getByName("google.com");
+                    } catch (UnknownHostException e) {
+                        return null;
+                    }
+                }
+            });
+            inetAddress = future.get(timeOut, TimeUnit.MILLISECONDS);
+            future.cancel(true);
+        } catch (InterruptedException e) {
+        } catch (ExecutionException e) {
+        } catch (TimeoutException e) {
+        }
+        return inetAddress!=null && !inetAddress.equals("");
     }
 }
