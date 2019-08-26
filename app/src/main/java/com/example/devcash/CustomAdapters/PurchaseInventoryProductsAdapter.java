@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.R;
@@ -22,8 +23,11 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_inventory_cardviewgrid, viewGroup, false);
-        return new ViewHolder(view);
+        View v;
+        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_inventory_cardviewgrid, viewGroup, false);
+        final ViewHolder viewHolder = new ViewHolder(v);
+
+        return viewHolder;
     }
 
     @Override

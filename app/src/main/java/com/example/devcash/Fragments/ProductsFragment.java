@@ -149,44 +149,6 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
             }
         });
 
-
-
-//        productsfirebaseDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                list = new ArrayList<>();
-//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Product product = dataSnapshot1.getValue(Product.class);
-//                    Productlistdata listdata = new Productlistdata();
-//                    String pname = product.getProd_name();
-//                    double prop = product.getProd_rop();
-//                    double pprice = product.getProd_price();
-//                    int pstock = product.getProd_stock();
-//                    String condname = product.getProductCondition().getCond_name();
-//                    String pstatus = product.getProd_status();
-//                    listdata.setProd_name(pname);
-//                    listdata.setProd_rop(prop);
-//                    listdata.setProd_status(pstatus);
-//                    listdata.setProd_price(pprice);
-//                    listdata.setProd_stock(pstock);
-//                    listdata.setCond_name(condname);
-//                    list.add(listdata);
-//                }
-//                ProductsAdapter adapter = new ProductsAdapter(list);
-//                RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
-//                prodrecyclerview.setLayoutManager(pLayoutManager);
-//                prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
-//                prodrecyclerview.setAdapter(adapter);
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getContext(), "Something is wrong, please try that again.", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-
         ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.custom_spinner_item,

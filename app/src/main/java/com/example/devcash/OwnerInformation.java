@@ -1,21 +1,25 @@
 package com.example.devcash;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.devcash.EDIT_UI.EditEmployee;
 import com.example.devcash.Object.Account;
 import com.example.devcash.Object.Business;
 import com.example.devcash.Object.Employee;
@@ -34,7 +38,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
     private FirebaseDatabase firebaseDatabase;
 
     private TextInputEditText ownerlname, ownerfname, ownerphone, owneraddr, ownerbdate, acctemail, acctpassw;
-    private TextView txtownerusername;
+    private TextView txtownerusername, txtdeactivate, txtacctstatus;
     private RadioGroup radioGroupgender;
     private RadioButton radioButton, radioMale, radioFemale;
     private String selectedGender;
@@ -56,8 +60,11 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         radioGroupgender = (RadioGroup) findViewById(R.id.radiogroup_ownergender);
         radioMale = (RadioButton) findViewById(R.id.radio_ownermale);
         radioFemale = (RadioButton) findViewById(R.id.radio_ownerfemale);
+        txtdeactivate = (TextView) findViewById(R.id.txt_deactivate);
+        txtacctstatus = (TextView) findViewById(R.id.txtacctstatus);
 
         ownerbdate.setOnClickListener(this);
+        txtdeactivate.setOnClickListener(this);
 
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -207,12 +214,242 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
 
     }
 
+    public void enterPasswDialog(){
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_password, null);
+        dialog.setView(dialogView);
+
+        final TextInputEditText editconfpassw = (TextInputEditText) dialogView.findViewById(R.id.confirmpassword);
+        final Button btnconfirm = (Button) dialogView.findViewById(R.id.btnconfirm);
+
+        btnconfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(txtdeactivate.getText().toString().equals("deactivate")){
+
+                    SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                    final String username = (shared.getString("owner_username", ""));
+
+                    ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                    final String ownerkey = dataSnapshot1.getKey();
+                                    ownerdbreference.child(ownerkey+"/business/account").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.exists()){
+                                                for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                    String acctkey = dataSnapshot2.getKey();
+                                                    ownerdbreference.child(ownerkey+"/business/account")
+                                                            .orderByChild("/acct_uname").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if(dataSnapshot.exists()){
+                                                                for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                    Account account = dataSnapshot3.getValue(Account.class);
+                                                                    String type = account.getAcct_type();
+                                                                    String passw = account.getAcct_passw();
+                                                                    if (!editconfpassw.getText().toString().equals("")){
+                                                                        if(passw.equals(editconfpassw.getText().toString()) && type.equals("Owner")){
+                                                                            deactivateDialog();
+                                                                        } else{
+                                                                            Toast.makeText(OwnerInformation.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    } else{
+                                                                        Toast.makeText(OwnerInformation.this, "Fields can not be empty!", Toast.LENGTH_SHORT).show();
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                } else{
+
+                    SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                    final String username = (shared.getString("owner_username", ""));
+
+                    ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                    final String ownerkey = dataSnapshot1.getKey();
+                                    ownerdbreference.child(ownerkey+"/business/account").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.exists()){
+                                                for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                    String acctkey = dataSnapshot2.getKey();
+                                                    ownerdbreference.child(ownerkey+"/business/account")
+                                                            .orderByChild("/acct_uname").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if(dataSnapshot.exists()){
+                                                                for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                    Account account = dataSnapshot3.getValue(Account.class);
+                                                                    String type = account.getAcct_type();
+                                                                    String passw = account.getAcct_passw();
+                                                                    if (!editconfpassw.getText().toString().equals("")){
+                                                                        if(passw.equals(editconfpassw.getText().toString()) && type.equals("Owner")){
+                                                                            activateDialog();
+                                                                        } else{
+                                                                            Toast.makeText(OwnerInformation.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    } else{
+                                                                        Toast.makeText(OwnerInformation.this, "Fields can not be empty!", Toast.LENGTH_SHORT).show();
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+            }
+        });
+        AlertDialog builder = dialog.create();
+        builder.show();
+    }
+
+    public void activateDialog(){
+
+    }
+
+    public void deactivateDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Sure to delete account?");
+        builder.setMessage("Your account will be deleted after 30 days.");
+        builder.setPositiveButton("DEACTIVATE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                //queryy
+
+                SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                final String username = (shared.getString("owner_username", ""));
+
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                final String ownerkey = dataSnapshot1.getKey();
+                                ownerdbreference.child(ownerkey+"/business/account")
+                                        .orderByChild("acct_uname").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                String acctkey = dataSnapshot2.getKey();
+                                                Account account = dataSnapshot2.getValue(Account.class);
+
+                                                txtacctstatus.setText("Deactivated");
+                                                ownerdbreference.child(ownerkey+"/business/account").child(acctkey+"/acct_status").setValue(txtacctstatus.getText().toString());
+                                                logoutOwner();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+        builder.show();
+    }
+
+    public void logoutOwner(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pending Deletion");
+        builder.setMessage("Your account is pending for deletion. If you will not login within 30 days, your account with Devcash will be permanently deleted.");
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = shared.edit();
+                editor.clear();
+                editor.commit();
+                Intent logout = new Intent(OwnerInformation.this, OwnerLoginActivity.class);
+                startActivity(logout);
+                Toast.makeText(OwnerInformation.this, "Error. You have been logged out.", Toast.LENGTH_SHORT).show();
+                finish();
+
+            }
+        });
+        builder.show();
+    }
+
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-            case R.id.owner_dob:
-
+            case R.id.txt_deactivate:
+                enterPasswDialog();
                 break;
         }
     }

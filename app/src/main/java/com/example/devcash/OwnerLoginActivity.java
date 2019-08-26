@@ -203,7 +203,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 ////                        Toast.makeText(OwnerLoginActivity.this, account.getAcct_email()+"", Toast.LENGTH_SHORT).show();
 //                    }
                 }else{
-                    Toast.makeText(OwnerLoginActivity.this, "does not exist", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(OwnerLoginActivity.this, "does not exist", Toast.LENGTH_SHORT).show();
                 }
             }
 

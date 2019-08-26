@@ -152,6 +152,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutpurchase_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
@@ -159,6 +160,17 @@
 
         <ListView
             android:id="@+id/listview_purchased_transaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_purchtransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <FrameLayout
+            android:id="@+id/recyclerflcontent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
