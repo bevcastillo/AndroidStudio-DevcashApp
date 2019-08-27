@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 
 import com.example.devcash.QRCodeFragment;
 import com.example.devcash.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 /**
@@ -35,14 +38,18 @@ import com.example.devcash.R;
  */
 public class PurchaseListFragment extends Fragment implements View.OnClickListener {
 
-    Toolbar purchaseListToolbar;
-    Spinner purchaseListSpinner;
-    Button btnpay;
+    private Toolbar purchaseListToolbar;
+    private Spinner purchaseListSpinner;
+    private Button btnpay;
+    private RecyclerView recyclerViewpurchlist;
 
-    Toolbar toolbar;
-    DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private DrawerLayout mDrawer;
 
-    LinearLayout layoutScanCode, layoutNewTransaction;
+    private LinearLayout layoutScanCode, layoutNewTransaction;
+
+    private DatabaseReference ownerdbreference;
+    private FirebaseDatabase firebaseDatabase;
 
 
     public PurchaseListFragment() {
@@ -57,6 +64,7 @@ public class PurchaseListFragment extends Fragment implements View.OnClickListen
 
         purchaseListToolbar = (Toolbar) view.findViewById(R.id.toolbar_purchaselist);
         purchaseListSpinner = (Spinner) view.findViewById(R.id.spinner_customertype);
+        recyclerViewpurchlist = (RecyclerView) view.findViewById(R.id.recycler_purchtransaction);
 
         //
         btnpay = (Button) view.findViewById(R.id.btn_paypurchasetransaction);
@@ -94,33 +102,27 @@ public class PurchaseListFragment extends Fragment implements View.OnClickListen
             }
         });
 
-
-        //set adapter
-        //set click listener
-
-        //show no data found text when listview is empty
-
-        // button click listener
-
-//        btnpay.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Fragment chargeFragment = new ChargeFragment();
-//
-//                FragmentManager fragmentManager = getFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.customersales_content, chargeFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//            }
-//        });
-
         //adding listeners to the linear layouts
         layoutScanCode.setOnClickListener(this);
         layoutNewTransaction.setOnClickListener(this);
         btnpay.setOnClickListener(this);
 
+
+
+        //
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+
     }
 
     @Override
@@ -163,32 +165,4 @@ public class PurchaseListFragment extends Fragment implements View.OnClickListen
 
         }
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        //Handles item selection
-//        switch (item.getItemId()){
-//            case R.id.action_scan:
-//                Toast.makeText(getActivity(),"Scan", Toast.LENGTH_SHORT).show();
-//                return true;
-//            case R.id.action_new:
-//                Toast.makeText(getActivity(), "New Purchase", Toast.LENGTH_SHORT).show();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        //The action bar home/up action should open or close the drawer
-//        switch (item.getItemId()){
-//            case android.R.id.home:
-//                mDrawer.openDrawer(GravityCompat.START);
-//                return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 }

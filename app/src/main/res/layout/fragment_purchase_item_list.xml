@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.PurchaseItemListFragment"
+    tools:context=".Fragments.PurchaseInventorylistFragment"
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
@@ -27,7 +27,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_purchitemlist"
@@ -68,6 +68,26 @@
 
 
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:padding="10dp">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/custom_btn"
+            android:text="items"
+            android:textAllCaps="false"
+            android:textColor="#fefefe"
+            android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+
+
 
 
 </LinearLayout>

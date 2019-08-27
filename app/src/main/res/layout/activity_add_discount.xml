@@ -23,8 +23,8 @@
                 android:layout_width="650dp"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
-                android:layout_marginTop="@dimen/padding_50"
-                android:layout_marginBottom="@dimen/padding_50"
+                android:layout_marginTop="@dimen/padding_20"
+                android:layout_marginBottom="@dimen/padding_20"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 

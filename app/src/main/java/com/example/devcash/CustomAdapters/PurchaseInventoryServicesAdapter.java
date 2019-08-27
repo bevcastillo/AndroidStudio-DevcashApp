@@ -1,7 +1,9 @@
 package com.example.devcash.CustomAdapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,17 +16,25 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.example.devcash.Fragments.PurchaseListFragment;
+import com.example.devcash.Object.PurchaseTransaction;
 import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<PurchaseInventoryServicesAdapter.ViewHolder> {
     List<Serviceslistdata> list;
     private static int itemcount = 0;
+    Context context;
 
     public PurchaseInventoryServicesAdapter(List<Serviceslistdata> list) {
         this.list = list;
+    }
+
+    public PurchaseInventoryServicesAdapter(Context context) {
+        this.context = context;
     }
 
     @NonNull
@@ -42,6 +52,15 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                 String servname = list.get(viewHolder.getAdapterPosition()).getServname();
                 double servprice = list.get(viewHolder.getAdapterPosition()).getServprice();
                 int servqty = itemcount;
+
+                Intent intent = new Intent(v.getContext(), PurchaseListFragment.class);
+                intent.putExtra("service_name", servname);
+                intent.putExtra("service_price", servprice);
+                intent.putExtra("service_qty", servqty);
+//                v.getContext().startActivity(intent); //save to intent
+
+//                addTransaction(null,servname,servqty,servprice);
+                addTransaction();
 
             }
         });
@@ -71,9 +90,18 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
         }
     }
 
-    private void clickCount(int pos){
-        if(pos==0){
-            itemcount++;
-        }
+    public void addTransaction(){
+
+//    public void addTransaction(String datetime, String itemName, int itemQty, double itemPrice){
+//        final PurchaseTransaction transaction = new PurchaseTransaction(datetime, null,
+//                null, null, itemQty, 0.0, 0.0, 0.0,
+//        0.0, 0.0, 0.0, 0.0);
+
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+        SharedPreferences sharedPreferences = context.getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (sharedPreferences.getString("owner_username",""));
+
+        Toast.makeText(context, username+" is the username", Toast.LENGTH_SHORT).show();
     }
 }

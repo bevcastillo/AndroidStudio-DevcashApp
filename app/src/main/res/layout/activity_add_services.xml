@@ -24,8 +24,7 @@
                 android:layout_width="650dp"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
-                android:layout_marginTop="@dimen/padding_30"
-                android:layout_marginBottom="@dimen/padding_top"
+                android:layout_marginTop="@dimen/padding_20"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -50,8 +49,7 @@
                             android:hint="@string/service_name"
                             android:inputType="text"
                             android:padding="@dimen/text_padding"
-                            android:textColorHint="@color/colorPrimary"
-                            android:textSize="@dimen/text_inputs" />
+                            android:textColorHint="@color/colorPrimary"/>
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -117,8 +115,7 @@
                                 android:hint="@string/price"
                                 android:inputType="numberDecimal"
                                 android:padding="@dimen/text_padding"
-                                android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/text_inputs" />
+                                android:textColorHint="@color/colorPrimary"/>
 
                         </android.support.design.widget.TextInputLayout>
 
@@ -133,7 +130,6 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:layout_marginTop="@dimen/padding_top"
-                android:layout_marginBottom="@dimen/padding_top"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -192,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:layout_marginTop="@dimen/padding_top"
-                android:layout_marginBottom="@dimen/padding_30"
+                android:layout_marginBottom="@dimen/padding_20"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 

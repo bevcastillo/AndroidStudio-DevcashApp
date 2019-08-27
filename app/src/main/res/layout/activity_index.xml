@@ -7,18 +7,19 @@
     tools:context=".IndexActivity"
     android:background="@color/white">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/imageView2"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:srcCompat="@mipmap/backdropimage" />-->
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@mipmap/backdrop_index"
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/tertiary"
-        android:alpha="0.6"
+        android:background="@color/white"
+        android:alpha="0.5"
         android:gravity="center"/>
 
     <LinearLayout

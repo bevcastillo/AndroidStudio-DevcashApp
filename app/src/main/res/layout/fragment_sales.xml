@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/inventory_fragment"
-        android:name="com.example.devcash.Fragments.PurchaseItemListFragment"
+        android:name="com.example.devcash.Fragments.PurchaseInventorylistFragment"
         tools:layout="@layout/fragment_purchase_item_list"
         android:layout_width="0dp"
         android:layout_height="match_parent"

@@ -137,7 +137,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                     for(DataSnapshot ds1 : dataSnapshot.getChildren()) {
                                         final String passkey = ds1.getKey();
                                         Account account = ds1.getValue(Account.class);
-                                        if (account.getAcct_passw().equals(ownerpassword)) {
+                                        if (account.getAcct_passw().equals(ownerpassword) && account.getAcct_uname().equals(owneruser)) {
                                             Toast.makeText(OwnerLoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
                                             Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
                                             startActivity(owner_dashboard);
@@ -145,35 +145,12 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                             editor.putString("account", accountJson);
                                             editor.commit();
                                         } else {
-//                                            Toast.makeText(OwnerLoginActivity.this, "Account not found", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
+                                } else{
+                                    Toast.makeText(OwnerLoginActivity.this, "Account not found!", Toast.LENGTH_SHORT).show();
                                 }
-//                                if(dataSnapshot.exists()){
-////                                    editor.putString("owner_passw", ownerpassword);
-////                                    editor.commit();
-////                                    for(DataSnapshot ds1: dataSnapshot.getChildren()){
-////                                        String passkey = ds1.getKey();
-////                                        Toast.makeText(OwnerLoginActivity.this, key+"", Toast.LENGTH_SHORT).show();
-////                                        Toast.makeText(OwnerLoginActivity.this, passkey+"", Toast.LENGTH_SHORT).show();
-////
-////                                        ownerbusinessReference.orderByChild(key+"/business/account/"+passkey+"/acct_passw").equalTo(ownerpassword).addListenerForSingleValueEvent(new ValueEventListener() {
-////                                            @Override
-////                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////                                                if(dataSnapshot.exists()){
-////                                                    Toast.makeText(OwnerLoginActivity.this, ownerpassword+"", Toast.LENGTH_SHORT).show();
-////                                                }
-////                                            }
-////
-////                                            @Override
-////                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-////
-////                                            }
-////                                        });
-////                                    }
-//                                }else{
-//                                    Toast.makeText(OwnerLoginActivity.this, ownerpassword+" does not exist!", Toast.LENGTH_SHORT).show();
-//                                }
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -183,45 +160,6 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 
                     }
 
-//                    ownerbusinessReference.orderByChild("business/account"+"/acct_passw").equalTo(ownerpassword).addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                            if (dataSnapshot.exists()) {
-//                                Toast.makeText(getApplication(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
-//                                Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
-//                                startActivity(owner_dashboard);
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                        }
-//                    });
-
-                    // iterate
-//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//                        Business business1 = ds.getValue(Business.class);
-//
-//                        Log.i("BUSINESS TAG!!", business1.getAccount().getAcct_uname());
-////                        Map<String, Business> map = (Map<String, Business>) dataSnapshot.getValue();
-////                        Iterator iter = map.keySet().iterator();
-////
-////                        while(iter.hasNext()) {
-////                            String key = (String) iter.next();
-////                            business = (Business) map.get(key);
-////                        }
-////
-////                        Log.i("BUSINESS TAG@@@@@", String.valueOf(business));
-//
-////                        Log.i("MY MAP BUSINESS TAG", "Value is: " + map.keySet().iterator());
-////                        Business business = ds.getValue(Business.class);
-////                        Account account = ds.child("account").getValue(Account.class);
-//
-//
-////                        Log.i("BUSINESS TAG!!!", );
-////                        Toast.makeText(OwnerLoginActivity.this, account.getAcct_email()+"", Toast.LENGTH_SHORT).show();
-//                    }
                 }else{
 //                    Toast.makeText(OwnerLoginActivity.this, "does not exist", Toast.LENGTH_SHORT).show();
                 }
@@ -232,108 +170,6 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
-
-
-//        accountDatabaseReference.orderByChild("acct_uname").equalTo(owneruser).addListenerForSingleValueEvent(new ValueEventListener() {
-//        @Override
-//        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//            if(dataSnapshot.exists()){
-//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Account account = dataSnapshot1.getValue(Account.class);
-//                    if(account.getAcct_passw().equals(ownerpassword)){
-//                        if(account.getAcct_type().equals("Owner")){
-//                            String json = gson.toJson(account);
-//                            editor.putString("acct_uname", owneruser);
-//                            editor.putString("acct_passw", ownerpassword);
-//                            editor.putString("acct_type", "Owner");
-//                            editor.putString("Account", json);
-//                            editor.commit();
-//                            Toast.makeText(getApplicationContext(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
-//                            Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
-//                            startActivity(owner_dashboard);
-//                        }else{
-//                            Toast.makeText(getApplicationContext(), "No access", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }else{
-//                        Toast.makeText(getApplicationContext(), "Invalid username/password", Toast.LENGTH_LONG).show();
-//                    }
-//                }//end for
-//            }else{
-//                Toast.makeText(getApplicationContext(), "Username does not exist", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//
-//        @Override
-//        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//        }
-//    });
-
-
-//        ownerDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot ownerSnap : dataSnapshot.getChildren()) {
-////                    Log.i("OWNER TAG!!!", ownerSnap.child("owner_username").getValue(String.class));
-////                    Owner owner = ownerSnap.getValue(Owner.class);
-//                    Account account = ownerSnap.child("account").getValue(Account.class);
-//                    Enterprise ent = ownerSnap.child("enterprise").getValue(Enterprise.class);
-//                    String ownerFname = ownerSnap.child("owner_fname").getValue(String.class);
-//                    String ownerLname = ownerSnap.child("owner_lname").getValue(String.class);
-//                    String ownerUname = ownerSnap.child("owner_username").getValue(String.class);
-//                    Owner owner = new Owner(ownerLname, ownerFname, ownerUname, account, ent);
-//                    Log.i("OWNER TAG!!!!", owner.getOwner_fname());
-//
-//                    // check if the user credentials is same from the filled up form.
-//                    if (!account.getAcct_uname().equals(owneruname.getText().toString()) && !account.getAcct_passw().equals(ownerpassw.getText().toString())) {
-//                        Toast.makeText(OwnerLoginActivity.this, "User not found", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    } else {
-//                        Toast.makeText(OwnerLoginActivity.this, "Proceed to next activity", Toast.LENGTH_SHORT).show();
-//                        Log.i("OWNER ACCOUNT", owneruname.getText().toString());
-//                        break;
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//        ownerDatabaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Owner owner = dataSnapshot1.getValue(Owner.class);
-//                    String ownerusername = owner.getAccount().getAcct_uname();
-//                    String ownerpassword = owner.getAccount().getAcct_passw();
-//                    String acctype = owner.getAccount().getAcct_type();
-//
-//                    String uname = owneruname.getText().toString();
-//                    String passw = ownerpassw.getText().toString();
-//                    if(ownerusername.equals(uname) && ownerpassword.equals(passw)){
-//                        if(acctype.equals("Owner")){
-//                            Toast.makeText(getApplication(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
-//                            Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
-//                            startActivity(owner_dashboard);
-//                        }else{
-//                            Toast.makeText(getApplicationContext(), "Not owner!", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }else{
-//                        Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
-//                    }
-////                    Toast.makeText(getApplicationContext(), dataSnapshot1.toString(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
 //    private boolean ownerExists() {
@@ -375,8 +211,28 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 //        startActivity(owner_dashboard);
 //    }
 
+    private boolean validateEmailPassw(){
+        String username = owneruname.getText().toString().trim();
+        String passw = ownerpassw.getText().toString().trim();
+        boolean ok = true;
 
+        if(username.isEmpty()){
+            textInputOwnerUsername.setError("Fields can not be empty.");
+            ok = false;
+            if(passw.isEmpty()){
+                textInputOwnerPassw.setError("Fields can not be empty.");
+                ok = false;
+            }else{
+                textInputOwnerPassw.setError(null);
+                ok = true;
+            }
+        }else {
+            textInputOwnerUsername.setError(null);
+            ok = true;
+        }
 
+        return ok;
+    }
 
     @Override
     public void onClick(View v) {
@@ -386,12 +242,15 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                 startActivity(owner_forgotpassw);
                 break;
             case R.id.btn_login:
-
-                if(internetConnectionAvailable(5) == true){
-                    ownerLogin();
-                } else{
-                    noInternetDialog();
+                //checking the internet connection
+                if (validateEmailPassw()){
+                    if(internetConnectionAvailable(5) == true){
+                        ownerLogin();
+                    } else{
+                        noInternetDialog();
+                    }
                 }
+
                 break;
         }
     }

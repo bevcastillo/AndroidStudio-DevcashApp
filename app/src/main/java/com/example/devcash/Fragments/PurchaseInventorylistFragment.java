@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,7 +48,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PurchaseItemListFragment extends Fragment implements SearchView.OnQueryTextListener,
+public class PurchaseInventorylistFragment extends Fragment implements SearchView.OnQueryTextListener,
         MenuItem.OnActionExpandListener{
 
     //
@@ -70,7 +71,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
     String selectedinventorytype;
 
 
-    public PurchaseItemListFragment() {
+    public PurchaseInventorylistFragment() {
         // Required empty public constructor
     }
 
@@ -160,7 +161,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
                                         list.add(listdata);
                                     }
                                         PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(list);
-                                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),4);
+                                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),6);
                                         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                         recyclerViewitemlist.setLayoutManager(gridLayoutManager);
                                         recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
@@ -209,7 +210,7 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
                                         slist.add(slistdata);
                                     }
                                         PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist);
-                                        GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),4);
+                                        GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),6);
                                         sgridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                         recyclerViewitemlist.setLayoutManager(sgridLayoutManager);
                                         recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
@@ -265,5 +266,17 @@ public class PurchaseItemListFragment extends Fragment implements SearchView.OnQ
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 }
