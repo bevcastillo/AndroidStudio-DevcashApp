@@ -28,8 +28,10 @@ import android.widget.Toast;
 
 import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.CustomAdapters.PurchaseInventoryServicesAdapter;
+import com.example.devcash.MyUtility;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Productlistdata;
+import com.example.devcash.Object.PurchaseTransactionlistdata;
 import com.example.devcash.Object.Services;
 import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
@@ -60,6 +62,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
     List<Productlistdata> list;
     List<Serviceslistdata> slist;
+    List<PurchaseTransactionlistdata> ptlist;
     //
     Toolbar itemListToolbar;
     Spinner itemListSpinner;
@@ -136,6 +139,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
 
     public void viewAllProducts(){
+
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 

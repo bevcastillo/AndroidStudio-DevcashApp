@@ -1,21 +1,30 @@
 package com.example.devcash.Object;
 
+import java.util.List;
+import java.util.Map;
+
 public class PurchaseTransaction {
     String purch_datetime, cust_type, cust_phone, cust_email;
-    double purch_qty, purch_tot_qty, purch_tot_price, purch_vat, purch_vatE, purch_zero, cust_cash, cust_change;
+    double purch_tot_qty, purch_tot_price, purch_vat, purch_vatE, purch_zero, cust_cash, cust_change;
     Product product;
     Services services;
     Employee employee;
     Enterprise enterprise;
+//    List<PurchasedItem> purchasedItem;
+//    Map<String, PurchasedItem> purchasedItem;
+
+    PurchasedItem purchasedItem;
+
+    public PurchaseTransaction() {
+    }
 
     public PurchaseTransaction(String purch_datetime, String cust_type, String cust_phone, String cust_email,
-                               double purch_qty, double purch_tot_qty, double purch_tot_price, double purch_vat,
+                               double purch_tot_qty, double purch_tot_price, double purch_vat,
                                double purch_vatE, double purch_zero, double cust_cash, double cust_change) {
         this.purch_datetime = purch_datetime;
         this.cust_type = cust_type;
         this.cust_phone = cust_phone;
         this.cust_email = cust_email;
-        this.purch_qty = purch_qty;
         this.purch_tot_qty = purch_tot_qty;
         this.purch_tot_price = purch_tot_price;
         this.purch_vat = purch_vat;
@@ -24,6 +33,8 @@ public class PurchaseTransaction {
         this.cust_cash = cust_cash;
         this.cust_change = cust_change;
     }
+
+
 
     public String getPurch_datetime() {
         return purch_datetime;
@@ -55,14 +66,6 @@ public class PurchaseTransaction {
 
     public void setCust_email(String cust_email) {
         this.cust_email = cust_email;
-    }
-
-    public double getPurch_qty() {
-        return purch_qty;
-    }
-
-    public void setPurch_qty(double purch_qty) {
-        this.purch_qty = purch_qty;
     }
 
     public double getPurch_tot_qty() {
@@ -151,5 +154,31 @@ public class PurchaseTransaction {
 
     public void setEnterprise(Enterprise enterprise) {
         this.enterprise = enterprise;
+    }
+
+//    public List<PurchasedItem> getPurchasedItem() {
+//        return purchasedItem;
+//    }
+//
+//    public void setPurchasedItem(List<PurchasedItem> purchasedItem) {
+//        this.purchasedItem = purchasedItem;
+//    }
+
+
+//    public Map<String, PurchasedItem> getPurchasedItem() {
+//        return purchasedItem;
+//    }
+//
+//    public void setPurchasedItem(Map<String, PurchasedItem> purchasedItem) {
+//        this.purchasedItem = purchasedItem;
+//    }
+
+
+    public PurchasedItem getPurchasedItem() {
+        return purchasedItem;
+    }
+
+    public void setPurchasedItem(PurchasedItem purchasedItem) {
+        this.purchasedItem = purchasedItem;
     }
 }

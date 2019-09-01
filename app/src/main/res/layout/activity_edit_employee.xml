@@ -282,10 +282,9 @@
                     android:id="@+id/editempusername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/page_title"
                     android:text="johndoe123"
-                    android:textColor="@color/dark_text"
-                    android:paddingTop="10dp"/>
+                    android:paddingTop="10dp"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
@@ -305,10 +304,9 @@
                     android:id="@+id/editempname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/page_title"
                     android:text="John Doe"
-                    android:textColor="@color/dark_text"
-                    android:paddingTop="10dp"/>
+                    android:paddingTop="10dp"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
@@ -328,10 +326,9 @@
                     android:id="@+id/editempgender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/page_title"
-                    android:text="Male/Female"
-                    android:textColor="@color/dark_text"
-                    android:paddingTop="10dp"/>
+                    android:text="Male"
+                    android:paddingTop="10dp"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
@@ -351,10 +348,9 @@
                     android:id="@+id/editempnumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/page_title"
                     android:text="09065283986"
-                    android:textColor="@color/dark_text"
-                    android:paddingTop="10dp"/>
+                    android:paddingTop="10dp"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
 

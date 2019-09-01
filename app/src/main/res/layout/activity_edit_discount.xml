@@ -23,8 +23,8 @@
                 android:layout_width="650dp"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
-                android:layout_marginTop="@dimen/padding_50"
-                android:layout_marginBottom="@dimen/padding_20"
+                android:layout_marginTop="@dimen/padding_20"
+                android:layout_marginBottom="10dp"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -49,8 +49,7 @@
                             android:hint="@string/disc_code"
                             android:inputType="text"
                             android:padding="@dimen/text_padding"
-                            android:textColorHint="@color/colorPrimary"
-                            android:textSize="@dimen/text_inputs" />
+                            android:textColorHint="@color/colorPrimary" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -210,7 +209,7 @@
                 android:layout_width="650dp"
                 android:layout_height="55dp"
                 android:padding="@dimen/text_padding"
-                android:layout_marginBottom="@dimen/padding_top"
+                android:layout_marginBottom="@dimen/padding_20"
                 android:background="@color/whiteBG">
 
                 <LinearLayout

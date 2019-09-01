@@ -49,8 +49,7 @@
                             android:hint="@string/prod_name"
                             android:inputType="text"
                             android:padding="@dimen/text_padding"
-                            android:textColorHint="@color/colorPrimary"
-                            android:textSize="@dimen/text_inputs" />
+                            android:textColorHint="@color/dark_text"/>
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -185,8 +184,7 @@
                                 android:hint="@string/price"
                                 android:inputType="numberDecimal"
                                 android:padding="@dimen/text_padding"
-                                android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/text_inputs" />
+                                android:textColorHint="@color/colorPrimary"/>
 
                         </android.support.design.widget.TextInputLayout>
 
@@ -513,8 +511,7 @@
                                 android:hint="@string/rop"
                                 android:inputType="number"
                                 android:padding="@dimen/text_padding"
-                                android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/text_inputs" />
+                                android:textColorHint="@color/colorPrimary"/>
 
                         </android.support.design.widget.TextInputLayout>
 

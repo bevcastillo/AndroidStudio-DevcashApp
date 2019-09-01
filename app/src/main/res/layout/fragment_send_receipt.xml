@@ -11,7 +11,7 @@
         android:id="@+id/toolbar_purchaseitemlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:theme="@style/AppTheme"
         style="@style/PrimaryHeaderBar"
         android:elevation="4dp">
 
@@ -166,7 +166,8 @@
                             android:padding="@dimen/text_padding"
                             android:drawableLeft="@drawable/ic_smartphone"
                             android:drawableTint="@color/icon_light"
-                            android:drawablePadding="@dimen/text_padding"/>
+                            android:drawablePadding="@dimen/text_padding"
+                            android:visibility="gone"/>
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -214,7 +215,7 @@
         <Button
             android:id="@+id/btn_newPurchase"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:text="@string/new_purchase"
             android:textColor="@color/whiteBG"
             android:background="@color/colorPrimary"/>

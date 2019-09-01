@@ -325,12 +325,28 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     product_editor.putString("product_id", ProductId); //saving the ProductId to shared preference
+
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
-                        dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
-                        String categoryJson = gson.toJson(product);
-                        product_editor.putString("product", categoryJson);
-                        product_editor.commit();
+
+                        for(ProductExpDate productExpDate : productExpDates) {
+                            product.setProd_expdate(productExpDate.getProd_expdate());
+                            product.setProdExpCount(productExpDate.getProd_expdatecount());
+
+                            Toast.makeText(AddProductActivity.this, productExpDate.getProd_expdate()+ " is the exp date with a count of "+productExpDate.getProd_expdatecount(), Toast.LENGTH_SHORT).show();
+
+//                            dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
+                            dbreference.child("owner/"+key+"/business/product").push().setValue(product);
+
+                            String productJson = gson.toJson(product);
+                            product_editor.putString("product", productJson);
+                            product_editor.commit();
+                        }
+
+//                        dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
+//                        String productJson = gson.toJson(product);
+//                        product_editor.putString("product", productJson);
+//                        product_editor.commit();
                     }
                 }
             }
@@ -413,7 +429,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 //            addRadioGroupListener();
 //            addCheckBoxListener();
             insertProduct();
-//            getExpDate();
+            getExpDate();
         }
         return super.onOptionsItemSelected(item);
 
@@ -464,7 +480,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        productExpDate.setProd_expdatecount(Integer.valueOf(s.toString()));
+                        if(!s.toString().equals("")) {
+                            productExpDate.setProd_expdatecount(Integer.valueOf(s.toString()));
+                        } else {
+                            productExpDate.setProd_expdatecount(0);
+                        }
+
                     }
                 });
 

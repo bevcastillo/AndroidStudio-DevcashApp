@@ -103,6 +103,8 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
         final String owneruser = owneruname.getText().toString();
         final String ownerpassword = ownerpassw.getText().toString();
 
+        MyUtility.username=owneruser;
+
         ownerbusinessReference.orderByChild("business/owner_username").equalTo(owneruser).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -247,7 +249,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                     if(internetConnectionAvailable(5) == true){
                         ownerLogin();
                     } else{
-                        noInternetDialog();
+                        Toast.makeText(this, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
                     }
                 }
 

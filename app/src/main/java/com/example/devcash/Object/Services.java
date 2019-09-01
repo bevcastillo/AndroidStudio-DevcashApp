@@ -8,6 +8,7 @@ import android.net.Uri;
 public class Services {
     String service_name, service_status;
     double service_price;
+    int service_qty;
     public Discount discount;
     public Category category;
 
@@ -15,10 +16,23 @@ public class Services {
     }
 
     public Services(String service_name, String service_status, double service_price) {
+    }
+
+//    public Services(String service_name, String service_status, double service_price) {
+//        this.service_name = service_name;
+//        this.service_status = service_status;
+//        this.service_price = service_price;
+//    }
+
+
+    public Services(String service_name, String service_status, double service_price, int service_qty) {
         this.service_name = service_name;
         this.service_status = service_status;
         this.service_price = service_price;
+        this.service_qty = service_qty;
     }
+
+
 
     public String getService_name() {
         return service_name;
@@ -58,5 +72,13 @@ public class Services {
 
     public void setService_status(String service_status) {
         this.service_status = service_status;
+    }
+
+    public int getService_qty() {
+        return service_qty;
+    }
+
+    public void setService_qty(int service_qty) {
+        this.service_qty = service_qty;
     }
 }

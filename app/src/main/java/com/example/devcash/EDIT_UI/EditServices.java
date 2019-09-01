@@ -301,10 +301,8 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                         String name = services.getCategory().getCategory_name();
 //                                        strchkavail = services.getService_status();
 
-                                        ownerdbreference.child(ownerkey+"/business/services")
-                                                .child(servkey+"/service_name").setValue(servname.getText().toString());
-                                        ownerdbreference.child(ownerkey+"/business/services")
-                                                .child(servkey+"/service_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_name").setValue(servname.getText().toString());
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_price").setValue(Double.valueOf(servprice.getText().toString()));
                                         //
                                         if(chckavail.isChecked()){
                                             strchkavail = "Available";
@@ -312,14 +310,13 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                             strchkavail = "Unavailable";
                                         }
 
-                                        ownerdbreference.child(ownerkey+"/business/services")
-                                                .child(servkey+"/service_status").setValue(strchkavail);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_status").setValue(strchkavail);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category/category_name").setValue(selectedcategory);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_code").setValue(selecteddiscount);
 
-                                        ownerdbreference.child(ownerkey+"/business/services")
-                                                .child(servkey+"/category/category_name").setValue(selectedcategory);
-
-                                        ownerdbreference.child(ownerkey+"/business/services")
-                                                .child(servkey+"/discount/disc_code").setValue(selecteddiscount);
+                                        //updating the qrcode
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_code").setValue(servname.getText().toString());
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_price").setValue(Double.valueOf(servprice.getText().toString()));
 
                                     }
                                 }
@@ -331,6 +328,7 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                             }
                         });
                         Toast.makeText(EditServices.this, "Services is updated", Toast.LENGTH_SHORT).show();
+                        finish();
 
                     }
                 }
@@ -342,6 +340,7 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
             }
         });
     }
+
 
     public void deleteServices(){
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
@@ -361,13 +360,20 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                 if(dataSnapshot.exists()){
                                     for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
                                         String servkey = dataSnapshot2.getKey();
+                                        Services services = dataSnapshot2.getValue(Services.class);
 
                                         ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_name").setValue(null);
                                         ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_price").setValue(null);
+//
                                         ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_status").setValue(null);
                                         ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category/category_name").setValue(null);
                                         ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_code").setValue(null);
                                         ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_value").setValue(null);
+
+                                        //deleting the qrcode
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_category").setValue(null);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_code").setValue(null);
+                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_price").setValue(null);
 
                                     }
                                 }
@@ -379,6 +385,7 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                             }
                         });
                         Toast.makeText(EditServices.this, "Services is deleted", Toast.LENGTH_SHORT).show();
+                        finish();
 
                     }
                 }
@@ -390,6 +397,54 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
             }
         });
     }
+
+//    public void deleteServices(){
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()){
+//                    for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                        final String ownerkey = dataSnapshot1.getKey();
+//
+//                        ownerdbreference.child(ownerkey+"/business/services")
+//                                .orderByChild("service_name").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                if(dataSnapshot.exists()){
+//                                    for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+//                                        String servkey = dataSnapshot2.getKey();
+//
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_name").setValue(null);
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_price").setValue(null);
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_status").setValue(null);
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category/category_name").setValue(null);
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_code").setValue(null);
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_value").setValue(null);
+//
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//                        Toast.makeText(EditServices.this, "Services is deleted", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 
     @Override
