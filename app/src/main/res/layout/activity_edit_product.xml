@@ -220,7 +220,7 @@
                         android:paddingTop="@dimen/padding_10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Use product condition if you add different conditions."
+                        android:text="Use product condition if you have items with different condition."
                         android:textColor="@color/dark_text"/>
 
                     <LinearLayout
@@ -353,7 +353,7 @@
                         android:paddingTop="@dimen/padding_10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Use expiration date if you items with different expiration dates."
+                        android:text="Use expiration date if you have items with different expiration dates."
                         android:textColor="@color/dark_text"/>
 
                     <LinearLayout

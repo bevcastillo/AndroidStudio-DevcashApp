@@ -11,6 +11,7 @@ public class Services {
     int service_qty;
     public Discount discount;
     public Category category;
+    public QRCode qrCode;
 
     public Services() {
     }
@@ -80,5 +81,13 @@ public class Services {
 
     public void setService_qty(int service_qty) {
         this.service_qty = service_qty;
+    }
+
+    public QRCode getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(QRCode qrCode) {
+        this.qrCode = qrCode;
     }
 }

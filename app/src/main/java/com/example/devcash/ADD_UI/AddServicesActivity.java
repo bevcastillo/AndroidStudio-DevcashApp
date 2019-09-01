@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.devcash.Object.Category;
 import com.example.devcash.Object.Discount;
+import com.example.devcash.Object.QRCode;
 import com.example.devcash.Object.Services;
 import com.example.devcash.R;
 import com.google.firebase.database.DataSnapshot;
@@ -174,12 +175,20 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     public void addServices(String service_name, String service_status, double service_price){
         Discount discount = new Discount();
         Category category = new Category();
+        QRCode qrCode = new QRCode();
+        qrCode.setQr_category("Services");
+        qrCode.setQr_code(service_name);
+        qrCode.setQr_price(service_price);
         discount.setDisc_code(selecteddiscount);
         category.setCategory_name(selectedcategory);
 
-        final Services services = new Services(service_name, service_status, service_price);
+        final Services services = new Services();
+        services.setService_status(service_status);
+        services.setService_name(service_name);
+        services.setService_price(service_price);
         services.setDiscount(discount);
         services.setCategory(category);
+        services.setQrCode(qrCode);
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));

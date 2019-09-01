@@ -7,6 +7,7 @@ public class    Product {
     int prod_stock, prodExpCount;
     public ProductCondition productCondition;
     public Discount discount;
+    public QRCode qrCode;
 
     public Product() {
     }
@@ -150,5 +151,13 @@ public class    Product {
 
     public void setProdExpCount(int prodExpCount) {
         this.prodExpCount = prodExpCount;
+    }
+
+    public QRCode getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(QRCode qrCode) {
+        this.qrCode = qrCode;
     }
 }

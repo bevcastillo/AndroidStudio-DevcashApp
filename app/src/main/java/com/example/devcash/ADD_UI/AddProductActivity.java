@@ -39,6 +39,7 @@ import com.example.devcash.Object.Discount;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.ProductCondition;
 import com.example.devcash.Object.ProductExpDate;
+import com.example.devcash.Object.QRCode;
 import com.example.devcash.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -265,7 +266,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         ProductCondition condition = new ProductCondition();
         Category category = new Category();
         Discount discount = new Discount();
+        QRCode qrCode = new QRCode();
 
+        qrCode.setQr_category("Product");
+        qrCode.setQr_code(prod_name);
+        qrCode.setQr_price(prod_price);
         discount.setDisc_code(selecteddisc);
         category.setCategory_name(selectedcategory);
         condition.setCond_name(selectedprodcond);
@@ -281,6 +286,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         product.setProductCondition(condition);
         product.setCategory(category);
         product.setDiscount(discount);
+        product.setQrCode(qrCode);
+
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
@@ -289,36 +296,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         final SharedPreferences.Editor product_editor = productshared.edit();
 
         final Gson gson = new Gson();
-
-//        for(ProductExpDate productExpDate : productExpDates) {
-//            Toast.makeText(this, productExpDate.getProd_expdate()+" is the expiration date with a count of "+productExpDate.getProd_expdatecount(), Toast.LENGTH_SHORT).show();
-//
-//            product.setProd_expdate(productExpDate.getProd_expdate());
-//            product.setProdExpCount(productExpDate.getProd_expdatecount());
-//
-//            businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    if(dataSnapshot.exists()){
-//                        product_editor.putString("product_id", ProductId); //saving the ProductId to shared preference
-//                        for(DataSnapshot ds: dataSnapshot.getChildren()){
-//                            String key = ds.getKey();
-//
-//
-//                            dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
-//                            String categoryJson = gson.toJson(product);
-//                            product_editor.putString("product", categoryJson);
-//                            product_editor.commit();
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
-//        }
 
         businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -329,24 +306,26 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
 
-                        for(ProductExpDate productExpDate : productExpDates) {
-                            product.setProd_expdate(productExpDate.getProd_expdate());
-                            product.setProdExpCount(productExpDate.getProd_expdatecount());
+                        if (productExpDates.size()>0){
+                            for(ProductExpDate productExpDate : productExpDates) {
+                                product.setProd_expdate(productExpDate.getProd_expdate());
+                                product.setProdExpCount(productExpDate.getProd_expdatecount());
 
-                            Toast.makeText(AddProductActivity.this, productExpDate.getProd_expdate()+ " is the exp date with a count of "+productExpDate.getProd_expdatecount(), Toast.LENGTH_SHORT).show();
+                                dbreference.child("owner/"+key+"/business/product").push().setValue(product);
 
-//                            dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
-                            dbreference.child("owner/"+key+"/business/product").push().setValue(product);
-
+                                String productJson = gson.toJson(product);
+                                product_editor.putString("product", productJson);
+                                product_editor.commit();
+                            }
+                        } else{
+                            product.setProd_expdate("");
+                            dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
                             String productJson = gson.toJson(product);
                             product_editor.putString("product", productJson);
                             product_editor.commit();
                         }
 
-//                        dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
-//                        String productJson = gson.toJson(product);
-//                        product_editor.putString("product", productJson);
-//                        product_editor.commit();
+
                     }
                 }
             }
@@ -427,7 +406,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             return true;
         }else if(id == R.id.action_save){
 //            addRadioGroupListener();
-//            addCheckBoxListener();
+            addCheckBoxListener();
             insertProduct();
             getExpDate();
         }
