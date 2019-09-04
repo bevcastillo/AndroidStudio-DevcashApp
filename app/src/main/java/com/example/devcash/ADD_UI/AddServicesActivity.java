@@ -46,7 +46,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference ownerdbreference;
 //    private StorageReference storageReference;
-    private String ServicesId;
+    private String ServicesId, QRCodeId;
 
 
     ImageView servicesphoto;
@@ -88,6 +88,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
         ServicesId = dbreference.push().getKey();
+        QRCodeId = dbreference.push().getKey();
 
         categorydbreference = firebaseDatabase.getReference("datadevcash/category");
         discountsdbreference = firebaseDatabase.getReference("datadevcash/discount");
@@ -175,10 +176,11 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     public void addServices(String service_name, String service_status, double service_price){
         Discount discount = new Discount();
         Category category = new Category();
-        QRCode qrCode = new QRCode();
+        final QRCode qrCode = new QRCode();
         qrCode.setQr_category("Services");
         qrCode.setQr_code(service_name);
         qrCode.setQr_price(service_price);
+        qrCode.setQr_reference(service_name+service_price);
         discount.setDisc_code(selecteddiscount);
         category.setCategory_name(selectedcategory);
 
@@ -199,6 +201,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
                 if(dataSnapshot.exists()){
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/qrCode").child(QRCodeId).setValue(qrCode);
                         dbreference.child("owner/"+key+"/business/services").child(ServicesId).setValue(services);
                     }
                 }
