@@ -5,13 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +35,7 @@ import com.example.devcash.Object.Category;
 import com.example.devcash.Object.Discount;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.ProductCondition;
-import com.example.devcash.Object.ProductExpDate;
+import com.example.devcash.Object.ProductExpiration;
 import com.example.devcash.Object.QRCode;
 import com.example.devcash.R;
 import com.google.firebase.database.DataSnapshot;
@@ -49,7 +46,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -67,7 +63,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     //
     private DatabaseReference businessprodfirebasereference;
     private FirebaseDatabase firebaseDatabase;
-    private String ProductId;
+    private String ProductId, QRCodeId;
     private String ProductCondId, pexpdate, count;
 
 
@@ -96,7 +92,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     LinearLayout measurementlayout;
 
-    final List<ProductExpDate> productExpDates = new ArrayList<ProductExpDate>();
+    final List<ProductExpiration> productExpDates = new ArrayList<ProductExpiration>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +167,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
         ProductId = dbreference.push().getKey();
+        QRCodeId = dbreference.push().getKey();
         ProductCondId = dbreference.push().getKey();
 
         categoryfirebasereference = firebaseDatabase.getReference("/datadevcash/category");
@@ -261,19 +258,24 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final double prod_rop, int prod_stock){
+    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final double prod_rop, int prod_stock, final String prod_reference){
 
         ProductCondition condition = new ProductCondition();
+        ProductExpiration expiration = new ProductExpiration();
         Category category = new Category();
         Discount discount = new Discount();
-        QRCode qrCode = new QRCode();
+        final QRCode qrCode = new QRCode();
 
         qrCode.setQr_category("Product");
         qrCode.setQr_code(prod_name);
         qrCode.setQr_price(prod_price);
+
         discount.setDisc_code(selecteddisc);
+
         category.setCategory_name(selectedcategory);
+
         condition.setCond_name(selectedprodcond);
+
         if(condcount.getText().toString().equals("") && selectedprodcond.equals("New")){
             int count = 0;
             condition.setCond_count(count);
@@ -282,11 +284,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             condition.setCond_count(count);
         }
 
-        final Product product = new Product(prod_name, prod_brand, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock);
+        final Product product = new Product(prod_name, prod_brand, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock,prod_reference);
         product.setProductCondition(condition);
         product.setCategory(category);
         product.setDiscount(discount);
         product.setQrCode(qrCode);
+
 
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
@@ -307,10 +310,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         String key = ds.getKey();
 
                         if (productExpDates.size()>0){
-                            for(ProductExpDate productExpDate : productExpDates) {
+                            for(ProductExpiration productExpDate : productExpDates) {
+                                QRCode qrCode1 = new QRCode();
                                 product.setProd_expdate(productExpDate.getProd_expdate());
-                                product.setProdExpCount(productExpDate.getProd_expdatecount());
+                                product.setProd_expdatecount(productExpDate.getProd_expdatecount());
+                                String pname = product.getProd_name();
+                                product.setProd_reference(pname+productExpDate.getProd_expdate());
+                                qrCode.setQr_reference(pname+productExpDate.getProd_expdate());
+                                product.setQrCode(qrCode);
 
+                                dbreference.child("owner/"+key+"/business/qrCode").push().setValue(qrCode);
                                 dbreference.child("owner/"+key+"/business/product").push().setValue(product);
 
                                 String productJson = gson.toJson(product);
@@ -318,8 +327,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                 product_editor.commit();
                             }
                         } else{
-                            product.setProd_expdate("");
+                            product.setProd_expdate("No Expiration");
+                            String pname = product.getProd_name();
+                            product.setProd_reference(pname+product.getProd_expdate().trim());
+                            qrCode.setQr_reference(pname+product.getProd_expdate().trim());
+                            product.setQrCode(qrCode);
+
                             dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
+                            dbreference.child("owner/"+key+"/business/qrCode").child(QRCodeId).setValue(qrCode);
                             String productJson = gson.toJson(product);
                             product_editor.putString("product", productJson);
                             product_editor.commit();
@@ -351,7 +366,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         double pprice = Double.parseDouble(prodprice.getText().toString());
         double prop = Double.parseDouble(prodrop.getText().toString());
 
-        addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock);
+        ProductExpiration expiration = new ProductExpiration();
+        String expdate = expiration.getProd_expdate();
+        String p_reference = pname+expdate;
+
+        addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference);
         Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
         finish();
 
@@ -437,7 +456,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 //                TextInputEditText exp_itemcount = (TextInputEditText) expdatechild.findViewById(R.id.textinput_expdatecount);
                 exp_itemcount = (TextInputEditText) expdatechild.findViewById(R.id.textinput_expdatecount);
 
-                final ProductExpDate productExpDate = new ProductExpDate();
+                final ProductExpiration productExpDate = new ProductExpiration();
 
 //                count = exp_itemcount.getText().toString();
 //
@@ -476,7 +495,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         int mMonth = c.get(Calendar.MONTH);
                         int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-//                        final List<ProductExpDate> productExpDates = new ArrayList<ProductExpDate>();
+//                        final List<ProductExpiration> productExpDates = new ArrayList<ProductExpiration>();
 
                         //date picker dialog
                         expdatePicker = new DatePickerDialog(AddProductActivity.this,
@@ -507,7 +526,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     public void getExpDate(){
 
 //        Toast.makeText(this, pexpdate+" is the selected expdate", Toast.LENGTH_SHORT).show();
-        for(ProductExpDate productExpDate : productExpDates) {
+        for(ProductExpiration productExpDate : productExpDates) {
             Toast.makeText(this, productExpDate.getProd_expdate()+" is the selected expdate with a count of: "+productExpDate.getProd_expdatecount(), Toast.LENGTH_SHORT).show();
         }
 

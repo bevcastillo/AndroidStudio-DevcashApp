@@ -114,6 +114,8 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                 double prop = product.getProd_rop();
                                 double pprice = product.getProd_price();
                                 int pstock = product.getProd_stock();
+                                String pexpdate = product.getProd_expdate();
+                                int pexpdatecount = product.getProd_expdatecount();
                                 String condname = product.getProductCondition().getCond_name();
                                 String pstatus = product.getProd_status();
                                 listdata.setProd_name(pname);
@@ -122,6 +124,8 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                 listdata.setProd_price(pprice);
                                 listdata.setProd_stock(pstock);
                                 listdata.setCond_name(condname);
+                                listdata.setProd_expdate(pexpdate);
+                                listdata.setProd_expdatecount(pexpdatecount);
                                 list.add(listdata);
                             }
                                 ProductsAdapter adapter = new ProductsAdapter(list);

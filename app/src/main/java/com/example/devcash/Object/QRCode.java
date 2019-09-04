@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class QRCode {
-    private String qr_category, qr_code;
+    private String qr_category, qr_code, qr_expdate, qr_reference;
     private double qr_price;
 
     public QRCode() {
@@ -29,5 +29,21 @@ public class QRCode {
 
     public void setQr_price(double qr_price) {
         this.qr_price = qr_price;
+    }
+
+    public String getQr_expdate() {
+        return qr_expdate;
+    }
+
+    public void setQr_expdate(String qr_expdate) {
+        this.qr_expdate = qr_expdate;
+    }
+
+    public String getQr_reference() {
+        return qr_reference;
+    }
+
+    public void setQr_reference(String qr_reference) {
+        this.qr_reference = qr_reference;
     }
 }

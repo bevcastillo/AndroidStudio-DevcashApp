@@ -1,13 +1,18 @@
 package com.example.devcash.CustomAdapters;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.devcash.EDIT_UI.EditProduct;
 import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.R;
 
@@ -22,50 +27,63 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
         View v;
         v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_products, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(v);
 
-//        Intent pintent = new Intent(v.getContext(), EditProduct.class);
-//
-//        String pname = list.get(viewHolder.getAdapterPosition()).getProd_name();
-//        double pprice = list.get(viewHolder.getAdapterPosition()).getProd_price();
-//        int pstock = list.get(viewHolder.getAdapterPosition()).getProd_stock();
-//        double prop = list.get(viewHolder.getAdapterPosition()).getProd_rop();
-//        String pcat = list.get(viewHolder.getAdapterPosition()).getCategory_name();
-//        String pavail = list.get(viewHolder.getAdapterPosition()).getProd_status();
-//        String psoldby = list.get(viewHolder.getAdapterPosition()).getProd_soldby();
-//        String punit = list.get(viewHolder.getAdapterPosition()).getProd_unitof_measure();
-//        String pcond = list.get(viewHolder.getAdapterPosition()).getCond_name();
-//
-//        pintent.putExtra("eprodname", pname);
-//        pintent.putExtra("eprodprice", pprice);
-//        pintent.putExtra("eprodstock", pstock);
-//        pintent.putExtra("eprodrop", prop);
-//        pintent.putExtra("eprodcat", pcat);
-//        pintent.putExtra("eprodavail", pavail);
-//        pintent.putExtra("eprodsoldby", psoldby);
-//        pintent.putExtra("eprodunit", punit);
-//        pintent.putExtra("eprodcond", pcond);
-//
-//        v.getContext().startActivity(pintent);
+        viewHolder.prodname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String prodname = list.get(viewHolder.getAdapterPosition()).getProd_name();
+                String prodstatus = list.get(viewHolder.getAdapterPosition()).getProd_status();
+                double prodprice = list.get(viewHolder.getAdapterPosition()).getProd_price();
+                int prodstock = list.get(viewHolder.getAdapterPosition()).getProd_stock();
+                String prodexpdate = list.get(viewHolder.getAdapterPosition()).getProd_expdate();
+                int prodexpcount = list.get(viewHolder.getAdapterPosition()).getProd_expdatecount();
+
+                Intent intent = new Intent(v.getContext(), EditProduct.class);
+                intent.putExtra("product_name", prodname);
+                intent.putExtra("product_status", prodstatus);
+                intent.putExtra("product_price", prodprice);
+                intent.putExtra("product_stock", prodstock);
+                intent.putExtra("product_expdate", prodexpdate);
+                intent.putExtra("product_expcount", prodexpcount);
+                v.getContext().startActivity(intent);
+            }
+        });
 
         return viewHolder;
-
-
-//        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_products, viewGroup, false);
-//        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Productlistdata data = list.get(i);
         viewHolder.prodname.setText(data.getProd_name());
-        viewHolder.prodstatus.setText(data.getProd_status());
-        viewHolder.prodprice.setText(String.valueOf(data.getProd_price()));
+
+        if (viewHolder.prodstatus.getText().toString().equals("Available")){
+            viewHolder.prodstatus.setText(data.getProd_status());
+            viewHolder.prodimgstatus.setColorFilter(Color.GREEN);
+            viewHolder.prodstatus.setTextColor(Color.GREEN);
+        }
+        if (viewHolder.prodstatus.getText().toString().equals("Not Available")){
+            viewHolder.prodstatus.setText(data.getProd_status());
+            viewHolder.prodimgstatus.setColorFilter(Color.RED);
+            viewHolder.prodstatus.setTextColor(Color.RED);
+        }
+
+        viewHolder.prodprice.setText("₱"+(data.getProd_price()));
         viewHolder.prodstock.setText(String.valueOf(data.getProd_stock()));
-        Log.i("TAG STOCK", String.valueOf(data.getProd_stock()));
+
+        if (viewHolder.prodexpdate.getText().toString().equals("")){
+            viewHolder.prodexpdate.setText("No Expiration");
+        }
+        if (viewHolder.prodexpcount.getText().toString().equals(0)){
+            viewHolder.prodexpcount.setVisibility(View.INVISIBLE);
+            viewHolder.instock.setVisibility(View.INVISIBLE);
+        }
+        viewHolder.prodexpdate.setText(data.getProd_expdate());
+        viewHolder.prodexpcount.setText(String.valueOf(data.getProd_expdatecount()));
         viewHolder.condname.setText(data.getCond_name());
     }
 
@@ -76,7 +94,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView prodname, prodstatus, prodprice, prodstock, condname;
+        TextView prodname, prodstatus, prodprice, prodstock, condname, prodexpdate, prodexpcount, instock;
+        ImageView prodimgstatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,6 +104,10 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             prodprice = (TextView) itemView.findViewById(R.id.txtprod_price);
             prodstock = (TextView) itemView.findViewById(R.id.txtprod_stock);
             condname = (TextView) itemView.findViewById(R.id.txtprod_condition);
+            prodexpdate = (TextView) itemView.findViewById(R.id.txtprod_expdate);
+            prodexpcount = (TextView) itemView.findViewById(R.id.txtcount);
+            instock = (TextView) itemView.findViewById(R.id.instock);
+            prodimgstatus = (ImageView) itemView.findViewById(R.id.imageView_availability);
         }
     }
 }

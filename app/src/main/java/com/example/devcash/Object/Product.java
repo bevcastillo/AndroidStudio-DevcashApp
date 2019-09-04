@@ -1,13 +1,14 @@
 package com.example.devcash.Object;
 
-public class    Product {
-    String prod_name, prod_brand, prod_unitof_measure, prod_status, prod_datetimeadded, prod_expdate;
+public class Product {
+    String prod_name, prod_brand, prod_unitof_measure, prod_status, prod_datetimeadded, prod_expdate, prod_reference;
     double prod_price, prod_rop;
     public Category category;
-    int prod_stock, prodExpCount;
+    int prod_stock, prod_expdatecount;
     public ProductCondition productCondition;
     public Discount discount;
     public QRCode qrCode;
+    public ProductExpiration productExpiration;
 
     public Product() {
     }
@@ -34,7 +35,7 @@ public class    Product {
 //    }
 
 
-    public Product(String prod_name, String prod_brand, String prod_unitof_measure, String prod_status, double prod_price, double prod_rop, int prod_stock) {
+    public Product(String prod_name, String prod_brand, String prod_unitof_measure, String prod_status, double prod_price, double prod_rop, int prod_stock, String prod_reference) {
         this.prod_name = prod_name;
         this.prod_brand = prod_brand;
         this.prod_unitof_measure = prod_unitof_measure;
@@ -42,6 +43,7 @@ public class    Product {
         this.prod_price = prod_price;
         this.prod_rop = prod_rop;
         this.prod_stock = prod_stock;
+        this.prod_reference = prod_reference;
     }
 
     public Category getCategory() {
@@ -145,13 +147,6 @@ public class    Product {
         this.prod_expdate = prod_expdate;
     }
 
-    public int getProdExpCount() {
-        return prodExpCount;
-    }
-
-    public void setProdExpCount(int prodExpCount) {
-        this.prodExpCount = prodExpCount;
-    }
 
     public QRCode getQrCode() {
         return qrCode;
@@ -160,4 +155,30 @@ public class    Product {
     public void setQrCode(QRCode qrCode) {
         this.qrCode = qrCode;
     }
+
+    public ProductExpiration getProductExpiration() {
+        return productExpiration;
+    }
+
+    public void setProductExpiration(ProductExpiration productExpiration) {
+        this.productExpiration = productExpiration;
+    }
+
+    public int getProd_expdatecount() {
+        return prod_expdatecount;
+    }
+
+    public void setProd_expdatecount(int prod_expdatecount) {
+        this.prod_expdatecount = prod_expdatecount;
+    }
+
+    public String getProd_reference() {
+        return prod_reference;
+    }
+
+    public void setProd_reference(String prod_reference) {
+        this.prod_reference = prod_reference;
+    }
+
+
 }

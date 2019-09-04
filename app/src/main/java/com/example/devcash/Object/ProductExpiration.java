@@ -1,13 +1,13 @@
 package com.example.devcash.Object;
 
-public class ProductExpDate {
+public class ProductExpiration {
     String prod_expdate;
     int prod_expdatecount;
 
-    public ProductExpDate() {
+    public ProductExpiration() {
     }
 
-//    public ProductExpDate(String prod_expdate, int prod_expdatecount) {
+//    public ProductExpiration(String prod_expdate, int prod_expdatecount) {
 //        this.prod_expdate = prod_expdate;
 //        this.prod_expdatecount = prod_expdatecount;
 //    }

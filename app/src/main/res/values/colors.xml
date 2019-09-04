@@ -13,6 +13,7 @@
 
     <color name="secondary">#20A3EC</color>
     <color name="tertiary">#95D3F6</color>
+    <color name="blue_price">#3498DB</color>
 
     <!-- other colors used -->
     <color name="blue_link">#0033CC</color>

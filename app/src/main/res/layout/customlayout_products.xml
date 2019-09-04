@@ -29,7 +29,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:orientation="vertical"
             android:layout_marginLeft="@dimen/text_padding">
 
@@ -62,6 +62,42 @@
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/text_padding">
+
+            <TextView
+                android:id="@+id/txtprod_expdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="12/12/12"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtcount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/instock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  in stock"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/txtprod_condition"
             android:layout_width="0dp"
@@ -85,7 +121,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Available"
-            android:textSize="@dimen/text_inputs" />
+            android:textSize="@dimen/text_inputs"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/imageView_availability"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_circle"
+            android:paddingRight="5dp"
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/txtprod_price"
@@ -93,10 +138,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Price"
-            android:textSize="@dimen/page_title"
-            android:gravity="right"
-            android:paddingRight="@dimen/padding_30"
-            android:textColor="@color/dark_text"/>
+            android:textColor="@color/blue_price"
+            android:textSize="@dimen/text_inputs"
+            android:layout_marginRight="10dp"
+            android:gravity="right" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

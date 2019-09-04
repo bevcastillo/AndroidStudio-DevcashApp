@@ -43,7 +43,7 @@
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/textinput_prodname"
+                            android:id="@+id/textinput_editprodname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/prod_name"
@@ -65,8 +65,8 @@
                             android:padding="@dimen/text_padding"
                             android:text="@string/category" />
 
-                        <Spinner
-                            android:id="@+id/spinner_prodcat"
+                          <Spinner
+                            android:id="@+id/spinner_editprodcat"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                         android:paddingTop="@dimen/padding_top">
 
                         <CheckBox
-                            android:id="@+id/cbox_prod_avail"
+                            android:id="@+id/cbox_editprodavail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/colorPrimary"
@@ -153,7 +153,7 @@
                                 android:text="@string/unit" />
 
                             <Spinner
-                                android:id="@+id/spinner_unit"
+                                android:id="@+id/spinner_editunit"
                                 style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                             app:errorEnabled="true">
 
                             <android.support.design.widget.TextInputEditText
-                                android:id="@+id/textinput_price"
+                                android:id="@+id/textinput_editprice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/price"
@@ -198,7 +198,6 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:layout_marginTop="@dimen/padding_top"
-                android:layout_marginBottom="@dimen/padding_top"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -243,7 +242,7 @@
                                 android:textSize="@dimen/small_title" />
 
                             <Spinner
-                                android:id="@+id/spinner_prodcondition"
+                                android:id="@+id/spinner_editprodcond"
                                 style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -261,15 +260,14 @@
                             app:errorEnabled="true">
 
                             <android.support.design.widget.TextInputEditText
-                                android:id="@+id/textinput_itemcount"
+                                android:id="@+id/textinput_editcondcount"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:hint="@string/item_count"
                                 android:inputType="number"
                                 android:padding="@dimen/text_padding"
                                 android:textColorHint="@color/colorPrimary"
-                                android:textSize="@dimen/text_inputs"
-                                android:visibility="gone"/>
+                                android:textSize="@dimen/text_inputs" />
 
                         </android.support.design.widget.TextInputLayout>
 
@@ -304,8 +302,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_add_circle"
-                            android:tint="@color/colorPrimary"
-                            android:visibility="gone"/>
+                            android:tint="@color/colorPrimary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -357,17 +354,72 @@
                         android:textColor="@color/dark_text"/>
 
                     <LinearLayout
-                        android:id="@+id/container_expdate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="@dimen/padding_top"/>
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/padding_top">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingTop="@dimen/text_padding"
+                            android:paddingRight="@dimen/padding_30"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/textprod_editexpdate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableRight="@drawable/ic_date_range"
+                                android:drawablePadding="@dimen/text_padding"
+                                android:drawableTint="@color/icon_light"
+                                android:hint="@string/exp_date"
+                                android:padding="@dimen/text_padding"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/text_inputs" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="@dimen/padding_30"
+                            android:paddingTop="@dimen/text_padding"
+                            app:errorEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/textinput_editexpcount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/item_count"
+                                android:inputType="number"
+                                android:padding="@dimen/text_padding"
+                                android:textColorHint="@color/colorPrimary"
+                                android:textSize="@dimen/text_inputs" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_delete"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/text_padding"
+                            android:tint="@color/icon_light"/>
+
+
+                    </LinearLayout>
+
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingTop="@dimen/padding_top">
+                        android:paddingTop="@dimen/padding_top"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/imgview_addexpdate"
@@ -393,7 +445,6 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:layout_marginTop="@dimen/padding_top"
-                android:layout_marginBottom="@dimen/padding_top"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -434,7 +485,7 @@
                                 android:text="@string/disc_name" />
 
                             <Spinner
-                                android:id="@+id/spinner_proddisc"
+                                android:id="@+id/spinner_editproddisc"
                                 style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -451,7 +502,6 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:layout_marginTop="@dimen/padding_top"
-                android:layout_marginBottom="@dimen/padding_top"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -485,7 +535,7 @@
                             app:errorEnabled="true">
 
                             <android.support.design.widget.TextInputEditText
-                                android:id="@+id/textinput_instock"
+                                android:id="@+id/textinput_editinstock"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/in_stock"
@@ -505,7 +555,7 @@
                             app:errorEnabled="true">
 
                             <android.support.design.widget.TextInputEditText
-                                android:id="@+id/textinput_ROP"
+                                android:id="@+id/textinput_editROP"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/rop"
@@ -525,7 +575,6 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:layout_marginTop="@dimen/padding_top"
-                android:layout_marginBottom="@dimen/padding_30"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -621,7 +670,8 @@
                 android:layout_width="650dp"
                 android:layout_height="55dp"
                 android:padding="@dimen/text_padding"
-                android:layout_marginBottom="@dimen/padding_top"
+                android:layout_marginTop="@dimen/padding_top"
+                android:layout_marginBottom="@dimen/padding_30"
                 android:background="@color/whiteBG">
 
                 <LinearLayout

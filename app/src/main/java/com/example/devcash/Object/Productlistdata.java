@@ -1,9 +1,11 @@
 package com.example.devcash.Object;
 
 public class Productlistdata {
-    String prod_name, prod_brand, prod_unitof_measure, prod_status, category_name, cond_name;
+    String prod_name, prod_brand, prod_unitof_measure, prod_status, category_name, cond_name, prod_expdate;
     double prod_price, prod_rop;
-    int prod_stock;
+    int prod_stock, prod_expdatecount;
+
+    ProductExpiration productExpiration;
 
 
     public String getProd_name() {
@@ -77,4 +79,30 @@ public class Productlistdata {
     public void setProd_brand(String prod_brand) {
         this.prod_brand = prod_brand;
     }
+
+    public String getProd_expdate() {
+        return prod_expdate;
+    }
+
+    public void setProd_expdate(String prod_expdate) {
+        this.prod_expdate = prod_expdate;
+    }
+
+
+    public int getProd_expdatecount() {
+        return prod_expdatecount;
+    }
+
+    public void setProd_expdatecount(int prod_expdatecount) {
+        this.prod_expdatecount = prod_expdatecount;
+    }
+
+    public ProductExpiration getProductExpiration() {
+        return productExpiration;
+    }
+
+    public void setProductExpiration(ProductExpiration productExpiration) {
+        this.productExpiration = productExpiration;
+    }
+
 }
