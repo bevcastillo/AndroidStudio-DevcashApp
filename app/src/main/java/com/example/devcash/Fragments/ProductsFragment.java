@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddProductActivity;
 import com.example.devcash.CustomAdapters.ProductsAdapter;
+import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.R;
@@ -48,11 +50,11 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProductsFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+public class ProductsFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, AdapterView.OnItemSelectedListener {
 
     DatabaseReference dbreference;
     DatabaseReference productsfirebaseDatabase;
-    DatabaseReference businessprodfirebasereference;
+    DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
 
     RecyclerView prodrecyclerview;
@@ -65,6 +67,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
     Spinner productsSpinner, conditionSpinner;
     ProgressBar progressBar;
 
+    String selectedstatus, selectedcondition;
 
     public ProductsFragment() {
         // Required empty public constructor
@@ -98,29 +101,185 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
         productsfirebaseDatabase = firebaseDatabase.getReference("/datadevcash/products");
-        businessprodfirebasereference = firebaseDatabase.getReference("/datadevcash/owner");
+        ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
+
+        productsSpinner.setOnItemSelectedListener(this);
 
 
-//        if (list.isEmpty()){
-//            emptylayout.setVisibility(View.VISIBLE);
-//        }else{
-//            emptylayout.setVisibility(View.GONE);
-//        }
+//        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()){
+//                   for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                        String key = ds.getKey();
+//                       dbreference.child("owner/"+key+"/business/product").addValueEventListener(new ValueEventListener() {
+//                           @Override
+//                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                list = new ArrayList<>();
+//                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+//                                    Product product = dataSnapshot1.getValue(Product.class);
+//                                    Productlistdata listdata = new Productlistdata();
+//                                    String pname = product.getProd_name();
+//                                    double prop = product.getProd_rop();
+//                                    double pprice = product.getProd_price();
+//                                    int pstock = product.getProd_stock();
+//                                    String pexpdate = product.getProd_expdate();
+//                                    int pexpdatecount = product.getProd_expdatecount();
+//                                    String condname = product.getProductCondition().getCond_name();
+//                                    String pstatus = product.getProd_status();
+//                                    listdata.setProd_name(pname);
+//                                    listdata.setProd_rop(prop);
+//                                    listdata.setProd_status(pstatus);
+//                                    listdata.setProd_price(pprice);
+//                                    listdata.setProd_stock(pstock);
+//                                    listdata.setCond_name(condname);
+//                                    listdata.setProd_expdate(pexpdate);
+//                                    listdata.setProd_expdatecount(pexpdatecount);
+//                                    list.add(listdata);
+//
+//                                }
+//                                ProductsAdapter adapter = new ProductsAdapter(list);
+//                                RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
+//                                prodrecyclerview.setLayoutManager(pLayoutManager);
+//                                prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+//                                prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+//                                prodrecyclerview.setAdapter(adapter);
+//                                adapter.notifyDataSetChanged();
+//                                progressBar.setVisibility(View.GONE);
+//
+//                               if (list.isEmpty()){
+//                                   emptylayout.setVisibility(View.VISIBLE);
+//                               }else{
+//                                   emptylayout.setVisibility(View.GONE);
+//                               }
+//
+//                           }
+//
+//                           @Override
+//                           public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                           }
+//                       });
+//                   }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         ///
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.custom_spinner_item,
+                getResources().getStringArray(R.array.dropdownallstatus));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        productsSpinner.setAdapter(myAdapter);
 
+        productsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedstatus = productsSpinner.getItemAtPosition(position).toString();
+                if (productsSpinner.getSelectedItem().equals("All Status")){
+                    dispAllStatus();
+                }else if (productsSpinner.getSelectedItem().equals("Available")){
+                    dispAvailable();
+                }else if(productsSpinner.getSelectedItem().equals("Not Available")){
+                    dispNotAvailable();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ///
+        ArrayAdapter<String> conditionAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.custom_spinner_item,
+                getResources().getStringArray(R.array.dropdownallcondition));
+        conditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        conditionSpinner.setAdapter(conditionAdapter);
+
+        conditionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getActivity(),
+//                        conditionSpinner.getSelectedItem().toString(),
+//                        Toast.LENGTH_SHORT).show();
+                selectedcondition = conditionSpinner.getItemAtPosition(position).toString();
+                if (conditionSpinner.getSelectedItem().equals("All Condition")){
+
+                }else if (conditionSpinner.getSelectedItem().equals("New")){
+                    dispNew();
+                }else if (conditionSpinner.getSelectedItem().equals("Lost")){
+
+                }else if (conditionSpinner.getSelectedItem().equals("Disposed of")){
+
+                }else if(conditionSpinner.getSelectedItem().equals("Damaged")){
+
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //add floating action button
+        FloatingActionButton prod_fab = view.findViewById(R.id.addprod_fab);
+        prod_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // when add fab is pressed, go to add product activity
+                Intent addprod = new Intent(getActivity(), AddProductActivity.class);
+                startActivity(addprod);
+            }
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getActivity().setTitle("Products");
+    }
+
+    //handles the search menu
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.searchmenu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search..");
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public void dispAllStatus(){
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                   for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
                         String key = ds.getKey();
-                       dbreference.child("owner/"+key+"/business/product").addValueEventListener(new ValueEventListener() {
-                           @Override
-                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        dbreference.child("owner/"+key+"/business/product").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 list = new ArrayList<>();
                                 for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                     Product product = dataSnapshot1.getValue(Product.class);
@@ -153,20 +312,84 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                 adapter.notifyDataSetChanged();
                                 progressBar.setVisibility(View.GONE);
 
-                               if (list.isEmpty()){
-                                   emptylayout.setVisibility(View.VISIBLE);
-                               }else{
-                                   emptylayout.setVisibility(View.GONE);
-                               }
+                                if (list.isEmpty()){
+                                    emptylayout.setVisibility(View.VISIBLE);
+                                }else{
+                                    emptylayout.setVisibility(View.GONE);
+                                }
 
-                           }
+                            }
 
-                           @Override
-                           public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                           }
-                       });
-                   }
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void dispAvailable(){
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerkey+"/business/product").orderByChild("prod_status").equalTo("Available").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                list = new ArrayList<>();
+
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+//                                        list = new ArrayList<>();
+                                        Product product = dataSnapshot2.getValue(Product.class);
+                                        Productlistdata productlistdata = new Productlistdata();
+                                        String prodname = product.getProd_name();
+                                        double prodprice = product.getProd_price();
+                                        productlistdata.setProd_name(prodname);
+                                        productlistdata.setProd_price(prodprice);
+                                        list.add(productlistdata);
+                                    }
+                                    ProductsAdapter adapter = new ProductsAdapter(list);
+                                    RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
+                                    prodrecyclerview.setLayoutManager(pLayoutManager);
+                                    prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    prodrecyclerview.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                    progressBar.setVisibility(View.GONE);
+
+                                    if (list.isEmpty()){
+//                                        emptylayout.setVisibility(View.VISIBLE);
+                                        Toast.makeText(getActivity(), "No items found", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+                                    }
+
+                                } else{
+                                    Toast.makeText(getActivity(), "there are no available items", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
             }
 
@@ -176,90 +399,139 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
             }
         });
 
-        ///
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.custom_spinner_item,
-                getResources().getStringArray(R.array.dropdownallstatus));
-        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        productsSpinner.setAdapter(myAdapter);
+    }
 
-        productsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    public void dispNotAvailable(){
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getActivity(),
-//                        productsSpinner.getSelectedItem().toString(),
-//                        Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerkey+"/business/product").orderByChild("prod_status").equalTo("Not Available").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                list = new ArrayList<>();
+
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+//                                        list = new ArrayList<>();
+                                        Product product = dataSnapshot2.getValue(Product.class);
+                                        Productlistdata productlistdata = new Productlistdata();
+                                        String prodname = product.getProd_name();
+                                        double prodprice = product.getProd_price();
+                                        productlistdata.setProd_name(prodname);
+                                        productlistdata.setProd_price(prodprice);
+                                        list.add(productlistdata);
+                                    }
+                                    ProductsAdapter adapter = new ProductsAdapter(list);
+                                    RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
+                                    prodrecyclerview.setLayoutManager(pLayoutManager);
+                                    prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    prodrecyclerview.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                    progressBar.setVisibility(View.GONE);
+
+                                    if (list.isEmpty()){
+//                                        emptylayout.setVisibility(View.VISIBLE);
+                                        Toast.makeText(getActivity(), "No items found", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+                                    }
+
+                                } else{
+                                    Toast.makeText(getActivity(), "there are no available items", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
 
-        ///
-        ArrayAdapter<String> conditionAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.custom_spinner_item,
-                getResources().getStringArray(R.array.dropdownallcondition));
-        conditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        conditionSpinner.setAdapter(conditionAdapter);
+    }
 
-        conditionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+    public void dispNew(){
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getActivity(),
-//                        conditionSpinner.getSelectedItem().toString(),
-//                        Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerkey+"/business/product/productCondition").orderByChild("cond_name").equalTo("New").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                list = new ArrayList<>();
+
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+//                                        list = new ArrayList<>();
+                                        Product product = dataSnapshot2.getValue(Product.class);
+                                        Productlistdata productlistdata = new Productlistdata();
+                                        String prodname = product.getProd_name();
+                                        double prodprice = product.getProd_price();
+                                        productlistdata.setProd_name(prodname);
+                                        productlistdata.setProd_price(prodprice);
+                                        list.add(productlistdata);
+                                    }
+                                    ProductsAdapter adapter = new ProductsAdapter(list);
+                                    RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
+                                    prodrecyclerview.setLayoutManager(pLayoutManager);
+                                    prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    prodrecyclerview.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                    progressBar.setVisibility(View.GONE);
+
+                                    if (list.isEmpty()){
+//                                        emptylayout.setVisibility(View.VISIBLE);
+                                        Toast.makeText(getActivity(), "No items found", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+                                    }
+
+                                } else{
+                                    Toast.makeText(getActivity(), "there are no available items", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
 
-        //add floating action button
-        FloatingActionButton prod_fab = view.findViewById(R.id.addprod_fab);
-        prod_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // when add fab is pressed, go to add product activity
-                Intent addprod = new Intent(getActivity(), AddProductActivity.class);
-                startActivity(addprod);
-            }
-        });
-
-        //handles listview
-//        ListView lvproducts = view.findViewById(R.id.productlist_listview);
-
-        //set adapter
-        // set click listener
-
-        //show no data found text when listview is empty
-//        lvproducts.setEmptyView(view.findViewById(R.id.emptyproduct_face));
-//        lvproducts.setEmptyView(view.findViewById(R.id.empty_product));
-        return view;
     }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        getActivity().setTitle("Products");
-    }
-
-    //handles the search menu
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.searchmenu, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint("Search..");
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
 
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -291,5 +563,24 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
     public void onStop() {
         super.onStop();
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int sid = parent.getId();
+
+        switch (sid){
+            case R.id.spinner_products:
+                selectedstatus = productsSpinner.getItemAtPosition(position).toString();
+                break;
+            case R.id.spinner_condition:
+                selectedcondition = conditionSpinner.getItemAtPosition(position).toString();
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

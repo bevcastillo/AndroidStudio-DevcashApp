@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -63,6 +65,9 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     List<Productlistdata> list;
     List<Serviceslistdata> slist;
     List<PurchaseTransactionlistdata> ptlist;
+
+    ProgressBar invprogress;
+    LinearLayout emptylayout;
     //
     Toolbar itemListToolbar;
     Spinner itemListSpinner;
@@ -96,6 +101,9 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         itemListToolbar = (Toolbar) view.findViewById(R.id.toolbar_purchaseitemlist);
         itemListSpinner = (Spinner) view.findViewById(R.id.spinner_inventorytype);
 
+        invprogress = (ProgressBar) view.findViewById(R.id.inv_progressbar);
+        emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyinv);
+
         recyclerViewitemlist = (RecyclerView) view.findViewById(R.id.recyclerview_purchitemlist);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -115,8 +123,6 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         itemListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getActivity(),
-//                        itemListSpinner.getSelectedItem().toString();
                 selectedinventorytype = itemListSpinner.getItemAtPosition(position).toString();
                 if(itemListSpinner.getSelectedItem().equals("Products")){
                     viewAllProducts();
@@ -143,7 +149,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        Toast.makeText(getActivity(), username, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), username, Toast.LENGTH_SHORT).show();
 
         businessownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -171,6 +177,14 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
                                         recyclerViewitemlist.setAdapter(adapter);
                                         adapter.notifyDataSetChanged();
+
+                                        invprogress.setVisibility(View.GONE);
+
+                                        if(list.isEmpty()){
+                                            emptylayout.setVisibility(View.VISIBLE);
+                                        }else{
+                                            emptylayout.setVisibility(View.GONE);
+                                        }
                             }
 
                             @Override
@@ -220,6 +234,14 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
                                         recyclerViewitemlist.setAdapter(sadapter);
                                         sadapter.notifyDataSetChanged();
+
+                                        invprogress.setVisibility(View.GONE);
+
+                                        if(slist.isEmpty()){
+                                            emptylayout.setVisibility(View.VISIBLE);
+                                        }else{
+                                            emptylayout.setVisibility(View.GONE);
+                                        }
                             }
 
                             @Override
