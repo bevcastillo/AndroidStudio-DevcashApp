@@ -356,12 +356,24 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
 //                                        list = new ArrayList<>();
                                         Product product = dataSnapshot2.getValue(Product.class);
-                                        Productlistdata productlistdata = new Productlistdata();
-                                        String prodname = product.getProd_name();
-                                        double prodprice = product.getProd_price();
-                                        productlistdata.setProd_name(prodname);
-                                        productlistdata.setProd_price(prodprice);
-                                        list.add(productlistdata);
+                                        Productlistdata listdata = new Productlistdata();
+                                        String pname = product.getProd_name();
+                                        double prop = product.getProd_rop();
+                                        double pprice = product.getProd_price();
+                                        int pstock = product.getProd_stock();
+                                        String pexpdate = product.getProd_expdate();
+                                        int pexpdatecount = product.getProd_expdatecount();
+                                        String condname = product.getProductCondition().getCond_name();
+                                        String pstatus = product.getProd_status();
+                                        listdata.setProd_name(pname);
+                                        listdata.setProd_rop(prop);
+                                        listdata.setProd_status(pstatus);
+                                        listdata.setProd_price(pprice);
+                                        listdata.setProd_stock(pstock);
+                                        listdata.setCond_name(condname);
+                                        listdata.setProd_expdate(pexpdate);
+                                        listdata.setProd_expdatecount(pexpdatecount);
+                                        list.add(listdata);
                                     }
                                     ProductsAdapter adapter = new ProductsAdapter(list);
                                     RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
@@ -421,12 +433,24 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
 //                                        list = new ArrayList<>();
                                         Product product = dataSnapshot2.getValue(Product.class);
-                                        Productlistdata productlistdata = new Productlistdata();
-                                        String prodname = product.getProd_name();
-                                        double prodprice = product.getProd_price();
-                                        productlistdata.setProd_name(prodname);
-                                        productlistdata.setProd_price(prodprice);
-                                        list.add(productlistdata);
+                                        Productlistdata listdata = new Productlistdata();
+                                        String pname = product.getProd_name();
+                                        double prop = product.getProd_rop();
+                                        double pprice = product.getProd_price();
+                                        int pstock = product.getProd_stock();
+                                        String pexpdate = product.getProd_expdate();
+                                        int pexpdatecount = product.getProd_expdatecount();
+                                        String condname = product.getProductCondition().getCond_name();
+                                        String pstatus = product.getProd_status();
+                                        listdata.setProd_name(pname);
+                                        listdata.setProd_rop(prop);
+                                        listdata.setProd_status(pstatus);
+                                        listdata.setProd_price(pprice);
+                                        listdata.setProd_stock(pstock);
+                                        listdata.setCond_name(condname);
+                                        listdata.setProd_expdate(pexpdate);
+                                        listdata.setProd_expdatecount(pexpdatecount);
+                                        list.add(listdata);
                                     }
                                     ProductsAdapter adapter = new ProductsAdapter(list);
                                     RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
@@ -477,23 +501,32 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                        String ownerkey = dataSnapshot1.getKey();
+                        String acctkey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(ownerkey+"/business/product/productCondition").orderByChild("cond_name").equalTo("New").addListenerForSingleValueEvent(new ValueEventListener() {
+                        ownerdbreference.child(acctkey+"/business/product").orderByChild("productCondition/cond_name").equalTo("New").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                list = new ArrayList<>();
-
-                                if (dataSnapshot.exists()){
+                                if(dataSnapshot.exists()){
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-//                                        list = new ArrayList<>();
                                         Product product = dataSnapshot2.getValue(Product.class);
-                                        Productlistdata productlistdata = new Productlistdata();
-                                        String prodname = product.getProd_name();
-                                        double prodprice = product.getProd_price();
-                                        productlistdata.setProd_name(prodname);
-                                        productlistdata.setProd_price(prodprice);
-                                        list.add(productlistdata);
+                                        Productlistdata listdata = new Productlistdata();
+                                        String pname = product.getProd_name();
+                                        double prop = product.getProd_rop();
+                                        double pprice = product.getProd_price();
+                                        int pstock = product.getProd_stock();
+                                        String pexpdate = product.getProd_expdate();
+                                        int pexpdatecount = product.getProd_expdatecount();
+                                        String condname = product.getProductCondition().getCond_name();
+                                        String pstatus = product.getProd_status();
+                                        listdata.setProd_name(pname);
+                                        listdata.setProd_rop(prop);
+                                        listdata.setProd_status(pstatus);
+                                        listdata.setProd_price(pprice);
+                                        listdata.setProd_stock(pstock);
+                                        listdata.setCond_name(condname);
+                                        listdata.setProd_expdate(pexpdate);
+                                        listdata.setProd_expdatecount(pexpdatecount);
+                                        list.add(listdata);
                                     }
                                     ProductsAdapter adapter = new ProductsAdapter(list);
                                     RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
@@ -510,9 +543,6 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                     }else{
                                         emptylayout.setVisibility(View.GONE);
                                     }
-
-                                } else{
-                                    Toast.makeText(getActivity(), "there are no available items", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -530,7 +560,6 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
 
             }
         });
-
     }
 
     @Override
