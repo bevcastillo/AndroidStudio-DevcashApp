@@ -386,6 +386,12 @@
         <item>Category 3</item>
     </string-array>
 
+    <string-array name="dropdownallstatus">
+        <item>All Status</item>
+        <item>Available</item>
+        <item>Not Available</item>
+    </string-array>
+
     <string-array name="dropdownallproducts">
         <item>All Products</item>
     </string-array>
@@ -393,8 +399,6 @@
     <string-array name="dropdownallcondition">
         <item>All Condition</item>
         <item>New</item>
-        <item>Used</item>
-        <item>Good as new</item>
         <item>Lost</item>
         <item>Disposed of</item>
         <item>Damaged</item>

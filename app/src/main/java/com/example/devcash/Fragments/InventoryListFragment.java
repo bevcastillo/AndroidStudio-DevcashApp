@@ -55,9 +55,6 @@ public class InventoryListFragment extends Fragment implements InventoryRecycler
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_inventory_list, container, false);
-
-
-        Log.d(TAG, "onCreateView: started");
         initImageBitmaps(view);
 ////
 //
@@ -70,7 +67,6 @@ public class InventoryListFragment extends Fragment implements InventoryRecycler
     }
 
     private void initImageBitmaps(View view){
-        Log.d(TAG, "initImageBitmaps: preparing bitmaps");
 
         mIcon.add(R.drawable.ic_product);
         mLabel.add("Products");

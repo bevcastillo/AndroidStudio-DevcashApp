@@ -25,6 +25,7 @@ import com.example.devcash.ADD_UI.AddServicesActivity;
 import com.example.devcash.CustomAdapters.ServicesAdapter;
 import com.example.devcash.Object.Category;
 import com.example.devcash.Object.Discount;
+import com.example.devcash.Object.QRCode;
 import com.example.devcash.Object.Services;
 import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
@@ -299,24 +300,46 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                         String servkey = dataSnapshot2.getKey();
                                         Services services = dataSnapshot2.getValue(Services.class);
                                         String name = services.getCategory().getCategory_name();
-//                                        strchkavail = services.getService_status();
+                                        strchkavail = services.getService_status();
 
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_name").setValue(servname.getText().toString());
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_price").setValue(Double.valueOf(servprice.getText().toString()));
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_name").setValue(servname.getText().toString());
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_price").setValue(Double.valueOf(servprice.getText().toString()));
                                         //
                                         if(chckavail.isChecked()){
                                             strchkavail = "Available";
                                         } else{
                                             strchkavail = "Unavailable";
                                         }
+//
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_status").setValue(strchkavail);
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category/category_name").setValue(selectedcategory);
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_code").setValue(selecteddiscount);
+//
+//                                        //updating the qrcode
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrCode/qr_code").setValue(servname.getText().toString());
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrCode/qr_price").setValue(Double.valueOf(servprice.getText().toString()));
+//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrCode/qr_reference").setValue(servname.getText().toString()+Double.valueOf(servprice.getText().toString()));
 
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_status").setValue(strchkavail);
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category/category_name").setValue(selectedcategory);
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_code").setValue(selecteddiscount);
+                                        final String myqr_ref = servname.getText().toString()+Double.valueOf(servprice.getText().toString());
+                                        ownerdbreference.child(ownerkey+"/business/qrCode").orderByChild("qr_reference").equalTo(myqr_ref).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if(dataSnapshot.exists()){
+                                                    for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                        Toast.makeText(EditServices.this, dataSnapshot3.getKey()+" is the key", Toast.LENGTH_SHORT).show();
+                                                        ownerdbreference.child(ownerkey+"/business/qrCode").child(dataSnapshot3.getKey()+"/qr_code").setValue("SampleItem");
+//                                                        ownerdbreference.child(ownerkey+"/business/qrCode").child(dataSnapshot3.getKey()+"/qr_code").setValue(servname.getText().toString());
+//                                                        ownerdbreference.child(ownerkey+"/business/qrCode").child(qrkey+"/qr_price").setValue(Double.valueOf(servprice.getText().toString()));
+//                                                        ownerdbreference.child(ownerkey+"/business/qrCode").child(qrkey+"/qr_reference").setValue(servname.getText().toString()+Double.valueOf(servprice.getText().toString()));
+                                                    }
+                                                }
+                                            }
 
-                                        //updating the qrcode
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_code").setValue(servname.getText().toString());
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
 
                                     }
                                 }

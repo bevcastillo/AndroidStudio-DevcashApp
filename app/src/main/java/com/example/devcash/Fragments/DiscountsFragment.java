@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -58,6 +60,9 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
 
+    ProgressBar discprogress;
+    LinearLayout emptylayout;
+
     RecyclerView discountrecycler;
     List<Discountlistdata> list;
 
@@ -87,6 +92,9 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
         discountrecycler = (RecyclerView) view.findViewById(R.id.recycler_discount);
         discountToolbar = (Toolbar) view.findViewById(R.id.toolbar_discounts);
         discountSpinner = (Spinner) view.findViewById(R.id.spinner_discounts);
+
+        emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptydiscounts);
+        discprogress = (ProgressBar) view.findViewById(R.id.discounts_progressbar);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
@@ -127,6 +135,14 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
                                     discountrecycler.setItemAnimator(new DefaultItemAnimator());
                                     discountrecycler.setAdapter(discountAdapter);
                                     discountAdapter.notifyDataSetChanged();
+
+                                    discprogress.setVisibility(View.GONE);
+
+                                    if (list.isEmpty()){
+                                        emptylayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+                                    }
                             }
 
                             @Override

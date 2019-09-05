@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="30dp"
+    android:gravity="center"
+    android:id="@+id/myprogressbar">
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:progressDrawable="@drawable/progressbar_circle"
+        android:progress="80"
+        android:indeterminateTint="@color/colorPrimaryDark"
+        android:indeterminate="false" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please wait..."
+        android:layout_marginLeft="40dp"/>
+
+</LinearLayout>

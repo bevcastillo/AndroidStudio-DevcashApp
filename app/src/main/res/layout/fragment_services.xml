@@ -53,6 +53,54 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/services_progressbar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:progressDrawable="@drawable/progressbar_circle"
+            android:progress="80"
+            android:indeterminateTint="@color/colorPrimaryDark"
+            android:indeterminate="false"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:visibility="visible"/>
+
+        <LinearLayout
+            android:id="@+id/layout_emptyservices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="130dp"
+            android:visibility="gone">
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_cry_face"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You have no services yet"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:visibility="visible"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="To add services, press the (+) button"
+                android:textSize="@dimen/text_inputs"
+                android:gravity="center"
+                android:visibility="visible"
+                android:layout_marginTop="5dp"/>
+
+
+        </LinearLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_servlist"
             android:layout_width="match_parent"

@@ -21,8 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddProductActivity;
@@ -55,9 +58,12 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
     RecyclerView prodrecyclerview;
     List<Productlistdata> list;
     ArrayList<Product> productArrayList;
+    TextView emptylist;
+    LinearLayout emptylayout;
 
     Toolbar productsToolbar;
     Spinner productsSpinner, conditionSpinner;
+    ProgressBar progressBar;
 
 
     public ProductsFragment() {
@@ -82,7 +88,12 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
         productsSpinner = (Spinner) view.findViewById(R.id.spinner_products);
         conditionSpinner = (Spinner) view.findViewById(R.id.spinner_condition);
 
+        emptylist = (TextView) view.findViewById(R.id.emptylist);
+        progressBar = (ProgressBar) view.findViewById(R.id.product_progressbar);
+
         prodrecyclerview = (RecyclerView) view.findViewById(R.id.recycler_prodlist);
+
+        emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyprod);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
@@ -90,12 +101,16 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
         businessprodfirebasereference = firebaseDatabase.getReference("/datadevcash/owner");
 
 
+//        if (list.isEmpty()){
+//            emptylayout.setVisibility(View.VISIBLE);
+//        }else{
+//            emptylayout.setVisibility(View.GONE);
+//        }
+
         ///
 
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
-
-        Toast.makeText(getActivity(), username+"", Toast.LENGTH_SHORT).show();
 
         businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -108,33 +123,41 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 list = new ArrayList<>();
                                 for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                Product product = dataSnapshot1.getValue(Product.class);
-                                Productlistdata listdata = new Productlistdata();
-                                String pname = product.getProd_name();
-                                double prop = product.getProd_rop();
-                                double pprice = product.getProd_price();
-                                int pstock = product.getProd_stock();
-                                String pexpdate = product.getProd_expdate();
-                                int pexpdatecount = product.getProd_expdatecount();
-                                String condname = product.getProductCondition().getCond_name();
-                                String pstatus = product.getProd_status();
-                                listdata.setProd_name(pname);
-                                listdata.setProd_rop(prop);
-                                listdata.setProd_status(pstatus);
-                                listdata.setProd_price(pprice);
-                                listdata.setProd_stock(pstock);
-                                listdata.setCond_name(condname);
-                                listdata.setProd_expdate(pexpdate);
-                                listdata.setProd_expdatecount(pexpdatecount);
-                                list.add(listdata);
-                            }
+                                    Product product = dataSnapshot1.getValue(Product.class);
+                                    Productlistdata listdata = new Productlistdata();
+                                    String pname = product.getProd_name();
+                                    double prop = product.getProd_rop();
+                                    double pprice = product.getProd_price();
+                                    int pstock = product.getProd_stock();
+                                    String pexpdate = product.getProd_expdate();
+                                    int pexpdatecount = product.getProd_expdatecount();
+                                    String condname = product.getProductCondition().getCond_name();
+                                    String pstatus = product.getProd_status();
+                                    listdata.setProd_name(pname);
+                                    listdata.setProd_rop(prop);
+                                    listdata.setProd_status(pstatus);
+                                    listdata.setProd_price(pprice);
+                                    listdata.setProd_stock(pstock);
+                                    listdata.setCond_name(condname);
+                                    listdata.setProd_expdate(pexpdate);
+                                    listdata.setProd_expdatecount(pexpdatecount);
+                                    list.add(listdata);
+
+                                }
                                 ProductsAdapter adapter = new ProductsAdapter(list);
                                 RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
                                 prodrecyclerview.setLayoutManager(pLayoutManager);
-                               prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
-                               prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
                                 prodrecyclerview.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();
+                                progressBar.setVisibility(View.GONE);
+
+                               if (list.isEmpty()){
+                                   emptylayout.setVisibility(View.VISIBLE);
+                               }else{
+                                   emptylayout.setVisibility(View.GONE);
+                               }
 
                            }
 
@@ -156,16 +179,16 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
         ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.custom_spinner_item,
-                getResources().getStringArray(R.array.dropdownallproducts));
+                getResources().getStringArray(R.array.dropdownallstatus));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         productsSpinner.setAdapter(myAdapter);
 
         productsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),
-                        productsSpinner.getSelectedItem().toString(),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),
+//                        productsSpinner.getSelectedItem().toString(),
+//                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -184,9 +207,9 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
         conditionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),
-                        conditionSpinner.getSelectedItem().toString(),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),
+//                        conditionSpinner.getSelectedItem().toString(),
+//                        Toast.LENGTH_SHORT).show();
             }
 
             @Override

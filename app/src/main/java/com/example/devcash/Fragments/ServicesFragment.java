@@ -21,7 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -59,6 +61,8 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
     DatabaseReference servicesdbreference;
     DatabaseReference businessownerdbreference;
     FirebaseDatabase firebaseDatabase;
+    ProgressBar servicesprogress;
+    LinearLayout emptylayout;
 
     RecyclerView servrecyclerview;
 
@@ -85,6 +89,9 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
 
         servicesToolbar = (Toolbar) view.findViewById(R.id.toolbar_services);
         servicesSpinner = (Spinner) view.findViewById(R.id.spinner_services);
+
+        servicesprogress = (ProgressBar) view.findViewById(R.id.services_progressbar);
+        emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyservices);
 
         servrecyclerview = (RecyclerView) view.findViewById(R.id.recycler_servlist);
 
@@ -126,6 +133,14 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                 servrecyclerview.setItemAnimator(new DefaultItemAnimator());
                                 servrecyclerview.setAdapter(servicesAdapter);
                                 servicesAdapter.notifyDataSetChanged();
+
+                                servicesprogress.setVisibility(View.GONE);
+
+                                if(serviceslist.isEmpty()){
+                                    emptylayout.setVisibility(View.VISIBLE);
+                                }else{
+                                    emptylayout.setVisibility(View.GONE);
+                                }
                             }
 
                             @Override

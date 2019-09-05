@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -52,6 +53,8 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
     DatabaseReference employeedfirebasereference;
     DatabaseReference businessownerfirebasereference;
     FirebaseDatabase firebaseDatabase;
+    ProgressBar empprogress;
+    LinearLayout emptylayout;
 
     RecyclerView emprecyclerview;
 
@@ -116,6 +119,15 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                                 emprecyclerview.setItemAnimator(new DefaultItemAnimator());
                                 emprecyclerview.setAdapter(employeesAdapter);
                                 employeesAdapter.notifyDataSetChanged();
+
+                                empprogress.setVisibility(View.GONE);
+
+                                if(emplist.isEmpty()){
+                                    emptylayout.setVisibility(View.VISIBLE);
+                                }else{
+                                    emptylayout.setVisibility(View.GONE);
+
+                                }
                             }
 
                             @Override

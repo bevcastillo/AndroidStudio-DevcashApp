@@ -51,6 +51,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ProgressBar
+                    android:id="@+id/emp_progressbar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:progressDrawable="@drawable/progressbar_circle"
+                    android:progress="80"
+                    android:indeterminateTint="@color/colorPrimaryDark"
+                    android:indeterminate="false"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="50dp"
+                    android:visibility="visible"/>
+
+                <LinearLayout
+                    android:id="@+id/layout_emptyemp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="130dp"
+                    android:visibility="gone">
+
+
+                    <ImageView
+                        android:id="@+id/emptyproduct_face"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_cry_face"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/emptylist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="You have no employees yet"
+                        android:textSize="18dp"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:layout_marginTop="10dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="To add employees, press the (+) button"
+                        android:textSize="@dimen/text_inputs"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:layout_marginTop="5dp"/>
+
+
+                </LinearLayout>
+
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/emplist_recyclerview"
                     android:layout_width="match_parent"

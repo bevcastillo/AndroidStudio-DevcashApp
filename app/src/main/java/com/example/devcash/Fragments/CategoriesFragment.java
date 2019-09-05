@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -67,6 +68,9 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
     DatabaseReference mydbreference;
     FirebaseDatabase firebaseDatabase;
 
+    ProgressBar categoriesprogress;
+    LinearLayout emptylayout;
+
     RecyclerView categoryrecyclerView;
     List<Categorylistdata> list;
 
@@ -91,6 +95,9 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
         categoryrecyclerView = (RecyclerView) view.findViewById(R.id.catrecyclerview);
+
+        categoriesprogress = (ProgressBar) view.findViewById(R.id.categories_progressbar);
+        emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptycategories);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
@@ -124,6 +131,14 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
                                 categoryrecyclerView.setItemAnimator(new DefaultItemAnimator());
                                 categoryrecyclerView.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();
+
+                                categoriesprogress.setVisibility(View.GONE);
+
+                                if(list.isEmpty()){
+                                    emptylayout.setVisibility(View.VISIBLE);
+                                }else{
+                                    emptylayout.setVisibility(View.GONE);
+                                }
                             }
 
                             @Override

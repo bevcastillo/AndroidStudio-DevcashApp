@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -146,11 +148,13 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                             String accountJson = gson.toJson(account);
                                             editor.putString("account", accountJson);
                                             editor.commit();
+
                                         } else {
                                             Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 } else{
+
                                     Toast.makeText(OwnerLoginActivity.this, "Account not found!", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -244,17 +248,25 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                 startActivity(owner_forgotpassw);
                 break;
             case R.id.btn_login:
-                //checking the internet connection
                 if (validateEmailPassw()){
                     if(internetConnectionAvailable(5) == true){
                         ownerLogin();
                     } else{
-                        Toast.makeText(this, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
+                        progressDialog();
                     }
                 }
 
                 break;
         }
+    }
+
+    public void progressDialog(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View progressView = inflater.inflate(R.layout.custom_progressbar, null);
+        builder.setView(progressView);
+        builder.show();
+
     }
 
     public void noInternetDialog(){
