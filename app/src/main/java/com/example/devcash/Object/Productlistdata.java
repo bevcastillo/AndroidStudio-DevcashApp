@@ -1,11 +1,14 @@
 package com.example.devcash.Object;
 
 public class Productlistdata {
-    String prod_name, prod_brand, prod_unitof_measure, prod_status, category_name, cond_name, prod_expdate;
-    double prod_price, prod_rop;
-    int prod_stock, prod_expdatecount;
-
-    ProductExpiration productExpiration;
+    String prod_name, prod_brand, prod_unitof_measure, prod_status, category_name, cond_name, prod_expdate, prod_reference;
+    double prod_price, prod_rop, subtotal;
+    int prod_stock, prod_expdatecount, prod_qty, prodclick;
+    public Category category;
+    public ProductCondition productCondition;
+    public Discount discount;
+    public QRCode qrCode;
+    public ProductExpiration productExpiration;
 
 
     public String getProd_name() {
@@ -105,4 +108,67 @@ public class Productlistdata {
         this.productExpiration = productExpiration;
     }
 
+    public int getProd_qty() {
+        return prod_qty;
+    }
+
+    public void setProd_qty(int prod_qty) {
+        this.prod_qty = prod_qty;
+    }
+
+    public int getProdclick() {
+        return prodclick;
+    }
+
+    public void setProdclick(int prodclick) {
+        this.prodclick = prodclick;
+    }
+
+    public String getProd_reference() {
+        return prod_reference;
+    }
+
+    public void setProd_reference(String prod_reference) {
+        this.prod_reference = prod_reference;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public ProductCondition getProductCondition() {
+        return productCondition;
+    }
+
+    public void setProductCondition(ProductCondition productCondition) {
+        this.productCondition = productCondition;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    public QRCode getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(QRCode qrCode) {
+        this.qrCode = qrCode;
+    }
 }

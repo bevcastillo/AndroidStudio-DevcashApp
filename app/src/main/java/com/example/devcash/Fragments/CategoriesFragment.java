@@ -157,28 +157,28 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         });
 
 //        categoriesToolbar = (Toolbar) view.findViewById(R.id.toolbar_categories);
-        categoriesSpinner = (Spinner) view.findViewById(R.id.spinner_categories);
+//        categoriesSpinner = (Spinner) view.findViewById(R.id.spinner_categories);
 
         ///
-        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.custom_spinner_item,
-                getResources().getStringArray(R.array.dropdownitempurchase));
-        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoriesSpinner.setAdapter(myAdapter);
-
-        categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),
-                        categoriesSpinner.getSelectedItem().toString(),
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
+//                R.layout.custom_spinner_item,
+//                getResources().getStringArray(R.array.dropdownitempurchase));
+//        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        categoriesSpinner.setAdapter(myAdapter);
+//
+//        categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getActivity(),
+//                        categoriesSpinner.getSelectedItem().toString(),
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
         //add floating action button
         FloatingActionButton categories_fab = view.findViewById(R.id.addcategories_fab);

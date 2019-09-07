@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.devcash">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,18 +10,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EDIT_UI.EditServices"
-            android:screenOrientation="landscape"
-            android:label="Edit Services"></activity>
+        <activity android:name=".AllPurchaseActivity"
+            android:label="Cart"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".EDIT_UI.EditServices"
+            android:label="Edit Services"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".InventoryNav"
             android:label="@string/title_activity_inventory_nav"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CashierNavigation$NoTask" />
+        <activity android:name=".CashierNavigation$NoTask"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".CashierNavigation"
             android:label="@string/title_activity_cashier_navigation"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".EmployeeAccountInfo"
             android:label="My Profile"
@@ -44,16 +46,20 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".EDIT_UI.EditEmployee"
-            android:label="Edit Employee" />
+            android:label="Edit Employee"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".EDIT_UI.EditProduct"
-            android:label="Edit Product" />
+            android:label="Edit Product"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".EDIT_UI.EditDiscount"
-            android:label="Edit Discount" />
+            android:label="Edit Discount"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".EDIT_UI.EditCategory"
-            android:label="Edit Category" />
+            android:label="Edit Category"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".EmployeeLoginActivity"
             android:label="@string/login"
@@ -62,12 +68,18 @@
         <activity
             android:name=".IndexActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".WhyDevcash" />
-        <activity android:name=".HelpCenterEmployees" />
-        <activity android:name=".HelpCenterInventory" />
-        <activity android:name=".Settings_UI.HelpCenterSales" />
-        <activity android:name=".GettingStarted" />
-        <activity android:name=".OwnerSignupActivity" />
+        <activity android:name=".WhyDevcash"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".HelpCenterEmployees"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".HelpCenterInventory"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".Settings_UI.HelpCenterSales"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".GettingStarted"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".OwnerSignupActivity"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".SubscriptionActivity"
             android:label="@string/subs_name"
@@ -190,6 +202,9 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

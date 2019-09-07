@@ -1,12 +1,15 @@
 package com.example.devcash.Fragments;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,12 +25,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.devcash.AllPurchaseActivity;
 import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.CustomAdapters.PurchaseInventoryServicesAdapter;
 import com.example.devcash.MyUtility;
@@ -53,7 +58,7 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class PurchaseInventorylistFragment extends Fragment implements SearchView.OnQueryTextListener,
-        MenuItem.OnActionExpandListener{
+        MenuItem.OnActionExpandListener, View.OnClickListener {
 
     //
     DatabaseReference dbreference;
@@ -74,6 +79,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
+    Button btncharge;
 
     RecyclerView recyclerViewitemlist;
     String selectedinventorytype;
@@ -103,6 +109,10 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
         invprogress = (ProgressBar) view.findViewById(R.id.inv_progressbar);
         emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyinv);
+
+        btncharge = (Button) view.findViewById(R.id.btn_chargeitem);
+
+        btncharge.setOnClickListener(this);
 
         recyclerViewitemlist = (RecyclerView) view.findViewById(R.id.recyclerview_purchitemlist);
 
@@ -168,6 +178,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         double prodprice = product.getProd_price();
                                         listdata.setProd_name(prodname);
                                         listdata.setProd_price(prodprice);
+                                        listdata.setProd_expdate(product.getProd_expdate());
                                         list.add(listdata);
                                     }
                                         PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(list);
@@ -304,5 +315,17 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     public void onStop() {
         super.onStop();
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.btn_chargeitem:
+                Intent intent = new Intent(getActivity(), AllPurchaseActivity.class);
+                startActivity(intent);
+
+                break;
+        }
     }
 }

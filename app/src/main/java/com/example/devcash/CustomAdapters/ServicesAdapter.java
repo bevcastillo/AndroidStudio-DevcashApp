@@ -2,6 +2,7 @@ package com.example.devcash.CustomAdapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -57,7 +58,19 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         Serviceslistdata data = list.get(i);
         viewHolder.servicename.setText(data.getServname());
         viewHolder.servicestatus.setText(data.getServstatus());
-        viewHolder.serviceprice.setText(String.valueOf(data.getServprice()));
+
+        if (viewHolder.servicestatus.getText().toString().equals("Available")){
+            viewHolder.servicestatus.setText(data.getServstatus());
+            viewHolder.servimgstatus.setColorFilter(Color.GREEN);
+            viewHolder.servicestatus.setTextColor(Color.GREEN);
+        }
+        if (viewHolder.servicestatus.getText().toString().equals("Not Available")){
+            viewHolder.servicestatus.setText(data.getServstatus());
+            viewHolder.servimgstatus.setColorFilter(Color.RED);
+            viewHolder.servicestatus.setTextColor(Color.RED);
+        }
+
+        viewHolder.serviceprice.setText("₱"+(data.getServprice()));
     }
 
     @Override
@@ -67,12 +80,14 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView servicename, serviceprice, servicestatus;
+        ImageView servimgstatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             servicename = (TextView) itemView.findViewById(R.id.txtservice_name);
             serviceprice = (TextView) itemView.findViewById(R.id.txtservice_price);
             servicestatus = (TextView) itemView.findViewById(R.id.txtservice_status);
+            servimgstatus = (ImageView) itemView.findViewById(R.id.imageView_servavail);
         }
     }
 }

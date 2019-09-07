@@ -126,11 +126,12 @@
 
         <ImageView
             android:id="@+id/imageView_availability"
-            android:layout_width="18dp"
+            android:layout_width="0dp"
             android:layout_height="18dp"
+            android:layout_weight="0.2"
             android:src="@drawable/ic_circle"
             android:paddingRight="5dp"
-            android:layout_gravity="center"/>
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/txtprod_price"

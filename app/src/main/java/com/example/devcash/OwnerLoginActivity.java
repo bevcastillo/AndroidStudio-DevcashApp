@@ -150,9 +150,10 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                             editor.commit();
 
                                         } else {
-                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
+                                    Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect!", Toast.LENGTH_SHORT).show();
                                 } else{
 
                                     Toast.makeText(OwnerLoginActivity.this, "Account not found!", Toast.LENGTH_SHORT).show();
@@ -224,7 +225,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 
         if(username.isEmpty()){
             textInputOwnerUsername.setError("Fields can not be empty.");
-            ok = false;
+                ok = false;
             if(passw.isEmpty()){
                 textInputOwnerPassw.setError("Fields can not be empty.");
                 ok = false;
@@ -266,7 +267,6 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
         final View progressView = inflater.inflate(R.layout.custom_progressbar, null);
         builder.setView(progressView);
         builder.show();
-
     }
 
     public void noInternetDialog(){

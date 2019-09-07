@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="160dp"
+    android:layout_width="165dp"
     android:layout_height="160dp"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
@@ -37,6 +37,7 @@
             android:alpha="0.5"
             android:layout_alignParentBottom="true"
             android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:gravity="center">
 
             <TextView
@@ -47,16 +48,32 @@
                 android:text="Product Name"
                 android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/prodlist_price"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0.00"
-                android:textColor="@color/white"/>
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/prodlist_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="0.00"
+                    android:textColor="@color/white"/>
 
+                <TextView
+                    android:id="@+id/prodlist_expdate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="12/12/12"
+                    android:textColor="@color/white"
+                    android:textSize="12dp"
+                    android:visibility="invisible"/>
 
+            </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>

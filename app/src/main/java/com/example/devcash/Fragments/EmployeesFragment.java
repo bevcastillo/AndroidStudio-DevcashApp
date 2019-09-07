@@ -18,10 +18,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.devcash.ADD_UI.AddEmployeeActivity;
@@ -47,7 +50,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EmployeesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+public class EmployeesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, AdapterView.OnItemSelectedListener {
 
     DatabaseReference dbreference;
     DatabaseReference employeedfirebasereference;
@@ -55,6 +58,8 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
     FirebaseDatabase firebaseDatabase;
     ProgressBar empprogress;
     LinearLayout emptylayout;
+    Spinner spinneremptask;
+    String selectedtask;
 
     RecyclerView emprecyclerview;
 
@@ -77,12 +82,63 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
         View view = inflater.inflate(R.layout.fragment_employees, container, false);
 
         emprecyclerview = (RecyclerView) view.findViewById(R.id.emplist_recyclerview);
+        empprogress = (ProgressBar) view.findViewById(R.id.emp_progressbar);
+        emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyemp);
+
+        spinneremptask = (Spinner) view.findViewById(R.id.spinner_empassignedtask);
+
+        spinneremptask.setOnItemSelectedListener(this);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
         businessownerfirebasereference = firebaseDatabase.getReference("datadevcash/owner");
         employeedfirebasereference = firebaseDatabase.getReference("/datadevcash/employees");
 
+
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.custom_spinner_item,
+                getResources().getStringArray(R.array.task_employee));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinneremptask.setAdapter(myAdapter);
+
+        spinneremptask.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getActivity(),
+//                        spinneremptask.getSelectedItem().toString(),
+//                        Toast.LENGTH_SHORT).show();
+                if (spinneremptask.getSelectedItem().toString().equals("All Tasks")){
+                    dispAllTask();
+                }else if (spinneremptask.getSelectedItem().toString().equals("Cashiering")){
+
+                }else if (spinneremptask.getSelectedItem().toString().equals("Inventory Monitoring")){
+
+                }else if (spinneremptask.getSelectedItem().toString().equals("Unassign Employee")){
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        getActivity().setTitle("Employee");
+        FloatingActionButton emp_fab = view.findViewById(R.id.addemp_fab);
+        emp_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addprod = new Intent(getActivity(), AddEmployeeActivity.class);
+                startActivity(addprod);
+
+            }
+        });
+        return view;
+    }
+
+    public void dispAllTask(){
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
@@ -97,20 +153,20 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 emplist = new ArrayList<>();
                                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                Employee employee = dataSnapshot1.getValue(Employee.class);
-                                Employeelistdata employeelistdata = new Employeelistdata();
-                                String lname = employee.getEmp_lname();
-                                String fname = employee.getEmp_fname();
-                                String task = employee.getEmp_task();
-                                String uname = employee.getAccount().getAcct_uname();
-                                String email = employee.getAccount().getAcct_email();
-                                employeelistdata.setEmplname(lname);
-                                employeelistdata.setEmpfname(fname);
-                                employeelistdata.setAcctuname(uname);
-                                employeelistdata.setAcctemail(email);
-                                employeelistdata.setEmptask(task);
-                                emplist.add(employeelistdata);
-                            }
+                                    Employee employee = dataSnapshot1.getValue(Employee.class);
+                                    Employeelistdata employeelistdata = new Employeelistdata();
+                                    String lname = employee.getEmp_lname();
+                                    String fname = employee.getEmp_fname();
+                                    String task = employee.getEmp_task();
+                                    String uname = employee.getAccount().getAcct_uname();
+                                    String email = employee.getAccount().getAcct_email();
+                                    employeelistdata.setEmplname(lname);
+                                    employeelistdata.setEmpfname(fname);
+                                    employeelistdata.setAcctuname(uname);
+                                    employeelistdata.setAcctemail(email);
+                                    employeelistdata.setEmptask(task);
+                                    emplist.add(employeelistdata);
+                                }
 
                                 EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
                                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -144,18 +200,6 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
 
             }
         });
-
-        getActivity().setTitle("Employee");
-        FloatingActionButton emp_fab = view.findViewById(R.id.addemp_fab);
-        emp_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addprod = new Intent(getActivity(), AddEmployeeActivity.class);
-                startActivity(addprod);
-
-            }
-        });
-        return view;
     }
 
     @Override
@@ -205,5 +249,21 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
     public void onStop() {
         super.onStop();
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int sid = parent.getId();
+
+        switch (sid){
+            case R.id.spinner_empassignedtask:
+                selectedtask = spinneremptask.getItemAtPosition(position).toString();
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

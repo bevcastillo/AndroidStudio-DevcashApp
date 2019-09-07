@@ -52,17 +52,18 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class ServicesFragment extends Fragment implements SearchView.OnQueryTextListener,
-        MenuItem.OnActionExpandListener {
+        MenuItem.OnActionExpandListener, AdapterView.OnItemSelectedListener {
 
     Toolbar servicesToolbar;
-    Spinner servicesSpinner;
+    Spinner statusSpinner;
+    String selectedstatus;
 
     DatabaseReference dbreference;
     DatabaseReference servicesdbreference;
-    DatabaseReference businessownerdbreference;
+    DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
     ProgressBar servicesprogress;
-    LinearLayout emptylayout;
+    LinearLayout emptylayout, noitemlayout;
 
     RecyclerView servrecyclerview;
 
@@ -88,122 +89,40 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
         View view = inflater.inflate(R.layout.fragment_services, container, false);
 
         servicesToolbar = (Toolbar) view.findViewById(R.id.toolbar_services);
-        servicesSpinner = (Spinner) view.findViewById(R.id.spinner_services);
+        statusSpinner = (Spinner) view.findViewById(R.id.spinner_servstatus);
 
         servicesprogress = (ProgressBar) view.findViewById(R.id.services_progressbar);
         emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyservices);
+        noitemlayout = (LinearLayout) view.findViewById(R.id.layout_noitem);
 
         servrecyclerview = (RecyclerView) view.findViewById(R.id.recycler_servlist);
+
+        statusSpinner.setOnItemSelectedListener(this);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("datadevcash");
         servicesdbreference = firebaseDatabase.getReference("datadevcash/services");
-        businessownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
-
-        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
-
-
-        businessownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        String key = ds.getKey();
-                        dbreference.child("owner/"+key+"/business/services").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                serviceslist = new ArrayList<>();
-                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                Services services = dataSnapshot1.getValue(Services.class);
-                                Serviceslistdata serviceslistdata = new Serviceslistdata();
-                                String sname = services.getService_name();
-                                double sprice = services.getService_price();
-                                String sstatus = services.getService_status();
-                                serviceslistdata.setServname(sname);
-                                serviceslistdata.setServprice(sprice);
-                                serviceslistdata.setServstatus(sstatus);
-                                serviceslist.add(serviceslistdata);
-                            }
-
-                                ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
-                                RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
-                                servrecyclerview.setLayoutManager(sLayoutManager);
-                                servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
-                                servrecyclerview.setItemAnimator(new DefaultItemAnimator());
-                                servrecyclerview.setAdapter(servicesAdapter);
-                                servicesAdapter.notifyDataSetChanged();
-
-                                servicesprogress.setVisibility(View.GONE);
-
-                                if(serviceslist.isEmpty()){
-                                    emptylayout.setVisibility(View.VISIBLE);
-                                }else{
-                                    emptylayout.setVisibility(View.GONE);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-//        servicesdbreference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                serviceslist = new ArrayList<>();
-//                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                    Services services = dataSnapshot1.getValue(Services.class);
-//                    Serviceslistdata serviceslistdata = new Serviceslistdata();
-//                    String sname = services.getService_name();
-//                    double sprice = services.getService_price();
-//                    String sstatus = services.getService_status();
-//                    serviceslistdata.setServname(sname);
-//                    serviceslistdata.setServprice(sprice);
-//                    serviceslistdata.setServstatus(sstatus);
-//                    serviceslist.add(serviceslistdata);
-//                }
-//
-//                ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
-//                RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
-//                servrecyclerview.setLayoutManager(sLayoutManager);
-//                servrecyclerview.setItemAnimator(new DefaultItemAnimator());
-//                servrecyclerview.setAdapter(servicesAdapter);
-//                servicesAdapter.notifyDataSetChanged();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
+        ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
 
         ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.custom_spinner_item,
-                getResources().getStringArray(R.array.dropdownallservices));
+                getResources().getStringArray(R.array.dropdownallstatus));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        servicesSpinner.setAdapter(myAdapter);
+        statusSpinner.setAdapter(myAdapter);
 
-        servicesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),
-                        servicesSpinner.getSelectedItem().toString(),
-                        Toast.LENGTH_SHORT).show();
+
+                if (statusSpinner.getSelectedItem().toString().equals("All Status")){
+                    dispAllStats();
+                } else if (statusSpinner.getSelectedItem().toString().equals("Available")){
+                    dispAvailable();
+                }else if (statusSpinner.getSelectedItem().toString().equals("Not Available")){
+                    dispNotAvailable();
+                }
+
             }
 
             @Override
@@ -212,22 +131,14 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
             }
         });
 
-        //add floating action button
         FloatingActionButton services_fab = view.findViewById(R.id.addservices_fab);
         services_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // when add fab is pressed, go to add product activity
                 Intent addservices = new Intent(getActivity(), AddServicesActivity.class);
                 startActivity(addservices);
             }
         });
-        //set adapter
-        // set click listener
-
-        //show no data found text when listview is empty
-//        lvservices.setEmptyView(view.findViewById(R.id.emptyservices_face));
-//        lvservices.setEmptyView(view.findViewById(R.id.empty_services));
 
         return view;
     }
@@ -249,6 +160,195 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
         searchView.setQueryHint("Search..");
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public void dispAllStats(){
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        dbreference.child("owner/"+key+"/business/services").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                serviceslist = new ArrayList<>();
+                                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                    Services services = dataSnapshot1.getValue(Services.class);
+                                    Serviceslistdata serviceslistdata = new Serviceslistdata();
+                                    String sname = services.getService_name();
+                                    double sprice = services.getService_price();
+                                    String sstatus = services.getService_status();
+                                    serviceslistdata.setServname(sname);
+                                    serviceslistdata.setServprice(sprice);
+                                    serviceslistdata.setServstatus(sstatus);
+                                    serviceslist.add(serviceslistdata);
+                                }
+
+                                ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
+                                servrecyclerview.setLayoutManager(sLayoutManager);
+                                servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                servrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                servrecyclerview.setAdapter(servicesAdapter);
+                                servicesAdapter.notifyDataSetChanged();
+
+                                servicesprogress.setVisibility(View.GONE);
+
+                                if(serviceslist.isEmpty()){
+                                    noitemlayout.setVisibility(View.VISIBLE);
+                                }else{
+                                    noitemlayout.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    public void dispAvailable(){
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/services").orderByChild("service_status").equalTo("Available").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        serviceslist = new ArrayList<>();
+                                        Services services = dataSnapshot2.getValue(Services.class);
+                                        Serviceslistdata serviceslistdata = new Serviceslistdata();
+                                        String sname = services.getService_name();
+                                        double sprice = services.getService_price();
+                                        String sstatus = services.getService_status();
+                                        serviceslistdata.setServname(sname);
+                                        serviceslistdata.setServprice(sprice);
+                                        serviceslistdata.setServstatus(sstatus);
+                                        serviceslist.add(serviceslistdata);
+                                    }
+                                    ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                    RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
+                                    servrecyclerview.setLayoutManager(sLayoutManager);
+                                    servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    servrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    servrecyclerview.setAdapter(servicesAdapter);
+                                    servicesAdapter.notifyDataSetChanged();
+
+                                    servicesprogress.setVisibility(View.GONE);
+
+                                    if(serviceslist.isEmpty()){
+                                        noitemlayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        noitemlayout.setVisibility(View.GONE);
+                                    }
+                                }else{
+                                    Toast.makeText(getActivity(), "there are no available items", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void dispNotAvailable(){
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/services").orderByChild("service_status").equalTo("Not Available").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        serviceslist = new ArrayList<>();
+                                        Services services = dataSnapshot2.getValue(Services.class);
+                                        Serviceslistdata serviceslistdata = new Serviceslistdata();
+                                        String sname = services.getService_name();
+                                        double sprice = services.getService_price();
+                                        String sstatus = services.getService_status();
+                                        serviceslistdata.setServname(sname);
+                                        serviceslistdata.setServprice(sprice);
+                                        serviceslistdata.setServstatus(sstatus);
+                                        serviceslist.add(serviceslistdata);
+                                    }
+                                    ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                    RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
+                                    servrecyclerview.setLayoutManager(sLayoutManager);
+                                    servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    servrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    servrecyclerview.setAdapter(servicesAdapter);
+                                    servicesAdapter.notifyDataSetChanged();
+
+                                    servicesprogress.setVisibility(View.GONE);
+
+                                    if(serviceslist.isEmpty()){
+                                        noitemlayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        noitemlayout.setVisibility(View.GONE);
+                                    }
+                                }else{
+                                    noitemlayout.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -281,5 +381,21 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
     public void onStop() {
         super.onStop();
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int sid = parent.getId();
+
+        switch (sid){
+            case R.id.spinner_servstatus:
+                selectedstatus = statusSpinner.getItemAtPosition(position).toString();
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

@@ -18,21 +18,21 @@ public class PurchaseTransaction {
     public PurchaseTransaction() {
     }
 
-    public PurchaseTransaction(String purch_datetime, String cust_type, String cust_phone, String cust_email,
-                               double purch_tot_qty, double purch_tot_price, double purch_vat,
-                               double purch_vatE, double purch_zero, double cust_cash, double cust_change) {
-        this.purch_datetime = purch_datetime;
-        this.cust_type = cust_type;
-        this.cust_phone = cust_phone;
-        this.cust_email = cust_email;
-        this.purch_tot_qty = purch_tot_qty;
-        this.purch_tot_price = purch_tot_price;
-        this.purch_vat = purch_vat;
-        this.purch_vatE = purch_vatE;
-        this.purch_zero = purch_zero;
-        this.cust_cash = cust_cash;
-        this.cust_change = cust_change;
-    }
+//    public PurchaseTransaction(String purch_datetime, String cust_type, String cust_phone, String cust_email,
+//                               double purch_tot_qty, double purch_tot_price, double purch_vat,
+//                               double purch_vatE, double purch_zero, double cust_cash, double cust_change) {
+//        this.purch_datetime = purch_datetime;
+//        this.cust_type = cust_type;
+//        this.cust_phone = cust_phone;
+//        this.cust_email = cust_email;
+//        this.purch_tot_qty = purch_tot_qty;
+//        this.purch_tot_price = purch_tot_price;
+//        this.purch_vat = purch_vat;
+//        this.purch_vatE = purch_vatE;
+//        this.purch_zero = purch_zero;
+//        this.cust_cash = cust_cash;
+//        this.cust_change = cust_change;
+//    }
 
 
 

@@ -2,7 +2,7 @@ package com.example.devcash.Object;
 
 public class Product {
     String prod_name, prod_brand, prod_unitof_measure, prod_status, prod_datetimeadded, prod_expdate, prod_reference;
-    double prod_price, prod_rop;
+    double prod_price, prod_rop, subtotal, prod_qty;
     public Category category;
     int prod_stock, prod_expdatecount;
     public ProductCondition productCondition;
@@ -180,5 +180,19 @@ public class Product {
         this.prod_reference = prod_reference;
     }
 
+    public double getSubtotal() {
+        return subtotal;
+    }
 
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public double getProd_qty() {
+        return prod_qty;
+    }
+
+    public void setProd_qty(double prod_qty) {
+        this.prod_qty = prod_qty;
+    }
 }

@@ -46,8 +46,6 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
     private FirebaseDatabase firebaseDatabase;
 
     List<Serviceslistdata> list;
-    List<PurchaseTransactionlistdata> purchaseTransactionlistdata;
-//    List<PurchasedItem> purchasedItemList;
     Map<String, PurchasedItem> purchasedItemMap;
 
     private static int itemcount = 0;
@@ -56,16 +54,6 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
     public PurchaseInventoryServicesAdapter(List<Serviceslistdata> list) {
         this.list = list;
     }
-
-//    public PurchaseInventoryServicesAdapter(List<Serviceslistdata> list, List<PurchaseTransactionlistdata> purchaseTransactionlistdata) {
-//        this.list = list;
-//        this.purchaseTransactionlistdata = purchaseTransactionlistdata;
-//    }
-
-//    public PurchaseInventoryServicesAdapter(List<Serviceslistdata> list, Context context) {
-//        this.list = list;
-//        this.context = context;
-//    }
 
     @NonNull
     @Override
@@ -98,13 +86,18 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                 services.setService_name(servname);
                 services.setService_price(servprice);
                 services.setService_qty(servqty);
+                services.setSubtotal(services.getService_price() * services.getService_qty());
 
                 final PurchasedItem purchasedItem = new PurchasedItem();
                 purchasedItem.setServices(services);
 //                purchasedItemList.add(purchasedItem);
 //                purchasedItemMap.put(PurchaseId, purchasedItem);
 
+                final double subtotal = services.getService_price()*services.getService_qty();
                 final PurchaseTransaction purchaseTransaction = new PurchaseTransaction();
+//                purchaseTransaction.setPurch_subtotal(subtotal);
+                purchaseTransaction.setPurch_tot_qty(services.getService_qty());
+                purchaseTransaction.setPurch_tot_price(subtotal);
                 purchaseTransaction.setPurchasedItem(purchasedItem);
 //                purchaseTransaction.setPurchasedItem(purchasedItem);
 //                purchaseTransaction.setPurchasedItem(purchasedItemList);
@@ -151,6 +144,10 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 //                                                            .child(transkey+"/purchasedItem/services/service_qty").setValue(servqty);
 
                                                     ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purchasedItem/services/service_qty").setValue(servqty);
+                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purchasedItem/services/subtotal").setValue(servqty * services.getService_price());
+                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_tot_qty").setValue(servqty);
+                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_subtotal").setValue(subtotal);
+                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_tot_price").setValue(subtotal);
                                                     Toast.makeText(v.getContext(), "Quantity updated.", Toast.LENGTH_SHORT).show();
                                                 }
                                             }
@@ -193,7 +190,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView servicename, serviceprice;
+        TextView servicename, serviceprice, expiration;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -201,5 +198,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
             serviceprice = (TextView) itemView.findViewById(R.id.prodlist_price);
         }
     }
+
+
 
 }

@@ -420,6 +420,14 @@
         <item>Unassign Employee</item>
     </string-array>
 
+
+    <string-array name="task_employee">
+        <item>All Tasks</item>
+        <item>Cashiering</item>
+        <item>Inventory Monitoring</item>
+        <item>Unassign Employee</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string-array name="disc_status">
         <item>Active</item>
@@ -436,7 +444,6 @@
         <item>Salon</item>
         <item>Others</item>
     </string-array>
-
 
 
 </resources>

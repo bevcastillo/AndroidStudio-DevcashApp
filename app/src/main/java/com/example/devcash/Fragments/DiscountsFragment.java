@@ -255,9 +255,9 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
         discountSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),
-                        discountSpinner.getSelectedItem().toString(),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),
+//                        discountSpinner.getSelectedItem().toString(),
+//                        Toast.LENGTH_SHORT).show();
             }
 
             @Override

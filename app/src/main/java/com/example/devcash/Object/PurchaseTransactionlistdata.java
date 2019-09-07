@@ -2,11 +2,12 @@ package com.example.devcash.Object;
 
 public class PurchaseTransactionlistdata {
     String purch_datetime, cust_type, cust_phone, cust_email;
-    double purch_qty, purch_tot_qty, purch_tot_price, purch_vat, purch_vatE, purch_zero, cust_cash, cust_change;
+    double purch_qty, purch_tot_qty, purch_subtotal, purch_tot_price, purch_vat, purch_vatE, purch_zero, cust_cash, cust_change;
     Product product;
     Services services;
     Employee employee;
     Enterprise enterprise;
+    PurchasedItem purchasedItem;
 
     public String getPurch_datetime() {
         return purch_datetime;
@@ -134,5 +135,21 @@ public class PurchaseTransactionlistdata {
 
     public void setEnterprise(Enterprise enterprise) {
         this.enterprise = enterprise;
+    }
+
+    public double getPurch_subtotal() {
+        return purch_subtotal;
+    }
+
+    public void setPurch_subtotal(double purch_subtotal) {
+        this.purch_subtotal = purch_subtotal;
+    }
+
+    public PurchasedItem getPurchasedItem() {
+        return purchasedItem;
+    }
+
+    public void setPurchasedItem(PurchasedItem purchasedItem) {
+        this.purchasedItem = purchasedItem;
     }
 }

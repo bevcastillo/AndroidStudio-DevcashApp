@@ -57,7 +57,17 @@
             android:textColor="@color/icon_light"
             android:textSize="@dimen/text_inputs"
             android:layout_marginLeft="@dimen/padding_50"
-            android:gravity="left"/>
+            android:gravity="left"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/imageView_servavail"
+            android:layout_width="0dp"
+            android:layout_height="18dp"
+            android:layout_weight="0.2"
+            android:src="@drawable/ic_circle"
+            android:paddingRight="5dp"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/txtservice_price"
@@ -65,9 +75,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Price"
-            android:textColor="@color/colorGray"
+            android:textColor="@color/blue_price"
             android:textSize="@dimen/text_inputs"
-            android:layout_marginRight="@dimen/padding_50"
+            android:layout_marginRight="10dp"
             android:gravity="right" />
     </LinearLayout>
 
