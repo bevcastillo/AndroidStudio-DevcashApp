@@ -7,7 +7,7 @@ import android.net.Uri;
 
 public class Services {
     String service_name, service_status;
-    double service_price, subtotal;
+    double service_price, service_subtotal;
     int service_qty;
     public Discount discount;
     public Category category;
@@ -91,11 +91,11 @@ public class Services {
         this.qrCode = qrCode;
     }
 
-    public double getSubtotal() {
-        return subtotal;
+    public double getService_subtotal() {
+        return service_subtotal;
     }
 
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
+    public void setService_subtotal(double service_subtotal) {
+        this.service_subtotal = service_subtotal;
     }
 }

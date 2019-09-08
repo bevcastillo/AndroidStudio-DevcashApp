@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.PurchaseInventorylistFragment"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Fragments.PurchaseInventorylistFragment">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_purchaseitemlist"
@@ -24,9 +23,35 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/searchlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_below="@+id/toolbar_purchaseitemlist">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:drawableRight="@drawable/ic_search"
+            android:drawableTint="#808080"
+            android:background="@drawable/search_btnstroke"
+            android:hint="Search.."
+            android:padding="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchlayout">
 
 
         <ProgressBar
@@ -47,7 +72,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="130dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
 
             <ImageView
@@ -76,24 +101,31 @@
 
 
         </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_purchitemlist"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp" />
-
     </FrameLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_purchitemlist"
+        android:layout_width="match_parent"
+        android:layout_height="525dp"
+        android:layout_below="@+id/searchlayout"
+        android:layout_marginTop="10dp"/>
 
     <LinearLayout
         android:id="@+id/btn_chargeitem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="bottom"
         android:padding="10dp"
-        android:background="@drawable/custom_btn"
-        android:layout_gravity="center_horizontal">
+        android:background="@color/colorPrimary"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/recyclerview_purchitemlist"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -104,7 +136,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="items"
+            android:text="items = "
             android:textColor="@color/whiteBG"/>
 
         <TextView
@@ -116,6 +148,4 @@
     </LinearLayout>
 
 
-
-
-</LinearLayout>
+</RelativeLayout>

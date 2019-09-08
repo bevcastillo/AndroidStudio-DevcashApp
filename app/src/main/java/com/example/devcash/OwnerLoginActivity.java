@@ -153,7 +153,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 //                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                    Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect!", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect!", Toast.LENGTH_SHORT).show();
                                 } else{
 
                                     Toast.makeText(OwnerLoginActivity.this, "Account not found!", Toast.LENGTH_SHORT).show();

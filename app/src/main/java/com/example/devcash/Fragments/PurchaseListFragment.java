@@ -160,7 +160,7 @@ public class PurchaseListFragment extends Fragment implements View.OnClickListen
 
                 break;
             case R.id.layout_transaction_new:
-                Toast.makeText(getActivity(), "New Transaction", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "New CustomerTransaction", Toast.LENGTH_SHORT).show();
                 break;
 
         }

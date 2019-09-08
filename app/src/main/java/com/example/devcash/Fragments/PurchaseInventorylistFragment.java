@@ -79,7 +79,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
-    Button btncharge;
+    LinearLayout btncharge;
 
     RecyclerView recyclerViewitemlist;
     String selectedinventorytype;
@@ -101,7 +101,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_purchase_item_list, container, false);
+//        View view = inflater.inflate(R.layout.fragment_purchase_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_purchase_inventory_list, container, false);
         setHasOptionsMenu(true);
 
         itemListToolbar = (Toolbar) view.findViewById(R.id.toolbar_purchaseitemlist);
@@ -110,7 +111,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         invprogress = (ProgressBar) view.findViewById(R.id.inv_progressbar);
         emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyinv);
 
-        btncharge = (Button) view.findViewById(R.id.btn_chargeitem);
+        btncharge = (LinearLayout) view.findViewById(R.id.btn_chargeitem);
 
         btncharge.setOnClickListener(this);
 

@@ -10,12 +10,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.devcash.Object.CustomerCart;
+import com.example.devcash.Object.CustomerTransaction;
+import com.example.devcash.Object.Item;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.Object.PurchaseTransaction;
 import com.example.devcash.Object.PurchasedItem;
 import com.example.devcash.Object.Services;
 import com.example.devcash.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +28,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -35,6 +41,8 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
 
     List<Productlistdata> plist;
+    Map<String, PurchasedItem> purchasedItemMap;
+    Map<String, Object> cartMap;
 
     private static int itemcount = 0;
 
@@ -51,42 +59,42 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+        cartMap = new HashMap<String, Object>();
 
         viewHolder.price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 itemcount++;
 
-                final String PurchaseId = ownerdbreference.push().getKey();
                 final String TransId = ownerdbreference.push().getKey();
+                final String CustomerCartId = ownerdbreference.push().getKey();
+
                 final String prodname = plist.get(viewHolder.getAdapterPosition()).getProd_name();
                 final String prodexpdate = plist.get(viewHolder.getAdapterPosition()).getProd_expdate();
                 final double prodprice = plist.get(viewHolder.getAdapterPosition()).getProd_price();
-
                 final String preference = prodname+prodexpdate;
 
                 plist.get(viewHolder.getAdapterPosition()).setProdclick(plist.get(viewHolder.getAdapterPosition()).getProdclick() + 1);
 
 
-
                 final int prodqty = plist.get(viewHolder.getAdapterPosition()).getProdclick();
+
                 final Product product = new Product();
                 product.setProd_name(prodname);
                 product.setProd_expdate(prodexpdate);
                 product.setProd_price(prodprice);
                 product.setProd_qty(prodqty);
                 product.setProd_reference(preference);
-                product.setSubtotal(product.getProd_price() * product.getProd_qty());
+                product.setProd_subtotal(product.getProd_price() * product.getProd_qty());
 
-                final PurchasedItem purchasedItem = new PurchasedItem();
-                purchasedItem.setProduct(product);
+                final CustomerCart customerCart = new CustomerCart();
+                customerCart.setProduct(product);
 
-                final double subtotal = product.getProd_price()*product.getProd_qty();
-                final PurchaseTransaction purchaseTransaction = new PurchaseTransaction();
-                purchaseTransaction.setPurchasedItem(purchasedItem);
-                purchaseTransaction.setPurch_tot_qty(product.getProd_qty());
-                purchaseTransaction.setPurch_tot_price(subtotal);
-                purchaseTransaction.setPurchasedItem(purchasedItem);
+                cartMap.put(CustomerCartId, customerCart);
+
+                final CustomerTransaction customerTransaction = new CustomerTransaction();
+                customerTransaction.setCustomer_id(1);
+                customerTransaction.setCustomer_cart(cartMap);
 
                 SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
                 final String username = (shared.getString("owner_username", ""));
@@ -95,30 +103,69 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
-                            for (final DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                 final String acctkey = dataSnapshot1.getKey();
-                                ownerdbreference.child(acctkey+"/business/transaction").orderByChild("purchasedItem/product/prod_reference").equalTo(preference).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.exists()){
-                                            for (DataSnapshot dataSnapshot2:dataSnapshot.getChildren()){
-                                                String transkey = dataSnapshot2.getKey();
-                                                PurchaseTransaction purchaseTransaction1 = dataSnapshot2.getValue(PurchaseTransaction.class);
-                                                String reference = purchaseTransaction1.getPurchasedItem().getProduct().getProd_reference();
-//
-                                                if (reference.equals(preference)){
+                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                final String customertransactionkey = dataSnapshot2.getKey();
+                                                final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
+                                                final double currentSubtotal = customerTransaction1.getSubtotal();
 
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purchasedItem/product/prod_qty").setValue(prodqty);
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purchasedItem/product/subtotal").setValue(prodqty*product.getProd_price());
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_tot_qty").setValue(prodqty);
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_subtotal").setValue(subtotal);
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_tot_price").setValue(subtotal);
-                                                    Toast.makeText(v.getContext(), "Quantity updated.", Toast.LENGTH_SHORT).show();
-                                                }
+                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
+                                                        .orderByChild("product/prod_reference").equalTo(preference).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                String cartkey = dataSnapshot3.getKey();
+
+                                                                CustomerCart customerCart1 = dataSnapshot3.getValue(CustomerCart.class);
+                                                                String prodreference = customerCart1.getProduct().getProd_reference();
+
+
+                                                                if (prodreference.equals(preference)){
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(prodqty);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(prodqty*prodprice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
+                                                                    cartMap.clear();
+                                                                }else {
+                                                                    Toast.makeText(v.getContext(), customerTransaction1.getSubtotal()+" is the current subtotal", Toast.LENGTH_SHORT).show();
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").push().setValue(customerCart);
+                                                                }
+                                                            }
+                                                        }else {
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
+                                                            cartMap.clear();
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
+//                                                                    .setValue(null)
+//                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                                        @Override
+//                                                                        public void onSuccess(Void aVoid) {
+//                                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
+////                                                                                Toast.makeText(v.getContext(), "already cleared", Toast.LENGTH_SHORT).show();
+//                                                                        }
+//                                                                    }); //if the product does not exist in the customer cart
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+//                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
+//                                                        .orderByChild("services/service_name").equalTo(servname)
                                             }
-
                                         }else {
-                                            ownerdbreference.child(acctkey+"/business/transaction").child(TransId).setValue(purchaseTransaction);
+                                            // we also calculate the subtotal
+                                            customerTransaction.setSubtotal(product.getProd_price() * prodqty);
+                                            ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
                                         }
                                     }
 

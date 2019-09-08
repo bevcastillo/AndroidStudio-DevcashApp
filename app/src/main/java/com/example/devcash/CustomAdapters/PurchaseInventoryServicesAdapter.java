@@ -1,6 +1,7 @@
 package com.example.devcash.CustomAdapters;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,9 @@ import android.widget.Toast;
 
 import com.example.devcash.Fragments.PurchaseListFragment;
 import com.example.devcash.MyUtility;
+import com.example.devcash.Object.CustomerCart;
+import com.example.devcash.Object.CustomerTransaction;
+import com.example.devcash.Object.Item;
 import com.example.devcash.Object.PurchaseTransaction;
 import com.example.devcash.Object.PurchaseTransactionlistdata;
 import com.example.devcash.Object.PurchasedItem;
@@ -25,6 +29,7 @@ import com.example.devcash.Object.Services;
 import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,7 +51,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
     private FirebaseDatabase firebaseDatabase;
 
     List<Serviceslistdata> list;
-    Map<String, PurchasedItem> purchasedItemMap;
+    Map<String, Object> cartMap;
 
     private static int itemcount = 0;
     Context context;
@@ -64,17 +69,16 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
-//        purchasedItemList = new ArrayList<PurchasedItem>();
-        purchasedItemMap = new HashMap<String, PurchasedItem>();
+        cartMap = new HashMap<String, Object>();
 
         viewHolder.servicename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 itemcount++;
 
-//                String owner= MyUtility.myitem.toString();
-                final String PurchaseId = ownerdbreference.push().getKey();
                 final String TransId = ownerdbreference.push().getKey();
+                final String CustomerCartId = ownerdbreference.push().getKey();
+
                 final String servname = list.get(viewHolder.getAdapterPosition()).getServname();
                 final double servprice = list.get(viewHolder.getAdapterPosition()).getServprice();
 
@@ -86,37 +90,15 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                 services.setService_name(servname);
                 services.setService_price(servprice);
                 services.setService_qty(servqty);
-                services.setSubtotal(services.getService_price() * services.getService_qty());
+                services.setService_subtotal(services.getService_qty() * services.getService_price());
 
-                final PurchasedItem purchasedItem = new PurchasedItem();
-                purchasedItem.setServices(services);
-//                purchasedItemList.add(purchasedItem);
-//                purchasedItemMap.put(PurchaseId, purchasedItem);
+                final CustomerCart customerCart = new CustomerCart();
+                customerCart.setServices(services);
+                cartMap.put(CustomerCartId, customerCart);
 
-                final double subtotal = services.getService_price()*services.getService_qty();
-                final PurchaseTransaction purchaseTransaction = new PurchaseTransaction();
-//                purchaseTransaction.setPurch_subtotal(subtotal);
-                purchaseTransaction.setPurch_tot_qty(services.getService_qty());
-                purchaseTransaction.setPurch_tot_price(subtotal);
-                purchaseTransaction.setPurchasedItem(purchasedItem);
-//                purchaseTransaction.setPurchasedItem(purchasedItem);
-//                purchaseTransaction.setPurchasedItem(purchasedItemList);
-
-//                purchaseTransaction.setPurchasedItem(purchasedItemMap);
-//                purchaseTransaction.setCust_cash(0.0);
-
-
-//                Services services = new Services();
-//                services.setService_name(servname);
-//                services.setService_price(servprice);
-//                purchaseTransaction.setPurch_qty(servqty);
-
-//                purchaseTransaction.setPurch_qty(servqty);
-//                purchaseTransaction.setServices(services);
-
-//                itemcount = 0
-
-
+                final CustomerTransaction customerTransaction = new CustomerTransaction();
+                customerTransaction.setCustomer_id(1);
+                customerTransaction.setCustomer_cart(cartMap);
 
                 SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
                 final String username = (shared.getString("owner_username", ""));
@@ -124,35 +106,68 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                 ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
+                        if (dataSnapshot.exists()){
                             for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                final String acctkey =  dataSnapshot1.getKey();
+                                final String acctkey = dataSnapshot1.getKey();
 
-//                                ownerdbreference.child(acctkey+"/business/transaction").child(PurchaseId).setValue(purchaseTransaction);
-
-                                ownerdbreference.child(acctkey+"/business/transaction").orderByChild("purchasedItem/services/service_name").equalTo(servname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.exists()){
-                                            for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                                String transkey = dataSnapshot2.getKey();
-                                                PurchaseTransaction purchaseTransaction1 = dataSnapshot2.getValue(PurchaseTransaction.class);
-                                                String name = purchaseTransaction1.getPurchasedItem().getServices().getService_name();
+                                        if (dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                final String customertransactionkey = dataSnapshot2.getKey();
+                                                final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
+                                                final double currentSubtotal = customerTransaction1.getSubtotal();
 
-                                                if(name.equals(servname)){
-//                                                    ownerdbreference.child(acctkey+"/business/transaction")
-//                                                            .child(transkey+"/purchasedItem/services/service_qty").setValue(servqty);
+                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
+                                                        .orderByChild("services/service_name").equalTo(servname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                String cartkey = dataSnapshot3.getKey();
+                                                                CustomerCart customerCart1 = dataSnapshot3.getValue(CustomerCart.class);
+                                                                String itemname = customerCart1.getServices().getService_name();
+                                                                Toast.makeText(v.getContext(), itemname+" is the item name", Toast.LENGTH_SHORT).show();
 
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purchasedItem/services/service_qty").setValue(servqty);
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purchasedItem/services/subtotal").setValue(servqty * services.getService_price());
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_tot_qty").setValue(servqty);
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_subtotal").setValue(subtotal);
-                                                    ownerdbreference.child(acctkey+"/business/transaction/"+transkey+"/purch_tot_price").setValue(subtotal);
-                                                    Toast.makeText(v.getContext(), "Quantity updated.", Toast.LENGTH_SHORT).show();
-                                                }
+                                                                if (itemname.equals(servname)){
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_qty").setValue(servqty);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(servqty*servprice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + servprice);
+                                                                    Toast.makeText(v.getContext(), servname+" quantity has been updated", Toast.LENGTH_SHORT).show();
+                                                                    cartMap.clear();
+                                                                }else {
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").push().setValue(customerCart);
+                                                                }
+
+                                                            }
+                                                        }else {
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + servprice);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
+                                                            cartMap.clear();
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
+//                                                                        .setValue(null)
+//                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                                            @Override
+//                                                                            public void onSuccess(Void aVoid) {
+//                                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
+////                                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").push().setValue(cartMap);
+//                                                                                Toast.makeText(v.getContext(), "already cleared", Toast.LENGTH_SHORT).show();
+//                                                                            }
+//                                                                        });
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
                                             }
-                                        }else{
-                                            ownerdbreference.child(acctkey+"/business/transaction").child(TransId).setValue(purchaseTransaction);
+                                        }else {
+                                            customerTransaction.setSubtotal(servprice * servqty);
+                                            ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction);
                                         }
                                     }
 
@@ -170,7 +185,6 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
                     }
                 });
-
             }
         });
 

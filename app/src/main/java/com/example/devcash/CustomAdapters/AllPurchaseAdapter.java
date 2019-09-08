@@ -36,7 +36,7 @@ public class AllPurchaseAdapter extends RecyclerView.Adapter<AllPurchaseAdapter.
         viewHolder.txtservname.setText(data.getPurchasedItem().getServices().getService_name());
         viewHolder.txttotqty.setText(String.valueOf(data.getPurch_tot_qty()));
         viewHolder.txtservprice.setText("@ "+ data.getPurchasedItem().getServices().getService_price() +" each");
-        viewHolder.txtsubtotal.setText(String.valueOf(data.getPurchasedItem().getServices().getSubtotal()));
+        viewHolder.txtsubtotal.setText(String.valueOf(data.getPurchasedItem().getServices().getService_subtotal()));
 
     }
 
