@@ -26,6 +26,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
     TextInputEditText textcashreceived;
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
+    int customerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,10 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+
+        // We get from shared preference the customer id.
+        SharedPreferences customerIdShared = getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        customerId = (customerIdShared.getInt("customer_id", 0));
 
     }
 
@@ -91,7 +96,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                         final String acctkey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){
@@ -115,7 +120,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                         }
                                     }
                                 }else {
-                                    Toast.makeText(CustomerPaymentActivity.this, "cust id does not exist", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CustomerPaymentActivity.this, "cust id does not exist"+customerId, Toast.LENGTH_SHORT).show();
                                 }
                             }
 

@@ -30,6 +30,7 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
     TextView cust_cash, cust_change;
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
+    int customerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,10 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+
+        // We get from shared preference the customer id.
+        SharedPreferences customerIdShared = getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        customerId = (customerIdShared.getInt("customer_id", 0));
     }
 
     @Override
@@ -80,14 +85,11 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
 
         switch (id){
             case R.id.newsalebtn:
-//                Toast.makeText(this, "Start a new sale", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(FinalCustomerActivity.this, PurchaseInventorylistFragment.class);
-//                startActivity(intent);
-
-//                Fragment fragment = new DashboardActivity();
-//                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.finalcustomercontainer, fragment);
-//                fragmentTransaction.commit();
+                SharedPreferences customerIdPref = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+                SharedPreferences.Editor customerIdEditor = customerIdPref.edit();
+                int nextId = customerId + 1;
+                customerIdEditor.putInt("customer_id", nextId);
+                customerIdEditor.commit();
 
                 Intent intent = new Intent(FinalCustomerActivity.this, DashboardActivity.class);
                 startActivity(intent);
@@ -100,6 +102,8 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
+        Toast.makeText(this, customerId+" is the customer id from displayCashChange", Toast.LENGTH_SHORT).show();
+
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -107,7 +111,7 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                         final String acctkey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){

@@ -41,7 +41,7 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
         if (!services.equals(null)) {
             viewHolder.textservname.setText(services.getService_name());
             viewHolder.textservsubtotal.setText(String.valueOf(services.getService_subtotal()));
-            viewHolder.textservprice.setText(String.valueOf(services.getService_price()));
+            viewHolder.textservprice.setText("@"+(services.getService_price())+" each");
             viewHolder.textservqty.setText(String.valueOf(services.getService_qty()));
         }
 

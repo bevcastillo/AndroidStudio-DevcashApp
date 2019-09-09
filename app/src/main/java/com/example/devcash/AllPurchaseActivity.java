@@ -63,6 +63,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
     List<Services> services;
     List<CartItem> cartItems;
     CartItem cartItem;
+    int customerId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,13 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         //firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+
+        SharedPreferences custIdShared = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        customerId = (custIdShared.getInt("customer_id", 0));
+
+        if (customerId <= 0) {
+            customerId = customerId + 1;
+        }
     }
 
     @Override
@@ -120,7 +128,9 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        final Product[] prod = {new Product()};
+        SharedPreferences customerIdPref = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        final SharedPreferences.Editor customerIdEditor = customerIdPref.edit();
+
         Services serv = new Services();
 
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -130,7 +140,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                         String acctkey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){
@@ -138,6 +148,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
                                         String customertransactionkey = dataSnapshot2.getKey();
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+
                                         Gson gson = new Gson();
 
                                         for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
@@ -164,12 +175,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                                 recyclerViewProducts.setItemAnimator(new DefaultItemAnimator());
                                                 recyclerViewProducts.setAdapter(adapter);
 
-//                                                products.add(prodObj);
-//                                                Toast.makeText(AllPurchaseActivity.this, products.size()+" is the size of services", Toast.LENGTH_SHORT).show();
-
-
                                             } else {
-                                                Log.d("SERVICE TAG!!!", entry.getValue().toString());
                                                 String json = gson.toJson(entry.getValue());
                                                 String mJsonString = json;
                                                 JsonParser parser = new JsonParser();
@@ -188,18 +194,6 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                                 recyclerViewServices.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
                                                 recyclerViewServices.setItemAnimator(new DefaultItemAnimator());
                                                 recyclerViewServices.setAdapter(adapter);
-
-//                                                ServicelistAdapter adapter = new ServicelistAdapter(cartItems);
-//                                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//                                                recyclerViewServices.setLayoutManager(layoutManager);
-//                                                recyclerViewServices.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-//                                                recyclerViewServices.setItemAnimator(new DefaultItemAnimator());
-//                                                recyclerViewServices.setAdapter(adapter);
-//                                                adapter.notifyDataSetChanged();
-
-
-//                                                services.add(servicesObj);
-//                                                Toast.makeText(AllPurchaseActivity.this, services.size()+" is the size", Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -220,7 +214,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 //                                        Toast.makeText(AllPurchaseActivity.this, cartItems.size()+" is the size of the cart", Toast.LENGTH_SHORT).show();
                                     }
                                 }else {
-                                    Toast.makeText(AllPurchaseActivity.this, "No customer transaction yet!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AllPurchaseActivity.this, "No customer transaction yet!"+customerId, Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -252,7 +246,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                         final String acctkey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){

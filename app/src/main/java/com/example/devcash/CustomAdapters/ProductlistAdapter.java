@@ -39,7 +39,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
         if (!product.equals(null)) {
             viewHolder.textprodname.setText(product.getProd_name());
             viewHolder.textprodsubtotal.setText(String.valueOf(product.getProd_subtotal()));
-            viewHolder.textprodprice.setText(String.valueOf(product.getProd_price()));
+            viewHolder.textprodprice.setText("@"+(product.getProd_price())+" each");
             viewHolder.textprodqty.setText(String.valueOf(product.getProd_qty()));
 
         }

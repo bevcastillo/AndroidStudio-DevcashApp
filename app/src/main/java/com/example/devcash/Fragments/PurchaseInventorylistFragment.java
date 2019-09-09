@@ -86,6 +86,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
     RecyclerView recyclerViewitemlist;
     String selectedinventorytype;
+    int customerId;
 
 
     public PurchaseInventorylistFragment() {
@@ -128,6 +129,14 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         productsdbreference = firebaseDatabase.getReference("datadevcash/products");
         servicesdbreference = firebaseDatabase.getReference("datadevcash/services");
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+
+        // shared pref
+        SharedPreferences custIdShared = getActivity().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        customerId = (custIdShared.getInt("customer_id", 0));
+
+        if (customerId <= 0) {
+            customerId = customerId + 1;
+        }
 
         ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
@@ -172,8 +181,6 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
-
-//        Toast.makeText(getActivity(), username, Toast.LENGTH_SHORT).show();
 
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -355,7 +362,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                         final String acctkey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){

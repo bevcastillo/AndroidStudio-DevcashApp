@@ -38,7 +38,7 @@ public class PurchaseListAdapter extends RecyclerView.Adapter<PurchaseListAdapte
         PurchaseTransactionlistdata data = list.get(i);
         viewHolder.purchqty.setText(String.valueOf(data.getPurch_qty()));
         viewHolder.itemname.setText(data.getProduct().getProd_name());
-        viewHolder.itemprice.setText(String.valueOf(data.getProduct().getProd_price()));
+        viewHolder.itemprice.setText("@ "+(data.getProduct().getProd_price())+" each");
     }
 
     @Override

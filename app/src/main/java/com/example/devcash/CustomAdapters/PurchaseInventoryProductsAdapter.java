@@ -45,6 +45,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
     Map<String, Object> cartMap;
 
     private static int itemcount = 0;
+    int customerId;
 
     public PurchaseInventoryProductsAdapter(List<Productlistdata> plist) {
         this.plist = plist;
@@ -60,6 +61,15 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
         cartMap = new HashMap<String, Object>();
+
+        SharedPreferences shared = v.getContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        int sharedCustId = (shared.getInt("customer_id", 0));
+
+        if (sharedCustId <= 0) {
+            customerId = sharedCustId + 1;
+        } else {
+            customerId = sharedCustId;
+        }
 
         viewHolder.price.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,8 +103,14 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 cartMap.put(CustomerCartId, customerCart);
 
                 final CustomerTransaction customerTransaction = new CustomerTransaction();
-                customerTransaction.setCustomer_id(1);
+                customerTransaction.setCustomer_id(customerId);
                 customerTransaction.setCustomer_cart(cartMap);
+
+                // save the added customer id to shared pref.
+                SharedPreferences customerIdPref = v.getContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+                final SharedPreferences.Editor customerIdEditor = customerIdPref.edit();
+                customerIdEditor.putInt("customer_id", customerId);
+                customerIdEditor.commit();
 
                 SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
                 final String username = (shared.getString("owner_username", ""));
@@ -106,7 +122,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                             for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                 final String acctkey = dataSnapshot1.getKey();
 
-                                ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                                ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.exists()){
