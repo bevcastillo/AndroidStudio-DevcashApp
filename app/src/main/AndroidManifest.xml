@@ -10,10 +10,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FinalCustomerActivity"
-            android:label="Payment"
+        <activity android:name=".CustomerReceiptActivity"
+            android:label="Receipt"
             android:screenOrientation="landscape"
-            android:parentActivityName=".CustomerPaymentActivity"></activity>
+            android:parentActivityName=".FinalCustomerActivity"></activity>
+        <activity
+            android:name=".FinalCustomerActivity"
+            android:label="Payment"
+            android:parentActivityName=".CustomerPaymentActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".CustomerPaymentActivity"
             android:label="Payment"

@@ -76,13 +76,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="100dp"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/moreoptionsbtn"
             android:layout_width="45dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:orientation="vertical"
             android:background="@color/lightest_gray"
             android:gravity="center"
@@ -102,7 +102,7 @@
         <LinearLayout
             android:id="@+id/chargebtn"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:padding="5dp"
             android:background="@color/colorPrimary"
             android:gravity="center"

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
 
     Button newsalebtn;
     TextView cust_cash, cust_change;
+    LinearLayout btnshowreceipt;
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
     int customerId;
@@ -43,7 +45,9 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
         cust_cash = (TextView) findViewById(R.id.textcash);
         cust_change = (TextView) findViewById(R.id.txtchange);
         newsalebtn = (Button) findViewById(R.id.newsalebtn);
+        btnshowreceipt = (LinearLayout) findViewById(R.id.btnshowreceipt);
 
+        btnshowreceipt.setOnClickListener(this);
         newsalebtn.setOnClickListener(this);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -94,6 +98,10 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
                 Intent intent = new Intent(FinalCustomerActivity.this, DashboardActivity.class);
                 startActivity(intent);
 
+                break;
+            case R.id.btnshowreceipt:
+                Intent intent1 = new Intent(FinalCustomerActivity.this, CustomerReceiptActivity.class);
+                startActivity(intent1);
                 break;
         }
     }

@@ -3,44 +3,29 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:text="More Options"/>
-
-        <ImageView
-            android:id="@+id/btnclose"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            android:layout_gravity="right"
-            android:tint="@color/colorGray"/>
-
-    </LinearLayout>
+    android:paddingBottom="40dp"
+    android:paddingTop="30dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="30dp">
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
-            android:text="Add dicount"/>
+            android:text="More Options"
+            android:textSize="22dp"
+            android:textColor="@color/dark_text"/>
+
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_chevron_right"
+            android:id="@+id/btnclose"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_close"
             android:layout_gravity="right"
             android:tint="@color/colorGray"/>
 
@@ -48,15 +33,55 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         style="@style/Divider"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp">
+
+        <TextView
+            android:id="@+id/option_discount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:text="Add dicount"
+            android:textSize="@dimen/page_title"/>
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_right"
+            android:layout_gravity="right"
+            android:tint="@color/colorGray"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
 
     <TextView
+        android:id="@+id/option_newtransaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start a new sale"
+        android:paddingTop="10dp"
+        android:textSize="@dimen/page_title"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"/>
+
+    <TextView
+        android:id="@+id/option_clearcart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Clear Cart"
         android:paddingTop="10dp"
-        android:textColor="@color/color_red"/>
+        android:textColor="@color/color_red"
+        android:textSize="@dimen/page_title"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"/>
 
 </LinearLayout>

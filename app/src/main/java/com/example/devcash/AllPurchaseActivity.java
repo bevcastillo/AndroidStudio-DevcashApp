@@ -1,6 +1,7 @@
 package com.example.devcash;
 
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -32,6 +33,7 @@ import com.example.devcash.Object.PurchaseTransaction;
 import com.example.devcash.Object.PurchaseTransactionlistdata;
 import com.example.devcash.Object.PurchasedItem;
 import com.example.devcash.Object.Services;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -319,21 +321,143 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void moreoptionsDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         final View optionsview = inflater.inflate(R.layout.customdialog_moreoptions, null);
-        builder.setView(optionsview);
+        dialog.setView(optionsview);
 
         final ImageView imgclosebtn = (ImageView) optionsview.findViewById(R.id.btnclose);
+        final TextView add_discount = (TextView) optionsview.findViewById(R.id.option_discount);
+        final TextView clear_cart = (TextView) optionsview.findViewById(R.id.option_clearcart);
+        final TextView new_transaction = (TextView) optionsview.findViewById(R.id.option_newtransaction);
 
-        imgclosebtn.setOnClickListener(new View.OnClickListener() {
+        new_transaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                startNewSale();
             }
         });
 
-        builder.create();
-        builder.show();
+        clear_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                String username = (shared.getString("owner_username", ""));
+
+                Toast.makeText(AllPurchaseActivity.this, "Clear the cart of "+customerId, Toast.LENGTH_SHORT).show();
+                clearCart(customerId, username);
+            }
+        });
+//
+        imgclosebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+//        builder.create();
+        dialog.show();
+    }
+
+    public void startNewSale() {
+        // get first from shared preference.
+        SharedPreferences shared = getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        int sharedPrefCustId = (shared.getInt("customer_id", 0));
+        int newId = sharedPrefCustId + 1;
+
+        // store the new customer id to shared preference.
+        SharedPreferences customerIdPref = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        SharedPreferences.Editor customerIdEditor = customerIdPref.edit();
+        customerIdEditor.putInt("customer_id", newId);
+        customerIdEditor.commit();
+
+        // go to activity
+        Intent intent = new Intent(AllPurchaseActivity.this, DashboardActivity.class);
+        startActivity(intent);
+    }
+
+    public void clearCart(final int customerId, String ownerUsername) {
+        ownerdbreference.orderByChild("business/owner_username").equalTo(ownerUsername).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        final String customertransactionkey = dataSnapshot2.getKey();
+
+                                        ownerdbreference.child(acctkey+"/business/customer_transaction")
+                                                        .child(customertransactionkey+"/customer_cart")
+                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                if (dataSnapshot.exists()) {
+                                                                    for (DataSnapshot dataSnapshot3 : dataSnapshot.getChildren()) {
+                                                                        String cartKey = dataSnapshot3.getKey();
+
+                                                                        // delete the items in cart.
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction")
+                                                                                        .child(customertransactionkey+"/customer_cart/"+cartKey)
+                                                                                        .setValue(null)
+                                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                            @Override
+                                                                                            public void onSuccess(Void aVoid) {
+                                                                                                Toast.makeText(AllPurchaseActivity.this, "Cart has been cleared successfully!", Toast.LENGTH_SHORT).show();
+                                                                                            }
+                                                                                        });
+
+                                                                        // update subtotal
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction")
+                                                                                .child(customertransactionkey+"/subtotal")
+                                                                                .setValue(0);
+                                                                        // update total_qty
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction")
+                                                                                .child(customertransactionkey+"/total_qty")
+                                                                                .setValue(0);
+                                                                    }
+
+                                                                } else {
+                                                                    Toast.makeText(AllPurchaseActivity.this, "cart not found.", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+//                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
+//                                                .setValue("")
+//                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                    @Override
+//                                                    public void onSuccess(Void aVoid) {
+//                                                        Toast.makeText(AllPurchaseActivity.this, "Cart has been cleared successfully!", Toast.LENGTH_SHORT).show();
+//                                                    }
+//                                                });
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
