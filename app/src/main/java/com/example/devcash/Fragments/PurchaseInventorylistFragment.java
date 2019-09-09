@@ -30,12 +30,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.AllPurchaseActivity;
 import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.CustomAdapters.PurchaseInventoryServicesAdapter;
 import com.example.devcash.MyUtility;
+import com.example.devcash.Object.CustomerTransaction;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.Object.PurchaseTransactionlistdata;
@@ -64,7 +66,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     DatabaseReference dbreference;
     DatabaseReference productsdbreference;
     DatabaseReference servicesdbreference;
-    DatabaseReference businessownerdbreference;
+    DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
 
     List<Productlistdata> list;
@@ -80,6 +82,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     NavigationView navigationView;
     Toolbar toolbar;
     LinearLayout btncharge;
+    TextView text_totprice, text_qty;
 
     RecyclerView recyclerViewitemlist;
     String selectedinventorytype;
@@ -113,6 +116,9 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
         btncharge = (LinearLayout) view.findViewById(R.id.btn_chargeitem);
 
+        text_qty = (TextView) view.findViewById(R.id.txt_qty);
+        text_totprice = (TextView) view.findViewById(R.id.txt_totprice);
+
         btncharge.setOnClickListener(this);
 
         recyclerViewitemlist = (RecyclerView) view.findViewById(R.id.recyclerview_purchitemlist);
@@ -121,7 +127,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         dbreference = firebaseDatabase.getReference("/datadevcash");
         productsdbreference = firebaseDatabase.getReference("datadevcash/products");
         servicesdbreference = firebaseDatabase.getReference("datadevcash/services");
-        businessownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+        ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
 
         ///
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getActivity(),
@@ -152,6 +158,13 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        displayQtyPrice(); //display the total price and the total quantity to the button
+    }
+
     //
 
 
@@ -162,7 +175,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
 //        Toast.makeText(getActivity(), username, Toast.LENGTH_SHORT).show();
 
-        businessownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -220,7 +233,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        businessownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -328,5 +341,57 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
                 break;
         }
+    }
+
+    public void displayQtyPrice(){
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String customertransactionkey = dataSnapshot2.getKey();
+
+                                        CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+                                        double subtotal = customerTransaction.getSubtotal();
+                                        int qty = (int) customerTransaction.getTotal_qty();
+
+                                        text_qty.setText(String.valueOf(qty));
+                                        text_totprice.setText("₱ "+ (subtotal));
+
+                                    }
+                                }else {
+                                    //customer does not exist
+                                    text_qty.setText("0");
+                                    text_totprice.setText("₱ 0.00");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 }

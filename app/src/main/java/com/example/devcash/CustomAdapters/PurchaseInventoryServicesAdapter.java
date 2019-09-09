@@ -118,6 +118,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                 final String customertransactionkey = dataSnapshot2.getKey();
                                                 final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
                                                 final double currentSubtotal = customerTransaction1.getSubtotal();
+                                                final double currentTotalQty = customerTransaction1.getTotal_qty();
 
                                                 ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
                                                         .orderByChild("services/service_name").equalTo(servname).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -134,6 +135,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_qty").setValue(servqty);
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(servqty*servprice);
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + servprice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + servqty) - 1);
                                                                     Toast.makeText(v.getContext(), servname+" quantity has been updated", Toast.LENGTH_SHORT).show();
                                                                     cartMap.clear();
                                                                 }else {
@@ -143,19 +145,10 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                             }
                                                         }else {
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + servprice);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + servqty));
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(currentSubtotal + servprice);
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
                                                             cartMap.clear();
-//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
-//                                                                        .setValue(null)
-//                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                                                            @Override
-//                                                                            public void onSuccess(Void aVoid) {
-//                                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
-////                                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").push().setValue(cartMap);
-//                                                                                Toast.makeText(v.getContext(), "already cleared", Toast.LENGTH_SHORT).show();
-//                                                                            }
-//                                                                        });
-//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
                                                         }
                                                     }
 
@@ -166,7 +159,9 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                 });
                                             }
                                         }else {
+                                            // this is the logic to create new data.
                                             customerTransaction.setSubtotal(servprice * servqty);
+                                            customerTransaction.setTotal_qty(servqty);
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction);
                                         }
                                     }

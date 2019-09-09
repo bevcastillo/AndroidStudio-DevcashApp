@@ -29,6 +29,7 @@
     <color name="text_color">#606060</color>
     <color name="icon_light">#808080</color>
     <color name="icon_bg">#F0F0F0</color>
+    <color name="lightest_gray">#C4C4C4</color>
 
     <color name="color_red">#F52020</color>
 
