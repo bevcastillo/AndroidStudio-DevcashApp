@@ -20,27 +20,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="right"
-            android:paddingRight="10dp">
+            android:paddingRight="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Discount"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"/>
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="0.00"
                 android:paddingLeft="25dp"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
 
         </LinearLayout>
 
@@ -49,20 +52,24 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="right"
-            android:paddingRight="10dp">
+            android:paddingRight="15dp">
 
             <TextView
+                android:id="@+id/text_totaldisc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"/>
 
             <TextView
+                android:id="@+id/text_totalqty"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="0.00"
                 android:paddingLeft="25dp"
-                android:gravity="right"/>
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -75,7 +82,7 @@
         <LinearLayout
             android:id="@+id/moreoptionsbtn"
             android:layout_width="45dp"
-            android:layout_height="match_parent"
+            android:layout_height="70dp"
             android:orientation="vertical"
             android:background="@color/lightest_gray"
             android:gravity="center"
@@ -93,9 +100,10 @@
 
 
         <LinearLayout
+            android:id="@+id/chargebtn"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:padding="10dp"
+            android:padding="5dp"
             android:background="@color/colorPrimary"
             android:gravity="center"
             android:layout_marginTop="15dp"

@@ -1,6 +1,7 @@
 package com.example.devcash;
 
 import android.app.Service;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,8 +55,8 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
     DatabaseReference dbreference;
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
-    TextView text_totprice, text_qty;
-    LinearLayout moreoptionsbtn;
+    TextView text_totprice, text_qty, texttotal;
+    LinearLayout moreoptionsbtn, btncharge;
 
     List<PurchaseTransactionlistdata> list;
     List<Product> products;
@@ -76,16 +78,21 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         recyclerViewProducts = (RecyclerView) findViewById(R.id.prodlist_recyclerview);
         recyclerViewServices = (RecyclerView) findViewById(R.id.servlist_recyclerview);
 
+
         text_qty = (TextView) findViewById(R.id.txt_qty);
         text_totprice = (TextView) findViewById(R.id.txt_totprice);
+        texttotal = (TextView) findViewById(R.id.text_totalqty);
         products = new ArrayList<>();
         services = new ArrayList<>();
         cartItems = new ArrayList<>();
         cartItem = new CartItem();
 
         moreoptionsbtn = (LinearLayout) findViewById(R.id.moreoptionsbtn);
+        btncharge = (LinearLayout) findViewById(R.id.chargebtn);
+
 
         moreoptionsbtn.setOnClickListener(this);
+        btncharge.setOnClickListener(this);
 
         //firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -256,14 +263,16 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                         double subtotal = customerTransaction.getSubtotal();
                                         int qty = (int) customerTransaction.getTotal_qty();
 
-                                        text_qty.setText(String.valueOf(qty));
+                                            text_qty.setText(String.valueOf(qty));
                                         text_totprice.setText("₱ "+ (subtotal));
+                                        texttotal.setText("₱ "+ (subtotal));
 
                                     }
                                 }else {
                                     //customer does not exist
                                     text_qty.setText("0");
                                     text_totprice.setText("₱ 0.00");
+                                    texttotal.setText("₱ 0.00");
                                 }
                             }
 
@@ -282,65 +291,6 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
-
-
-
-
-//    public void displayAllPurchase(){
-//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-//        final String username = (shared.getString("owner_username", ""));
-//
-//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()){
-//                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-//                        String acctkey = dataSnapshot1.getKey();
-//
-//                        ownerdbreference.child(acctkey+"/business/transaction").addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                list = new ArrayList<>();
-//                                if(dataSnapshot.exists()){
-//                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-//                                        PurchaseTransaction purchaseTransaction = dataSnapshot2.getValue(PurchaseTransaction.class);
-//                                        PurchaseTransactionlistdata listdata = new PurchaseTransactionlistdata();
-//                                        double services_subtotal = purchaseTransaction.getPurchasedItem().getServices().getService_subtotal();
-////                                        double products_subtotal = purchaseTransaction.getPurchasedItem().getProduct().getSubtotal();
-//                                        double total = purchaseTransaction.getPurch_tot_price();
-//                                        double qty = purchaseTransaction.getPurch_tot_qty();
-////                                        String name = pur
-//                                        listdata.setPurch_subtotal(services_subtotal);
-//                                        listdata.setPurch_tot_price(total);
-//                                        listdata.setPurch_qty(qty);
-//                                        listdata.setPurchasedItem(purchaseTransaction.getPurchasedItem());
-//                                        list.add(listdata);
-//                                    }
-//                                    AllPurchaseAdapter adapter = new AllPurchaseAdapter(list);
-//                                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//                                    recyclerViewpurchaselist.setLayoutManager(layoutManager);
-//                                    recyclerViewpurchaselist.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-//                                    recyclerViewpurchaselist.setItemAnimator(new DefaultItemAnimator());
-//                                    recyclerViewpurchaselist.setAdapter(adapter);
-//                                    adapter.notifyDataSetChanged();
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     @Override
     public void onBackPressed() {
@@ -366,6 +316,10 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         switch (id){
             case R.id.moreoptionsbtn:
                 moreoptionsDialog();
+                break;
+            case R.id.chargebtn:
+                Intent intent = new Intent(AllPurchaseActivity.this, CustomerPaymentActivity.class);
+                startActivity(intent);
                 break;
         }
     }

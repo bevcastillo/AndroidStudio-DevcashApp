@@ -10,9 +10,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AllPurchaseActivity"
+        <activity android:name=".FinalCustomerActivity"
+            android:label="Payment"
+            android:screenOrientation="landscape"
+            android:parentActivityName=".CustomerPaymentActivity"></activity>
+        <activity
+            android:name=".CustomerPaymentActivity"
+            android:label="Payment"
+            android:parentActivityName=".AllPurchaseActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".AllPurchaseActivity"
             android:label="Cart"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".EDIT_UI.EditServices"
             android:label="Edit Services"
@@ -21,13 +31,14 @@
             android:name=".InventoryNav"
             android:label="@string/title_activity_inventory_nav"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CashierNavigation$NoTask"
-            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".CashierNavigation$NoTask"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".CashierNavigation"
             android:label="@string/title_activity_cashier_navigation"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EmployeeAccountInfo"
             android:label="My Profile"
@@ -47,19 +58,19 @@
         <activity
             android:name=".EDIT_UI.EditEmployee"
             android:label="Edit Employee"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".EDIT_UI.EditProduct"
             android:label="Edit Product"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".EDIT_UI.EditDiscount"
             android:label="Edit Discount"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".EDIT_UI.EditCategory"
             android:label="Edit Category"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".EmployeeLoginActivity"
             android:label="@string/login"
@@ -68,18 +79,24 @@
         <activity
             android:name=".IndexActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".WhyDevcash"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".HelpCenterEmployees"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".HelpCenterInventory"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".Settings_UI.HelpCenterSales"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".GettingStarted"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".OwnerSignupActivity"
-            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".WhyDevcash"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".HelpCenterEmployees"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".HelpCenterInventory"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Settings_UI.HelpCenterSales"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".GettingStarted"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".OwnerSignupActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".SubscriptionActivity"
             android:label="@string/subs_name"
