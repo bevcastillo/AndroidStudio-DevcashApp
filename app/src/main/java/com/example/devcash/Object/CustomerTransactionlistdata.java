@@ -3,7 +3,7 @@ package com.example.devcash.Object;
 public class CustomerTransactionlistdata {
 
     int customer_id;
-    double total_qty, total_price, vat, cash_received, change, subtotal;
+    double total_qty, total_price, vat, cash_received, change, subtotal, total_discount;
     String customer_email, customer_phone, transaction_datetime;
     Enterprise enterprise;
     Employee employee;
@@ -102,5 +102,13 @@ public class CustomerTransactionlistdata {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public double getTotal_discount() {
+        return total_discount;
+    }
+
+    public void setTotal_discount(double total_discount) {
+        this.total_discount = total_discount;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.devcash;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,8 +19,11 @@ import com.example.devcash.CustomAdapters.ProductlistAdapter;
 import com.example.devcash.CustomAdapters.ReceiptProductAdapter;
 import com.example.devcash.CustomAdapters.ReceiptServiceAdapter;
 import com.example.devcash.CustomAdapters.ServicelistAdapter;
+import com.example.devcash.Object.Account;
+import com.example.devcash.Object.Business;
 import com.example.devcash.Object.CartItem;
 import com.example.devcash.Object.CustomerTransaction;
+import com.example.devcash.Object.Enterprise;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Services;
 import com.google.firebase.database.DataSnapshot;
@@ -34,10 +40,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CustomerReceiptActivity extends AppCompatActivity {
+public class CustomerReceiptActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView enterprisename, enterpriseaddr, enterprisephone, receiptno, customertype, cashiername, discount, totalamt, datetime;
+    TextView enterprisename, enterpriseaddr, enterprisephone, receiptno, customertype, cashiername, txtdiscount, totalamt, datetime, txtvat, txtsubtotal, cash, change;
     RecyclerView showprodrecycler, showservicesrecycler;
+
+    LinearLayout sendbyemailbtn, sendbymmsbtn;
 
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
@@ -47,6 +55,7 @@ public class CustomerReceiptActivity extends AppCompatActivity {
     List<CartItem> cartItems;
     CartItem cartItem;
     int customerId = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +71,22 @@ public class CustomerReceiptActivity extends AppCompatActivity {
         receiptno = (TextView) findViewById(R.id.text_receiptno);
         customertype = (TextView) findViewById(R.id.text_customertype);
         cashiername = (TextView) findViewById(R.id.text_cashiername);
-        discount = (TextView) findViewById(R.id.text_discountamt);
+        txtdiscount = (TextView) findViewById(R.id.text_discountamt);
         totalamt = (TextView) findViewById(R.id.text_totalamt);
         datetime = (TextView) findViewById(R.id.text_transactiondatetime);
+        txtvat = (TextView) findViewById(R.id.text_totalvat);
+        txtsubtotal = (TextView) findViewById(R.id.text_subtotal);
+        cash = (TextView) findViewById(R.id.text_cash);
+        change = (TextView) findViewById(R.id.text_change);
 
         showprodrecycler = (RecyclerView) findViewById(R.id.receiptprod_recyclerview);
         showservicesrecycler = (RecyclerView) findViewById(R.id.receiptservice_recyclerview);
+
+        sendbyemailbtn = (LinearLayout) findViewById(R.id.sendbyemail);
+        sendbymmsbtn = (LinearLayout) findViewById(R.id.sendbytext);
+
+        sendbyemailbtn.setOnClickListener(this);
+        sendbymmsbtn.setOnClickListener(this);
 
         products = new ArrayList<>();
         services = new ArrayList<>();
@@ -84,6 +103,9 @@ public class CustomerReceiptActivity extends AppCompatActivity {
         super.onStart();
 
         displayAllPurchase();
+        displayEntDetails();
+//        displayPrice();
+        displayTransactionDetails();
     }
 
     @Override
@@ -137,8 +159,9 @@ public class CustomerReceiptActivity extends AppCompatActivity {
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
                                         String customertransactionkey = dataSnapshot2.getKey();
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-
                                         Gson gson = new Gson();
+
+                                        receiptno.setText("Receipt #"+(customerId));
 
                                         for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
                                             if (entry.getValue().toString().contains("product")) {
@@ -205,5 +228,99 @@ public class CustomerReceiptActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void displayEntDetails(){
+        SharedPreferences ownerPref = getApplicationContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        SharedPreferences businessPref = getApplicationContext().getSharedPreferences("BusinessPref", MODE_PRIVATE);
+
+
+        Gson gson = new Gson();
+        String json = ownerPref.getString("account", "");
+        String businessJson = businessPref.getString("business", "");
+
+        Account account = gson.fromJson(json, Account.class);
+        Business business = gson.fromJson(businessJson, Business.class);
+        enterprisephone.setText(business.getOwner_mobileno());
+        enterprisename.setText(business.enterprise.getEnt_name());
+        enterpriseaddr.setText(business.enterprise.getEnt_addr());
+
+    }
+
+    public void displayTransactionDetails(){
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        SharedPreferences custIdShared = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        customerId = (custIdShared.getInt("customer_id", 0));
+
+        if (customerId <= 0) {
+            customerId = customerId + 1;
+        }
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot datasnapshot3: dataSnapshot.getChildren()){
+                                        String customertransaction = datasnapshot3.getKey();
+
+                                        CustomerTransaction customerTransaction = datasnapshot3.getValue(CustomerTransaction.class);
+                                        double cashreceived = customerTransaction.getCash_received();
+                                        double cashchange = customerTransaction.getChange();
+                                        double subtotal = customerTransaction.getSubtotal();
+                                        double totaldiscount = customerTransaction.getTotal_discount();
+                                        double totalprice = customerTransaction.getTotal_price();
+                                        double vat = customerTransaction.getVat();
+
+                                        cash.setText(String.valueOf(cashreceived));
+                                        change.setText(String.valueOf(cashchange));
+                                        txtsubtotal.setText(String.valueOf(subtotal));
+                                        txtdiscount.setText(String.valueOf(totaldiscount));
+                                        totalamt.setText(String.valueOf(totalprice));
+                                        txtvat.setText(String.valueOf(vat));
+                                    }
+                                }else {
+                                    //set condition here if the id does not exist
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.sendbyemail:
+                Intent intent = new Intent(CustomerReceiptActivity.this, SendReceiptbyEmail.class);
+                startActivity(intent);
+                break;
+            case R.id.sendbytext:
+                Intent intent1 = new Intent(CustomerReceiptActivity.this, SendReceiptviaMMS.class);
+                startActivity(intent1);
+            break;
+        }
     }
 }

@@ -35,7 +35,7 @@ public class ReceiptProductAdapter extends RecyclerView.Adapter<ReceiptProductAd
 
         if (!product.equals(null)){
             viewHolder.itemname.setText(product.getProd_name());
-            viewHolder.itemqtyprice.setText(String.valueOf(product.getProd_qty())+" X"+product.getProd_price());
+            viewHolder.itemqtyprice.setText(String.valueOf(product.getProd_qty())+" X "+product.getDiscounted_price());
             viewHolder.itemsubtotal.setText(String.valueOf(product.getProd_subtotal()));
         }
 

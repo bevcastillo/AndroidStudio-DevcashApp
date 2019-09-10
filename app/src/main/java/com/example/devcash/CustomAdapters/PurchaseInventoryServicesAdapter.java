@@ -92,6 +92,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
                 final String servname = list.get(viewHolder.getAdapterPosition()).getServname();
                 final double servprice = list.get(viewHolder.getAdapterPosition()).getServprice();
+                final double discountedprice = list.get(viewHolder.getAdapterPosition()).getService_disc_price();
 
                 list.get(viewHolder.getAdapterPosition()).setClick(list.get(viewHolder.getAdapterPosition()).getClick() + 1);
 
@@ -100,8 +101,12 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                 final Services services = new Services();
                 services.setService_name(servname);
                 services.setService_price(servprice);
+                services.setService_disc_price(discountedprice);
                 services.setService_qty(servqty);
-                services.setService_subtotal(services.getService_qty() * services.getService_price());
+//                services.setService_subtotal(discountedprice * servqty);
+//                services.setService_subtotal(services.getService_qty() * services.getService_price());
+                services.setService_subtotal(services.getService_disc_price() * services.getService_qty());
+
 
                 final CustomerCart customerCart = new CustomerCart();
                 customerCart.setServices(services);
@@ -112,7 +117,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                 customerTransaction.setCustomer_cart(cartMap);
 
                 // save the added customer id to shared pref.
-                SharedPreferences customerIdPref = v.getContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+                final SharedPreferences customerIdPref = v.getContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
                 final SharedPreferences.Editor customerIdEditor = customerIdPref.edit();
                 customerIdEditor.putInt("customer_id", customerId);
                 customerIdEditor.commit();
@@ -136,6 +141,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                 final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
                                                 final double currentSubtotal = customerTransaction1.getSubtotal();
                                                 final double currentTotalQty = customerTransaction1.getTotal_qty();
+                                                final double currentTotalDiscount = customerTransaction1.getTotal_discount();
 
                                                 ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
                                                         .orderByChild("services/service_name").equalTo(servname).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -150,9 +156,14 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
                                                                 if (itemname.equals(servname)){
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_qty").setValue(servqty);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(servqty*servprice);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + servprice);
+//                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(servqty*servprice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(servqty*discountedprice);
+//                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + servprice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue((currentSubtotal + discountedprice) - ((currentSubtotal+discountedprice) * .12) * 100/100);;
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + servqty) - 1);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(((currentSubtotal+discountedprice) * .12) * 100 / 100);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(currentSubtotal + discountedprice);
+
                                                                     Toast.makeText(v.getContext(), servname+" quantity has been updated", Toast.LENGTH_SHORT).show();
                                                                     cartMap.clear();
                                                                 }else {
@@ -161,10 +172,15 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
                                                             }
                                                         }else {
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + servprice);
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + servprice);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue((currentSubtotal + discountedprice) - ((currentSubtotal+discountedprice) * .12) * 100/100);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(currentSubtotal + discountedprice);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(((currentSubtotal+discountedprice) * .12) * 100/100);
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + servqty));
-//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(currentSubtotal + servprice);
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue((currentTotalQty + servqty));
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
+
+//                                                            Toast.makeText(v.getContext(), "Added to cart", Toast.LENGTH_SHORT).show();
                                                             cartMap.clear();
                                                         }
                                                     }
@@ -177,8 +193,13 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                             }
                                         }else {
                                             // this is the logic to create new data.
-                                            customerTransaction.setSubtotal(servprice * servqty);
+//                                            customerTransaction.setSubtotal(servprice * servqty);
+                                            customerTransaction.setVat(((discountedprice * servqty) * .12) * 100 /100);
+                                            customerTransaction.setSubtotal((discountedprice * servqty) - ((discountedprice * servqty) * .12) * 100 /100);
                                             customerTransaction.setTotal_qty(servqty);
+                                            customerTransaction.setTotal_price(discountedprice * servqty);
+                                            customerTransaction.setTotal_discount((discountedprice * servqty) - (servprice * servqty));
+
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction);
                                         }
                                     }
@@ -208,6 +229,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
         Serviceslistdata data = list.get(i);
         viewHolder.servicename.setText(data.getServname());
         viewHolder.serviceprice.setText(String.valueOf(data.getServprice()));
+        viewHolder.discountedprice.setText(String.valueOf(data.getService_disc_price()));
     }
 
     @Override
@@ -216,12 +238,13 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView servicename, serviceprice, expiration;
+        TextView servicename, serviceprice, expiration, discountedprice;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             servicename = (TextView)itemView.findViewById(R.id.prodlist_name);
             serviceprice = (TextView) itemView.findViewById(R.id.prodlist_price);
+            discountedprice = (TextView) itemView.findViewById(R.id.prod_discountedprice);
         }
     }
 

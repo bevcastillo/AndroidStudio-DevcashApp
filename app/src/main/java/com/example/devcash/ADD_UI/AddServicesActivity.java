@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.devcash.Object.Category;
 import com.example.devcash.Object.Discount;
+import com.example.devcash.Object.ProductExpiration;
 import com.example.devcash.Object.QRCode;
 import com.example.devcash.Object.Services;
 import com.example.devcash.R;
@@ -49,6 +50,9 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     private String ServicesId, QRCodeId;
 
 
+    String servname, servstatus;
+    double servprce;
+
     ImageView servicesphoto;
     TextView takephoto, choosephoto;
     CheckBox chkavail;
@@ -58,7 +62,12 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
     private static final int PICK_IMAGE = 100;
 
+    double discountedPrice;
+
     private Uri imageUri;
+
+    String discountCode, discountStart, discountEnd, discountStatus, discountType;
+    double discountValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +182,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void addServices(String service_name, String service_status, double service_price){
+    public void addServices(String service_name, String service_status, double service_price, double service_disc_price){
         Discount discount = new Discount();
         Category category = new Category();
         final QRCode qrCode = new QRCode();
@@ -181,6 +190,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         qrCode.setQr_code(service_name);
         qrCode.setQr_price(service_price);
         qrCode.setQr_reference(service_name+service_price);
+        qrCode.setQr_disc_price(service_disc_price);
         discount.setDisc_code(selecteddiscount);
         category.setCategory_name(selectedcategory);
 
@@ -188,6 +198,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         services.setService_status(service_status);
         services.setService_name(service_name);
         services.setService_price(service_price);
+        services.setService_disc_price(service_disc_price);
         services.setDiscount(discount);
         services.setCategory(category);
         services.setQrCode(qrCode);
@@ -214,14 +225,88 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+
     public void insertServices(){
-        String servname = servicename.getText().toString();
-        double servprce = Double.parseDouble(serviceprice.getText().toString());
-        String servstatus = chkavail.getText().toString();
-//        addServices(servicename.getText().toString().trim(), Double.parseDouble(serviceprice.getText().toString()));
-        addServices(servname, servstatus, servprce);
-        Toast.makeText(getApplicationContext(), "Services Successfully added!", Toast.LENGTH_SHORT).show();
-        finish();
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+
+        //we will query to compare the selected discount to the discount object and get the discounted price
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/discount").orderByChild("disc_code").equalTo(selecteddiscount).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String discountkey = dataSnapshot2.getKey();
+
+                                        Discount discount = dataSnapshot2.getValue(Discount.class);
+                                        discountCode = discount.getDisc_code();
+                                        discountStart = discount.getDisc_start();
+                                        discountEnd = discount.getDisc_end();
+                                        discountStatus = discount.getDisc_status();
+                                        discountType = discount.getDisc_type();
+                                        discountValue = discount.getDisc_value();
+
+
+                                        servname = servicename.getText().toString();
+                                        servprce = Double.parseDouble(serviceprice.getText().toString());
+                                        servstatus  = chkavail.getText().toString();
+
+                                        if (discountStatus.equals("Active")){
+                                            if (discountType.equals("Percentage")){
+                                                discountedPrice = servprce - discountValue;
+
+                                                addServices(servname, servstatus, servprce, discountedPrice);
+                                                Toast.makeText(getApplicationContext(), "New Services Added!", Toast.LENGTH_SHORT).show();
+                                                finish();
+//
+//
+                                            }else {
+                                                //amount
+                                                discountedPrice = servprce - discountValue;
+
+                                                addServices(servname, servstatus, servprce, discountedPrice);
+                                                Toast.makeText(getApplicationContext(), "New Services Added!", Toast.LENGTH_SHORT).show();
+                                                finish();
+
+                                            }
+                                        }else {
+                                            //not active
+
+                                        }
+                                    }
+                                }else {
+                                    /// the user selected "No Discount"
+                                    discountedPrice = servprce - discountValue;
+
+                                    addServices(servname, servstatus, servprce, discountedPrice);
+                                    Toast.makeText(getApplicationContext(), "New Services Added!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

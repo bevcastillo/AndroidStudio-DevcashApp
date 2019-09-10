@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +42,14 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
         if (!services.equals(null)) {
             viewHolder.textservname.setText(services.getService_name());
             viewHolder.textservsubtotal.setText(String.valueOf(services.getService_subtotal()));
-            viewHolder.textservprice.setText("@"+(services.getService_price())+" each");
+            viewHolder.textservprice.setText("@"+(services.getService_disc_price())+" each");
+
             viewHolder.textservqty.setText(String.valueOf(services.getService_qty()));
+
+            if (viewHolder.textservprice.getText().toString().equals(services.getService_disc_price())){
+                viewHolder.imgdiscounted.setVisibility(View.VISIBLE);
+            }
+
         }
 
     }
@@ -55,6 +62,7 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
     class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView textservqty, textservname, textservprice, textservsubtotal;
+        ImageView imgdiscounted;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +71,7 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
             textservname = (TextView) itemView.findViewById(R.id.purchase_prodname);
             textservprice = (TextView) itemView.findViewById(R.id.purchase_prodprice);
             textservsubtotal = (TextView) itemView.findViewById(R.id.purchase_prodtotqty);
+            imgdiscounted = (ImageView) itemView.findViewById(R.id.img_discounted);
         }
     }
 }

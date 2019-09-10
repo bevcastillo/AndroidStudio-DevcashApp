@@ -10,10 +10,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomerReceiptActivity"
-            android:label="Receipt"
+        <activity android:name=".SendReceiptviaMMS"
             android:screenOrientation="landscape"
-            android:parentActivityName=".FinalCustomerActivity"></activity>
+            android:label="Send via MMS"
+            android:parentActivityName=".CustomerReceiptActivity"></activity>
+        <activity
+            android:name=".SendReceiptbyEmail"
+            android:label="Send via email"
+            android:parentActivityName=".CustomerReceiptActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".CustomerReceiptActivity"
+            android:label="Receipt"
+            android:parentActivityName=".FinalCustomerActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".FinalCustomerActivity"
             android:label="Payment"

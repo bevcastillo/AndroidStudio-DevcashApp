@@ -108,15 +108,16 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
 
                                         if (cashreceived >= subtotal){
                                             double change = cashreceived - subtotal;
+
                                             ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/cash_received").setValue(cashreceived);
-                                            ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue(change);
+                                            ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue((change*100)/100);
                                             Toast.makeText(CustomerPaymentActivity.this, "Cash is saved", Toast.LENGTH_SHORT).show();
 
                                             Intent intent = new Intent(CustomerPaymentActivity.this, FinalCustomerActivity.class);
                                             startActivity(intent);
 
                                         }else {
-                                            Toast.makeText(CustomerPaymentActivity.this, "short cash, please input higher cash amount!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(CustomerPaymentActivity.this, "Short cash! Please input higher cash amount.", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 }else {
@@ -144,6 +145,13 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
+        SharedPreferences custIdShared = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        customerId = (custIdShared.getInt("customer_id", 0));
+
+        if (customerId <= 0) {
+            customerId = customerId + 1;
+        }
+
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -151,7 +159,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                         final String acctkey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){
@@ -160,8 +168,9 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
 
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
                                         double subtotal = customerTransaction.getSubtotal();
+                                        double total = customerTransaction.getTotal_price();
 
-                                        txtchargeamt.setText("Charge  ₱ "+ (subtotal));
+                                        txtchargeamt.setText("Charge  ₱ "+ (total));
 
                                     }
                                 }else {

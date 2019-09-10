@@ -198,6 +198,13 @@
                                 android:textSize="@dimen/text_inputs" />
 
                         </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/prod_disc_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="heyjude"
+                            android:visibility="gone"/>
                     </LinearLayout>
 
                     <LinearLayout

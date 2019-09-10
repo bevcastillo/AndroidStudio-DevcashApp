@@ -2,7 +2,7 @@ package com.example.devcash.Object;
 
 public class Product {
     String prod_name, prod_brand, prod_unitof_measure, prod_status, prod_datetimeadded, prod_expdate, prod_reference;
-    double prod_price, prod_rop, prod_subtotal, prod_qty;
+    double prod_price, prod_rop, prod_subtotal, prod_qty, prod_disc_price;
     public Category category;
     int prod_stock, prod_expdatecount;
     public ProductCondition productCondition;
@@ -35,7 +35,7 @@ public class Product {
 //    }
 
 
-    public Product(String prod_name, String prod_brand, String prod_unitof_measure, String prod_status, double prod_price, double prod_rop, int prod_stock, String prod_reference) {
+    public Product(String prod_name, String prod_brand, String prod_unitof_measure, String prod_status, double prod_price, double prod_rop, int prod_stock, String prod_reference, double prod_disc_price) {
         this.prod_name = prod_name;
         this.prod_brand = prod_brand;
         this.prod_unitof_measure = prod_unitof_measure;
@@ -44,6 +44,7 @@ public class Product {
         this.prod_rop = prod_rop;
         this.prod_stock = prod_stock;
         this.prod_reference = prod_reference;
+        this.prod_disc_price = prod_disc_price;
     }
 
     public Category getCategory() {
@@ -194,5 +195,13 @@ public class Product {
 
     public void setProd_subtotal(double prod_subtotal) {
         this.prod_subtotal = prod_subtotal;
+    }
+
+    public double getDiscounted_price() {
+        return prod_disc_price;
+    }
+
+    public void setDiscounted_price(double discounted_price) {
+        this.prod_disc_price = discounted_price;
     }
 }

@@ -82,6 +82,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 final String prodname = plist.get(viewHolder.getAdapterPosition()).getProd_name();
                 final String prodexpdate = plist.get(viewHolder.getAdapterPosition()).getProd_expdate();
                 final double prodprice = plist.get(viewHolder.getAdapterPosition()).getProd_price();
+                final double discountedprice = plist.get(viewHolder.getAdapterPosition()).getProd_disc_price();
                 final String preference = prodname+prodexpdate;
 
                 plist.get(viewHolder.getAdapterPosition()).setProdclick(plist.get(viewHolder.getAdapterPosition()).getProdclick() + 1);
@@ -95,7 +96,10 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 product.setProd_price(prodprice);
                 product.setProd_qty(prodqty);
                 product.setProd_reference(preference);
-                product.setProd_subtotal(product.getProd_price() * product.getProd_qty());
+                product.setDiscounted_price(discountedprice);
+//                product.setProd_subtotal(product.getProd_price() * product.getProd_qty());
+                product.setProd_subtotal(product.getDiscounted_price() * product.getProd_qty());
+
 
                 final CustomerCart customerCart = new CustomerCart();
                 customerCart.setProduct(product);
@@ -145,8 +149,12 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
                                                                 if (prodreference.equals(preference)){
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(prodqty);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(prodqty*prodprice);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(prodqty * discountedprice);
+//                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(prodqty*prodprice);
+//                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(((discountedprice * prodqty) * 12) * 100 / 100);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(currentSubtotal + discountedprice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue((discountedprice * prodqty) - ((discountedprice * prodqty) * 12) * 100 / 100);
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + prodqty) - 1);
                                                                     cartMap.clear();
                                                                 }else {
@@ -155,7 +163,10 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                 }
                                                             }
                                                         }else {
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(((discountedprice * prodqty) * 12) * 100 / 100);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue((discountedprice * prodqty) - ((discountedprice * prodqty) * 12) * 100 / 100);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(currentSubtotal + discountedprice);
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + prodqty));
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
                                                             cartMap.clear();
@@ -173,8 +184,12 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                             }
                                         }else {
                                             // this is the logic for creating new data.
-                                            customerTransaction.setSubtotal(product.getProd_price() * prodqty);
+//                                            customerTransaction.setSubtotal(product.getProd_price() * prodqty);
+                                            customerTransaction.setVat(((discountedprice * prodqty) * 12) * 100 / 100);
+                                            customerTransaction.setSubtotal((discountedprice * prodqty) - ((discountedprice * prodqty) * 12) * 100 / 100);
+                                            customerTransaction.setTotal_price(discountedprice * prodqty);
                                             customerTransaction.setTotal_qty(prodqty);
+                                            customerTransaction.setTotal_discount((discountedprice * prodqty) - (prodprice * prodqty));
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
                                         }
                                     }
@@ -207,6 +222,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
         viewHolder.expiration.setVisibility(View.VISIBLE);
         viewHolder.expiration.setText(data.getProd_expdate());
+        viewHolder.discountedprice.setText(String.valueOf(data.getProd_disc_price()));
     }
 
     @Override
@@ -216,7 +232,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView name, price, expiration;
+        TextView name, price, expiration, discountedprice;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -224,6 +240,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
             name = (TextView) itemView.findViewById(R.id.prodlist_name);
             price = (TextView) itemView.findViewById(R.id.prodlist_price);
             expiration = (TextView) itemView.findViewById(R.id.prodlist_expdate);
+            discountedprice = (TextView)itemView.findViewById(R.id.prod_discountedprice);
 
         }
     }

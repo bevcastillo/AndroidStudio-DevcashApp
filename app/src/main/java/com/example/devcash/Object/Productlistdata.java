@@ -2,7 +2,7 @@ package com.example.devcash.Object;
 
 public class Productlistdata {
     String prod_name, prod_brand, prod_unitof_measure, prod_status, category_name, cond_name, prod_expdate, prod_reference;
-    double prod_price, prod_rop, subtotal;
+    double prod_price, prod_rop, subtotal, prod_disc_price;
     int prod_stock, prod_expdatecount, prod_qty, prodclick;
     public Category category;
     public ProductCondition productCondition;
@@ -170,5 +170,13 @@ public class Productlistdata {
 
     public void setQrCode(QRCode qrCode) {
         this.qrCode = qrCode;
+    }
+
+    public double getProd_disc_price() {
+        return prod_disc_price;
+    }
+
+    public void setProd_disc_price(double prod_disc_price) {
+        this.prod_disc_price = prod_disc_price;
     }
 }

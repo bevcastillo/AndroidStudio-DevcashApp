@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -57,11 +58,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     private DatabaseReference dbreference;
     private DatabaseReference mydbreference;
-    private DatabaseReference categoryfirebasereference;
-    private DatabaseReference discountfirebasereference;
-    private DatabaseReference prodcondfirebasereference;
     //
-    private DatabaseReference businessprodfirebasereference;
+    private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
     private String ProductId, QRCodeId;
     private String ProductCondId, pexpdate, count;
@@ -79,6 +77,17 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     TextInputEditText exp_itemcount;
     int conditioncount;
 
+    String code, type;
+    String pname;
+
+    TextView edit_discountedprice;
+    int pstock;
+
+    //
+    String discountCode, discountStart, discountEnd, discountStatus, discountType;
+    String pstatus;
+    public double pprice, prop, discountedPrice, discountValue;
+
     private static final int PICK_IMAGE = 100;
 
     Uri imageUri;
@@ -86,6 +95,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     LinearLayout addlayout;
     private int mClickCounter = 0;
+    String p_reference;
 
     Button btnshow;
     Spinner spinnercondition;
@@ -93,6 +103,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     LinearLayout measurementlayout;
 
     final List<ProductExpiration> productExpDates = new ArrayList<ProductExpiration>();
+    final List<Discount> productDiscount = new ArrayList<Discount>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +125,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         produnit = (Spinner) findViewById(R.id.spinner_unit);
         soldby = (RadioGroup) findViewById(R.id.radio_group_soldby);
         chkavail = (CheckBox) findViewById(R.id.cbox_prod_avail);
+
+        edit_discountedprice = (TextView) findViewById(R.id.prod_disc_price);
         //
         spinnerprodcategory = (Spinner) findViewById(R.id.spinner_prodcat);
         spinnerdiscount = (Spinner) findViewById(R.id.spinner_proddisc);
@@ -170,11 +183,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         QRCodeId = dbreference.push().getKey();
         ProductCondId = dbreference.push().getKey();
 
-        categoryfirebasereference = firebaseDatabase.getReference("/datadevcash/category");
-        discountfirebasereference = firebaseDatabase.getReference("/datadevcash/discount");
 
         //
-        businessprodfirebasereference = firebaseDatabase.getReference("/datadevcash/owner");
+        ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
 
 
         final ArrayList<String> categories = new ArrayList<String>();
@@ -185,7 +196,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -222,7 +233,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         final ArrayList<String> discounts = new ArrayList<String>();
 
-        businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -234,6 +245,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                 for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                     Discount discount1 = dataSnapshot1.getValue(Discount.class);
                                     discounts.add(discount1.getDisc_code());
+                                    code = discount1.getDisc_code();
+                                    type = discount1.getDisc_type();
                                 }
                                 discounts.add("No Discount");
                                 discounts.add("Create Discount");
@@ -258,10 +271,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final double prod_rop, int prod_stock, final String prod_reference){
+    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final double prod_rop, int prod_stock, final String prod_reference, final double discounted_price){
 
         ProductCondition condition = new ProductCondition();
-        ProductExpiration expiration = new ProductExpiration();
         Category category = new Category();
         Discount discount = new Discount();
         final QRCode qrCode = new QRCode();
@@ -269,9 +281,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         qrCode.setQr_category("Product");
         qrCode.setQr_code(prod_name);
         qrCode.setQr_price(prod_price);
+        qrCode.setQr_disc_price(discounted_price);
 
         discount.setDisc_code(selecteddisc);
-
         category.setCategory_name(selectedcategory);
 
         condition.setCond_name(selectedprodcond);
@@ -284,13 +296,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             condition.setCond_count(count);
         }
 
-        final Product product = new Product(prod_name, prod_brand, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock,prod_reference);
+        final Product product = new Product(prod_name, prod_brand, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock, prod_reference, discounted_price);
         product.setProductCondition(condition);
         product.setCategory(category);
         product.setDiscount(discount);
         product.setQrCode(qrCode);
-
-
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
@@ -300,18 +310,18 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         final Gson gson = new Gson();
 
-        businessprodfirebasereference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     product_editor.putString("product_id", ProductId); //saving the ProductId to shared preference
 
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        String key = ds.getKey();
+
+                        final String key = ds.getKey();
 
                         if (productExpDates.size()>0){
                             for(ProductExpiration productExpDate : productExpDates) {
-                                QRCode qrCode1 = new QRCode();
                                 product.setProd_expdate(productExpDate.getProd_expdate());
                                 product.setProd_expdatecount(productExpDate.getProd_expdatecount());
                                 String pname = product.getProd_name();
@@ -325,6 +335,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                 String productJson = gson.toJson(product);
                                 product_editor.putString("product", productJson);
                                 product_editor.commit();
+
                             }
                         } else{
                             product.setProd_expdate("No Expiration");
@@ -333,11 +344,13 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                             qrCode.setQr_reference(pname+product.getProd_expdate().trim());
                             product.setQrCode(qrCode);
 
+//                            product.setDiscounted_price();
                             dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
                             dbreference.child("owner/"+key+"/business/qrCode").child(QRCodeId).setValue(qrCode);
                             String productJson = gson.toJson(product);
                             product_editor.putString("product", productJson);
                             product_editor.commit();
+
                         }
 
 
@@ -353,27 +366,97 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void insertProduct(){
-        String pname = prodname.getText().toString();
-        if(prodbrand.getText().toString().equals("")){
-            prodbrand.setText("No Brand");
-            pbrand =prodbrand.getText().toString();
 
-        }else{
-            pbrand = prodbrand.getText().toString();
-        }
-        String pstatus = chkavail.getText().toString();
-        int pstock = Integer.parseInt(prodstock.getText().toString());
-        double pprice = Double.parseDouble(prodprice.getText().toString());
-        double prop = Double.parseDouble(prodrop.getText().toString());
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
 
-        ProductExpiration expiration = new ProductExpiration();
-        String expdate = expiration.getProd_expdate();
-        String p_reference = pname+expdate;
 
-        addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference);
-        Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
-        finish();
+        //we will query to compare the selected discount to the discount object and get the discounted price
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String acctkey = dataSnapshot1.getKey();
 
+                        ownerdbreference.child(acctkey+"/business/discount").orderByChild("disc_code").equalTo(selecteddisc).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String discountkey = dataSnapshot2.getKey();
+
+                                        Discount discount = dataSnapshot2.getValue(Discount.class);
+                                        discountCode = discount.getDisc_code();
+                                        discountStart = discount.getDisc_start();
+                                        discountEnd = discount.getDisc_end();
+                                        discountStatus = discount.getDisc_status();
+                                        discountType = discount.getDisc_type();
+                                        discountValue = discount.getDisc_value();
+
+                                        pname = prodname.getText().toString();
+                                        if(prodbrand.getText().toString().equals("")){
+                                            prodbrand.setText("No Brand");
+                                            pbrand =prodbrand.getText().toString();
+
+                                        }else{
+                                            pbrand = prodbrand.getText().toString();
+                                        }
+                                        pstatus = chkavail.getText().toString();
+                                        pstock = Integer.parseInt(prodstock.getText().toString());
+                                        pprice = Double.parseDouble(prodprice.getText().toString());
+                                        prop = Double.parseDouble(prodrop.getText().toString());
+
+                                        ProductExpiration expiration = new ProductExpiration();
+                                        String expdate = expiration.getProd_expdate();
+                                        p_reference = pname+expdate;
+
+
+                                        if (discountStatus.equals("Active")){
+                                            if (discountType.equals("Percentage")){
+                                                discountedPrice = pprice - discountValue;
+
+                                                addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
+                                                Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
+                                                finish();
+//
+//
+                                            }else {
+                                                //amount
+                                                discountedPrice = pprice - discountValue;
+
+                                                addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
+                                                Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
+                                                finish();
+
+                                            }
+                                        }else {
+                                            //not active
+                                        }
+                                    }
+                                }else {
+                                    /// the user selected "No Discount"
+                                    discountedPrice = pprice; //discounted price is equals to the original price
+                                    addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
+                                    Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void addCheckBoxListener() {
@@ -428,10 +511,81 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             addCheckBoxListener();
             insertProduct();
             getExpDate();
+//            getDiscountData();
         }
         return super.onOptionsItemSelected(item);
 
     }
+
+    public void getDiscountData(){
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/discount").orderByChild("disc_code").equalTo(selecteddisc).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String discountkey = dataSnapshot2.getKey();
+
+                                        Discount discount = dataSnapshot2.getValue(Discount.class);
+                                        discountCode = discount.getDisc_code();
+                                        discountStart = discount.getDisc_start();
+                                        discountEnd = discount.getDisc_end();
+                                        discountStatus = discount.getDisc_status();
+                                        discountType = discount.getDisc_type();
+                                        discountValue = discount.getDisc_value();
+
+                                        if (discountStatus.equals("Active")){
+                                            if (discountType.equals("Percentage")){
+                                                discountedPrice = pprice * discountValue;
+
+//
+//                                                Toast.makeText(AddProductActivity.this, edit_discountedprice.getText().toString()+" inside class", Toast.LENGTH_LONG).show();
+//                                                product.setDiscounted_price(discountedPrice);
+                                                //
+                                            }else {
+                                                //amount
+                                                discountedPrice = pprice - discountValue;
+
+//                                                Toast.makeText(AddProductActivity.this, edit_discountedprice.getText().toString()+" inside class", Toast.LENGTH_LONG).show();
+//                                                product.setDiscounted_price(discountedPrice);
+                                            }
+                                        }else {
+                                            //not active
+                                        }
+                                    }
+                                }else {
+                                    /// the user selected "No Discount"
+                                    discountedPrice = pprice; //discounted price is equals to the original price
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -527,10 +681,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
 //        Toast.makeText(this, pexpdate+" is the selected expdate", Toast.LENGTH_SHORT).show();
         for(ProductExpiration productExpDate : productExpDates) {
-            Toast.makeText(this, productExpDate.getProd_expdate()+" is the selected expdate with a count of: "+productExpDate.getProd_expdatecount(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, productExpDate.getProd_expdate()+" is the selected expdate with a count of: "+productExpDate.getProd_expdatecount(), Toast.LENGTH_SHORT).show();
         }
 
 //        Toast.makeText(this, exp_itemcount.getText().toString()+" is the count", Toast.LENGTH_SHORT).show();
+    }
+
+    public void getDiscountCode(){
+        for (Discount discount : productDiscount){
+
+        }
     }
 
 

@@ -71,6 +71,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         }
 
         viewHolder.serviceprice.setText("₱"+(data.getServprice()));
+        viewHolder.discountedprice.setText("₱"+(data.getService_disc_price()));
     }
 
     @Override
@@ -79,7 +80,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView servicename, serviceprice, servicestatus;
+        TextView servicename, serviceprice, servicestatus, discountedprice;
         ImageView servimgstatus;
 
         public ViewHolder(@NonNull View itemView) {
@@ -88,6 +89,8 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             serviceprice = (TextView) itemView.findViewById(R.id.txtservice_price);
             servicestatus = (TextView) itemView.findViewById(R.id.txtservice_status);
             servimgstatus = (ImageView) itemView.findViewById(R.id.imageView_servavail);
+            discountedprice = (TextView) itemView.findViewById(R.id.txtservice_discprice);
+
         }
     }
 }

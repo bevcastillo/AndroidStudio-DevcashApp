@@ -10,7 +10,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/prodlist_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/servlist_recyclerview"
@@ -38,6 +39,58 @@
                 android:textSize="@dimen/text_18"/>
 
             <TextView
+                android:id="@+id/text_discount"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"
+                android:textColor="@color/color_red"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subtotal"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"/>
+
+            <TextView
+                android:id="@+id/text_subtotal"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VAT(12%)"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"/>
+
+            <TextView
+                android:id="@+id/text_vat"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="0.00"
@@ -63,7 +116,7 @@
                 android:textSize="@dimen/text_18"/>
 
             <TextView
-                android:id="@+id/text_totalqty"
+                android:id="@+id/text_total"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="0.00"
@@ -76,8 +129,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="bottom">
 
         <LinearLayout
             android:id="@+id/moreoptionsbtn"
@@ -112,28 +166,28 @@
             android:layout_marginBottom="10dp">
 
             <TextView
-                android:id="@+id/txt_qty"
+                android:id="@+id/textpriceqty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1"
+                android:text="Item"
                 android:textColor="@color/whiteBG"
                 android:textSize="@dimen/text_inputs"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="items = "
-                android:textColor="@color/whiteBG"
-                android:paddingLeft="5dp"
-                android:textSize="@dimen/text_inputs"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="items = "-->
+<!--                android:textColor="@color/whiteBG"-->
+<!--                android:paddingLeft="5dp"-->
+<!--                android:textSize="@dimen/text_inputs"/>-->
 
-            <TextView
-                android:id="@+id/txt_totprice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0.00"
-                android:textColor="@color/whiteBG"
-                android:textSize="@dimen/text_inputs"/>
+<!--            <TextView-->
+<!--                android:id="@+id/txt_totprice"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="0.00"-->
+<!--                android:textColor="@color/whiteBG"-->
+<!--                android:textSize="@dimen/text_inputs"/>-->
 
         </LinearLayout>
 

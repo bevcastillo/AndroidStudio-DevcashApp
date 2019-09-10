@@ -47,6 +47,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
     DatabaseReference dbreference;
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
-    TextView text_totprice, text_qty, texttotal;
+    TextView text_totprice, text_qty, texttotal, texttotaldiscount, textvat, textpriceqty, textsubtotal;
     LinearLayout moreoptionsbtn, btncharge;
 
     List<PurchaseTransactionlistdata> list;
@@ -83,8 +84,13 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 
 
         text_qty = (TextView) findViewById(R.id.txt_qty);
-        text_totprice = (TextView) findViewById(R.id.txt_totprice);
-        texttotal = (TextView) findViewById(R.id.text_totalqty);
+        textpriceqty = (TextView) findViewById(R.id.textpriceqty);
+//        text_totprice = (TextView) findViewById(R.id.txt_totprice);
+        texttotal = (TextView) findViewById(R.id.text_total);
+        texttotaldiscount = (TextView) findViewById(R.id.text_discount);
+        textvat = (TextView) findViewById(R.id.text_vat);
+        textsubtotal = (TextView) findViewById(R.id.text_subtotal);
+
         products = new ArrayList<>();
         services = new ArrayList<>();
         cartItems = new ArrayList<>();
@@ -256,19 +262,32 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                         String customertransactionkey = dataSnapshot2.getKey();
 
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+                                        double vat = customerTransaction.getVat() *100/100;
                                         double subtotal = customerTransaction.getSubtotal();
-                                        int qty = (int) customerTransaction.getTotal_qty();
+                                        double total = customerTransaction.getTotal_price();
+                                        int quantity = (int) customerTransaction.getTotal_qty();
+                                        double totaldiscount = customerTransaction.getTotal_discount();
 
-                                            text_qty.setText(String.valueOf(qty));
-                                        text_totprice.setText("₱ "+ (subtotal));
-                                        texttotal.setText("₱ "+ (subtotal));
+//                                        text_qty.setText(String.valueOf(qty));
+//                                        text_totprice.setText("₱ "+ (subtotal));
+//                                        texttotal.setText("₱ "+ (total));
+//                                        texttotaldiscount.setText(String.valueOf(customerTransaction.getTotal_discount()));
+//                                        textvat.setText(String.valueOf(customerTransaction.getVat()*100/100));
+
+
+                                        textsubtotal.setText(String.valueOf(subtotal));
+                                        texttotaldiscount.setText(String.valueOf(totaldiscount));
+                                        textvat.setText(String.valueOf(vat));
+                                        texttotal.setText(String.valueOf(total));
+
+                                        textpriceqty.setText(quantity+" item = ₱"+(total));
+
+
 
                                     }
                                 }else {
                                     //customer does not exist
-                                    text_qty.setText("0");
-                                    text_totprice.setText("₱ 0.00");
-                                    texttotal.setText("₱ 0.00");
+                                    textpriceqty.setText("No items = ₱0.00");
                                 }
                             }
 
@@ -345,7 +364,10 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                 SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
                 String username = (shared.getString("owner_username", ""));
 
-                Toast.makeText(AllPurchaseActivity.this, "Clear the cart of "+customerId, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(AllPurchaseActivity.this, "Clear the cart of "+customerId, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AllPurchaseActivity.this, DashboardActivity.class);
+                startActivity(intent);
+
                 clearCart(customerId, username);
             }
         });
@@ -433,14 +455,6 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 
                                                             }
                                                         });
-//                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
-//                                                .setValue("")
-//                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                                    @Override
-//                                                    public void onSuccess(Void aVoid) {
-//                                                        Toast.makeText(AllPurchaseActivity.this, "Cart has been cleared successfully!", Toast.LENGTH_SHORT).show();
-//                                                    }
-//                                                });
                                     }
                                 }
                             }

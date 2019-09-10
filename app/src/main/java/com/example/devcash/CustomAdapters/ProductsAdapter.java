@@ -85,6 +85,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         viewHolder.prodexpdate.setText(data.getProd_expdate());
         viewHolder.prodexpcount.setText(String.valueOf(data.getProd_expdatecount()));
         viewHolder.condname.setText(data.getCond_name());
+        viewHolder.discountedprice.setText("₱"+(data.getProd_disc_price()));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView prodname, prodstatus, prodprice, prodstock, condname, prodexpdate, prodexpcount, instock;
+        TextView prodname, prodstatus, prodprice, prodstock, condname, prodexpdate, prodexpcount, instock, discountedprice;
         ImageView prodimgstatus;
 
         public ViewHolder(@NonNull View itemView) {
@@ -108,6 +109,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             prodexpcount = (TextView) itemView.findViewById(R.id.txtcount);
             instock = (TextView) itemView.findViewById(R.id.instock);
             prodimgstatus = (ImageView) itemView.findViewById(R.id.imageView_availability);
+            discountedprice = (TextView) itemView.findViewById(R.id.txtprod_discprice);
         }
     }
 }

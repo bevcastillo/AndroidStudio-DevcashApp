@@ -197,8 +197,10 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         Productlistdata listdata = new Productlistdata();
                                         String prodname = product.getProd_name();
                                         double prodprice = product.getProd_price();
+                                        double discountedprice = product.getDiscounted_price();
                                         listdata.setProd_name(prodname);
                                         listdata.setProd_price(prodprice);
+                                        listdata.setProd_disc_price(discountedprice);
                                         listdata.setProd_expdate(product.getProd_expdate());
                                         list.add(listdata);
                                     }
@@ -255,8 +257,10 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         Serviceslistdata slistdata = new Serviceslistdata();
                                         String sname = services.getService_name();
                                         double sprice = services.getService_price();
+                                        double discountedprice = services.getService_disc_price();
                                         slistdata.setServname(sname);
                                         slistdata.setServprice(sprice);
+                                        slistdata.setService_disc_price(discountedprice);
                                         slist.add(slistdata);
                                     }
                                         PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist);
