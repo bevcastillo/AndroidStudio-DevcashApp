@@ -28,8 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_below="@+id/toolbar_purchaseitemlist">
+        android:layout_below="@+id/toolbar_purchaseitemlist"
+        android:layout_marginTop="10dp">
 
         <EditText
             android:layout_width="0dp"
@@ -43,6 +43,37 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"/>
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="9"
+            android:layout_gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_search"
+                android:tint="@color/colorGray"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_qr_code_scan"
+            android:tint="@color/colorGray"
+            android:layout_gravity="right"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
@@ -107,51 +138,46 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_purchitemlist"
         android:layout_width="match_parent"
-        android:layout_height="525dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/searchlayout"
         android:layout_marginTop="10dp"/>
 
     <LinearLayout
-        android:id="@+id/btn_chargeitem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:background="@color/colorPrimary"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/recyclerview_purchitemlist"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:layout_below="@+id/recyclerview_purchitemlist">
 
-        <TextView
-            android:id="@+id/txt_qty"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/btn_chargeitem"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1"
-            android:textColor="@color/whiteBG"
-            android:textSize="@dimen/text_inputs"/>
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:background="@color/colorPrimary"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="items = "
-            android:textColor="@color/whiteBG"
-            android:paddingLeft="5dp"
-            android:textSize="@dimen/text_inputs"/>
+            <TextView
+                android:id="@+id/textqtyprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="items"
+                android:textColor="@color/whiteBG"
+                android:textSize="@dimen/text_inputs"/>
 
-        <TextView
-            android:id="@+id/txt_totprice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.00"
-            android:textColor="@color/whiteBG"
-            android:textSize="@dimen/text_inputs"/>
+        </LinearLayout>
 
     </LinearLayout>
+
+
+
 
 
 </RelativeLayout>

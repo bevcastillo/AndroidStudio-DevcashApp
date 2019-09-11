@@ -28,11 +28,11 @@ import com.google.firebase.database.ValueEventListener;
 public class FinalCustomerActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button newsalebtn;
-    TextView cust_cash, cust_change;
-    LinearLayout btnshowreceipt;
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
     int customerId;
+    TextView txtcustomer_cash, txtcustomer_change;
+    Button btnshowreceipt, btnstartnewsale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +41,14 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        cust_cash = (TextView) findViewById(R.id.textcash);
-        cust_change = (TextView) findViewById(R.id.txtchange);
-        newsalebtn = (Button) findViewById(R.id.newsalebtn);
-        btnshowreceipt = (LinearLayout) findViewById(R.id.btnshowreceipt);
+        txtcustomer_cash = (TextView) findViewById(R.id.txtcustomercash);
+        txtcustomer_change = (TextView) findViewById(R.id.txtcustomerchange);
+        btnshowreceipt = (Button) findViewById(R.id.btn_showreceipt);
+        btnstartnewsale = (Button) findViewById(R.id.btn_startnewsale);
 
         btnshowreceipt.setOnClickListener(this);
-        newsalebtn.setOnClickListener(this);
+        btnstartnewsale.setOnClickListener(this);
+
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
@@ -88,7 +88,7 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
         int id = v.getId();
 
         switch (id){
-            case R.id.newsalebtn:
+            case R.id.btn_startnewsale:
                 SharedPreferences customerIdPref = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
                 SharedPreferences.Editor customerIdEditor = customerIdPref.edit();
                 int nextId = customerId + 1;
@@ -99,7 +99,7 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
                 startActivity(intent);
 
                 break;
-            case R.id.btnshowreceipt:
+            case R.id.btn_showreceipt:
                 Intent intent1 = new Intent(FinalCustomerActivity.this, CustomerReceiptActivity.class);
                 startActivity(intent1);
                 break;
@@ -110,7 +110,7 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        Toast.makeText(this, customerId+" is the customer id from displayCashChange", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, customerId+" is the customer id from displayCashChange", Toast.LENGTH_SHORT).show();
 
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -124,16 +124,16 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                        String customertransactionkey = dataSnapshot2.getKey();
+
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
                                         double cash = customerTransaction.getCash_received();
                                         double change = customerTransaction.getChange();
 
-                                        cust_cash.setText(String.valueOf(cash));
-                                        cust_change.setText(String.valueOf(change));
+                                        txtcustomer_cash.setText(String.valueOf(cash));
+                                        txtcustomer_change.setText(String.valueOf(change));
 
                                     }
-                                }else {
+//                                }else {
                                     Toast.makeText(FinalCustomerActivity.this, "cust id does not exist", Toast.LENGTH_SHORT).show();
                                 }
                             }

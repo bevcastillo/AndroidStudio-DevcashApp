@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.devcash"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -47,6 +47,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.6'
     implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'com.google.code.gson:gson:2.8.5'
+//    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
+
+    implementation 'com.itextpdf:itextg:5.5.10'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

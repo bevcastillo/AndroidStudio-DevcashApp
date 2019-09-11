@@ -7,103 +7,148 @@
     android:orientation="vertical"
     tools:context=".FinalCustomerActivity">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/finalcustomercontainer"/>
-
-
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/ic_check_done"
-        android:tint="@color/greenSuccess"
-        android:layout_gravity="center"
-        android:layout_marginTop="90dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_checked"
+        android:layout_marginTop="80dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="done"
-        android:textAllCaps="true"
+        android:text="DONE"
         android:gravity="center"
+        android:paddingTop="15dp"
         android:textStyle="bold"
-        android:textSize="@dimen/text_18"
-        android:padding="20dp"/>
-
-    <TextView
-        android:id="@+id/textcash"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0.00"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="@dimen/text_18"
-        android:paddingTop="10dp"/>
+        android:textSize="18dp"
+        android:textColor="@color/greenSuccess"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:paddingTop="5dp">
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="change"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_18" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txtchange"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/txtcustomercash"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/money_1"
+                android:gravity="right"
+                android:textSize="30dp"
+                android:textColor="@color/dark_text"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Cash"
+                android:gravity="right"
+                android:textSize="@dimen/text_inputs"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            style="@style/Divider"
+            android:layout_marginLeft="@dimen/padding_30"
+            android:layout_marginRight="@dimen/padding_30"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="0.00"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_18"
-            android:paddingLeft="10dp"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtcustomerchange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/money_1"
+                android:gravity="left"
+                android:textSize="30dp"
+                android:textColor="@color/dark_text" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/change"
+                android:gravity="left"
+                android:textSize="@dimen/text_inputs"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
-
     <LinearLayout
-        android:id="@+id/btnshowreceipt"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/custom_btn_stroke"
-        android:padding="15dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="50dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_receipt"
-            android:tint="@color/colorGray"/>
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/btnshowcustomerreceipt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/custom_btn_stroke"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="0.5"
+                android:src="@drawable/ic_receipt"
+                android:tint="@color/colorGray"
+                android:layout_gravity="left"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:text="Receipt"
+                android:textSize="@dimen/text_inputs"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_showreceipt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_btn_stroke"
             android:text="Receipt"
-            android:gravity="center"/>
+            android:drawableLeft="@drawable/ic_local_movies_black_24dp"
+            android:drawableTint="@color/colorGray"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"/>
+
+        <Button
+            android:id="@+id/btn_startnewsale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="15dp"
+            android:text="Start a new sale"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:textSize="16dp"/>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/newsalebtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:text="Start a new sale"
-        android:background="@color/colorPrimary"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="8dp"
-        android:textAllCaps="false"
-        android:textColor="@color/whiteBG"/>
+
+
 
 </LinearLayout>

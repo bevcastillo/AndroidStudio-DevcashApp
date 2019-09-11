@@ -395,6 +395,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                         discountValue = discount.getDisc_value();
 
                                         pname = prodname.getText().toString();
+
                                         if(prodbrand.getText().toString().equals("")){
                                             prodbrand.setText("No Brand");
                                             pbrand =prodbrand.getText().toString();
@@ -436,6 +437,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                     }
                                 }else {
                                     /// the user selected "No Discount"
+                                    pname = prodname.getText().toString();
+                                    pprice = Double.parseDouble(prodprice.getText().toString());
+                                    pstatus = chkavail.getText().toString();
+                                    pprice = Double.parseDouble(prodprice.getText().toString());
+                                    prop = Double.parseDouble(prodrop.getText().toString());
                                     discountedPrice = pprice; //discounted price is equals to the original price
                                     addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
                                     Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();

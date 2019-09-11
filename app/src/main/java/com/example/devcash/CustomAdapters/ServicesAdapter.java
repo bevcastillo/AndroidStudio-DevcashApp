@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.devcash.EDIT_UI.EditServices;
 import com.example.devcash.Object.Services;
@@ -70,8 +71,13 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             viewHolder.servicestatus.setTextColor(Color.RED);
         }
 
-        viewHolder.serviceprice.setText("₱"+(data.getServprice()));
-        viewHolder.discountedprice.setText("₱"+(data.getService_disc_price()));
+//        viewHolder.serviceprice.setText("₱"+(data.getServprice()));
+//        viewHolder.discountedprice.setText("₱"+(data.getService_disc_price()));
+
+        if (viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.serviceprice.setText(String.valueOf(data.getServprice()));
+            viewHolder.discountedprice.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

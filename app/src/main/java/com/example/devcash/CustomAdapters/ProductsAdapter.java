@@ -3,6 +3,7 @@ package com.example.devcash.CustomAdapters;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -72,7 +73,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             viewHolder.prodstatus.setTextColor(Color.RED);
         }
 
-        viewHolder.prodprice.setText("₱"+(data.getProd_price()));
+//        viewHolder.prodprice.setText("₱"+(data.getProd_price()));
         viewHolder.prodstock.setText(String.valueOf(data.getProd_stock()));
 
         if (viewHolder.prodexpdate.getText().toString().equals("")){
@@ -85,6 +86,13 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         viewHolder.prodexpdate.setText(data.getProd_expdate());
         viewHolder.prodexpcount.setText(String.valueOf(data.getProd_expdatecount()));
         viewHolder.condname.setText(data.getCond_name());
+//        viewHolder.discountedprice.setText("₱"+(data.getProd_disc_price()));
+
+//        double price = Double.parseDouble(viewHolder.prodprice.getText().toString());
+//        double discounted = Double.parseDouble(viewHolder.discountedprice.getText().toString());
+
+        viewHolder.prodprice.setText("₱"+(data.getProd_price()));
+        viewHolder.prodprice.setPaintFlags(viewHolder.prodprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         viewHolder.discountedprice.setText("₱"+(data.getProd_disc_price()));
     }
 

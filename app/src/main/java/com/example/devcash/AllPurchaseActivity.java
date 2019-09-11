@@ -11,14 +11,17 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,14 +55,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AllPurchaseActivity extends AppCompatActivity implements View.OnClickListener {
+public class AllPurchaseActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     RecyclerView recyclerViewProducts, recyclerViewServices;
     DatabaseReference dbreference;
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
     TextView text_totprice, text_qty, texttotal, texttotaldiscount, textvat, textpriceqty, textsubtotal;
-    LinearLayout moreoptionsbtn, btncharge;
+    LinearLayout moreoptionsbtn, btncharge, layoutbtnscan, layoutbtnnewsale;
 
     List<PurchaseTransactionlistdata> list;
     List<Product> products;
@@ -68,6 +71,10 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
     CartItem cartItem;
     int customerId = 0;
 
+    Toolbar mtoolbar;
+    Spinner customertypeSpinner;
+    String selectedCustomerType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +82,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 
 
         //
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        recyclerViewpurchaselist = (RecyclerView) findViewById(R.id.purchaselist_recyclerview);
 
@@ -83,13 +90,29 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         recyclerViewServices = (RecyclerView) findViewById(R.id.servlist_recyclerview);
 
 
-        text_qty = (TextView) findViewById(R.id.txt_qty);
         textpriceqty = (TextView) findViewById(R.id.textpriceqty);
 //        text_totprice = (TextView) findViewById(R.id.txt_totprice);
         texttotal = (TextView) findViewById(R.id.text_total);
         texttotaldiscount = (TextView) findViewById(R.id.text_discount);
         textvat = (TextView) findViewById(R.id.text_vat);
         textsubtotal = (TextView) findViewById(R.id.text_subtotal);
+
+        mtoolbar = (Toolbar) findViewById(R.id.toolbar_allpurchase);
+        customertypeSpinner = (Spinner) findViewById(R.id.spinner_customertype);
+
+        layoutbtnscan = (LinearLayout) findViewById(R.id.layoutbtnscanqrcode);
+        layoutbtnnewsale = (LinearLayout) findViewById(R.id.layoutnewsale);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(AllPurchaseActivity.this, android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.customer_type));
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        customertypeSpinner.setAdapter(spinnerAdapter);
+
+        customertypeSpinner.setOnItemSelectedListener(this);
+        layoutbtnnewsale.setOnClickListener(this);
+        layoutbtnscan.setOnClickListener(this);
+
 
         products = new ArrayList<>();
         services = new ArrayList<>();
@@ -266,6 +289,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                         double subtotal = customerTransaction.getSubtotal();
                                         double total = customerTransaction.getTotal_price();
                                         int quantity = (int) customerTransaction.getTotal_qty();
+                                        double qty = customerTransaction.getTotal_qty();
                                         double totaldiscount = customerTransaction.getTotal_discount();
 
 //                                        text_qty.setText(String.valueOf(qty));
@@ -280,7 +304,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                         textvat.setText(String.valueOf(vat));
                                         texttotal.setText(String.valueOf(total));
 
-                                        textpriceqty.setText(quantity+" item = ₱"+(total));
+                                        textpriceqty.setText(qty+" item = ₱"+(total));
 
 
 
@@ -335,6 +359,14 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
             case R.id.chargebtn:
                 Intent intent = new Intent(AllPurchaseActivity.this, CustomerPaymentActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.layoutbtnscanqrcode:
+                Intent intent1 = new Intent(AllPurchaseActivity.this, ScanQRCode.class);
+                startActivity(intent1);
+                break;
+            case R.id.layoutnewsale:
+                startNewSale();
                 break;
         }
     }
@@ -398,6 +430,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         // go to activity
         Intent intent = new Intent(AllPurchaseActivity.this, DashboardActivity.class);
         startActivity(intent);
+        Toast.makeText(this, "Starting a new sale.", Toast.LENGTH_SHORT).show();
     }
 
     public void clearCart(final int customerId, String ownerUsername) {
@@ -446,7 +479,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                                                     }
 
                                                                 } else {
-                                                                    Toast.makeText(AllPurchaseActivity.this, "cart not found.", Toast.LENGTH_SHORT).show();
+//                                                                    Toast.makeText(AllPurchaseActivity.this, "cart not found.", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
 
@@ -473,5 +506,21 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int sid = parent.getId();
+
+        switch (sid){
+            case R.id.spinner_customertype:
+                selectedCustomerType = customertypeSpinner.getSelectedItem().toString();
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

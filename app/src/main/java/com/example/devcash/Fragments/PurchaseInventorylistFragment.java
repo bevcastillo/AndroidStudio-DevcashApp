@@ -81,8 +81,10 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
-    LinearLayout btncharge;
     TextView text_totprice, text_qty;
+
+    LinearLayout chargebtnlayout;
+    TextView qtypricetext;
 
     RecyclerView recyclerViewitemlist;
     String selectedinventorytype;
@@ -114,13 +116,11 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
         invprogress = (ProgressBar) view.findViewById(R.id.inv_progressbar);
         emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyinv);
+        qtypricetext = (TextView) view.findViewById(R.id.textqtyprice);
+        chargebtnlayout = (LinearLayout) view.findViewById(R.id.btn_chargeitem);
 
-        btncharge = (LinearLayout) view.findViewById(R.id.btn_chargeitem);
+        chargebtnlayout.setOnClickListener(this);
 
-        text_qty = (TextView) view.findViewById(R.id.txt_qty);
-        text_totprice = (TextView) view.findViewById(R.id.txt_totprice);
-
-        btncharge.setOnClickListener(this);
 
         recyclerViewitemlist = (RecyclerView) view.findViewById(R.id.recyclerview_purchitemlist);
 
@@ -349,7 +349,6 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
             case R.id.btn_chargeitem:
                 Intent intent = new Intent(getActivity(), AllPurchaseActivity.class);
                 startActivity(intent);
-
                 break;
         }
     }
@@ -371,20 +370,17 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                        String customertransactionkey = dataSnapshot2.getKey();
-
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        double subtotal = customerTransaction.getSubtotal();
                                         int qty = (int) customerTransaction.getTotal_qty();
+                                        double quantity = customerTransaction.getTotal_qty();
+                                        double total = customerTransaction.getTotal_price();
 
-                                        text_qty.setText(String.valueOf(qty));
-                                        text_totprice.setText("₱ "+ (subtotal));
+                                        qtypricetext.setText(quantity+" items = ₱"+total);
 
                                     }
                                 }else {
                                     //customer does not exist
-                                    text_qty.setText("0");
-                                    text_totprice.setText("₱ 0.00");
+                                    qtypricetext.setText("No items = ₱0.00");
                                 }
                             }
 

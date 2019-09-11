@@ -145,8 +145,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Price"
-                android:textColor="@color/blue_price"
-                android:textSize="18dp"
+                android:textColor="@color/color_red"
+                android:textSize="14dp"
                 android:layout_marginRight="10dp"
                 android:gravity="right" />
 
@@ -154,11 +154,12 @@
                 android:id="@+id/txtprod_discprice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Price"
-                android:textColor="@color/color_red"
-                android:textSize="14dp"
+                android:textColor="@color/blue_price"
+                android:textSize="18dp"
                 android:layout_marginRight="10dp"
-                android:gravity="right" />
+                android:gravity="right"
+                android:visibility="visible"
+                android:text="DiscPrice"/>
 
         </LinearLayout>
 

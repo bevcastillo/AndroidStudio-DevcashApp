@@ -285,8 +285,10 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
                                     }
                                 }else {
                                     /// the user selected "No Discount"
+                                    servname = servicename.getText().toString();
+                                    servprce = Double.parseDouble(serviceprice.getText().toString());
+                                    servstatus  = chkavail.getText().toString();
                                     discountedPrice = servprce - discountValue;
-
                                     addServices(servname, servstatus, servprce, discountedPrice);
                                     Toast.makeText(getApplicationContext(), "New Services Added!", Toast.LENGTH_SHORT).show();
                                     finish();

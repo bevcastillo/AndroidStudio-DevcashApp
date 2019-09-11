@@ -202,9 +202,9 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                 servicesprogress.setVisibility(View.GONE);
 
                                 if(serviceslist.isEmpty()){
-                                    noitemlayout.setVisibility(View.VISIBLE);
+                                    emptylayout.setVisibility(View.VISIBLE);
                                 }else{
-                                    noitemlayout.setVisibility(View.GONE);
+                                    emptylayout.setVisibility(View.GONE);
                                 }
                             }
 

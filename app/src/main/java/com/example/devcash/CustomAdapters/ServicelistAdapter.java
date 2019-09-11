@@ -1,8 +1,10 @@
 package com.example.devcash.CustomAdapters;
 
 import android.app.Service;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,7 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view;
-        view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customcard_purchaselist, viewGroup, false);
+        view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_itemsreceipt, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(view);
 
 
@@ -40,15 +42,13 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
 
         Services services = servicesList.get(i);
         if (!services.equals(null)) {
-            viewHolder.textservname.setText(services.getService_name());
-            viewHolder.textservsubtotal.setText(String.valueOf(services.getService_subtotal()));
-            viewHolder.textservprice.setText("@"+(services.getService_disc_price())+" each");
-
-            viewHolder.textservqty.setText(String.valueOf(services.getService_qty()));
-
-            if (viewHolder.textservprice.getText().toString().equals(services.getService_disc_price())){
-                viewHolder.imgdiscounted.setVisibility(View.VISIBLE);
-            }
+            viewHolder.servicename.setText(services.getService_name());
+            viewHolder.servicename.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            viewHolder.servicename.setTextColor(Color.BLACK);
+            viewHolder.servicesubtotal.setText(String.valueOf(services.getService_subtotal()));
+            viewHolder.servicesubtotal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            viewHolder.servicesubtotal.setTextColor(Color.BLACK);
+            viewHolder.serviceqtyprice.setText(services.getService_qty() + " X "+ services.getService_disc_price());
 
         }
 
@@ -61,17 +61,15 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView textservqty, textservname, textservprice, textservsubtotal;
+        TextView servicename, serviceqtyprice, servicesubtotal;
         ImageView imgdiscounted;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            textservqty = (TextView) itemView.findViewById(R.id.purchase_prodqtycount);
-            textservname = (TextView) itemView.findViewById(R.id.purchase_prodname);
-            textservprice = (TextView) itemView.findViewById(R.id.purchase_prodprice);
-            textservsubtotal = (TextView) itemView.findViewById(R.id.purchase_prodtotqty);
-            imgdiscounted = (ImageView) itemView.findViewById(R.id.img_discounted);
+            servicename = (TextView) itemView.findViewById(R.id.itemname);
+            serviceqtyprice = (TextView) itemView.findViewById(R.id.itemqtyprice);
+            servicesubtotal = (TextView) itemView.findViewById(R.id.itemsubtotal);
         }
     }
 }

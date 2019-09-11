@@ -10,10 +10,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SendReceiptviaMMS"
+        <activity android:name=".ScanQRCode"
+            android:label="Scan QRCode"
             android:screenOrientation="landscape"
+            android:parentActivityName=".AllPurchaseActivity"></activity>
+        <activity
+            android:name=".SendReceiptviaMMS"
             android:label="Send via MMS"
-            android:parentActivityName=".CustomerReceiptActivity"></activity>
+            android:parentActivityName=".CustomerReceiptActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".SendReceiptbyEmail"
             android:label="Send via email"
@@ -37,7 +42,8 @@
         <activity
             android:name=".AllPurchaseActivity"
             android:label="Cart"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EDIT_UI.EditServices"
             android:label="Edit Services"

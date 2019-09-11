@@ -14,7 +14,7 @@
             android:id="@+id/prodlist_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/coffee"/>
+            android:src="@drawable/item_tshirt"/>
 
         <LinearLayout
             android:layout_width="65dp"
@@ -46,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="Product Name"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="18dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,27 +61,39 @@
                     android:layout_weight="1"
                     android:gravity="left"
                     android:text="0.00"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/color_red"/>
 
-                <TextView
-                    android:id="@+id/prodlist_expdate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="12/12/12"
-                    android:textColor="@color/white"
-                    android:textSize="12dp"
-                    android:visibility="invisible"/>
+
 
             </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/prod_discountedprice"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="0.00"
-                android:textColor="@color/color_red" />
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/prodlist_expdate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="12/12/12"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
         </LinearLayout>
 
     </RelativeLayout>

@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 public class CustomerPaymentActivity extends AppCompatActivity implements View.OnClickListener {
 
     LinearLayout btncharge;
-    TextView txtchargeamt;
+    TextView txtchargeamt, txttotaldue;
     TextInputEditText textcashreceived;
     DatabaseReference ownerdbreference;
     FirebaseDatabase firebaseDatabase;
@@ -37,6 +37,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
 
         btncharge = (LinearLayout) findViewById(R.id.btnchargecustomer);
         txtchargeamt = (TextView) findViewById(R.id.textchargeamount);
+        txttotaldue = (TextView) findViewById(R.id.txttotalamount);
         textcashreceived = (TextInputEditText) findViewById(R.id.text_cashreceived);
 
         btncharge.setOnClickListener(this);
@@ -105,12 +106,13 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
                                         double subtotal = customerTransaction.getSubtotal();
                                         double cashreceived = Double.parseDouble(textcashreceived.getText().toString());
+                                        double total = customerTransaction.getTotal_price();
 
                                         if (cashreceived >= subtotal){
-                                            double change = cashreceived - subtotal;
+                                            double change = cashreceived - total;
 
                                             ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/cash_received").setValue(cashreceived);
-                                            ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue((change*100)/100);
+                                            ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue(change);
                                             Toast.makeText(CustomerPaymentActivity.this, "Cash is saved", Toast.LENGTH_SHORT).show();
 
                                             Intent intent = new Intent(CustomerPaymentActivity.this, FinalCustomerActivity.class);
@@ -167,15 +169,15 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                         String customertransactionkey = dataSnapshot2.getKey();
 
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        double subtotal = customerTransaction.getSubtotal();
                                         double total = customerTransaction.getTotal_price();
 
                                         txtchargeamt.setText("Charge  ₱ "+ (total));
-
+                                        txttotaldue.setText(String.valueOf(total));
                                     }
                                 }else {
                                     //customer does not exist
                                     txtchargeamt.setText("Charge  ₱ 0.00");
+                                    txttotaldue.setText("0.00");
                                 }
                             }
 

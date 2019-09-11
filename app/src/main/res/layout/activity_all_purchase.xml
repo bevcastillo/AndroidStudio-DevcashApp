@@ -7,16 +7,120 @@
     android:orientation="vertical"
     tools:context=".AllPurchaseActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_allpurchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:theme="@style/ThemeOverlay.AppCompat.Light"
+        style="@style/HeaderBar"
+        android:elevation="4dp"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:text="Cart"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:gravity="center|left"
+                android:textColor="@color/white"/>
+
+            <Spinner
+                android:id="@+id/spinner_customertype"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                style="@style/Divider"/>
+
+            <LinearLayout
+                android:id="@+id/layoutbtnscanqrcode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/text_padding"
+                android:layout_marginRight="@dimen/text_padding">
+
+                <ImageView
+                    android:id="@+id/transaction_qricon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_qr_code_scan"
+                    android:tint="@color/white"/>
+                <TextView
+                    android:id="@+id/transaction_qrtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scan_label"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                style="@style/Divider" />
+
+
+            <LinearLayout
+                android:id="@+id/layoutnewsale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/text_padding"
+                android:layout_marginRight="@dimen/text_padding">
+
+                <ImageView
+                    android:id="@+id/transaction_newIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/white"/>
+                <TextView
+                    android:id="@+id/transaction_newText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_label"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/prodlist_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/servlist_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -129,7 +233,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="bottom">
 
