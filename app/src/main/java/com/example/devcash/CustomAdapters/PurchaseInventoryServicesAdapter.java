@@ -201,6 +201,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                             customerTransaction.setTotal_discount((discountedprice * servqty) - (servprice * servqty));
 
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction);
+                                            Toast.makeText(v.getContext(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 

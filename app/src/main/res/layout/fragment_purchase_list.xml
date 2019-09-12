@@ -22,15 +22,6 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:text="Cart"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:gravity="center|left"
-                android:textColor="@color/white"/>
-
             <Spinner
                 android:id="@+id/spinner_customertype"
                 android:layout_width="0dp"
@@ -57,22 +48,20 @@
                     android:id="@+id/transaction_qricon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_qr_code_scan"
-                    android:tint="@color/white"/>
+                    android:src="@drawable/ic_qr_code_scan"/>
                 <TextView
                     android:id="@+id/transaction_qrtext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/scan_label"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"/>
+                    android:textAllCaps="true"/>
 
             </LinearLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                style="@style/Divider" />
+                style="@style/Divider"/>
 
 
             <LinearLayout
@@ -89,21 +78,20 @@
                     android:id="@+id/transaction_newIcon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_add"
-                    android:tint="@color/white"/>
+                    android:src="@drawable/ic_add"/>
                 <TextView
                     android:id="@+id/transaction_newText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/new_label"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"/>
+                    android:textAllCaps="true"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
+
 
 
     <LinearLayout
@@ -180,6 +168,11 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_purchtransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_services"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

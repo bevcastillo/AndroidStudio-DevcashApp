@@ -1,6 +1,7 @@
 package com.example.devcash.Fragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,11 +46,14 @@ import com.example.devcash.Object.PurchaseTransactionlistdata;
 import com.example.devcash.Object.Services;
 import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
+import com.example.devcash.ScanQRCode;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +79,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     List<PurchaseTransactionlistdata> ptlist;
 
     ProgressBar invprogress;
-    LinearLayout emptylayout;
+    LinearLayout emptylayout, scanqrcode;
     //
     Toolbar itemListToolbar;
     Spinner itemListSpinner;
@@ -94,6 +99,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     public PurchaseInventorylistFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,9 +124,10 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptyinv);
         qtypricetext = (TextView) view.findViewById(R.id.textqtyprice);
         chargebtnlayout = (LinearLayout) view.findViewById(R.id.btn_chargeitem);
+        scanqrcode = (LinearLayout) view.findViewById(R.id.scanqrcode_layout);
 
         chargebtnlayout.setOnClickListener(this);
-
+        scanqrcode.setOnClickListener(this);
 
         recyclerViewitemlist = (RecyclerView) view.findViewById(R.id.recyclerview_purchitemlist);
 
@@ -165,6 +172,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         });
 
         return view;
+
+
     }
 
     @Override
@@ -350,8 +359,46 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                 Intent intent = new Intent(getActivity(), AllPurchaseActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.scanqrcode_layout:
+//                Intent intent1 = new Intent(getActivity(), ScanQRCode.class);
+//                startActivity(intent1);
+                scanQrCode();
+                break;
         }
     }
+
+    public void scanQrCode(){
+        IntentIntegrator integrator = new IntentIntegrator(getActivity());
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("Scan");
+        integrator.setCameraId(0);
+        integrator.setBeepEnabled(true);
+        integrator.setBarcodeImageEnabled(false);
+        integrator.forSupportFragment(this).initiateScan();
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+
+            if(result != null){
+                if(result.getContents()==null){
+                    Toast.makeText(getActivity(), "Scanning was cancelled", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getActivity(), result.getContents(), Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+            else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+    }
+
+
+
 
     public void displayQtyPrice(){
 

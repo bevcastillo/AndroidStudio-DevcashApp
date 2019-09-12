@@ -195,6 +195,8 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                             customerTransaction.setTotal_qty(prodqty);
                                             customerTransaction.setTotal_discount((discountedprice * prodqty) - (prodprice * prodqty));
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
+
+                                            Toast.makeText(v.getContext(), "Item hsa been added to cart.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 

@@ -21,6 +21,48 @@
             android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:entries="@array/inventory_type"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="right">
+
+            <LinearLayout
+                android:id="@+id/scanqrcode_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_qr_code_scan"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:tint="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SCAN"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+
+            <Spinner
+                android:id="@+id/spinnercustomertype"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:entries="@array/customer_type"
+                android:gravity="right"/>
+
+
+
+        </LinearLayout>
+
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
@@ -29,20 +71,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/toolbar_purchaseitemlist"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone">
 
         <EditText
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2"
             android:drawableRight="@drawable/ic_search"
             android:drawableTint="#808080"
             android:background="@drawable/search_btnstroke"
-            android:hint="Search.."
-            android:padding="15dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"/>
+            android:hint="Search for items"
+            android:padding="15dp"/>
 
 
 

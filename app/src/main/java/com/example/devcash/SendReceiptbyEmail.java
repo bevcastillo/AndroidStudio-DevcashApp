@@ -190,10 +190,10 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                         double totprice = customerTransaction.getTotal_price();
 
 
-                                        String receipt_content = "<h1>Mayol's Enterprises</h1>" +
-                                                                "<h2>Colon St. Cebu City</h2>" +
-                                                                "<h2>09065283986</h2>" +
-                                                                "<p> Receipt#"+receiptno+"</p>";
+                                        String customerReceiptContent = "<h1>Mayol's Enterprises</h1>"+
+                                                                    "<p>Colon St. Cebu City</p>" +
+                                                                    "<p>09065283986</p>" +
+                                                                    "---------------------";
 
                                         //
                                         String[] recipients = {customer_email.getText().toString()};
@@ -206,7 +206,7 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                         email.putExtra(Intent.EXTRA_SUBJECT, "Customer Receipt");
                                         email.putExtra(Intent.EXTRA_TEXT,
                                                 Html.fromHtml(new StringBuilder()
-                                                        .append(receipt_content).toString()));
+                                                        .append(customerReceiptContent).toString()));
 
                                         try {
                                             // the user can choose the email client
