@@ -72,9 +72,10 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
             customerId = sharedCustId;
         }
 
-        viewHolder.price.setOnClickListener(new View.OnClickListener() {
+        viewHolder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                Toast.makeText(v.getContext(), "Adding to Cart...", Toast.LENGTH_SHORT).show();
                 itemcount++;
 
                 final String TransId = ownerdbreference.push().getKey();
@@ -119,6 +120,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
                 final String username = (shared.getString("owner_username", ""));
 
+                // query to customer transaction.
                 ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -152,9 +154,9 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(prodqty * discountedprice);
 //                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(prodqty*prodprice);
 //                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(((discountedprice * prodqty) * .12) * 100 / 100);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue((currentSubtotal + discountedprice) * 100/100);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100 / 100);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue((((discountedprice * prodqty) * .12) * 100) / 100);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(((currentSubtotal + discountedprice) * 100) / 100);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100) / 100);
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + prodqty) - 1);
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue((discountedprice * prodqty) - (prodprice * prodqty));
                                                                     cartMap.clear();
@@ -165,10 +167,10 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                             }
                                                         }else {
 //                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(((discountedprice * prodqty) * .12) * 100 / 100);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100 / 100);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue((((discountedprice * prodqty) * .12) * 100) / 100);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100) / 100);
 //                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue((currentSubtotal + discountedprice) * 100/100);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue((currentSubtotal + discountedprice) * 100/100);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(((currentSubtotal + discountedprice) * 100) / 100);
 //                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + prodqty));
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(currentTotalQty);
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue((discountedprice * prodqty) - (prodprice * prodqty));
@@ -182,21 +184,18 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
                                                     }
                                                 });
-
-//                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
-//                                                        .orderByChild("services/service_name").equalTo(servname)
                                             }
                                         }else {
                                             // this is the logic for creating new data.
 //                                            customerTransaction.setSubtotal(product.getProd_price() * prodqty);
-                                            customerTransaction.setVat(((discountedprice * prodqty) * .12) * 100 / 100);
-                                            customerTransaction.setSubtotal((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100 / 100);
-                                            customerTransaction.setTotal_price((discountedprice * prodqty) * 100 / 100);
+                                            customerTransaction.setVat((((discountedprice * prodqty) * .12) * 100) / 100);
+                                            customerTransaction.setSubtotal(((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100) / 100);
+                                            customerTransaction.setTotal_price(((discountedprice * prodqty) * 100) / 100);
                                             customerTransaction.setTotal_qty(prodqty);
                                             customerTransaction.setTotal_discount((discountedprice * prodqty) - (prodprice * prodqty));
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
 
-                                            Toast.makeText(v.getContext(), "Item hsa been added to cart.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(v.getContext(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 

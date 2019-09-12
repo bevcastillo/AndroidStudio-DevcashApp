@@ -190,10 +190,13 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                         double totprice = customerTransaction.getTotal_price();
 
 
-                                        String customerReceiptContent = "<h1>Mayol's Enterprises</h1>"+
-                                                                    "<p>Colon St. Cebu City</p>" +
-                                                                    "<p>09065283986</p>" +
-                                                                    "---------------------";
+                                        String customerReceiptContent = "-------------------------------"+
+                                                                        "<p>&nbsp;&nbsp;&nbsp;RECEIPT&nbsp;&nbsp;&nbsp;</p>"+
+                                                                        "<p>Receipt#"+receiptno+"</p>" +
+                                                                        "<p>Total Due-----"+totprice+"</p>" +
+                                                                        "<p>Discount------"+discount+"</p>"+
+                                                                        "<p>Cash----------"+cash+"</p>"+
+                                                                        "<p>Change--------"+change+"</p>" ;
 
                                         //
                                         String[] recipients = {customer_email.getText().toString()};

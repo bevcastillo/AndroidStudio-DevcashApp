@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.devcash.Object.Product;
 import com.example.devcash.R;
@@ -29,7 +30,6 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
         view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_itemsreceipt, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(view);
 
-
         return viewHolder;
     }
 
@@ -42,7 +42,13 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
             viewHolder.prodname.setText(product.getProd_name());
             viewHolder.prodname.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             viewHolder.prodname.setTextColor(Color.BLACK);
-            viewHolder.prodqtyprice.setText(String.valueOf(product.getProd_qty()) +" X 341.00");
+            double discPrice;
+//            if ( product.getQrCode() != null )  {
+//                discPrice = product.getQrCode().getQr_disc_price();
+//            } else {
+//                discPrice = product.getDiscounted_price();
+//            }
+            viewHolder.prodqtyprice.setText(String.valueOf(product.getProd_qty()) +" X "+ product.getDiscounted_price());
             viewHolder.prodsubtotal.setText(String.valueOf(product.getProd_subtotal()));
             viewHolder.prodsubtotal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             viewHolder.prodsubtotal.setTextColor(Color.BLACK);

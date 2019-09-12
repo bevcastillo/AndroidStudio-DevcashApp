@@ -39,6 +39,7 @@ import com.example.devcash.AllPurchaseActivity;
 import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.CustomAdapters.PurchaseInventoryServicesAdapter;
 import com.example.devcash.MyUtility;
+import com.example.devcash.Object.CustomerCart;
 import com.example.devcash.Object.CustomerTransaction;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Productlistdata;
@@ -56,7 +57,9 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -77,6 +80,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     List<Productlistdata> list;
     List<Serviceslistdata> slist;
     List<PurchaseTransactionlistdata> ptlist;
+    Map<String, Object> cartMap;
 
     ProgressBar invprogress;
     LinearLayout emptylayout, scanqrcode;
@@ -136,6 +140,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         productsdbreference = firebaseDatabase.getReference("datadevcash/products");
         servicesdbreference = firebaseDatabase.getReference("datadevcash/services");
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+        cartMap = new HashMap<String, Object>();
 
         // shared pref
         SharedPreferences custIdShared = getActivity().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
@@ -387,14 +392,178 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                     Toast.makeText(getActivity(), "Scanning was cancelled", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Toast.makeText(getActivity(), result.getContents(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), result.getContents(), Toast.LENGTH_SHORT).show();
+                    String qrItem = result.getContents();
 
-
+                    // Save to firebase using qr scanner.
+                    saveToFirebaseUsingScanner(qrItem);
                 }
             }
             else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
+    }
+
+
+    public void saveToFirebaseUsingScanner(final String qrItem) {
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        final String CustomerCartId = ownerdbreference.push().getKey();
+
+        // get from product node.
+        ownerdbreference.orderByChild("business/owner_username")
+                .equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                String acctKey = dataSnapshot1.getKey();
+
+                                ownerdbreference.child(acctKey+"/business/product").orderByChild("prod_reference").equalTo(qrItem).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot11: dataSnapshot.getChildren()){
+                                                String prodKey = dataSnapshot11.getKey();
+                                                final Product product = dataSnapshot11.getValue(Product.class);
+
+                                                Toast.makeText(getActivity(), product.getDiscounted_price()+" is the discounted price", Toast.LENGTH_SHORT).show();
+                                                product.setProd_qty(1);
+
+                                                double subtotal = product.getDiscounted_price() * product.getProd_qty();
+                                                product.setProd_subtotal(subtotal);
+
+                                                final String preference = product.getProd_name()+product.getProd_expdate();
+
+                                                final CustomerCart customerCart = new CustomerCart();
+                                                customerCart.setProduct(product);
+
+                                                cartMap.put(CustomerCartId, customerCart);
+
+                                                final CustomerTransaction customerTransaction = new CustomerTransaction();
+                                                customerTransaction.setCustomer_id(customerId);
+                                                customerTransaction.setCustomer_cart(cartMap);
+
+                                                // save the added customer id to shared pref.
+                                                SharedPreferences customerIdPref = getActivity().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+                                                final SharedPreferences.Editor customerIdEditor = customerIdPref.edit();
+                                                customerIdEditor.putInt("customer_id", customerId);
+                                                customerIdEditor.commit();
+
+                                                // save now to customer_transaction node.
+                                                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                                                final String acctkey = dataSnapshot1.getKey();
+
+                                                                ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                        if (dataSnapshot.exists()){
+                                                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                                                final String customertransactionkey = dataSnapshot2.getKey();
+                                                                                final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
+                                                                                final double currentSubtotal = customerTransaction1.getSubtotal();
+                                                                                final double currentTotalQty = customerTransaction1.getTotal_qty();
+
+                                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
+                                                                                        .orderByChild("product/prod_reference")
+                                                                                        .equalTo(preference)
+                                                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                    @Override
+                                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                        if (dataSnapshot.exists()){
+                                                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                                                String cartkey = dataSnapshot3.getKey();
+
+                                                                                                CustomerCart customerCart1 = dataSnapshot3.getValue(CustomerCart.class);
+                                                                                                String prodreference = customerCart1.getProduct().getProd_reference();
+
+                                                                                                if (prodreference.equals(preference)){
+                                                                                                    // we update the product qty if ever we already purchased.
+                                                                                                    product.setProd_qty(customerCart1.getProduct().getProd_qty() + 1);
+
+                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(product.getProd_qty());
+                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(product.getProd_qty() * product.getDiscounted_price());
+                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue((((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
+                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(((currentSubtotal + product.getDiscounted_price()) * 100) / 100);
+                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(((product.getDiscounted_price() * product.getProd_qty()) - ((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
+//                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + product.getProd_qty()) - 1);
+                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(product.getProd_qty());
+                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue((product.getDiscounted_price() * product.getProd_qty()) - (product.getProd_price() * product.getProd_qty()));
+                                                                                                    cartMap.clear();
+                                                                                                }else {
+                                                                                                    Toast.makeText(getActivity(), customerTransaction1.getSubtotal()+" is the current subtotal", Toast.LENGTH_SHORT).show();
+                                                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").push().setValue(customerCart);
+                                                                                                }
+                                                                                            }
+                                                                                        }else {
+                                                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue((((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
+                                                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(((product.getDiscounted_price() * product.getProd_qty()) - ((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
+                                                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(((currentSubtotal + product.getDiscounted_price()) * 100) / 100);
+                                                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(currentTotalQty);
+                                                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue((product.getDiscounted_price() * product.getProd_qty()) - (product.getProd_price() * product.getProd_qty()));
+                                                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
+                                                                                            cartMap.clear();
+                                                                                        }
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                    }
+                                                                                });
+
+                                                                            }
+                                                                        }else {
+                                                                            // this is the logic for creating new data.
+                                                                            customerTransaction.setVat((((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
+                                                                            customerTransaction.setSubtotal(((product.getDiscounted_price() * product.getProd_qty()) - ((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
+                                                                            customerTransaction.setTotal_price(((product.getDiscounted_price() * product.getProd_qty()) * 100) / 100);
+                                                                            customerTransaction.setTotal_qty(product.getProd_qty());
+                                                                            customerTransaction.setTotal_discount((product.getDiscounted_price() * product.getProd_qty()) - (product.getProd_price() * product.getProd_qty()));
+                                                                            ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
+
+                                                                            Toast.makeText(getActivity(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 

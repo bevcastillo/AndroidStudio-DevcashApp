@@ -31,7 +31,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="80dp"
             android:background="@color/colorBlack"
             android:orientation="vertical"
             android:alpha="0.6"
@@ -47,7 +47,7 @@
                 android:gravity="left"
                 android:text="Product Name"
                 android:textColor="@color/white"
-                android:textSize="18dp"/>
+                android:textSize="22dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
