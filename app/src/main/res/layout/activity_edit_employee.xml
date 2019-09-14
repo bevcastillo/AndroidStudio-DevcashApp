@@ -657,7 +657,8 @@
                     android:gravity="center"
                     android:text="DEACTIVATE EMPLOYEE"
                     android:textColor="@color/color_red"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
 
                 <android.support.v7.widget.CardView
                     android:layout_width="0dp"
@@ -666,7 +667,8 @@
                     android:padding="@dimen/text_padding"
                     android:layout_marginBottom="@dimen/padding_top"
                     android:background="@color/whiteBG"
-                    android:layout_marginRight="@dimen/padding_150">
+                    android:layout_marginRight="@dimen/padding_150"
+                    android:layout_marginLeft="@dimen/padding_150">
 
                     <LinearLayout
                         android:id="@+id/layout_delemployee"

@@ -180,44 +180,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-//    private boolean ownerExists() {
-//
-//    }
 
-//    private boolean validateEmail(){
-//        String owner_useremail = textInputOwnerUsername.getEditText().getText().toString().trim();
-//
-//        if(owner_useremail.isEmpty()){
-//            textInputOwnerUsername.setError("Fields can't be empty!");
-//            return false;
-//        }else{
-//            textInputOwnerUsername.setError(null);
-//            return true;
-//        }
-//    }
-
-//    private boolean validatePassword(){
-//        String owner_passw = textInputOwnerPassw.getEditText().getText().toString().trim();
-//
-//        if(owner_passw.isEmpty()){
-//            textInputOwnerPassw.setError("Fields can't be empty!");
-//            return false;
-//        }else{
-//            textInputOwnerPassw.setError(null);
-//            return true;
-//        }
-//    }
-    
-//    public void confirmInput(View v){
-//
-//        if(!validateEmail() && !validateEmail()){
-//            return;
-//        }
-//
-//        Toast.makeText(getApplication(), "Successfully logged in.", Toast.LENGTH_SHORT).show();
-//        Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
-//        startActivity(owner_dashboard);
-//    }
 
     private boolean validateEmailPassw(){
         String username = owneruname.getText().toString().trim();

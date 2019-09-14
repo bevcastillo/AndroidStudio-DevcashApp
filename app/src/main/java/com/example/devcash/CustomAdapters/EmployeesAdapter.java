@@ -58,9 +58,6 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
                 intent.putExtra("employeegender", empgender);
                 intent.putExtra("employeeusername", empuser);
                 intent.putExtra("employeestatus",empstatus);
-
-                Toast.makeText(v.getContext(), empstatus+"", Toast.LENGTH_SHORT).show();
-
                 v.getContext().startActivity(intent);
             }
         });

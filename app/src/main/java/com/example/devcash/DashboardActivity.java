@@ -230,16 +230,13 @@ public class DashboardActivity extends AppCompatActivity
                 SharedPreferences.Editor editor3 = customerTypePref.edit();
                 editor.clear();
                 editor.commit();
-
                 editor1.clear();
                 editor1.commit();
-
                 editor2.clear();
                 editor2.commit();
-
                 editor3.clear();
                 editor3.commit();
-                Intent logout = new Intent(DashboardActivity.this, OwnerLoginActivity.class);
+                Intent logout = new Intent(DashboardActivity.this, IndexActivity.class);
                 startActivity(logout);
                 Toast.makeText(DashboardActivity.this, "You have been logged out!", Toast.LENGTH_SHORT).show();
                 finish();

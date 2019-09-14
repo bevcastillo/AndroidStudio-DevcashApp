@@ -113,46 +113,6 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void getAccount(){
-        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
-
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                        final String ownerkey = dataSnapshot1.getKey();
-                        ownerdbreference.child(ownerkey+"/business/account").orderByChild("acct_uname").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                        String acct_key = dataSnapshot2.getKey();
-                                        Account account = dataSnapshot2.getValue(Account.class);
-                                        status = account.getAcct_status();
-                                        txtstatus.setText(status);
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     public void showEmpDetails(){
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
@@ -238,24 +198,6 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
                                                         if(employee.getEmp_username().equals(txtempusername.getText().toString())){
                                                             ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/emp_task").setValue(selectedtask);
 
-                                                            //
-//                                                            ownerdbreference.child(ownerkey+"/business/account").orderByChild("acct_uname").equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
-//                                                                @Override
-//                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                                                    if(dataSnapshot.exists()){
-//                                                                        for (DataSnapshot dataSnapshot4: dataSnapshot.getChildren()){
-//                                                                            Account account = dataSnapshot4.getValue(Account.class);
-//                                                                            Toast.makeText(EditEmployee.this, account.getAcct_status()+" is the "+empusername+" status.", Toast.LENGTH_SHORT).show();
-//                                                                            Toast.makeText(EditEmployee.this, txtstatus.getText().toString()+" is the status", Toast.LENGTH_SHORT).show();
-//                                                                        }
-//                                                                    }
-//                                                                }
-//
-//                                                                @Override
-//                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                                                                }
-//                                                            });
                                                         }
                                                     }
                                                 }
@@ -337,11 +279,119 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         switch (id){
             case R.id.layout_delemployee:
+                deleteEmployee();
                 break;
             case R.id.txtempdeactivate:
                 enterPasswDialog();
                 break;
         }
+    }
+
+    private void deleteEmployee() {
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete your employee "+txtempname.getText().toString()+" ?");
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                //
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                final String ownerKey = dataSnapshot1.getKey();
+
+                                ownerdbreference.child(ownerKey+"/business/employee")
+                                        .orderByChild("emp_username")
+                                        .equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                String empKey = dataSnapshot2.getKey();
+                                                Employee employee = dataSnapshot2.getValue(Employee.class);
+                                                final Account account = dataSnapshot2.getValue(Account.class);
+                                                String empname = employee.getEmp_lname();
+                                                String phone = employee.getEmp_phone();
+
+                                                String username = account.getAcct_uname();
+                                                String status = account.getAcct_status();
+
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_fname").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_gender").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_lname").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_phone").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_task").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_username").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_workfor").setValue(null);
+
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_email").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_passw").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_status").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_type").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_uname").setValue(null);
+
+                                                ownerdbreference.child(ownerKey+"/business/account")
+                                                        .orderByChild("acct_uname")
+                                                        .equalTo(empusername).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                String acctKey = dataSnapshot3.getKey();
+                                                                Account account1 = dataSnapshot3.getValue(Account.class);
+                                                                String acctuname = account1.getAcct_uname();
+
+                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_email").setValue(null);
+                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_passw").setValue(null);
+                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_status").setValue(null);
+                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_type").setValue(null);
+                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_uname").setValue(null);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                            Toast.makeText(EditEmployee.this, "Employee has been deleted.", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     @Override
