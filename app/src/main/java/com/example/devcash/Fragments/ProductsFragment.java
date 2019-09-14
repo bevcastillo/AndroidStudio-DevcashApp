@@ -300,7 +300,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                     listdata.setProd_stock(pstock);
                                     listdata.setCond_name(condname);
                                     listdata.setProd_expdate(pexpdate);
-                                    listdata.setProd_disc_price(discprice);
+                                    listdata.setDiscounted_price(discprice);
                                     listdata.setProd_expdatecount(pexpdatecount);
                                     list.add(listdata);
 

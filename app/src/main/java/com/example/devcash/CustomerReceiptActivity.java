@@ -28,6 +28,7 @@ import com.example.devcash.Object.Account;
 import com.example.devcash.Object.Business;
 import com.example.devcash.Object.CartItem;
 import com.example.devcash.Object.CustomerTransaction;
+import com.example.devcash.Object.Employee;
 import com.example.devcash.Object.Enterprise;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Services;
@@ -255,11 +256,63 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
 
     public void displayTransactionDetails(){
 
+        SharedPreferences ownerPref = getApplicationContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        SharedPreferences businessPref = getApplicationContext().getSharedPreferences("BusinessPref", MODE_PRIVATE);
+        SharedPreferences empPref = getApplicationContext().getSharedPreferences("EmpPref", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = ownerPref.getString("account", "");
+        String ownerAccountType = ownerPref.getString("account_type","");
+        String employeeAccountType = empPref.getString("account_type", "");
+        String businessJson = businessPref.getString("business", "");
+        String employeeJson = empPref.getString("Employee", "");
+
+        Account account = gson.fromJson(json, Account.class);
+        Business business = gson.fromJson(businessJson, Business.class);
+        Employee employee = gson.fromJson(employeeJson, Employee.class);
+
+        String lname = business.getOwner_lname();
+        String fname = business.getOwner_fname();
+        String name = fname+" "+lname;
+
+        if (!ownerAccountType.equals("")){
+            cashiername.setText("Cashier: "+name);
+        }
+
+        if (!employeeAccountType.equals("")){
+            String employeeName = employee.getEmp_fname() + " " + employee.getEmp_lname();
+            cashiername.setText("Cashier: "+employeeName);
+        }
+
+//        if (employee.getEmp_fname().equals("")) {
+//            // Logged in as owner.
+//            cashiername.setText("Cashier: " +name);
+//        } else {
+//            // Logged in as an employee.
+//            String employeeName = employee.getEmp_fname() + " " + employee.getEmp_lname();
+//            cashiername.setText("Cashier: " +employeeName);
+//        }
+
+
+//        cashiername.setText(name);
+//        enterprisename.setText(entname);
+
+//        if (account.getAcct_type().equals("Owner")) {
+//            cashiername.setText("Cashier: "+name);
+//        }else {
+//            cashiername.setText("Cashier: "+ employee.getEmp_fname());
+//        }
+
+        //
+
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
         SharedPreferences custIdShared = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
         customerId = (custIdShared.getInt("customer_id", 0));
+
+        SharedPreferences customerTypePref = getApplicationContext().getSharedPreferences("CustomerTypePref", MODE_PRIVATE);
+        final String customerType = (customerTypePref.getString("customer_type","Regular Customer"));
 
         if (customerId <= 0) {
             customerId = customerId + 1;
@@ -286,6 +339,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                         double totaldiscount = customerTransaction.getTotal_discount();
                                         double totalprice = customerTransaction.getTotal_price();
                                         double vat = customerTransaction.getVat();
+                                        String custType = customerTransaction.getCustomer_type();
 
                                         cash.setText(String.valueOf(cashreceived));
                                         change.setText(String.valueOf(cashchange));
@@ -293,6 +347,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                         txtdiscount.setText(String.valueOf(totaldiscount));
                                         totalamt.setText(String.valueOf(totalprice));
                                         txtvat.setText(String.valueOf(vat));
+                                        customertype.setText(custType);
                                     }
                                 }else {
                                     //set condition here if the id does not exist

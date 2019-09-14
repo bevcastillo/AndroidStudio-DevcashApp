@@ -43,7 +43,7 @@
             android:name=".AllPurchaseActivity"
             android:label="Cart"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".EDIT_UI.EditServices"
             android:label="Edit Services"

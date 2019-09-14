@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.example.devcash.AllPurchaseActivity;
 import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.CustomAdapters.PurchaseInventoryServicesAdapter;
+import com.example.devcash.DashboardActivity;
 import com.example.devcash.MyUtility;
 import com.example.devcash.Object.CustomerCart;
 import com.example.devcash.Object.CustomerTransaction;
@@ -68,7 +69,7 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class PurchaseInventorylistFragment extends Fragment implements SearchView.OnQueryTextListener,
-        MenuItem.OnActionExpandListener, View.OnClickListener {
+        MenuItem.OnActionExpandListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     //
     DatabaseReference dbreference;
@@ -83,10 +84,10 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     Map<String, Object> cartMap;
 
     ProgressBar invprogress;
-    LinearLayout emptylayout, scanqrcode;
+    LinearLayout emptylayout, scanqrcode, newsale;
     //
     Toolbar itemListToolbar;
-    Spinner itemListSpinner;
+    Spinner itemListSpinner, spinnerCustomerType;
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -96,7 +97,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     TextView qtypricetext;
 
     RecyclerView recyclerViewitemlist;
-    String selectedinventorytype;
+    String selectedinventorytype, selectedcustomertype;
     int customerId;
 
 
@@ -129,9 +130,14 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         qtypricetext = (TextView) view.findViewById(R.id.textqtyprice);
         chargebtnlayout = (LinearLayout) view.findViewById(R.id.btn_chargeitem);
         scanqrcode = (LinearLayout) view.findViewById(R.id.scanqrcode_layout);
+        newsale = (LinearLayout) view.findViewById(R.id.layoutnewsale);
+        spinnerCustomerType = (Spinner) view.findViewById(R.id.spinner_customertype);
 
         chargebtnlayout.setOnClickListener(this);
         scanqrcode.setOnClickListener(this);
+        newsale.setOnClickListener(this);
+        itemListSpinner.setOnItemSelectedListener(this);
+        spinnerCustomerType.setOnItemSelectedListener(this);
 
         recyclerViewitemlist = (RecyclerView) view.findViewById(R.id.recyclerview_purchitemlist);
 
@@ -158,23 +164,24 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         itemListSpinner.setAdapter(myAdapter);
 
 
-        itemListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedinventorytype = itemListSpinner.getItemAtPosition(position).toString();
-                if(itemListSpinner.getSelectedItem().equals("Products")){
-                    viewAllProducts();
-                }else if((itemListSpinner.getSelectedItem().equals("Services"))){
-                    viewAllServices();
-                }
+//        itemListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                selectedinventorytype = itemListSpinner.getItemAtPosition(position).toString();
+//                if(itemListSpinner.getSelectedItem().equals("Products")){
+//                    viewAllProducts();
+//                }else if((itemListSpinner.getSelectedItem().equals("Services"))){
+//                    viewAllServices();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         return view;
 
@@ -212,14 +219,19 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         String prodname = product.getProd_name();
                                         double prodprice = product.getProd_price();
                                         double discountedprice = product.getDiscounted_price();
-                                        listdata.setProd_name(prodname);
-                                        listdata.setProd_price(prodprice);
-                                        listdata.setProd_disc_price(discountedprice);
-                                        listdata.setProd_expdate(product.getProd_expdate());
-                                        list.add(listdata);
+                                        String status = product.getProd_status();
+
+                                        if (status.equals("Available")){
+                                            listdata.setProd_name(prodname);
+                                            listdata.setProd_price(prodprice);
+                                            listdata.setDiscounted_price(discountedprice);
+                                            listdata.setProd_expdate(product.getProd_expdate());
+                                            list.add(listdata);
+                                        }
+
                                     }
                                         PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(list);
-                                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),6);
+                                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),5);
                                         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                         recyclerViewitemlist.setLayoutManager(gridLayoutManager);
                                         recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
@@ -271,14 +283,19 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         Serviceslistdata slistdata = new Serviceslistdata();
                                         String sname = services.getService_name();
                                         double sprice = services.getService_price();
-                                        double discountedprice = services.getService_disc_price();
-                                        slistdata.setServname(sname);
-                                        slistdata.setServprice(sprice);
-                                        slistdata.setService_disc_price(discountedprice);
-                                        slist.add(slistdata);
+                                        double discountedprice = services.getDiscounted_price();
+                                        String status = services.getService_status();
+
+                                        if (status.equals("Available")){
+                                            slistdata.setServname(sname);
+                                            slistdata.setServprice(sprice);
+                                            slistdata.setDiscounted_price(discountedprice);
+                                            slist.add(slistdata);
+                                        }
+
                                     }
                                         PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist);
-                                        GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),6);
+                                        GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),5);
                                         sgridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                         recyclerViewitemlist.setLayoutManager(sgridLayoutManager);
                                         recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
@@ -361,15 +378,43 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         int id = v.getId();
         switch (id){
             case R.id.btn_chargeitem:
+//                Intent intent = new Intent(getActivity(), AllPurchaseActivity.class);
+//                startActivity(intent);
+
+//                Bundle bundle = new Bundle();
+//                bundle.putString("selectedCustomerType", selectedcustomertype);
+
                 Intent intent = new Intent(getActivity(), AllPurchaseActivity.class);
+                intent.putExtra("selectedCustomerType", selectedcustomertype); //passing the selected customer to the intent
                 startActivity(intent);
+
+
                 break;
             case R.id.scanqrcode_layout:
-//                Intent intent1 = new Intent(getActivity(), ScanQRCode.class);
-//                startActivity(intent1);
                 scanQrCode();
                 break;
+            case R.id.layoutnewsale:
+                startNewSale();
+                break;
         }
+    }
+
+    public void startNewSale() {
+        // get first from shared preference.
+        SharedPreferences shared = getActivity().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        int sharedPrefCustId = (shared.getInt("customer_id", 0));
+        int newId = sharedPrefCustId + 1;
+
+        // store the new customer id to shared preference.
+        SharedPreferences customerIdPref = getActivity().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        SharedPreferences.Editor customerIdEditor = customerIdPref.edit();
+        customerIdEditor.putInt("customer_id", newId);
+        customerIdEditor.commit();
+
+        // go to activity
+        Intent intent = new Intent(getActivity(), DashboardActivity.class);
+        startActivity(intent);
+        Toast.makeText(getActivity(), "Starting a new sale.", Toast.LENGTH_SHORT).show();
     }
 
     public void scanQrCode(){
@@ -392,10 +437,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                     Toast.makeText(getActivity(), "Scanning was cancelled", Toast.LENGTH_LONG).show();
                 }
                 else {
-//                    Toast.makeText(getActivity(), result.getContents(), Toast.LENGTH_SHORT).show();
                     String qrItem = result.getContents();
-
-                    // Save to firebase using qr scanner.
                     saveToFirebaseUsingScanner(qrItem);
                 }
             }
@@ -429,7 +471,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                 String prodKey = dataSnapshot11.getKey();
                                                 final Product product = dataSnapshot11.getValue(Product.class);
 
-                                                Toast.makeText(getActivity(), product.getDiscounted_price()+" is the discounted price", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(getActivity(), product.getDiscounted_price()+" is the discounted price", Toast.LENGTH_SHORT).show();
                                                 product.setProd_qty(1);
 
                                                 double subtotal = product.getDiscounted_price() * product.getProd_qty();
@@ -443,6 +485,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                 cartMap.put(CustomerCartId, customerCart);
 
                                                 final CustomerTransaction customerTransaction = new CustomerTransaction();
+                                                customerTransaction.setCustomer_type(selectedcustomertype);
                                                 customerTransaction.setCustomer_id(customerId);
                                                 customerTransaction.setCustomer_cart(cartMap);
 
@@ -521,6 +564,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                             }
                                                                         }else {
                                                                             // this is the logic for creating new data.
+
                                                                             customerTransaction.setVat((((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
                                                                             customerTransaction.setSubtotal(((product.getDiscounted_price() * product.getProd_qty()) - ((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
                                                                             customerTransaction.setTotal_price(((product.getDiscounted_price() * product.getProd_qty()) * 100) / 100);
@@ -615,6 +659,37 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
             }
         });
 
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int sid = parent.getId();
+        switch (sid){
+            case R.id.spinner_inventorytype:
+                selectedinventorytype = itemListSpinner.getItemAtPosition(position).toString();
+                if (selectedinventorytype.equals("Products")){
+                    viewAllProducts();
+                }else if (selectedinventorytype.equals("Services")){
+                    viewAllServices();
+                }
+                break;
+            case R.id.spinner_customertype:
+                selectedcustomertype = spinnerCustomerType.getItemAtPosition(position).toString();
+
+                SharedPreferences customerTypePref = getActivity().getSharedPreferences("CustomerTypePref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = customerTypePref.edit();
+
+                String customertype = selectedcustomertype;
+                editor.putString("customer_type", customertype);
+                editor.commit();
+
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

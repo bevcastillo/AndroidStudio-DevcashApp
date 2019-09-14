@@ -182,12 +182,12 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                     Serviceslistdata serviceslistdata = new Serviceslistdata();
                                     String sname = services.getService_name();
                                     double sprice = services.getService_price();
-                                    double discountedprice = services.getService_disc_price();
+                                    double discountedprice = services.getDiscounted_price();
                                     String sstatus = services.getService_status();
                                     serviceslistdata.setServname(sname);
                                     serviceslistdata.setServprice(sprice);
                                     serviceslistdata.setServstatus(sstatus);
-                                    serviceslistdata.setService_disc_price(discountedprice);
+                                    serviceslistdata.setDiscounted_price(discountedprice);
                                     serviceslist.add(serviceslistdata);
                                 }
 
@@ -246,10 +246,12 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                         Serviceslistdata serviceslistdata = new Serviceslistdata();
                                         String sname = services.getService_name();
                                         double sprice = services.getService_price();
+                                        double discPrice = services.getDiscounted_price();
                                         String sstatus = services.getService_status();
                                         serviceslistdata.setServname(sname);
                                         serviceslistdata.setServprice(sprice);
                                         serviceslistdata.setServstatus(sstatus);
+                                        serviceslistdata.setDiscounted_price(discPrice);
                                         serviceslist.add(serviceslistdata);
                                     }
                                     ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);

@@ -82,7 +82,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 
 
         //
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        recyclerViewpurchaselist = (RecyclerView) findViewById(R.id.purchaselist_recyclerview);
 
@@ -144,6 +144,20 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 
         displayAllPurchase();
         displayPriceQty();
+
+        //getting the selected customer type data from PurchaseInventorylistFragment
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle!=null){
+            selectedCustomerType = bundle.getString("selectedCustomerType");
+
+        }
+
+
+//        Bundle bundle = this.getIntent().getExtras();
+//        if(bundle!=null){
+//            name = bundle.getString("categoryname");
+//            editcatname.setText(name);
+//        }
     }
 
     @Override
@@ -514,7 +528,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 
         switch (sid){
             case R.id.spinner_customertype:
-                selectedCustomerType = customertypeSpinner.getSelectedItem().toString();
+//                selectedCustomerType = customertypeSpinner.getSelectedItem().toString();
                 break;
         }
     }

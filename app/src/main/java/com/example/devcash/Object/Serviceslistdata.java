@@ -3,7 +3,7 @@ package com.example.devcash.Object;
 public class Serviceslistdata {
     public String servname, servstatus;
     public int servqty;
-    double servprice, service_disc_price;
+    double servprice, discounted_price;
     int click;
 
     public String getServname() {
@@ -46,11 +46,12 @@ public class Serviceslistdata {
         this.servqty = servqty;
     }
 
-    public double getService_disc_price() {
-        return service_disc_price;
+
+    public double getDiscounted_price() {
+        return discounted_price;
     }
 
-    public void setService_disc_price(double service_disc_price) {
-        this.service_disc_price = service_disc_price;
+    public void setDiscounted_price(double discounted_price) {
+        this.discounted_price = discounted_price;
     }
 }

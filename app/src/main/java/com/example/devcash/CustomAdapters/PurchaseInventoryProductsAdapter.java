@@ -2,6 +2,7 @@ package com.example.devcash.CustomAdapters;
 
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -84,7 +85,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 final String prodname = plist.get(viewHolder.getAdapterPosition()).getProd_name();
                 final String prodexpdate = plist.get(viewHolder.getAdapterPosition()).getProd_expdate();
                 final double prodprice = plist.get(viewHolder.getAdapterPosition()).getProd_price();
-                final double discountedprice = plist.get(viewHolder.getAdapterPosition()).getProd_disc_price();
+                final double discountedprice = plist.get(viewHolder.getAdapterPosition()).getDiscounted_price();
                 final String preference = prodname+prodexpdate;
 
                 plist.get(viewHolder.getAdapterPosition()).setProdclick(plist.get(viewHolder.getAdapterPosition()).getProdclick() + 1);
@@ -120,6 +121,11 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
                 final String username = (shared.getString("owner_username", ""));
 
+                SharedPreferences customerTypePref = v.getContext().getSharedPreferences("CustomerTypePref", MODE_PRIVATE);
+                final String customerType = (customerTypePref.getString("customer_type","Regular Customer"));
+
+                Toast.makeText(v.getContext(), customerType+" is the selected customer type", Toast.LENGTH_SHORT).show();
+
                 // query to customer transaction.
                 ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -150,15 +156,28 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                 String prodreference = customerCart1.getProduct().getProd_reference();
 
                                                                 if (prodreference.equals(preference)){
+
+                                                                    String productSubtotal_str = String.format("%.2f", prodqty * discountedprice);
+                                                                    String taxVat_str = String.format("%.2f", (discountedprice * prodqty) * .12);
+                                                                    String totalPrice_str = String.format("%.2f", currentSubtotal + discountedprice);
+                                                                    String partialDiscount_str = String.format("%.2f", prodprice * prodqty);
+
+                                                                    double productSubtotal = Double.parseDouble(productSubtotal_str);
+                                                                    double taxVat = Double.parseDouble(taxVat_str);
+                                                                    double totalPrice = Double.parseDouble(totalPrice_str);
+                                                                    double subtotal = totalPrice - taxVat;
+                                                                    double totalQty = (currentTotalQty + prodqty) - 1;
+                                                                    double partialDiscount = Double.parseDouble(partialDiscount_str);
+                                                                    double totalDiscount = productSubtotal - partialDiscount;
+
+
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(prodqty);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(prodqty * discountedprice);
-//                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(prodqty*prodprice);
-//                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue((((discountedprice * prodqty) * .12) * 100) / 100);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(((currentSubtotal + discountedprice) * 100) / 100);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100) / 100);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + prodqty) - 1);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue((discountedprice * prodqty) - (prodprice * prodqty));
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(productSubtotal);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(taxVat);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(totalPrice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(subtotal);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(totalQty);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue(totalDiscount);
                                                                     cartMap.clear();
                                                                 }else {
                                                                     Toast.makeText(v.getContext(), customerTransaction1.getSubtotal()+" is the current subtotal", Toast.LENGTH_SHORT).show();
@@ -166,14 +185,24 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                 }
                                                             }
                                                         }else {
-//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(currentSubtotal + prodprice);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue((((discountedprice * prodqty) * .12) * 100) / 100);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100) / 100);
-//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue((currentSubtotal + discountedprice) * 100/100);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(((currentSubtotal + discountedprice) * 100) / 100);
-//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue((currentTotalQty + prodqty));
+//
+                                                            String taxvat_str = String.format("%.2f", (discountedprice * prodqty) * .12);
+                                                            String totalPrice_str = String.format("%.2f", currentSubtotal + discountedprice);
+                                                            String partialSubtotal_str = String.format("%.2f", discountedprice * prodqty);
+                                                            String partialDiscount_str = String.format("%.2f", prodprice * prodqty);
+
+                                                            double taxvat = Double.parseDouble(taxvat_str);
+                                                            double totalPrice = Double.parseDouble(totalPrice_str);
+                                                            double partialSubtotal = Double.parseDouble(partialSubtotal_str);
+                                                            double subtotal = partialSubtotal - taxvat;
+                                                            double partialDiscount = Double.parseDouble(partialDiscount_str);
+                                                            double totalDiscount = partialSubtotal - partialDiscount;
+
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(taxvat);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(subtotal);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(totalPrice);
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(currentTotalQty);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue((discountedprice * prodqty) - (prodprice * prodqty));
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue(totalDiscount);
                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
                                                             cartMap.clear();
                                                         }
@@ -187,12 +216,22 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                             }
                                         }else {
                                             // this is the logic for creating new data.
-//                                            customerTransaction.setSubtotal(product.getProd_price() * prodqty);
-                                            customerTransaction.setVat((((discountedprice * prodqty) * .12) * 100) / 100);
-                                            customerTransaction.setSubtotal(((discountedprice * prodqty) - ((discountedprice * prodqty) * .12) * 100) / 100);
-                                            customerTransaction.setTotal_price(((discountedprice * prodqty) * 100) / 100);
+                                            String taxvat_str = String.format("%.2f", (discountedprice * prodqty) * .12);
+                                            String partialSubtotal_str = String.format("%.2f", discountedprice * prodqty);
+                                            String totalprice_str = String.format("%.2f", discountedprice*prodqty);
+                                            double tax_vat = Double.parseDouble(taxvat_str);
+                                            double partialSubtotal = Double.parseDouble(partialSubtotal_str);
+                                            double subTotal = partialSubtotal - tax_vat;
+                                            double totalPrice = Double.parseDouble(totalprice_str);
+                                            double partialProdPriceTotal = prodprice * prodqty;
+                                            double totalDiscount = totalPrice - partialProdPriceTotal;
+
+                                            customerTransaction.setCustomer_type(customerType);
+                                            customerTransaction.setVat(tax_vat);
+                                            customerTransaction.setSubtotal(subTotal);
+                                            customerTransaction.setTotal_price(totalPrice);
                                             customerTransaction.setTotal_qty(prodqty);
-                                            customerTransaction.setTotal_discount((discountedprice * prodqty) - (prodprice * prodqty));
+                                            customerTransaction.setTotal_discount(totalDiscount);
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
 
                                             Toast.makeText(v.getContext(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
@@ -224,11 +263,31 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
         Productlistdata data = plist.get(i);
         viewHolder.name.setText(data.getProd_name());
         viewHolder.price.setText(String.valueOf(data.getProd_price()));
+        viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
+        viewHolder.expiration.setText(data.getProd_expdate());
+
+        if (viewHolder.price.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.price.setVisibility(View.INVISIBLE);
+        }
+
+        if (!viewHolder.price.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.price.setPaintFlags(viewHolder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
+        }
+
+        if (viewHolder.expiration.getText().toString().equals("No Expiration")){
+            viewHolder.expiration.setVisibility(View.INVISIBLE);
+        }
+
+
+
         viewHolder.price.setPaintFlags(viewHolder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        viewHolder.expiration.setVisibility(View.VISIBLE);
-        viewHolder.expiration.setText(data.getProd_expdate());
-        viewHolder.discountedprice.setText(String.valueOf(data.getProd_disc_price()));
+//        viewHolder.expiration.setVisibility(View.VISIBLE);
+//        viewHolder.expiration.setText(data.getProd_expdate());
+//        viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
+
+//        if (viewHolder.discountedprice.getText().toString().equals())
     }
 
     @Override

@@ -24,11 +24,97 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="right">
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"/>
+
+
+            <Spinner
+                android:id="@+id/spinner_customertype"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.9"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:entries="@array/customer_type"
+                android:gravity="right"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                style="@style/Divider"/>
 
             <LinearLayout
                 android:id="@+id/scanqrcode_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/text_padding"
+                android:layout_marginRight="@dimen/text_padding">
+
+                <ImageView
+                    android:id="@+id/transaction_qricon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_qr_code_scan"
+                    android:tint="@color/white"/>
+                <TextView
+                    android:id="@+id/transaction_qrtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/scan_label"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                style="@style/Divider" />
+
+
+            <LinearLayout
+                android:id="@+id/layoutnewsale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/text_padding"
+                android:layout_marginRight="@dimen/text_padding">
+
+                <ImageView
+                    android:id="@+id/transaction_newIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/white"/>
+                <TextView
+                    android:id="@+id/transaction_newText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_label"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/scanqrcode_layout1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -50,6 +136,10 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                style="@style/Divider" />
 
             <Spinner
                 android:id="@+id/spinnercustomertype"

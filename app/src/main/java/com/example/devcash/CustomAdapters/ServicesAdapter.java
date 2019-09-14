@@ -3,6 +3,7 @@ package com.example.devcash.CustomAdapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -71,12 +72,16 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             viewHolder.servicestatus.setTextColor(Color.RED);
         }
 
-//        viewHolder.serviceprice.setText("₱"+(data.getServprice()));
-//        viewHolder.discountedprice.setText("₱"+(data.getService_disc_price()));
+        viewHolder.serviceprice.setText("₱"+(data.getServprice()));
+        viewHolder.discountedprice.setText("₱"+(data.getDiscounted_price()));
 
         if (viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
-            viewHolder.serviceprice.setText(String.valueOf(data.getServprice()));
             viewHolder.discountedprice.setVisibility(View.INVISIBLE);
+        }
+
+        if (!viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.serviceprice.setPaintFlags(viewHolder.serviceprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            viewHolder.discountedprice.setText("₱"+(data.getDiscounted_price()));
         }
     }
 

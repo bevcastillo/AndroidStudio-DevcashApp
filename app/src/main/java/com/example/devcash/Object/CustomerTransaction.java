@@ -7,7 +7,7 @@ public class CustomerTransaction {
 
     int customer_id;
     double total_qty, total_price, vat, cash_received, change, subtotal, total_discount;
-    String customer_email, customer_phone, transaction_datetime;
+    String customer_email, customer_phone, transaction_datetime, customer_type;
     Enterprise enterprise;
     Employee employee;
 
@@ -146,5 +146,13 @@ public class CustomerTransaction {
 
     public void setTotal_discount(double total_discount) {
         this.total_discount = total_discount;
+    }
+
+    public String getCustomer_type() {
+        return customer_type;
+    }
+
+    public void setCustomer_type(String customer_type) {
+        this.customer_type = customer_type;
     }
 }

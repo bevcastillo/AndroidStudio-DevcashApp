@@ -7,7 +7,7 @@ import android.net.Uri;
 
 public class Services {
     String service_name, service_status;
-    double service_price, service_subtotal, service_disc_price;
+    double service_price, service_subtotal, discounted_price;
     int service_qty;
     public Discount discount;
     public Category category;
@@ -26,12 +26,12 @@ public class Services {
 //    }
 
 
-    public Services(String service_name, String service_status, double service_price, int service_qty, double service_disc_price) {
+    public Services(String service_name, String service_status, double service_price, int service_qty, double discounted_price) {
         this.service_name = service_name;
         this.service_status = service_status;
         this.service_price = service_price;
         this.service_qty = service_qty;
-        this.service_disc_price = service_disc_price;
+        this.discounted_price = discounted_price;
     }
 
 
@@ -92,6 +92,7 @@ public class Services {
         this.qrCode = qrCode;
     }
 
+
     public double getService_subtotal() {
         return service_subtotal;
     }
@@ -100,11 +101,11 @@ public class Services {
         this.service_subtotal = service_subtotal;
     }
 
-    public double getService_disc_price() {
-        return service_disc_price;
+    public double getDiscounted_price() {
+        return discounted_price;
     }
 
-    public void setService_disc_price(double service_disc_price) {
-        this.service_disc_price = service_disc_price;
+    public void setDiscounted_price(double discounted_price) {
+        this.discounted_price = discounted_price;
     }
 }

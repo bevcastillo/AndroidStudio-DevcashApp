@@ -38,7 +38,7 @@ public class ReceiptServiceAdapter extends RecyclerView.Adapter<ReceiptServiceAd
 
         if (!services.equals(null)){
             viewHolder.itemname.setText(services.getService_name());
-            viewHolder.itemqtyprice.setText(String.valueOf(services.getService_qty())+" X "+services.getService_disc_price());
+            viewHolder.itemqtyprice.setText(String.valueOf(services.getService_qty())+" X "+services.getDiscounted_price());
             viewHolder.itemsubtotal.setText(String.valueOf(services.getService_subtotal()));
         }
     }

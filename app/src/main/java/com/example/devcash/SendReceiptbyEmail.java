@@ -196,29 +196,11 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                                                         "<p>Total Due-----"+totprice+"</p>" +
                                                                         "<p>Discount------"+discount+"</p>"+
                                                                         "<p>Cash----------"+cash+"</p>"+
-                                                                        "<p>Change--------"+change+"</p>" ;
+                                                                        "<p>Change--------"+change+"</p>";
 
                                         //
-                                        String[] recipients = {customer_email.getText().toString()};
-                                        Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto: "));
 
-                                        //prompts email clients
-                                        email.setType("message/rfc822");
 
-                                        email.putExtra(Intent.EXTRA_EMAIL, recipients);
-                                        email.putExtra(Intent.EXTRA_SUBJECT, "Customer Receipt");
-                                        email.putExtra(Intent.EXTRA_TEXT,
-                                                Html.fromHtml(new StringBuilder()
-                                                        .append(customerReceiptContent).toString()));
-
-                                        try {
-                                            // the user can choose the email client
-                                            startActivity(Intent.createChooser(email, "Select an email client"));
-
-                                        } catch (android.content.ActivityNotFoundException ex) {
-                                            Toast.makeText(SendReceiptbyEmail.this, "No email client installed.",
-                                                    Toast.LENGTH_LONG).show();
-                                        }
 
 
                                         for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
@@ -240,14 +222,9 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                                 double itemqty = prodObj.getProd_qty();
                                                 double discprice = prodObj.getDiscounted_price();
 
-//                                                Toast.makeText(SendReceiptbyEmail.this, itemname+" is the item name", Toast.LENGTH_LONG).show();
-
-                                                ReceiptProductAdapter adapter = new ReceiptProductAdapter(products);
+                                                ReceiptServiceAdapter adapter = new ReceiptServiceAdapter(services);
                                                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//                                                showprodrecycler.setLayoutManager(layoutManager);
-//                                                showprodrecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-//                                                showprodrecycler.setItemAnimator(new DefaultItemAnimator());
-//                                                showprodrecycler.setAdapter(adapter);
+                                                customerReceiptContent += "Qty: "+prodObj.getProd_qty()+"purchasedItems: "+prodObj.getProd_name()+" with a price of: "+prodObj.getProd_price();
 
                                             } else {
                                                 String json = gson.toJson(entry.getValue());
@@ -262,13 +239,31 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                                 cartItems.add(cartItem);
                                                 services.add(servicesObj);
 
-                                                ReceiptServiceAdapter adapter = new ReceiptServiceAdapter(services);
-                                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//                                                showservicesrecycler.setLayoutManager(layoutManager);
-//                                                showservicesrecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-//                                                showservicesrecycler.setItemAnimator(new DefaultItemAnimator());
-//                                                showservicesrecycler.setAdapter(adapter);
+                                                customerReceiptContent += "Qty: "+servicesObj.getService_qty()+" purchasedItems: "+servicesObj.getService_name()+" with a price of: "+servicesObj.getService_price();
                                             }
+                                        }
+
+//                                        Toast.makeText(SendReceiptbyEmail.this, cartItems.size()+" are the items.", Toast.LENGTH_SHORT).show();
+
+                                        String[] recipients = {customer_email.getText().toString()};
+                                        Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto: "));
+
+                                        //prompts email clients
+                                        email.setType("message/rfc822");
+                                        email.putExtra(Intent.EXTRA_EMAIL, recipients);
+                                        email.putExtra(Intent.EXTRA_SUBJECT, "Customer Receipt");
+                                        email.putExtra(Intent.EXTRA_TEXT,
+                                                Html.fromHtml(new StringBuilder()
+                                                        .append(customerReceiptContent)
+                                                        .toString()));
+
+                                        try {
+                                            // the user can choose the email client
+                                            startActivity(Intent.createChooser(email, "Select an email client"));
+
+                                        } catch (android.content.ActivityNotFoundException ex) {
+                                            Toast.makeText(SendReceiptbyEmail.this, "No email client installed.",
+                                                    Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 }else {

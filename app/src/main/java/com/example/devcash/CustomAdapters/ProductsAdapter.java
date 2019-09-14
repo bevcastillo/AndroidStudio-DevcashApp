@@ -73,7 +73,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             viewHolder.prodstatus.setTextColor(Color.RED);
         }
 
-//        viewHolder.prodprice.setText("₱"+(data.getProd_price()));
         viewHolder.prodstock.setText(String.valueOf(data.getProd_stock()));
 
         if (viewHolder.prodexpdate.getText().toString().equals("")){
@@ -86,14 +85,18 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         viewHolder.prodexpdate.setText(data.getProd_expdate());
         viewHolder.prodexpcount.setText(String.valueOf(data.getProd_expdatecount()));
         viewHolder.condname.setText(data.getCond_name());
-//        viewHolder.discountedprice.setText("₱"+(data.getProd_disc_price()));
-
-//        double price = Double.parseDouble(viewHolder.prodprice.getText().toString());
-//        double discounted = Double.parseDouble(viewHolder.discountedprice.getText().toString());
 
         viewHolder.prodprice.setText("₱"+(data.getProd_price()));
-        viewHolder.prodprice.setPaintFlags(viewHolder.prodprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        viewHolder.discountedprice.setText("₱"+(data.getProd_disc_price()));
+        viewHolder.discountedprice.setText("₱"+(data.getDiscounted_price()));
+
+        if (viewHolder.prodprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.discountedprice.setVisibility(View.INVISIBLE);
+        }
+
+        if (!viewHolder.prodprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.prodprice.setPaintFlags(viewHolder.prodprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            viewHolder.discountedprice.setText("₱"+(data.getDiscounted_price()));
+        }
     }
 
     @Override

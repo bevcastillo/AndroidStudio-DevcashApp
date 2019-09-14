@@ -48,7 +48,7 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
             viewHolder.servicesubtotal.setText(String.valueOf(services.getService_subtotal()));
             viewHolder.servicesubtotal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             viewHolder.servicesubtotal.setTextColor(Color.BLACK);
-            viewHolder.serviceqtyprice.setText(services.getService_qty() + " X "+ services.getService_disc_price());
+            viewHolder.serviceqtyprice.setText(services.getService_qty() + " X "+ services.getDiscounted_price());
 
         }
 

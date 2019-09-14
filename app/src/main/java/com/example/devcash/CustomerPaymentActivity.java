@@ -109,7 +109,8 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                         double total = customerTransaction.getTotal_price();
 
                                         if (cashreceived >= subtotal){
-                                            double change = cashreceived - total;
+                                            String change_str = String.format("%.2f", cashreceived - total);
+                                            double change = Double.parseDouble(change_str);
 
                                             ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/cash_received").setValue(cashreceived);
                                             ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue(change);

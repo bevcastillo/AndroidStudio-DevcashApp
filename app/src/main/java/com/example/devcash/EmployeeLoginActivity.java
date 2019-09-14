@@ -84,6 +84,7 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
                                                                 String json = gson.toJson(employee);
                                                                 editor.putString("Employee", json);
                                                                 editor.putString("emp_username", employee.getEmp_username());
+                                                                editor.putString("account_type", "Employee");
                                                                 editor.commit();
                                                                 ownerEditor.putString("owner_username", employee.getEmp_workfor());
                                                                 ownerEditor.commit();

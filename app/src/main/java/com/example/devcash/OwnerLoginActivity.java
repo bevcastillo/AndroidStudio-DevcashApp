@@ -143,11 +143,12 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                         Account account = ds1.getValue(Account.class);
                                         if (account.getAcct_passw().equals(ownerpassword) && account.getAcct_uname().equals(owneruser)) {
                                             Toast.makeText(OwnerLoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
-                                            Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
-                                            startActivity(owner_dashboard);
                                             String accountJson = gson.toJson(account);
                                             editor.putString("account", accountJson);
+                                            editor.putString("account_type", "Owner");
                                             editor.commit();
+                                            Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
+                                            startActivity(owner_dashboard);
 
                                         } else {
 //                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();

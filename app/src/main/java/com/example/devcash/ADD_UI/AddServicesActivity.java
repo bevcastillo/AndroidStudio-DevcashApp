@@ -198,7 +198,8 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         services.setService_status(service_status);
         services.setService_name(service_name);
         services.setService_price(service_price);
-        services.setService_disc_price(service_disc_price);
+//        services.setService_disc_price(service_disc_price);
+        services.setDiscounted_price(service_disc_price);
         services.setDiscount(discount);
         services.setCategory(category);
         services.setQrCode(qrCode);

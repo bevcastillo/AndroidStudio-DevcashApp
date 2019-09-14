@@ -14,7 +14,8 @@
         app:theme="@style/ThemeOverlay.AppCompat.Light"
         style="@style/HeaderBar"
         android:elevation="4dp"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"

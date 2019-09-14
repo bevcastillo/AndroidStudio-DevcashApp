@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.example.devcash.Fragments.PurchaseInventorylistFragment;
 import com.example.devcash.Fragments.SalesFragment;
 
 public class CashierNavigation extends AppCompatActivity
@@ -96,7 +97,7 @@ public class CashierNavigation extends AppCompatActivity
 
         switch (id){
             case R.id.nav_cashiersales:
-                cashfragment = new SalesFragment();
+                cashfragment = new PurchaseInventorylistFragment();
                 break;
             case R.id.nav_cashierprof:
                 Intent intent = new Intent(CashierNavigation.this, EmployeeAccountInfo.class);
