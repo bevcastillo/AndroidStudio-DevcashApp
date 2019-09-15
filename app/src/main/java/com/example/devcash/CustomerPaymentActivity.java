@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -13,11 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.Object.CustomerTransaction;
+import com.example.devcash.Object.Product;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.util.Map;
 
 public class CustomerPaymentActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -81,10 +89,100 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
 
         switch (id){
             case R.id.btnchargecustomer:
+                // update product stock
+                updateProductStock();
                 saveCashChange();
                 break;
         }
     }
+
+    private void updateProductStock() {
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username")
+                .equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                final String acctKey = dataSnapshot1.getKey();
+
+                                ownerdbreference.child(acctKey+"/business/customer_transaction")
+                                        .orderByChild("customer_id")
+                                        .equalTo(customerId)
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.exists()) {
+
+                                                    for (DataSnapshot dataSnapshot2 : dataSnapshot.getChildren()) {
+                                                        String customerTransactionKey = dataSnapshot2.getKey();
+                                                        CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+                                                        Gson gson = new Gson();
+
+                                                        // we iterate every items in the cart.
+                                                        for (Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
+                                                            if (entry.getValue().toString().contains("product")) {
+                                                                String json = gson.toJson(entry.getValue());
+                                                                Log.d("PRODUCT JSON REP @@@@", json);
+                                                                String mJsonString = json;
+                                                                JsonParser parser = new JsonParser();
+                                                                JsonElement mJson =  parser.parse(mJsonString);
+
+                                                                JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+                                                                JsonElement prodJson = jsonObject.get("product");
+                                                                final Product prodObj = gson.fromJson(prodJson, Product.class);
+
+                                                                // we update now the product object
+                                                                ownerdbreference.child(acctKey+"/business/product")
+                                                                        .orderByChild("prod_reference")
+                                                                        .equalTo(prodObj.getProd_reference())
+                                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                            @Override
+                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                if (dataSnapshot.exists()) {
+                                                                                    for (DataSnapshot dataSnapshot3 : dataSnapshot.getChildren()) {
+                                                                                        String prodKey = dataSnapshot3.getKey();
+                                                                                        Product prod = dataSnapshot3.getValue(Product.class);
+                                                                                        double newStock = prod.getProd_stock() - prodObj.getProd_qty();
+                                                                                        ownerdbreference.child(acctKey+"/business/product/"+prodKey+"/prod_stock").setValue(newStock);
+                                                                                    }
+
+                                                                                } else {
+                                                                                    Toast.makeText(CustomerPaymentActivity.this, "Product not found", Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                            }
+                                                                        });
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
 
     public void saveCashChange(){
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);

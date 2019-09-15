@@ -425,7 +425,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                             }else {
                                                 //amount
                                                 discountedPrice = pprice - discountValue;
-
                                                 addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
                                                 Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
                                                 finish();
@@ -442,6 +441,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                     pstatus = chkavail.getText().toString();
                                     pprice = Double.parseDouble(prodprice.getText().toString());
                                     prop = Double.parseDouble(prodrop.getText().toString());
+                                    pstock = Integer.parseInt(prodstock.getText().toString());
                                     discountedPrice = pprice; //discounted price is equals to the original price
                                     addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
                                     Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();

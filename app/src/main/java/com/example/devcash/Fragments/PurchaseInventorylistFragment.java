@@ -513,6 +513,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                                 final String customertransactionkey = dataSnapshot2.getKey();
                                                                                 final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
                                                                                 final double currentSubtotal = customerTransaction1.getSubtotal();
+                                                                                final double currentTotalPrice = customerTransaction1.getTotal_price();
                                                                                 final double currentTotalQty = customerTransaction1.getTotal_qty();
 
                                                                                 ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
@@ -547,6 +548,13 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                                                 }
                                                                                             }
                                                                                         }else {
+
+                                                                                            double discountedPrice = product.getDiscounted_price();
+                                                                                            double productQty = product.getProd_qty();
+
+                                                                                            String vatStr = String.format("%.2f", (discountedPrice * productQty)  * .12);
+                                                                                            double vat = Double.parseDouble(vatStr);
+
                                                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue((((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
                                                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(((product.getDiscounted_price() * product.getProd_qty()) - ((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
                                                                                             ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(((currentSubtotal + product.getDiscounted_price()) * 100) / 100);
@@ -567,11 +575,31 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                         }else {
                                                                             // this is the logic for creating new data.
 
-                                                                            customerTransaction.setVat((((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
-                                                                            customerTransaction.setSubtotal(((product.getDiscounted_price() * product.getProd_qty()) - ((product.getDiscounted_price() * product.getProd_qty()) * .12) * 100) / 100);
-                                                                            customerTransaction.setTotal_price(((product.getDiscounted_price() * product.getProd_qty()) * 100) / 100);
-                                                                            customerTransaction.setTotal_qty(product.getProd_qty());
-                                                                            customerTransaction.setTotal_discount((product.getDiscounted_price() * product.getProd_qty()) - (product.getProd_price() * product.getProd_qty()));
+                                                                            double discountedPrice = product.getDiscounted_price();
+                                                                            double prodQty = product.getProd_qty();
+                                                                            double productPrice = product.getProd_price();
+
+                                                                            String vatStr = String.format("%.2f", (discountedPrice * prodQty) * .12);
+                                                                            double vat = Double.parseDouble(vatStr);
+
+                                                                            String totalPriceStr = String.format("%.2f", discountedPrice * prodQty);
+                                                                            double totalPrice = Double.parseDouble(totalPriceStr);
+
+                                                                            String subtotalStr = String.format("%.2f", totalPrice - vat);
+                                                                            double subtotal = Double.parseDouble(subtotalStr);
+
+                                                                            String partialDiscountedPriceStr = String.format("%.2f", productPrice * prodQty);
+                                                                            double partialDiscountedPrice = Double.parseDouble(partialDiscountedPriceStr);
+
+                                                                            String totalDiscountedPriceStr = String.format("%.2f", totalPrice - partialDiscountedPrice);
+                                                                            double totalDiscountedPrice = Double.parseDouble(totalDiscountedPriceStr);
+
+
+                                                                            customerTransaction.setVat(vat);
+                                                                            customerTransaction.setSubtotal(subtotal);
+                                                                            customerTransaction.setTotal_price(totalPrice);
+                                                                            customerTransaction.setTotal_qty(prodQty);
+                                                                            customerTransaction.setTotal_discount(totalDiscountedPrice);
                                                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
 
                                                                             Toast.makeText(getActivity(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
