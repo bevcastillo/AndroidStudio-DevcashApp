@@ -284,26 +284,6 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
             cashiername.setText("Cashier: "+employeeName);
         }
 
-//        if (employee.getEmp_fname().equals("")) {
-//            // Logged in as owner.
-//            cashiername.setText("Cashier: " +name);
-//        } else {
-//            // Logged in as an employee.
-//            String employeeName = employee.getEmp_fname() + " " + employee.getEmp_lname();
-//            cashiername.setText("Cashier: " +employeeName);
-//        }
-
-
-//        cashiername.setText(name);
-//        enterprisename.setText(entname);
-
-//        if (account.getAcct_type().equals("Owner")) {
-//            cashiername.setText("Cashier: "+name);
-//        }else {
-//            cashiername.setText("Cashier: "+ employee.getEmp_fname());
-//        }
-
-        //
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));

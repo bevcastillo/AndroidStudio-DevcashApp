@@ -8,17 +8,22 @@
     android:padding="@dimen/text_padding"
     android:background="@color/whiteBG">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/product_pulltorefresh"
+<!--    <android.support.v4.widget.SwipeRefreshLayout-->
+<!--        android:id="@+id/product_pulltorefresh"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <ListView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:dividerHeight="1dp"/>-->
+
+<!--    </android.support.v4.widget.SwipeRefreshLayout>-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/allreceipt_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:dividerHeight="1dp"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>

@@ -76,7 +76,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         viewHolder.discountedprice.setText("₱"+(data.getDiscounted_price()));
 
         if (viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
-            viewHolder.discountedprice.setVisibility(View.INVISIBLE);
+            viewHolder.serviceprice.setVisibility(View.INVISIBLE);
         }
 
         if (!viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){

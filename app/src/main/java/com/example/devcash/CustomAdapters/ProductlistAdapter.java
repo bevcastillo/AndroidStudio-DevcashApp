@@ -4,7 +4,11 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,6 +33,27 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
         View view;
         view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_itemsreceipt, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(view);
+
+        viewHolder.prodname.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, final View v, ContextMenu.ContextMenuInfo menuInfo) {
+                menu.add("Edit Quantity").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(v.getContext(), "This is edit", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                menu.add("Delete Item").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(v.getContext(), "This is delete", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+            }
+        });
 
         return viewHolder;
     }

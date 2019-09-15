@@ -38,7 +38,7 @@
             android:id="@+id/btnforowners"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_cornered"
+            android:background="@drawable/gradient_button"
             android:paddingLeft="18dp"
             android:paddingRight="18dp"
             android:text="@string/forowners"

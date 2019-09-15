@@ -124,7 +124,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                         }
                                     }
                                 }else {
-                                    Toast.makeText(CustomerPaymentActivity.this, "cust id does not exist"+customerId, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(CustomerPaymentActivity.this, "cust id does not exist"+customerId, Toast.LENGTH_SHORT).show();
                                 }
                             }
 

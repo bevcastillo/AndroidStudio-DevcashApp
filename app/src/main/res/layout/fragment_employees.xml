@@ -25,6 +25,31 @@
 <!--            android:layout_height="wrap_content"-->
 <!--            android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="Employees"
+                android:textColor="@color/white"
+                style="@style/TextAppearance.AppCompat.Title"/>
+
+
+            <Spinner
+                android:id="@+id/spinner_empassignedtask"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:entries="@array/task_employee"
+                android:gravity="right"/>
+
+        </LinearLayout>
+
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
@@ -36,32 +61,33 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:gravity="center"-->
+<!--                android:visibility="visible">-->
 
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:drawableRight="@drawable/ic_search"
-                    android:drawableTint="#808080"
-                    android:background="@drawable/search_btnstroke"
-                    android:hint="Search.."
-                    android:padding="15dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="10dp"/>
+<!--                <EditText-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="2"-->
+<!--                    android:drawableRight="@drawable/ic_search"-->
+<!--                    android:drawableTint="#808080"-->
+<!--                    android:background="@drawable/search_btnstroke"-->
+<!--                    android:hint="Search.."-->
+<!--                    android:padding="15dp"-->
+<!--                    android:layout_marginLeft="5dp"-->
+<!--                    android:layout_marginRight="5dp"-->
+<!--                    android:layout_marginTop="10dp"/>-->
 
-                <Spinner
-                    android:id="@+id/spinner_empassignedtask"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+<!--                <Spinner-->
+<!--                    android:id="@+id/spinner_empassignedtask"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
 
             <FrameLayout

@@ -133,8 +133,6 @@ public class FinalCustomerActivity extends AppCompatActivity implements View.OnC
                                         txtcustomer_change.setText(String.valueOf(change));
 
                                     }
-//                                }else {
-                                    Toast.makeText(FinalCustomerActivity.this, "cust id does not exist", Toast.LENGTH_SHORT).show();
                                 }
                             }
 

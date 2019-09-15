@@ -136,16 +136,23 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                 ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String customertransactionkey = "";
+
                                         if (dataSnapshot.exists()){
                                             for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                                final String customertransactionkey = dataSnapshot2.getKey();
+                                                customertransactionkey = dataSnapshot2.getKey();
+
                                                 final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
                                                 final double currentSubtotal = customerTransaction1.getSubtotal();
+                                                final double currentTotalPrice = customerTransaction1.getTotal_price();
                                                 final double currentTotalQty = customerTransaction1.getTotal_qty();
                                                 final double currentTotalDiscount = customerTransaction1.getTotal_discount();
 
+                                                final String finalCustomertransactionkey = customertransactionkey;
                                                 ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
-                                                        .orderByChild("services/service_name").equalTo(servname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        .orderByChild("services/service_name")
+                                                        .equalTo(servname)
+                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                         if (dataSnapshot.exists()){
@@ -155,58 +162,66 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                                 String itemname = customerCart1.getServices().getService_name();
                                                                 Toast.makeText(v.getContext(), itemname+" is the item name", Toast.LENGTH_SHORT).show();
 
-
-
+                                                                //if added items is already in the customer cart
                                                                 if (itemname.equals(servname)){
 
-                                                                    String taxvat_str = String.format("%.2f", (currentSubtotal+discountedprice) * .12);
-                                                                    String totalPrice_str = String.format("%.2f", currentSubtotal + discountedprice);
+                                                                    String taxvat_str = String.format("%.2f", (currentTotalPrice+discountedprice) * .12);
+                                                                    String totalPrice_str = String.format("%.2f", currentTotalPrice + discountedprice);
                                                                     String serviceSubtotal_str = String.format("%.2f", servqty*discountedprice);
                                                                     String partialDiscount_str = String.format("%.2f", servprice * servqty);
 
 
                                                                     double taxvat = Double.parseDouble(taxvat_str);
                                                                     double totalPrice = Double.parseDouble(totalPrice_str);
-                                                                    double totalQty = (currentTotalQty + servqty) - 1;
-                                                                    double subTotal = totalPrice - taxvat;
+//                                                                    double totalQty = (currentTotalQty + servqty) - 1;
+                                                                    double totalQty = currentTotalQty + 1;
+                                                                    String subTotalStr = String.format("%.2f", totalPrice - taxvat);
+
+                                                                    double subTotal = Double.parseDouble(subTotalStr);
                                                                     double serviceSubtotal = Double.parseDouble(serviceSubtotal_str);
                                                                     double partialDiscount = Double.parseDouble(partialDiscount_str);
                                                                     double totalDiscount = serviceSubtotal - partialDiscount;
 
+                                                                    Toast.makeText(v.getContext(), totalPrice+" is the new total price", Toast.LENGTH_SHORT).show();
 
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_qty").setValue(servqty);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(serviceSubtotal);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(subTotal);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(totalQty);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(taxvat);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(totalPrice);
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue(totalDiscount);
+
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/services/service_qty").setValue(servqty);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(serviceSubtotal);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/subtotal").setValue(subTotal);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_qty").setValue(totalQty);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(taxvat);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_price").setValue(totalPrice);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_discount").setValue(totalDiscount);
 
                                                                     Toast.makeText(v.getContext(), servname+" quantity has been updated", Toast.LENGTH_SHORT).show();
                                                                     cartMap.clear();
                                                                 }else {
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").push().setValue(customerCart);
+                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").push().setValue(customerCart);
                                                                 }
 
                                                             }
                                                         }else {
 //
-                                                            String taxVat_str = String.format("%.2f", (currentSubtotal+discountedprice) * .12);
-                                                            String totalPrice_str = String.format("%.2f", currentSubtotal + discountedprice);
+                                                            // Transaction already exist, but we will add different item..
+                                                            String taxVat_str = String.format("%.2f", (currentTotalPrice+discountedprice) * .12);
+                                                            String totalPrice_str = String.format("%.2f", currentTotalPrice + discountedprice);
                                                             String totalDiscount_str = String.format("%.2f", (discountedprice * servqty) - (servprice * servqty));
 
                                                             double taxVat = Double.parseDouble(taxVat_str);
                                                             double totalPrice = Double.parseDouble(totalPrice_str);
-                                                            double subTotal = totalPrice - taxVat;
+
+                                                            String subtotalStr = String.format("%.2f", totalPrice - taxVat);
+
+                                                            double subTotal = Double.parseDouble(subtotalStr);
                                                             double totalQty = currentTotalQty + servqty;
                                                             double totalDiscount = Double.parseDouble(totalDiscount_str);
 
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/subtotal").setValue(subTotal);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_price").setValue(totalPrice);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/vat").setValue(taxVat);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_qty").setValue(totalQty);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/total_discount").setValue(totalDiscount);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart").updateChildren(cartMap);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/subtotal").setValue(subTotal);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_price").setValue(totalPrice);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(taxVat);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_qty").setValue(currentTotalQty + 1);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_discount").setValue(totalDiscount);
+                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").updateChildren(cartMap);
 
 //                                                            Toast.makeText(v.getContext(), "Added to cart", Toast.LENGTH_SHORT).show();
                                                             cartMap.clear();
@@ -229,7 +244,10 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                             double partialSubtotal = Double.parseDouble(partialsubTotal_str);
                                             double totalPrice = Double.parseDouble(partialsubTotal_str);
                                             double partialDiscount = Double.parseDouble(partialDiscount_str);
-                                            double subTotal = partialSubtotal - taxVat;
+
+                                            String subtotalStr = String.format("%.2f", partialSubtotal - taxVat);
+
+                                            double subTotal = Double.parseDouble(subtotalStr);
                                             double totalDiscount = partialSubtotal - partialDiscount;
 
                                             customerTransaction.setVat(taxVat);
@@ -239,6 +257,8 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                             customerTransaction.setTotal_discount(totalDiscount);
 
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction);
+
+//                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ customertransactionkey +"/total_qty").setValue(customerTransaction.getTotal_qty() + 1);
                                             Toast.makeText(v.getContext(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
                                         }
                                     }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.example.devcash.ADD_UI.AddProductActivity;
 import com.example.devcash.Object.Category;
 import com.example.devcash.Object.Discount;
+import com.example.devcash.Object.Product;
 import com.example.devcash.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class EditProduct extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class EditProduct extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private DatabaseReference dbreference;
     private DatabaseReference ownerdbreference;
@@ -41,9 +43,10 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
     private CheckBox checkBoxavail;
     private RadioGroup radioGroupsoldby;
     private RadioButton radioeach, radioweight;
-    private String selectedcategory, selectedunit, selectedcondition, selecteddiscount, strprodname, strprodexpdate, strprodrop, strprodavail;
-    private double strprice;
+    private String selectedcategory, selectedunit, selectedcondition, selecteddiscount, strprodname, strprodexpdate, strprodavail, prodreference;
+    private double strprice, strprodrop;
     private int strprodstock, strprodexpcount;
+    private LinearLayout deletelayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +68,14 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
         spinnercategory = (Spinner) findViewById(R.id.spinner_editprodcat);
         spinnercondition = (Spinner) findViewById(R.id.spinner_editprodcond);
         spinnerdiscount = (Spinner) findViewById(R.id.spinner_editproddisc);
+        deletelayout = (LinearLayout) findViewById(R.id.layout_delcategory);
 
         //listeners
         spinnerdiscount.setOnItemSelectedListener(this);
         spinnerunit.setOnItemSelectedListener(this);
         spinnercategory.setOnItemSelectedListener(this);
         spinnercondition.setOnItemSelectedListener(this);
+        deletelayout.setOnClickListener(this);
 
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -169,13 +174,16 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
             strprodavail = bundle.getString("product_status");
             strprodexpdate = bundle.getString("product_expdate");
             strprodexpcount = bundle.getInt("product_expcount");
+            strprodrop = bundle.getDouble("product_rop");
+
+            prodreference = strprodname+""+strprodexpdate;
+
             productname.setText(strprodname);
             prodprice.setText(Double.toString(strprice));
             prodstock.setText(Integer.toString(strprodstock));
             prodexpdate.setText(strprodexpdate);
             prodexpcount.setText(Integer.toString(strprodexpcount));
-
-            Toast.makeText(this, strprodexpcount+" is the count", Toast.LENGTH_SHORT).show();
+            prodrop.setText(Double.toString(strprodrop));
 
             if (strprodavail.equals("Available")){
                 checkBoxavail.setChecked(true);
@@ -185,28 +193,6 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
         }
     }
 
-    public void getProductData(){
-        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
-
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                        String ownerkey = dataSnapshot1.getKey();
-
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -244,7 +230,7 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-            getProductData();
+
         }
         return super.onOptionsItemSelected(item);
 
@@ -274,5 +260,91 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.layout_delcategory:
+                deleteProduct();
+                break;
+        }
+    }
+
+    private void deleteProduct() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this product?");
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                final String username = (shared.getString("owner_username", ""));
+
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                final String ownerKey = dataSnapshot1.getKey();
+
+                                ownerdbreference.child(ownerKey+"/business/product").orderByChild("prod_reference").equalTo(prodreference).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                String prodKey = dataSnapshot2.getKey();
+                                                Product product = dataSnapshot2.getValue(Product.class);
+
+                                                ownerdbreference.child(ownerKey+"/business/product/").child(prodKey).setValue(null);
+
+                                                ownerdbreference.child(ownerKey+"/business/qrCode").orderByChild("qr_reference").equalTo(prodreference).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                String qrCodeKey = dataSnapshot3.getKey();
+
+                                                                ownerdbreference.child(ownerKey+"/business/qrCode").child(qrCodeKey).setValue(null);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                            Toast.makeText(EditProduct.this, "Product has been deleted.", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.devcash.EDIT_UI.EditProduct;
 import com.example.devcash.Object.Productlistdata;
@@ -42,6 +43,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 int prodstock = list.get(viewHolder.getAdapterPosition()).getProd_stock();
                 String prodexpdate = list.get(viewHolder.getAdapterPosition()).getProd_expdate();
                 int prodexpcount = list.get(viewHolder.getAdapterPosition()).getProd_expdatecount();
+                double rop = list.get(viewHolder.getAdapterPosition()).getProd_rop();
+
 
                 Intent intent = new Intent(v.getContext(), EditProduct.class);
                 intent.putExtra("product_name", prodname);
@@ -50,6 +53,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 intent.putExtra("product_stock", prodstock);
                 intent.putExtra("product_expdate", prodexpdate);
                 intent.putExtra("product_expcount", prodexpcount);
+                intent.putExtra("product_rop", rop);
                 v.getContext().startActivity(intent);
             }
         });
@@ -90,7 +94,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         viewHolder.discountedprice.setText("₱"+(data.getDiscounted_price()));
 
         if (viewHolder.prodprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
-            viewHolder.discountedprice.setVisibility(View.INVISIBLE);
+            viewHolder.prodprice.setVisibility(View.INVISIBLE);
         }
 
         if (!viewHolder.prodprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){

@@ -81,7 +81,7 @@
                 android:id="@+id/btn_loginemp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_cornered"
+                android:background="@drawable/gradient_button"
                 android:text="@string/login"
                 android:textColor="@color/whiteBG"
                 android:padding="@dimen/padding_top"/>
