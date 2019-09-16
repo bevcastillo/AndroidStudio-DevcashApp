@@ -218,7 +218,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                             startActivity(intent);
 
                                         }else {
-                                            Toast.makeText(CustomerPaymentActivity.this, "Short cash! Please input higher cash amount.", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(CustomerPaymentActivity.this, "Short cash!", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 }else {

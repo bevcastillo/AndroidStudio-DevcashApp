@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class EmployeeAccountInfo extends AppCompatActivity {
 
     private TextView txtname, txtusername, txttask;
     private TextInputEditText editemail, editphone, editpassword;
+    private TextInputLayout empPasswordLayout;
     private RadioGroup radioGroupgender;
     private RadioButton radioButtongender, radioButtonMale, radioButtonFemale;
     String employeename, employeeusername, employeephone, selectedgender, employeetask, employeeacctpassw, employeemeail;
@@ -52,6 +54,7 @@ public class EmployeeAccountInfo extends AppCompatActivity {
         radioGroupgender = (RadioGroup) findViewById(R.id.radiogroup_empgender);
         radioButtonMale = (RadioButton) findViewById(R.id.radioempmale);
         radioButtonFemale = (RadioButton) findViewById(R.id.radioempfemale);
+        empPasswordLayout = (TextInputLayout) findViewById(R.id.inputlayout_empassword);
 
 
         //
@@ -71,6 +74,21 @@ public class EmployeeAccountInfo extends AppCompatActivity {
         int radioid = radioGroupgender.getCheckedRadioButtonId();
         radioButtongender = (RadioButton) findViewById(radioid);
         selectedgender = radioButtongender.getText().toString();
+    }
+
+    private boolean validateEmailPassw(){
+        String empPassword = editpassword.getText().toString().trim();
+        boolean ok = true;
+
+        if(empPassword.isEmpty()){
+            empPasswordLayout.setError("Passwords can not be empty!");
+            ok = false;
+        }else {
+            empPasswordLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
     }
 
     public void showEmpDetails(){
@@ -216,7 +234,8 @@ public class EmployeeAccountInfo extends AppCompatActivity {
 
                             }
                         });
-                        Toast.makeText(EmployeeAccountInfo.this, "Employee is updated!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EmployeeAccountInfo.this, "Account has been successfully updated.", Toast.LENGTH_LONG).show();
+                        finish();
                     }
                 }
             }
@@ -264,7 +283,10 @@ public class EmployeeAccountInfo extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_save:
-                updateEmployee();
+                if (validateEmailPassw()){
+                    updateEmployee();
+
+                }
                 break;
         }
 

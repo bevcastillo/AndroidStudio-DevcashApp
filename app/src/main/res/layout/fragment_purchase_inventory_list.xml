@@ -254,16 +254,6 @@
                 android:visibility="visible"
                 android:layout_marginTop="10dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="To add products, press the (+) button"
-                android:textSize="@dimen/text_inputs"
-                android:gravity="center"
-                android:visibility="visible"
-                android:layout_marginTop="5dp"/>
-
-
         </LinearLayout>
     </FrameLayout>
 

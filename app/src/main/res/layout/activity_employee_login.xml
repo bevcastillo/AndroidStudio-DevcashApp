@@ -47,7 +47,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_top"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:id="@+id/layout_empemail">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/textinput_empemail"
@@ -64,7 +65,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true"
-                app:passwordToggleEnabled="true">
+                app:passwordToggleEnabled="true"
+                android:id="@+id/layout_emppassw">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/textinput_emppassw"

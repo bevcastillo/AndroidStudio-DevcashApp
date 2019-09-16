@@ -1,11 +1,15 @@
 package com.example.devcash;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,6 +31,7 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
 
     TextInputEditText empusername, emppassw;
     Button btnlogin;
+    TextInputLayout empusernameLayout, emppasswLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +41,37 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
         empusername = (TextInputEditText) findViewById(R.id.textinput_empemail);
         emppassw = (TextInputEditText) findViewById(R.id.textinput_emppassw);
         btnlogin = (Button) findViewById(R.id.btn_loginemp);
+        empusernameLayout = (TextInputLayout) findViewById(R.id.layout_empemail);
+        emppasswLayout = (TextInputLayout) findViewById(R.id.layout_emppassw);
 
         btnlogin.setOnClickListener(this);
 
         firebasedb = FirebaseDatabase.getInstance();
         databaseReference = firebasedb.getReference("/datadevcash");
         businessownerdbreference = firebasedb.getReference("/datadevcash/owner");
+    }
+
+    private boolean validateEmailPassw(){
+        String empUsername = empusername.getText().toString().trim();
+        String empPassword = emppassw.getText().toString().trim();
+        boolean ok = true;
+
+        if(empUsername.isEmpty()){
+            empusernameLayout.setError("Username can not be empty!");
+            ok = false;
+            if (empPassword.isEmpty()){
+                emppasswLayout.setError("Password can not be empty!");
+                ok = false;
+            }else {
+                emppasswLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            empusernameLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
     }
 
     public void empLogin(){
@@ -58,10 +88,6 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
         final String empuser = empusername.getText().toString();
         final String emppassword = emppassw.getText().toString();
 
-        if(empuser.equals("") || emppassword.equals("")) {
-            Toast.makeText(this, "Username and Password is required", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         databaseReference.child("owner")
                 .addValueEventListener(new ValueEventListener() {
@@ -97,7 +123,8 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
                                                                     startActivity(invintent);
                                                                     Toast.makeText(EmployeeLoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                                                                 } else {
-                                                                    Toast.makeText(EmployeeLoginActivity.this, "Sorry, you have no task for today.", Toast.LENGTH_SHORT).show();
+                                                                    noTaskDialog();
+//                                                                    Toast.makeText(EmployeeLoginActivity.this, "Sorry, you have no task for today.", Toast.LENGTH_SHORT).show();
                                                                 }
 
                                                             } else {
@@ -125,81 +152,32 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
                     }
                 });
 
-
-
-//        databaseReference.child("owner").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//                        final String ownerKey = ds.getKey();
-//                        if (ds.exists()) {
-//                            databaseReference.child("owner/"+ownerKey+"/business/account").addValueEventListener(new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                    Log.i("ACCOUNT SNAPSHOT!!!", dataSnapshot.getKey());
-//
-//                                    if (dataSnapshot.exists()) {
-//                                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-//                                            String accountKey = dataSnapshot1.getKey();
-//
-//                                            businessownerdbreference.orderByChild("business/account/"+accountKey+"/acct_uname").equalTo(empuser)
-//                                                .addListenerForSingleValueEvent(new ValueEventListener() {
-//                                                    @Override
-//                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                                        if (dataSnapshot.exists()) {
-//                                                            Log.i("Account Tag!!", dataSnapshot.getKey());
-//                                                            Toast.makeText(EmployeeLoginActivity.this, "exists "+empuser, Toast.LENGTH_SHORT).show();
-//                                                        }
-//                                                    }
-//
-//                                                    @Override
-//                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                                                    }
-//                                                });
-//                                        }
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                                }
-//                            });
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//        businessownerdbreference.child("business/account").startAt(empuser).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String key = dataSnapshot.getKey();
-//                Toast.makeText(EmployeeLoginActivity.this, key, Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
     }
+
+    private void noTaskDialog() {
+        AlertDialog.Builder dialogbuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View noTaskView = inflater.inflate(R.layout.customdialog_employeenotask, null);
+        dialogbuilder.setView(noTaskView);
+
+        dialogbuilder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();;
+            }
+        });
+        dialogbuilder.show();
+    }
+
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
             case R.id.btn_loginemp:
-                empLogin();
+                if (validateEmailPassw()){
+                    empLogin();
+                }
                 break;
         }
     }

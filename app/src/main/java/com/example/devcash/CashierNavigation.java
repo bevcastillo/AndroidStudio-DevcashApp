@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devcash.Fragments.PurchaseInventorylistFragment;
@@ -28,6 +29,8 @@ public class CashierNavigation extends AppCompatActivity
     DrawerLayout cashierdrawer;
     NavigationView cashiernav;
     Toolbar cashiertoolbar;
+
+    TextView txtEmployeeName, txtEmployeeTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class CashierNavigation extends AppCompatActivity
 
         cashierdrawer = findViewById(R.id.cashierdrawer_layout);
         cashiernav = findViewById(R.id.cashiernav_view);
+
 
         //
 
