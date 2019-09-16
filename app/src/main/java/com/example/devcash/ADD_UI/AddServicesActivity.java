@@ -266,7 +266,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
                                                 discountedPrice = servprce - discountValue;
 
                                                 addServices(servname, servstatus, servprce, discountedPrice);
-                                                Toast.makeText(getApplicationContext(), "New Services Added!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "New services has been successfully added.", Toast.LENGTH_SHORT).show();
                                                 finish();
 //
 //
@@ -275,7 +275,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
                                                 discountedPrice = servprce - discountValue;
 
                                                 addServices(servname, servstatus, servprce, discountedPrice);
-                                                Toast.makeText(getApplicationContext(), "New Services Added!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "New services has been successfully added.", Toast.LENGTH_SHORT).show();
                                                 finish();
 
                                             }

@@ -36,7 +36,7 @@
                 android:gravity="left"
                 android:text="Product Name"
                 android:textColor="@color/white"
-                android:textSize="24dp"/>
+                android:textSize="22dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,6 +45,14 @@
 
                 <TextView
                     android:id="@+id/prodlist_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="0.00"
+                    android:textColor="@color/color_red"/>
+                <TextView
+                    android:id="@+id/lessOff"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -5,6 +5,8 @@ public class Serviceslistdata {
     public int servqty;
     double servprice, discounted_price;
     int click;
+    Discount discount;
+    Category category;
 
     public String getServname() {
         return servname;
@@ -53,5 +55,21 @@ public class Serviceslistdata {
 
     public void setDiscounted_price(double discounted_price) {
         this.discounted_price = discounted_price;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

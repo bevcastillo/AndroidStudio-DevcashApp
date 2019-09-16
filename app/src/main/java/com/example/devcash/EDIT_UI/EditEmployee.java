@@ -292,7 +292,7 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
         final String username = (shared.getString("owner_username", ""));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to delete your employee "+txtempname.getText().toString()+" ?");
+        builder.setMessage("Are you sure you want to delete your employee?");
         builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

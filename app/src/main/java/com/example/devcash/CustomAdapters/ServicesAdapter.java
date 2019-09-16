@@ -48,6 +48,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
                 intent.putExtra("service_status", servstatus);
                 intent.putExtra("service_price", servprice);
                 v.getContext().startActivity(intent);
+
             }
         });
 

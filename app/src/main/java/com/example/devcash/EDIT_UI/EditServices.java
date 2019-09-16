@@ -52,6 +52,8 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
     private double strservprice;
     private int pos, pos1;
     private LinearLayout layoutdelete;
+    String discountCode, discountStart, discountEnd, discountStatus, discountType;
+    double discountValue, discountedPrice, servicePrice;
 
     List<Serviceslistdata> serviceslist;
 //    ArrayList<Category> categoryArrayList = new ArrayList<Category>();
@@ -239,8 +241,8 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 if(dataSnapshot.exists()){
-                                                    Discount discount = dataSnapshot.getValue(Discount.class);
-                                                    selecteddiscount = discount.getDisc_code();
+                                                    Discount discount3 = dataSnapshot.getValue(Discount.class);
+                                                    selecteddiscount = discount3.getDisc_code();
 
                                                     for(int i = 0; i < discountArrayList.size(); i++ ){
                                                         if(discountArrayList.get(i).equals(selecteddiscount)){
@@ -287,50 +289,146 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                        final String ownerkey = dataSnapshot1.getKey();
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String ownerKey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(ownerkey+"/business/services")
-                                .orderByChild("service_name").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
+                        ownerdbreference.child(ownerKey+"/business/services").orderByChild("service_name").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                        String servkey = dataSnapshot2.getKey();
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        final String servicesKey = dataSnapshot2.getKey();
                                         Services services = dataSnapshot2.getValue(Services.class);
-                                        String name = services.getCategory().getCategory_name();
                                         strchkavail = services.getService_status();
 
-//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_name").setValue(servname.getText().toString());
-//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_price").setValue(Double.valueOf(servprice.getText().toString()));
-                                        //
-                                        if(chckavail.isChecked()){
+                                        if (chckavail.isChecked()){
                                             strchkavail = "Available";
-                                        } else{
-                                            strchkavail = "Unavailable";
+                                        }else {
+                                            strchkavail = "Not Available";
                                         }
-//
-//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_status").setValue(strchkavail);
-//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category/category_name").setValue(selectedcategory);
-//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_code").setValue(selecteddiscount);
-//
-//                                        //updating the qrcode
-//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrCode/qr_code").setValue(servname.getText().toString());
-//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrCode/qr_price").setValue(Double.valueOf(servprice.getText().toString()));
-//                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrCode/qr_reference").setValue(servname.getText().toString()+Double.valueOf(servprice.getText().toString()));
 
                                         final String myqr_ref = servname.getText().toString()+Double.valueOf(servprice.getText().toString());
-                                        ownerdbreference.child(ownerkey+"/business/qrCode").orderByChild("qr_reference").equalTo(myqr_ref).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        //updating inside the service node
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_name").setValue(servname.getText().toString());
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_status").setValue(strchkavail);
+////
+//                                        //updating inside the service/qrCode
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/qrCode/qr_code").setValue(servname.getText().toString());
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/qrCode/qr_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/qrCode/qr_reference").setValue(myqr_ref);
+
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/discount/disc_code").setValue(selecteddiscount);
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/category/category_name").setValue(selectedcategory);
+
+                                        //updating the discounted price based on the selected discount
+                                        ownerdbreference.child(ownerKey+"/business/discount").orderByChild("disc_code").equalTo(selecteddiscount).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                if(dataSnapshot.exists()){
+                                                if (dataSnapshot.exists()){
+                                                    //if the selected discount exists
                                                     for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
-                                                        Toast.makeText(EditServices.this, dataSnapshot3.getKey()+" is the key", Toast.LENGTH_SHORT).show();
-                                                        ownerdbreference.child(ownerkey+"/business/qrCode").child(dataSnapshot3.getKey()+"/qr_code").setValue("SampleItem");
-//                                                        ownerdbreference.child(ownerkey+"/business/qrCode").child(dataSnapshot3.getKey()+"/qr_code").setValue(servname.getText().toString());
-//                                                        ownerdbreference.child(ownerkey+"/business/qrCode").child(qrkey+"/qr_price").setValue(Double.valueOf(servprice.getText().toString()));
-//                                                        ownerdbreference.child(ownerkey+"/business/qrCode").child(qrkey+"/qr_reference").setValue(servname.getText().toString()+Double.valueOf(servprice.getText().toString()));
+                                                        String discountKey = dataSnapshot3.getKey();
+                                                        Discount discount = dataSnapshot3.getValue(Discount.class);
+                                                        discountCode = discount.getDisc_code();
+                                                        discountStart = discount.getDisc_start();
+                                                        discountEnd = discount.getDisc_end();
+                                                        discountType = discount.getDisc_type();
+                                                        discountValue = discount.getDisc_value();
+                                                        discountStatus = discount.getDisc_status();
+
+                                                        servicePrice = Double.parseDouble(servprice.getText().toString());
+                                                        if (discountStatus.equals("Active")){
+                                                            if (discountType.equals("Percentage")) {
+                                                                discountedPrice = servicePrice - discountValue;
+
+                                                                //update firebase
+                                                                ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/discounted_price").setValue(discountedPrice);
+                                                                ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/qrCode/qr_disc_price").setValue(discountedPrice);
+
+                                                            }else {
+                                                                //amount
+                                                                discountedPrice = servicePrice - discountValue;
+                                                                ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/discounted_price").setValue(discountedPrice);
+                                                                ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/qrCode/qr_disc_price").setValue(discountedPrice);
+                                                            }
+                                                        }else {
+                                                            //the discount is not active
+                                                        }
+
+
+                                                    }
+                                                }else {
+                                                    //if the discount does not exist, then we set the discounted price to whatever the new price set by the user
+                                                    ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/discounted_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                                    ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/qrCode/qr_disc_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+
+                                        //updating the qrCode node
+                                        ownerdbreference.child(ownerKey+"/business/qrCode").orderByChild("qr_code").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.exists()){
+                                                    for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                        final String qrCodeKey = dataSnapshot3.getKey();
+                                                        String newReference = servname.getText().toString()+""+servprice.getText().toString();
+
+                                                        ownerdbreference.child(ownerKey+"/business/qrCode/").child(qrCodeKey+"/qr_code").setValue(servname.getText().toString());
+                                                        ownerdbreference.child(ownerKey+"/business/qrCode/").child(qrCodeKey+"/qr_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                                        ownerdbreference.child(ownerKey+"/business/qrCode/").child(qrCodeKey+"/qr_reference").setValue(newReference);
+
+                                                        ownerdbreference.child(ownerKey+"/business/discount").orderByChild("disc_code").equalTo(selecteddiscount).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                if (dataSnapshot.exists()){
+                                                                    for (DataSnapshot dataSnapshot4: dataSnapshot.getChildren()){
+                                                                        Discount discount1 = dataSnapshot4.getValue(Discount.class);
+                                                                        discountCode = discount1.getDisc_code();
+                                                                        discountStart = discount1.getDisc_start();
+                                                                        discountEnd = discount1.getDisc_end();
+                                                                        discountType = discount1.getDisc_type();
+                                                                        discountValue = discount1.getDisc_value();
+                                                                        discountStatus = discount1.getDisc_status();
+
+                                                                        servicePrice = Double.parseDouble(servprice.getText().toString());
+                                                                        if (discountStatus.equals("Active")){
+                                                                            if (discountType.equals("Percentage")) {
+//                                                                              discountedPrice = servicePrice - discountValue;
+
+                                                                                //update firebase
+                                                                                ownerdbreference.child(ownerKey+"/business/qrCode/").child(qrCodeKey+"/qr_disc_price").setValue(discountedPrice);
+                //
+
+                                                                            }else {
+                                                                                //amount
+                                                                                discountedPrice = servicePrice - discountValue;
+                                                                                ownerdbreference.child(ownerKey+"/business/qrCode/").child(qrCodeKey+"/qr_disc_price").setValue(discountedPrice);
+                                                                            }
+                                                                        }else {
+                                                                            //the discount is not active
+                                                                        }
+                                                                    }
+                                                                }else {
+                                                                    //selected discount does not exist, then we set the discount to whatever is the original price
+                                                                    ownerdbreference.child(ownerKey+"/business/qrCode/").child(qrCodeKey+"/qr_disc_price").setValue(Double.parseDouble(servprice.getText().toString()));
+//
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             }
@@ -342,6 +440,8 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                         });
 
                                     }
+                                    Toast.makeText(EditServices.this, "Services has been successfully updated.", Toast.LENGTH_SHORT).show();
+                                    finish();
                                 }
                             }
 
@@ -350,9 +450,6 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
 
                             }
                         });
-                        Toast.makeText(EditServices.this, "Services is updated", Toast.LENGTH_SHORT).show();
-                        finish();
-
                     }
                 }
             }
@@ -369,56 +466,81 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this services?");
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                        final String ownerkey = dataSnapshot1.getKey();
+            public void onClick(DialogInterface dialog, int which) {
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                final String ownerkey = dataSnapshot1.getKey();
 
-                        ownerdbreference.child(ownerkey+"/business/services")
-                                .orderByChild("service_name").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                        String servkey = dataSnapshot2.getKey();
-                                        Services services = dataSnapshot2.getValue(Services.class);
+                                ownerdbreference.child(ownerkey+"/business/services")
+                                        .orderByChild("service_name").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for(DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                String servkey = dataSnapshot2.getKey();
+                                                Services services = dataSnapshot2.getValue(Services.class);
 
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_name").setValue(null);
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_price").setValue(null);
-//
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/service_status").setValue(null);
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category/category_name").setValue(null);
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_code").setValue(null);
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/discount/disc_value").setValue(null);
+                                                ownerdbreference.child(ownerkey+"/business/services").child(servkey).setValue(null);
 
-                                        //deleting the qrcode
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_category").setValue(null);
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_code").setValue(null);
-                                        ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/qrcode/qr_price").setValue(null);
+                                                //deleting the qrCode
+                                                ownerdbreference.child(ownerkey+"/business/qrCode").orderByChild("qr_code").equalTo(strservname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                String qrCodeKey = dataSnapshot3.getKey();
+
+                                                                ownerdbreference.child(ownerkey+"/business/qrCode").child(qrCodeKey).setValue(null);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                     }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                });
+                                Toast.makeText(EditServices.this, "Services has been successfully deleted.", Toast.LENGTH_SHORT).show();
+                                finish();
 
                             }
-                        });
-                        Toast.makeText(EditServices.this, "Services is deleted", Toast.LENGTH_SHORT).show();
-                        finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                });
 
             }
         });
+
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
     }
 
 //    public void deleteServices(){
@@ -537,7 +659,6 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
         switch (sid){
             case R.id.layout_delservices:
                 deleteServices();
-                finish();
                 break;
         }
     }
