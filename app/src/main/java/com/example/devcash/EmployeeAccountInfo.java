@@ -32,7 +32,7 @@ public class EmployeeAccountInfo extends AppCompatActivity {
 
     private TextView txtname, txtusername, txttask;
     private TextInputEditText editemail, editphone, editpassword;
-    private TextInputLayout empPasswordLayout;
+    private TextInputLayout empPasswordLayout, empPhoneLayout;
     private RadioGroup radioGroupgender;
     private RadioButton radioButtongender, radioButtonMale, radioButtonFemale;
     String employeename, employeeusername, employeephone, selectedgender, employeetask, employeeacctpassw, employeemeail;
@@ -55,6 +55,7 @@ public class EmployeeAccountInfo extends AppCompatActivity {
         radioButtonMale = (RadioButton) findViewById(R.id.radioempmale);
         radioButtonFemale = (RadioButton) findViewById(R.id.radioempfemale);
         empPasswordLayout = (TextInputLayout) findViewById(R.id.inputlayout_empassword);
+        empPhoneLayout = (TextInputLayout) findViewById(R.id.employeePhone_layout);
 
 
         //
@@ -78,11 +79,22 @@ public class EmployeeAccountInfo extends AppCompatActivity {
 
     private boolean validateEmailPassw(){
         String empPassword = editpassword.getText().toString().trim();
+        String empPhone = editphone.getText().toString().trim();
         boolean ok = true;
 
         if(empPassword.isEmpty()){
             empPasswordLayout.setError("Passwords can not be empty!");
             ok = false;
+            if (empPhone.length() > 11 && empPhone.length() < 11){
+                empPhoneLayout.setError("Invalid phone number");
+                ok = false;
+            }else if (empPhone.equals("")){
+                empPhoneLayout.setError(null);
+                ok = true;
+            }else {
+                empPhoneLayout.setError(null);
+                ok = true;
+            }
         }else {
             empPasswordLayout.setError(null);
             ok = true;
@@ -285,7 +297,6 @@ public class EmployeeAccountInfo extends AppCompatActivity {
             case R.id.action_save:
                 if (validateEmailPassw()){
                     updateEmployee();
-
                 }
                 break;
         }

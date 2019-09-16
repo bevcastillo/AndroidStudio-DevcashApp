@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     private DatabaseReference accountFirebaseReference;
     private DatabaseReference ownerdbreference;
     TextInputEditText empLname, empFname, empEmail, empPhone, empbdate, empuname, emppassw, empconfpass, empaddr;
+    TextInputLayout empLname_layout, empFname_layout;
     EditText acctstatus, accttype;
     private Uri empimageUri;
     ImageView empimage;
@@ -99,6 +101,8 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
         emppassw = (TextInputEditText) findViewById(R.id.textinput_emppassw);
         empconfpass = (TextInputEditText) findViewById(R.id.textinput_empconfpassw);
+        empFname_layout = (TextInputLayout) findViewById(R.id.empFname_layout);
+        empLname_layout = (TextInputLayout) findViewById(R.id.empLname_layout);
 
         //add listeners to the textviews
         empbdate.setOnClickListener(this);
@@ -114,6 +118,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         AccountId = databaseReference.push().getKey();
 
     }
+    
 
     public void addRadioGroupListener(){
         int radioid = gender.getCheckedRadioButtonId();
@@ -176,37 +181,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
-
-
-//    public void addAccount(String acct_uname, final String acct_passw, final String acct_type, final String acct_status){
-//
-//    final Account account = new Account(acct_uname, acct_passw, acct_type, acct_status);
-////        databaseReference.child("account").child(AccountId).setValue(account);
-////        databaseReference.child("employees").child(EmployeeId).child("account").child(AccountId).setValue(account);
-//
-//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-//        final String username = (shared.getString("owner_username", ""));
-//
-//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.exists()){
-//                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-//                        String key = ds.getKey();
-//                        databaseReference.child("owner/"+key+"business/account").child(AccountId).setValue(account);
-//                        databaseReference.child("owner/"+key+"business/employee").child(EmployeeId).setValue(account);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//
-//    }
+    
 
     public void insertEmployee(){
         Log.d(TAG,"insertEmployee()");
@@ -239,63 +214,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         return x;
     }
 
-//    public void insertAccount(){
-//        acctstatus.setText("Active");
-//        accttype.setText("Employee");
-//        final String status = acctstatus.getText().toString();
-//        final String type = accttype.getText().toString();
-//        final String lname = empLname.getText().toString();
-//        final String fname = empFname.getText().toString();
-//        final String newfname = fname.substring(0,1).toLowerCase();
-//        final String username = newfname+lname.toLowerCase();
-//
-//        accountFirebaseReference.orderByChild("acct_uname").equalTo(username)
-//                .addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        if(dataSnapshot.exists()){
-////                            int index = temp_uname.indexOf('0');
-////                            String numberValue = temp_uname.substring(index);
-////                            int counter = Integer.valueOf(numberValue); //duplicate username counter
-////                            int lastnum = 0;
-////                            for(int i; i <counter+1; counter++){
-////
-////                            }
-////                            String empusername = temp_uname+01;
-//
-////                            String empusername = newuname + '0' + countOfDuplicates+1;
-//
-////                            String username = newuname+num+1;
-////                            empuname.setText(username);
-////                            final String acctuname = empuname.getText().toString();
-////                            String empusername = temp_uname+01;
-////                            String user = temp_uname+01;
-////                            int index = .indexOf('0');
-//
-//
-//                            //
-//                            String mytemp = username+0; //assign the temporary username to add 0 example bcastillo0
-//                            int index = username.indexOf('0'); //getting the index of that zero from username bcastillo0<--
-//                            String numbervalue = username.substring(index); //using the index to get the number from the document
-//
-//                            Toast.makeText(getApplicationContext(), "Number Value: "+numbervalue, Toast.LENGTH_LONG).show();
-//                        }else{
-//                            empuname.setText(username);
-//                             Toast.makeText(getApplicationContext(), "Username: "+empuname, Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                    final String acctuname = empuname.getText().toString();
-//                    final String acctpassw = empuname.getText().toString();
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                });
-//
-//        //addAccount(newuname, newpassw, type, status);
-//
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -367,13 +285,37 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-                addRadioGroupListener();
-//                insertAccount();
-                insertEmployee();
-//                successDialog();
-//            Toast.makeText(getApplicationContext(), "New employee has been added!", Toast.LENGTH_SHORT).show();
+            
+                if (validateDetails()){
+                    addRadioGroupListener();
+                    insertEmployee();
+                }
         }
         return super.onOptionsItemSelected(item);
+
+    }
+
+    private boolean validateDetails() {
+        String empLastname = empLname.getText().toString();
+        String empFirstname = empFname.getText().toString();
+        boolean ok = true;
+
+        if (empLastname.isEmpty()){
+            empLname_layout.setError("Lastname can not be empty");
+            ok = false;
+
+            if (empFirstname.isEmpty()){
+                empFname_layout.setError("Firstame can not be empty");
+                ok = false;
+            }else {
+                empFname_layout.setError(null);
+                ok = false;
+            }
+        }else {
+            empLname_layout.setError(null);
+            ok = true;
+        }
+        return ok;
 
     }
 
