@@ -78,7 +78,7 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
                     public boolean onMenuItemClick(MenuItem item) {
 
                         final String serviceName = servicesList.get(viewHolder.getAdapterPosition()).getService_name();
-                        double serviceQty = servicesList.get(viewHolder.getAdapterPosition()).getService_qty();
+                        final double serviceQty = servicesList.get(viewHolder.getAdapterPosition()).getService_qty();
                         double serviceDiscountedPrice = servicesList.get(viewHolder.getAdapterPosition()).getDiscounted_price();
 
                         SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
@@ -113,21 +113,46 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
                                                                         double servicePrice = customerCart.getServices().getService_price();
                                                                         double serviceDiscountedPrice = customerCart.getServices().getDiscounted_price();
 
+                                                                        //details from customer transaction
                                                                         double totalQty = customerTransaction.getTotal_qty();
                                                                         double currentSubtotal = customerTransaction.getSubtotal();
                                                                         double currentTotalPrice = customerTransaction.getTotal_price();
                                                                         double currentTotalDiscount = customerTransaction.getTotal_discount();
 
-                                                                        double currentServiceDiscount = servicePrice - serviceDiscountedPrice;
+                                                                        //this is the computation to delete the selected service from the cart
+                                                                        double newTotalQty = totalQty - servQty;
 
-                                                                        //delete
+                                                                        String newServDiscValueStr = String.format("%.2f", (servicePrice - serviceDiscountedPrice) * servQty); //we get the total discount value of each service
+                                                                        double newServDiscValue = Double.parseDouble(newServDiscValueStr);
 
-                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_qty").setValue(servQty - totalQty);
-                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/subtotal").setValue(currentSubtotal - serviceSubTotal);
-                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_price").setValue(currentTotalPrice - serviceSubTotal);
-                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_discount").setValue(currentTotalDiscount - currentServiceDiscount);
+                                                                        String getPositiveDiscountStr = String.format("%.2f", currentTotalDiscount * -1); //we convert the negative discount amount to positive so that we can deduct it
+                                                                        double getPositiveDiscount = Double.parseDouble(getPositiveDiscountStr);
+
+                                                                        String newTotalDiscountStr = String.format("%.2f", getPositiveDiscount - newServDiscValue);
+                                                                        double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
+
+                                                                        String newTotalPriceStr = String.format("%.2f", currentTotalPrice - serviceSubTotal);
+                                                                        double newTotalPrice = Double.parseDouble(newTotalPriceStr);
+
+                                                                        String newVatStr = String.format("%.2f", newTotalPrice * .12);
+                                                                        double newVat = Double.parseDouble(newVatStr);
+
+                                                                        String newSubtotalStr = String.format("%.2f", newTotalPrice - newVat);
+                                                                        double newSubtotal = Double.parseDouble(newSubtotalStr);
+
+
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                                .child(customerCartKey+"/services").setValue(null); //deleting the service node from the customer cart
+
+
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/total_qty").setValue(newTotalQty);
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/total_discount").setValue(newTotalDiscount);
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/subtotal").setValue(newSubtotal);
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/vat").setValue(newVat);
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/total_price").setValue(newTotalPrice);
 
                                                                     }
+                                                                    Toast.makeText(v.getContext(), "Item has been successfully deleted.", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
 

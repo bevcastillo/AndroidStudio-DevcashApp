@@ -40,7 +40,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:errorEnabled="true">
+                        app:errorEnabled="true"
+                        android:id="@+id/editProdname_layout">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/textinput_editprodname"

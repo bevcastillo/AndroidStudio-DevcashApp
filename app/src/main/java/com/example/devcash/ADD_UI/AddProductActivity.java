@@ -135,7 +135,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         prodstock = (TextInputEditText) findViewById(R.id.textinput_instock);
         prodbrand = (TextInputEditText) findViewById(R.id.textinput_prodbrand);
 
-
         //
         addlayout = (LinearLayout) findViewById(R.id.addplayout);
 
@@ -418,7 +417,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                                 discountedPrice = pprice - discountValue;
 
                                                 addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
-                                                Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "Product has been successfully added.", Toast.LENGTH_SHORT).show();
                                                 finish();
 //
 //
@@ -426,7 +425,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                                 //amount
                                                 discountedPrice = pprice - discountValue;
                                                 addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
-                                                Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "Product has been successfully added.", Toast.LENGTH_SHORT).show();
                                                 finish();
 
                                             }
@@ -523,75 +522,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void getDiscountData(){
-        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
-
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                        final String acctkey = dataSnapshot1.getKey();
-
-                        ownerdbreference.child(acctkey+"/business/discount").orderByChild("disc_code").equalTo(selecteddisc).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()){
-                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                        String discountkey = dataSnapshot2.getKey();
-
-                                        Discount discount = dataSnapshot2.getValue(Discount.class);
-                                        discountCode = discount.getDisc_code();
-                                        discountStart = discount.getDisc_start();
-                                        discountEnd = discount.getDisc_end();
-                                        discountStatus = discount.getDisc_status();
-                                        discountType = discount.getDisc_type();
-                                        discountValue = discount.getDisc_value();
-
-                                        if (discountStatus.equals("Active")){
-                                            if (discountType.equals("Percentage")){
-                                                discountedPrice = pprice * discountValue;
-
-//
-//                                                Toast.makeText(AddProductActivity.this, edit_discountedprice.getText().toString()+" inside class", Toast.LENGTH_LONG).show();
-//                                                product.setDiscounted_price(discountedPrice);
-                                                //
-                                            }else {
-                                                //amount
-                                                discountedPrice = pprice - discountValue;
-
-//                                                Toast.makeText(AddProductActivity.this, edit_discountedprice.getText().toString()+" inside class", Toast.LENGTH_LONG).show();
-//                                                product.setDiscounted_price(discountedPrice);
-                                            }
-                                        }else {
-                                            //not active
-                                        }
-                                    }
-                                }else {
-                                    /// the user selected "No Discount"
-                                    discountedPrice = pprice; //discounted price is equals to the original price
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -672,8 +602,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                     }
                                 },mYear,mMonth,mDay);
                         expdatePicker.show();
-
-//                        productExpDate.setProd_expdatecount(Integer.valueOf(exp_itemcount.getText().toString()));
                     }
                 });
 
