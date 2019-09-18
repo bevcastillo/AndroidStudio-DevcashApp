@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TimeFormatException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -50,7 +53,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProductsFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, AdapterView.OnItemSelectedListener {
+public class ProductsFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     DatabaseReference dbreference;
     DatabaseReference productsfirebaseDatabase;
@@ -62,6 +65,8 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
     ArrayList<Product> productArrayList;
     TextView emptylist;
     LinearLayout emptylayout;
+    EditText discountSearch;
+    Button searchBtn;
 
     Toolbar productsToolbar;
     Spinner productsSpinner, conditionSpinner;
@@ -90,6 +95,10 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
         productsToolbar = (Toolbar) view.findViewById(R.id.toolbar_products);
         productsSpinner = (Spinner) view.findViewById(R.id.spinner_products);
         conditionSpinner = (Spinner) view.findViewById(R.id.spinner_condition);
+        discountSearch = (EditText) view.findViewById(R.id.prodsearchtext);
+        searchBtn = (Button) view.findViewById(R.id.prodsearchbtn);
+
+        searchBtn.setOnClickListener(this);
 
         emptylist = (TextView) view.findViewById(R.id.emptylist);
         progressBar = (ProgressBar) view.findViewById(R.id.product_progressbar);
@@ -613,5 +622,92 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id){
+            case R.id.prodsearchbtn:
+                searchProduct();
+                break;
+        }
+    }
+
+    private void searchProduct() {
+        final String inputText = discountSearch.getText().toString();
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/product").orderByChild("prod_name").equalTo(inputText).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    list = new ArrayList<>();
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        Product product = dataSnapshot2.getValue(Product.class);
+                                        Productlistdata listdata = new Productlistdata();
+                                        String pname = product.getProd_name();
+                                        double prop = product.getProd_rop();
+                                        double pprice = product.getProd_price();
+                                        double discprice = product.getDiscounted_price();
+                                        int pstock = product.getProd_stock();
+                                        String pexpdate = product.getProd_expdate();
+                                        int pexpdatecount = product.getProd_expdatecount();
+                                        String condname = product.getProductCondition().getCond_name();
+                                        String pstatus = product.getProd_status();
+                                        listdata.setProd_name(pname);
+                                        listdata.setProd_rop(prop);
+                                        listdata.setProd_status(pstatus);
+                                        listdata.setProd_price(pprice);
+                                        listdata.setProd_stock(pstock);
+                                        listdata.setCond_name(condname);
+                                        listdata.setProd_expdate(pexpdate);
+                                        listdata.setDiscounted_price(discprice);
+                                        listdata.setProd_expdatecount(pexpdatecount);
+                                        list.add(listdata);
+                                    }
+                                    ProductsAdapter adapter = new ProductsAdapter(list);
+                                    RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
+                                    prodrecyclerview.setLayoutManager(pLayoutManager);
+                                    prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    prodrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    prodrecyclerview.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                    progressBar.setVisibility(View.GONE);
+
+                                    if (list.isEmpty()){
+                                        emptylayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+                                    }
+                                }else {
+                                    Toast.makeText(getActivity(), "no item found", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

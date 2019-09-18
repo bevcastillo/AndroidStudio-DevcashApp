@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -48,7 +50,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DiscountsFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+public class DiscountsFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, View.OnClickListener {
     private Context context;
 
     Toolbar discountToolbar;
@@ -62,6 +64,8 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
 
     ProgressBar discprogress;
     LinearLayout emptylayout;
+    EditText discountText;
+    Button btnSearch;
 
     RecyclerView discountrecycler;
     List<Discountlistdata> list;
@@ -92,9 +96,13 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
         discountrecycler = (RecyclerView) view.findViewById(R.id.recycler_discount);
         discountToolbar = (Toolbar) view.findViewById(R.id.toolbar_discounts);
         discountSpinner = (Spinner) view.findViewById(R.id.spinner_discounts);
+        btnSearch = (Button) view.findViewById(R.id.discountsearchbtn);
+        discountText = (EditText) view.findViewById(R.id.discountsearchtext);
 
         emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptydiscounts);
         discprogress = (ProgressBar) view.findViewById(R.id.discounts_progressbar);
+
+        btnSearch.setOnClickListener(this);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
@@ -132,6 +140,7 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
                                     DiscountAdapter discountAdapter = new DiscountAdapter(list);
                                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
                                     discountrecycler.setLayoutManager(layoutManager);
+                                    discountrecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
                                     discountrecycler.setItemAnimator(new DefaultItemAnimator());
                                     discountrecycler.setAdapter(discountAdapter);
                                     discountAdapter.notifyDataSetChanged();
@@ -339,5 +348,86 @@ public class DiscountsFragment extends Fragment implements SearchView.OnQueryTex
     public void onStop() {
         super.onStop();
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id){
+            case R.id.discountsearchbtn:
+                searchDiscount();
+                break;
+        }
+    }
+
+    private void searchDiscount() {
+        final String inputText = discountText.getText().toString();
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/discount").orderByChild("disc_code").equalTo(inputText).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                list = new ArrayList<>();
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        Discount discount = dataSnapshot2.getValue(Discount.class);
+                                        Discountlistdata listdata = new Discountlistdata();
+                                        String dcode = discount.getDisc_code();
+                                        String dstart = discount.getDisc_start();
+                                        String dend = discount.getDisc_end();
+                                        String dstatus = discount.getDisc_status();
+                                        double dvalue = discount.getDisc_value();
+                                        listdata.setDisc_code(dcode);
+                                        listdata.setDisc_start(dstart);
+                                        listdata.setDisc_end(dend);
+                                        listdata.setDisc_status(dstatus);
+                                        listdata.setDisc_value(dvalue);
+                                        list.add(listdata);
+                                    }
+                                    DiscountAdapter discountAdapter = new DiscountAdapter(list);
+                                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                    discountrecycler.setLayoutManager(layoutManager);
+                                    discountrecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    discountrecycler.setItemAnimator(new DefaultItemAnimator());
+                                    discountrecycler.setAdapter(discountAdapter);
+                                    discountAdapter.notifyDataSetChanged();
+
+                                    discprogress.setVisibility(View.GONE);
+
+                                    if (list.isEmpty()){
+                                        emptylayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+                                    }
+                                }else {
+                                    Toast.makeText(getActivity(), "does not exist", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

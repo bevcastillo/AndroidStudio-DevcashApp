@@ -1,6 +1,7 @@
 package com.example.devcash.Fragments;
 
 
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -52,7 +55,7 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class ServicesFragment extends Fragment implements SearchView.OnQueryTextListener,
-        MenuItem.OnActionExpandListener, AdapterView.OnItemSelectedListener {
+        MenuItem.OnActionExpandListener, AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     Toolbar servicesToolbar;
     Spinner statusSpinner;
@@ -64,6 +67,9 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
     FirebaseDatabase firebaseDatabase;
     ProgressBar servicesprogress;
     LinearLayout emptylayout, noitemlayout;
+
+    EditText searchservice;
+    Button searchbtn;
 
     RecyclerView servrecyclerview;
 
@@ -96,6 +102,11 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
         noitemlayout = (LinearLayout) view.findViewById(R.id.layout_noitem);
 
         servrecyclerview = (RecyclerView) view.findViewById(R.id.recycler_servlist);
+
+        searchservice = (EditText) view.findViewById(R.id.servicesearchtext);
+        searchbtn = (Button) view.findViewById(R.id.servicesearchbtn);
+
+        searchbtn.setOnClickListener(this);
 
         statusSpinner.setOnItemSelectedListener(this);
 
@@ -400,6 +411,84 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.servicesearchbtn:
+                searchForServices();
+                break;
+        }
+    }
+
+    private void searchForServices() {
+        final String inputText = searchservice.getText().toString();
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/services").orderByChild("service_name").equalTo(inputText).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        serviceslist = new ArrayList<>();
+                                        Services services = dataSnapshot2.getValue(Services.class);
+                                        Serviceslistdata serviceslistdata = new Serviceslistdata();
+                                        String sname = services.getService_name();
+                                        double sprice = services.getService_price();
+                                        double discountedprice = services.getDiscounted_price();
+                                        String sstatus = services.getService_status();
+                                        serviceslistdata.setServname(sname);
+                                        serviceslistdata.setServprice(sprice);
+                                        serviceslistdata.setServstatus(sstatus);
+                                        serviceslistdata.setDiscounted_price(discountedprice);
+                                        serviceslist.add(serviceslistdata);
+                                    }
+                                    ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                    RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
+                                    servrecyclerview.setLayoutManager(sLayoutManager);
+                                    servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    servrecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    servrecyclerview.setAdapter(servicesAdapter);
+                                    servicesAdapter.notifyDataSetChanged();
+
+                                    servicesprogress.setVisibility(View.GONE);
+
+                                    if(serviceslist.isEmpty()){
+                                        noitemlayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        noitemlayout.setVisibility(View.GONE);
+                                    }
+                                }else {
+                                    noitemlayout.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }
