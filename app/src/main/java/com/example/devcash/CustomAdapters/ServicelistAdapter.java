@@ -1,6 +1,8 @@
 package com.example.devcash.CustomAdapters;
 
+import android.app.AlertDialog;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -11,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,11 +68,126 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
         }
 
         viewHolder.servicename.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
             @Override
             public void onCreateContextMenu(ContextMenu menu, final View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+                final int myquantity = servicesList.get(viewHolder.getAdapterPosition()).getService_qty(); //get the quantity of the purchased service
+
                 menu.add("Edit Quantity").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setTitle("Edit Item Quantity");
+                        final EditText qty = new EditText(v.getContext());
+                        qty.setText(String.valueOf(myquantity));
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        qty.setLayoutParams(lp);
+                        builder.setView(qty);
+                        builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //code here to update quantity
+
+                                final String serviceName = servicesList.get(viewHolder.getAdapterPosition()).getService_name();
+                                final int serviceQty = servicesList.get(viewHolder.getAdapterPosition()).getService_qty();
+                                double serviceDiscountedPrice = servicesList.get(viewHolder.getAdapterPosition()).getDiscounted_price();
+
+                                SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                                final String username = (shared.getString("owner_username", ""));
+
+                                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                                final String ownerKey = dataSnapshot1.getKey();
+
+                                                ownerdbreference.child(ownerKey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                                final String customerTransactionKey = dataSnapshot2.getKey();
+                                                                final CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+
+                                                                ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                        .orderByChild("services/service_name").equalTo(serviceName).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                        if (dataSnapshot.exists()){
+                                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                                String customerCartKey = dataSnapshot3.getKey();
+                                                                                CustomerCart customerCart = dataSnapshot3.getValue(CustomerCart.class);
+
+                                                                                int servQty = customerCart.getServices().getService_qty();
+                                                                                double serviceSubTotal = customerCart.getServices().getService_subtotal();
+                                                                                double servicePrice = customerCart.getServices().getService_price();
+                                                                                double serviceDiscountedPrice = customerCart.getServices().getDiscounted_price();
+
+                                                                                //details from customer transaction
+                                                                                int totalQty = customerTransaction.getTotal_qty();
+                                                                                double currentSubtotal = customerTransaction.getSubtotal();
+                                                                                double currentTotalPrice = customerTransaction.getTotal_price();
+                                                                                double currentTotalDiscount = customerTransaction.getTotal_discount();
+
+                                                                                //computation here to remove quantity based on the input text from the user
+                                                                                int input_qty = Integer.parseInt(qty.getText().toString());
+                                                                                int newQuantity = input_qty;
+
+                                                                                String newServiceSubtotalStr = String.format("%.2f", serviceDiscountedPrice * newQuantity);
+                                                                                double newServiceSubtotal = Double.parseDouble(newServiceSubtotalStr);
+
+                                                                                ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                                        .child(customerCartKey+"/services/service_qty").setValue(newQuantity); //we update the quantity
+
+                                                                                ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                                        .child(customerCartKey+"/services/service_subtotal").setValue(newServiceSubtotal);
+
+
+                                                                                //computation for the new values of customer cart
+//
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        });
+
+                        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.show();
+
                         return true;
                     }
                 });
@@ -78,7 +197,7 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
                     public boolean onMenuItemClick(MenuItem item) {
 
                         final String serviceName = servicesList.get(viewHolder.getAdapterPosition()).getService_name();
-                        final double serviceQty = servicesList.get(viewHolder.getAdapterPosition()).getService_qty();
+                        final int serviceQty = servicesList.get(viewHolder.getAdapterPosition()).getService_qty();
                         double serviceDiscountedPrice = servicesList.get(viewHolder.getAdapterPosition()).getDiscounted_price();
 
                         SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
@@ -108,13 +227,13 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
                                                                     for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
                                                                         String customerCartKey = dataSnapshot3.getKey();
                                                                         CustomerCart customerCart = dataSnapshot3.getValue(CustomerCart.class);
-                                                                        double servQty = customerCart.getServices().getService_qty();
+                                                                        int servQty = customerCart.getServices().getService_qty();
                                                                         double serviceSubTotal = customerCart.getServices().getService_subtotal();
                                                                         double servicePrice = customerCart.getServices().getService_price();
                                                                         double serviceDiscountedPrice = customerCart.getServices().getDiscounted_price();
 
                                                                         //details from customer transaction
-                                                                        double totalQty = customerTransaction.getTotal_qty();
+                                                                        int totalQty = customerTransaction.getTotal_qty();
                                                                         double currentSubtotal = customerTransaction.getSubtotal();
                                                                         double currentTotalPrice = customerTransaction.getTotal_price();
                                                                         double currentTotalDiscount = customerTransaction.getTotal_discount();
@@ -140,10 +259,8 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
                                                                         String newSubtotalStr = String.format("%.2f", newTotalPrice - newVat);
                                                                         double newSubtotal = Double.parseDouble(newSubtotalStr);
 
-
                                                                         ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
                                                                                 .child(customerCartKey+"/services").setValue(null); //deleting the service node from the customer cart
-
 
                                                                         ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/total_qty").setValue(newTotalQty);
                                                                         ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/total_discount").setValue(newTotalDiscount);

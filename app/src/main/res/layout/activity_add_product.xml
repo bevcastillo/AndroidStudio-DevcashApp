@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/padding_30"
-                    android:layout_marginBottom="@dimen/padding_top"
+                    android:layout_marginBottom="30dp"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/padding_30"
                     android:paddingRight="@dimen/padding_30">
@@ -40,7 +40,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:errorEnabled="true">
+                        app:errorEnabled="true"
+                        android:id="@+id/prodnameLayout">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/textinput_prodname"
@@ -57,7 +58,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:errorEnabled="true">
+                        app:errorEnabled="true"
+                        android:id="@+id/prodBrandLayout">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/textinput_prodbrand"
@@ -185,7 +187,8 @@
                             android:layout_weight="1"
                             android:paddingTop="@dimen/text_padding"
                             app:errorEnabled="true"
-                            android:paddingLeft="@dimen/padding_30">
+                            android:paddingLeft="@dimen/padding_30"
+                            android:id="@+id/prodPriceLayout">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/textinput_price"
@@ -499,14 +502,15 @@
                             android:layout_weight="1"
                             android:paddingTop="@dimen/text_padding"
                             android:paddingRight="@dimen/padding_30"
-                            app:errorEnabled="true">
+                            app:errorEnabled="true"
+                            android:id="@+id/prodStockLayout">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/textinput_instock"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/in_stock"
-                                android:inputType="date"
+                                android:inputType="number"
                                 android:padding="@dimen/text_padding"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/text_inputs" />
@@ -519,7 +523,8 @@
                             android:layout_weight="1"
                             android:paddingLeft="@dimen/padding_30"
                             android:paddingTop="@dimen/text_padding"
-                            app:errorEnabled="true">
+                            app:errorEnabled="true"
+                            android:id="@+id/productRopLayout">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/textinput_ROP"

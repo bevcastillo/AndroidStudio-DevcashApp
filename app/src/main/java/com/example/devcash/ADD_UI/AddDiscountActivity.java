@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
     RadioButton discbtn;
     String selecteddisc, selectedstatus;
     TextInputEditText disc_code, disc_value, disc_startdate, disc_enddate;
+    TextInputLayout discCodeLayout, discValueLayout, discStartLayout, discEndLayout;
     Spinner spinnerstatus;
 
     DatePickerDialog datePickerDialog;
@@ -57,6 +59,10 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
         disc_enddate = (TextInputEditText) findViewById(R.id.textdisc_enddate);
         disctype = (RadioGroup) findViewById(R.id.rgroup_disctype);
         spinnerstatus = (Spinner) findViewById(R.id.spinner_discstatus);
+        discCodeLayout = (TextInputLayout) findViewById(R.id.discountCodeLayout);
+        discValueLayout = (TextInputLayout) findViewById(R.id.discountValueLayout);
+        discStartLayout = (TextInputLayout) findViewById(R.id.startDateLayout);
+        discEndLayout = (TextInputLayout) findViewById(R.id.endDateLayout);
 
         //
         disc_startdate.setOnClickListener(this);
@@ -67,6 +73,90 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
         dbreference = firebaseInstance.getReference("/datadevcash");
         ownerdbreference = firebaseInstance.getReference("/datadevcash/owner");
         DiscountId = dbreference.push().getKey();
+    }
+
+    private boolean validateDetails(){
+        String discountCode = disc_code.getText().toString();
+        String discountValue = disc_value.getText().toString();
+        String discountEnd = disc_enddate.getText().toString();
+        String discountstart = disc_startdate.getText().toString();
+        boolean ok = true;
+
+        if (discountCode.isEmpty()){
+            discCodeLayout.setError("Fields can not be empty.");
+            ok = false;
+            if (discountValue.isEmpty()){
+                discValueLayout.setError("Fields can not be empty.");
+                ok = false;
+                if (discountstart.isEmpty()){
+                    discStartLayout.setError("Fields can not be empty.");
+                    ok = false;
+                    if (discountEnd.isEmpty()){
+                        discEndLayout.setError("Fields can not be empty.");
+                        ok = false;
+                    }else {
+                        discEndLayout.setError(null);
+                        ok = true;
+                    }
+                }else {
+                    discEndLayout.setError(null);
+                    ok = true;
+                }
+            }else {
+                discValueLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            discCodeLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
+    }
+
+    private boolean checkDuplicates(){
+        final String discountCode = disc_code.getText().toString();
+        final boolean[] ok = {true};
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/discount").orderByChild("disc_code").equalTo(discountCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    discCodeLayout.setError("Discount name already exists");
+                                    ok[0] = false;
+                                }else {
+                                    discCodeLayout.setError(null);
+                                    ok[0] = true;
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return ok[0];
+
     }
 
     public void addDiscount(String disc_code, String disc_type, String disc_start, String disc_end, String disc_status, double disc_value){
@@ -147,8 +237,13 @@ public class AddDiscountActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-            addRadioGroupListener();
-            insertDiscount();
+
+            if (validateDetails()){
+                if (checkDuplicates()){
+                    insertDiscount();
+                }
+            }
+
         }
         return super.onOptionsItemSelected(item);
 

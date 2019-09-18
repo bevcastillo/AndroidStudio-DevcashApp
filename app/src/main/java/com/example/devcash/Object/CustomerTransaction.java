@@ -1,12 +1,12 @@
 package com.example.devcash.Object;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class CustomerTransaction {
 
     int customer_id;
-    double total_qty, total_price, vat, cash_received, change, subtotal, total_discount;
+    double total_price, vat, cash_received, change, subtotal, total_discount;
+    int total_qty;
     String customer_email, customer_phone, transaction_datetime, customer_type;
     Enterprise enterprise;
     Employee employee;
@@ -92,11 +92,11 @@ public class CustomerTransaction {
         this.customer_cart = customer_cart;
     }
 
-    public double getTotal_qty() {
+    public int getTotal_qty() {
         return total_qty;
     }
 
-    public void setTotal_qty(double total_qty) {
+    public void setTotal_qty(int total_qty) {
         this.total_qty = total_qty;
     }
 

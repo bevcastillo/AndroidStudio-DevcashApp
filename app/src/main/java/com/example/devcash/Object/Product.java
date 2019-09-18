@@ -2,8 +2,9 @@ package com.example.devcash.Object;
 
 public class Product {
     String prod_name, prod_brand, prod_unitof_measure, prod_status, prod_datetimeadded, prod_expdate, prod_reference;
-    double prod_price, prod_rop, prod_subtotal, prod_qty, prod_disc_price;
-    double discounted_price;
+    double prod_price, prod_subtotal, discounted_price;
+    int prod_rop;
+    int prod_qty;
     public Category category;
     int prod_stock, prod_expdatecount;
     public ProductCondition productCondition;
@@ -36,7 +37,7 @@ public class Product {
 //    }
 
 
-    public Product(String prod_name, String prod_brand, String prod_unitof_measure, String prod_status, double prod_price, double prod_rop, int prod_stock, String prod_reference, double discounted_price) {
+    public Product(String prod_name, String prod_brand, String prod_unitof_measure, String prod_status, double prod_price, int prod_rop, int prod_stock, String prod_reference, double discounted_price) {
         this.prod_name = prod_name;
         this.prod_brand = prod_brand;
         this.prod_unitof_measure = prod_unitof_measure;
@@ -102,11 +103,11 @@ public class Product {
     }
 
 
-    public double getProd_rop() {
+    public int getProd_rop() {
         return prod_rop;
     }
 
-    public void setProd_rop(double prod_rop) {
+    public void setProd_rop(int prod_rop) {
         this.prod_rop = prod_rop;
     }
 
@@ -183,11 +184,11 @@ public class Product {
         this.prod_reference = prod_reference;
     }
 
-    public double getProd_qty() {
+    public int getProd_qty() {
         return prod_qty;
     }
 
-    public void setProd_qty(double prod_qty) {
+    public void setProd_qty(int prod_qty) {
         this.prod_qty = prod_qty;
     }
 

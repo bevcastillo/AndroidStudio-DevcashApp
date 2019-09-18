@@ -40,7 +40,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:errorEnabled="true">
+                        app:errorEnabled="true"
+                        android:id="@+id/serviceNameLayout">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/textinput_servname"
@@ -106,7 +107,8 @@
                             android:layout_weight="1"
                             android:paddingTop="@dimen/text_padding"
                             android:paddingRight="@dimen/padding_30"
-                            app:errorEnabled="true">
+                            app:errorEnabled="true"
+                            android:id="@+id/servicePriceLayout">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/textinput_servprice"

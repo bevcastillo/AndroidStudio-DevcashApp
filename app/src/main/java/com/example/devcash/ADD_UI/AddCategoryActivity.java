@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class AddCategoryActivity extends AppCompatActivity {
     private String CategoryId;
 
     TextInputEditText categoryName;
+    TextInputLayout categoryNameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
         //
         categoryName = (TextInputEditText) findViewById(R.id.text_categoryname);
+        categoryNameLayout = (TextInputLayout) findViewById(R.id.text_input_category_name);
 
         firebaseInstance = FirebaseDatabase.getInstance();
         mydbreference = firebaseInstance.getReference("/datadevcash");
@@ -71,6 +75,66 @@ public class AddCategoryActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean validateFields(){
+        String catName = categoryName.getText().toString();
+        boolean ok = true;
+
+        if (catName.isEmpty()){
+            categoryNameLayout.setError("Fields can not be empty.");
+            ok = false;
+        }else {
+            categoryNameLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
+
+    }
+
+    private boolean checkDuplicate(){
+        final String catName = categoryName.getText().toString();
+        final boolean[] ok = {true};
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/category").orderByChild("category_name").equalTo(catName).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    categoryNameLayout.setError("Category already exists.");
+                                    ok[0] = false;
+                                }else {
+                                    categoryNameLayout.setError(null);
+                                    ok[0] = true;
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return ok[0];
     }
 
     public void addCategory (String categoryName){
@@ -170,9 +234,15 @@ public class AddCategoryActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-            insertCategory();
+
+            if (validateFields()){
+                if (checkDuplicate()){
+                    insertCategory();
+                }
+            }
         }
-            return super.onOptionsItemSelected(item);
+
+        return super.onOptionsItemSelected(item);
 
     }
 }

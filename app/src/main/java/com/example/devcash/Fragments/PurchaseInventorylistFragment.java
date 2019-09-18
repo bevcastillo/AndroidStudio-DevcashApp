@@ -1,17 +1,13 @@
 package com.example.devcash.Fragments;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +16,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -41,7 +35,6 @@ import com.example.devcash.AllPurchaseActivity;
 import com.example.devcash.CustomAdapters.PurchaseInventoryProductsAdapter;
 import com.example.devcash.CustomAdapters.PurchaseInventoryServicesAdapter;
 import com.example.devcash.DashboardActivity;
-import com.example.devcash.MyUtility;
 import com.example.devcash.Object.CustomerCart;
 import com.example.devcash.Object.CustomerTransaction;
 import com.example.devcash.Object.Product;
@@ -50,7 +43,6 @@ import com.example.devcash.Object.PurchaseTransactionlistdata;
 import com.example.devcash.Object.Services;
 import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
-import com.example.devcash.ScanQRCode;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -514,7 +506,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                                 final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
                                                                                 final double currentSubtotal = customerTransaction1.getSubtotal();
                                                                                 final double currentTotalPrice = customerTransaction1.getTotal_price();
-                                                                                final double currentTotalQty = customerTransaction1.getTotal_qty();
+                                                                                final int currentTotalQty = customerTransaction1.getTotal_qty();
 
                                                                                 ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
                                                                                         .orderByChild("product/prod_reference")
@@ -576,7 +568,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                             // this is the logic for creating new data.
 
                                                                             double discountedPrice = product.getDiscounted_price();
-                                                                            double prodQty = product.getProd_qty();
+                                                                            int prodQty = product.getProd_qty();
                                                                             double productPrice = product.getProd_price();
 
                                                                             String vatStr = String.format("%.2f", (discountedPrice * prodQty) * .12);
@@ -661,8 +653,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                 if (dataSnapshot.exists()){
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        int qty = (int) customerTransaction.getTotal_qty();
-                                        double quantity = customerTransaction.getTotal_qty();
+                                        int quantity = customerTransaction.getTotal_qty();
                                         double total = customerTransaction.getTotal_price();
 
                                         qtypricetext.setText(quantity+" items = ₱"+total);

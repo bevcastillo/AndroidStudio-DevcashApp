@@ -2,6 +2,7 @@ package com.example.devcash.CustomAdapters;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -18,14 +19,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.devcash.Object.CustomerCart;
+import com.example.devcash.Object.CustomerTransaction;
 import com.example.devcash.Object.Product;
 import com.example.devcash.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.ViewHolder> {
 
     List<Product> productList;
+
+    private DatabaseReference ownerdbreference;
+    private FirebaseDatabase firebaseDatabase;
+
+    private static int itemcount = 0;
+    int customerId;
 
     public ProductlistAdapter(List<Product> productList) {
         this.productList = productList;
@@ -33,10 +49,22 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view;
-        view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_itemsreceipt, viewGroup, false);
-        final ViewHolder viewHolder = new ViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
+        View v;
+        v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_itemsreceipt, viewGroup, false);
+        final ViewHolder viewHolder = new ViewHolder(v);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+
+        SharedPreferences shared = v.getContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+        int sharedCustId = (shared.getInt("customer_id", 0));
+
+        if (sharedCustId <= 0) {
+            customerId = sharedCustId + 1;
+        } else {
+            customerId = sharedCustId;
+        }
 
 
         viewHolder.prodname.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -46,8 +74,6 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
 
                 String itemName = productList.get(viewHolder.getAdapterPosition()).getProd_name();
                 double itemQty = productList.get(viewHolder.getAdapterPosition()).getProd_qty();
-
-                Toast.makeText(v.getContext(), itemName+itemQty+" are the clicked items", Toast.LENGTH_SHORT).show();
 
                 menu.add("Edit Quantity").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
@@ -80,7 +106,114 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                 menu.add("Delete Item").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(v.getContext(), "This is delete", Toast.LENGTH_SHORT).show();
+
+                        final String productName = productList.get(viewHolder.getAdapterPosition()).getProd_name();
+                        final int productQty = productList.get(viewHolder.getAdapterPosition()).getProd_qty();
+                        double productDiscountedPrice = productList.get(viewHolder.getAdapterPosition()).getDiscounted_price();
+                        final String expdate = productList.get(viewHolder.getAdapterPosition()).getProd_expdate();
+                        final String productReference = productName+""+expdate;
+
+
+                        SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                        final String username = (shared.getString("owner_username", ""));
+
+                        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                        final String ownerKey = dataSnapshot1.getKey();
+
+                                        ownerdbreference.child(ownerKey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.exists()){
+                                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                        final String customerTransactionKey = dataSnapshot2.getKey();
+                                                        final CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+
+                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                .orderByChild("product/prod_reference").equalTo(productReference).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                if (dataSnapshot.exists()){
+                                                                    for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                        String customerCartKey = dataSnapshot3.getKey();
+                                                                        CustomerCart customerCart = dataSnapshot3.getValue(CustomerCart.class);
+
+                                                                        int productQty = customerCart.getProduct().getProd_qty();
+                                                                        double productSubTotal = customerCart.getProduct().getProd_subtotal();
+                                                                        double productPrice = customerCart.getProduct().getProd_price();
+                                                                        double serviceDiscountedPrice = customerCart.getProduct().getDiscounted_price();
+
+                                                                        //details from customer transaction
+                                                                        int totalQty = customerTransaction.getTotal_qty();
+                                                                        double currentSubtotal = customerTransaction.getSubtotal();
+                                                                        double currentTotalPrice = customerTransaction.getTotal_price();
+                                                                        double currentTotalDiscount = customerTransaction.getTotal_discount();
+
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                                .child(customerCartKey+"/product").setValue(null); //delete the product node from the customer cart
+
+                                                                        //computation for the customer transaction details after deleting the product
+                                                                        int newTotalQty =  totalQty - productQty;
+
+                                                                        String newServDiscValueStr = String.format("%.2f", (productPrice - serviceDiscountedPrice) * productQty); //we get the total discount value of each service
+                                                                        double newServDiscValue = Double.parseDouble(newServDiscValueStr);
+
+                                                                        String getPositiveDiscountStr = String.format("%.2f", currentTotalDiscount * -1); //we convert the negative discount amount to positive so that we can deduct it
+                                                                        double getPositiveDiscount = Double.parseDouble(getPositiveDiscountStr);
+
+                                                                        String newTotalDiscountStr = String.format("%.2f", getPositiveDiscount - newServDiscValue);
+                                                                        double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
+
+                                                                        String newTotalPriceStr = String.format("%.2f", currentTotalPrice - productSubTotal);
+                                                                        double newTotalPrice = Double.parseDouble(newTotalPriceStr);
+
+                                                                        String newVatStr = String.format("%.2f", newTotalPrice * .12);
+                                                                        double newVat = Double.parseDouble(newVatStr);
+
+                                                                        String newSubtotalStr = String.format("%.2f", newTotalPrice - newVat);
+                                                                        double newSubtotal = Double.parseDouble(newSubtotalStr);
+
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/total_qty").setValue(newTotalQty);
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/total_discount").setValue(newTotalDiscount);
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/subtotal").setValue(newSubtotal);
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/vat").setValue(newVat);
+                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/total_price").setValue(newTotalPrice);
+
+
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+
+
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
                         return true;
                     }
                 });

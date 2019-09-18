@@ -10,11 +10,13 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -46,6 +47,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -67,14 +70,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     ImageView prodphoto, addexpdate, addcondition;
     TextView takephoto, choosephoto;
-    TextInputEditText prodexpdate, prodname, prodprice, prodrop, condcount, prodstock, prodbrand;
+    TextInputEditText prodexpdate, prodname, prodprice, prodrop, condcount, prodstock, prodbrand, exp_itemcount;
+    TextInputLayout productNameLayout, productBrandLayout, productPriceLayout, productStockLayout, productRopLayout;
     Spinner prodcondition, produnit, spinnerprodcategory, spinnerdiscount;
     RadioGroup soldby;
     RadioButton soldbybtn, radioeach, radioweight;
     String selectedprodcond, selectedprodunit, selecteddisc, selectedsoldby, selectedcategory, pbrand;
     CheckBox chkavail;
     LinearLayout prodcondlayout, prodexpdatelayout;
-    TextInputEditText exp_itemcount;
     int conditioncount;
 
     String code, type;
@@ -86,7 +89,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     //
     String discountCode, discountStart, discountEnd, discountStatus, discountType;
     String pstatus;
-    public double pprice, prop, discountedPrice, discountValue;
+    public double pprice;
+    public int prop;
+    public double discountedPrice;
+    public double discountValue;
 
     private static final int PICK_IMAGE = 100;
 
@@ -134,6 +140,13 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         condcount = (TextInputEditText) findViewById(R.id.textinput_itemcount);
         prodstock = (TextInputEditText) findViewById(R.id.textinput_instock);
         prodbrand = (TextInputEditText) findViewById(R.id.textinput_prodbrand);
+
+        productNameLayout = (TextInputLayout) findViewById(R.id.prodnameLayout);
+        productBrandLayout = (TextInputLayout) findViewById(R.id.prodBrandLayout);
+        productPriceLayout = (TextInputLayout) findViewById(R.id.prodPriceLayout);
+        productStockLayout = (TextInputLayout) findViewById(R.id.prodStockLayout);
+        productRopLayout = (TextInputLayout) findViewById(R.id.productRopLayout);
+
 
         //
         addlayout = (LinearLayout) findViewById(R.id.addplayout);
@@ -270,7 +283,143 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final double prod_rop, int prod_stock, final String prod_reference, final double discounted_price){
+//    private void checkStockRop(){
+//        double stock = Double.parseDouble(prodstock.getText().toString());
+//        double rop = Double.parseDouble(prodrop.getText().toString());
+//
+//        if (rop >= stock){
+//            productRopLayout.setError("ROP is greater than your stock!");
+//        }else {
+//            productRopLayout.setError(null);
+//        }
+//
+//    }
+
+    private boolean checkStockRop(){
+        double stock = Double.parseDouble(prodstock.getText().toString());
+        double rop = Double.parseDouble(prodrop.getText().toString());
+        final boolean[] ok = {true};
+
+        if (rop > stock){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.customdialog_warning, null);
+            builder.setView(dialogView);
+
+            builder.setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ok[0] = true;
+                }
+            });
+
+            builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }
+
+        return ok[0];
+    }
+
+    private boolean checkDuplicateProdName(){ //check if the user input same data that already exist in the firebase database
+        final String productName = prodname.getText().toString();
+        final boolean[] ok = {true};
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        //query from the database
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/product").orderByChild("prod_name").equalTo(productName).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    productNameLayout.setError("Product name already exists.");
+                                    ok[0] = false;
+                                }else {
+                                    productNameLayout.setError(null);
+                                    ok[0] = true;
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return ok[0];
+    }
+
+    private boolean validateFields(){ //trappings if the user filled in all fields
+        String productName = prodname.getText().toString();
+        String productBrand = prodbrand.getText().toString();
+        String productPriceStr = prodprice.getText().toString();
+        String productStock = prodstock.getText().toString();
+        String productRop = prodrop.getText().toString();
+        boolean ok = true;
+
+        if (productName.isEmpty()){
+            productNameLayout.setError("Fields can not be empty.");
+            ok = false;
+            if (productBrand.isEmpty()){
+                productBrandLayout.setError("Fields can not be empty.");
+                ok = false;
+                if (productPriceStr.isEmpty()){
+                    productPriceLayout.setError("Fields can not be empty.");
+                    ok = false;
+                    if (productStock.equals("")){
+                        productStockLayout.setError("Fields can not be empty.");
+                        ok = false;
+                        if (productRop.equals("")){
+                            productRopLayout.setError("Fields can not be empty.");
+                            ok = false;
+                        }else {
+                            productRopLayout.setError(null);
+                            ok = true;
+                        }
+                    }else {
+                        productStockLayout.setError(null);
+                        ok = true;
+                    }
+                }else {
+                    productPriceLayout.setError(null);
+                    ok = true;
+                }
+            }else {
+                productBrandLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            productNameLayout.setError(null);
+            ok = true;
+        }
+
+
+
+        return ok;
+
+    }
+
+    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final int prod_rop, int prod_stock, final String prod_reference, final double discounted_price){
 
         ProductCondition condition = new ProductCondition();
         Category category = new Category();
@@ -405,7 +554,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                         pstatus = chkavail.getText().toString();
                                         pstock = Integer.parseInt(prodstock.getText().toString());
                                         pprice = Double.parseDouble(prodprice.getText().toString());
-                                        prop = Double.parseDouble(prodrop.getText().toString());
+                                        prop = Integer.parseInt(prodrop.getText().toString());
 
                                         ProductExpiration expiration = new ProductExpiration();
                                         String expdate = expiration.getProd_expdate();
@@ -439,7 +588,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                     pprice = Double.parseDouble(prodprice.getText().toString());
                                     pstatus = chkavail.getText().toString();
                                     pprice = Double.parseDouble(prodprice.getText().toString());
-                                    prop = Double.parseDouble(prodrop.getText().toString());
+                                    prop = Integer.parseInt(prodrop.getText().toString());
                                     pstock = Integer.parseInt(prodstock.getText().toString());
                                     discountedPrice = pprice; //discounted price is equals to the original price
                                     addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
@@ -513,10 +662,19 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             return true;
         }else if(id == R.id.action_save){
 //            addRadioGroupListener();
-            addCheckBoxListener();
-            insertProduct();
-            getExpDate();
 //            getDiscountData();
+
+            if (validateFields()){
+                if (checkDuplicateProdName()){
+                    if (checkStockRop()){
+                        addCheckBoxListener();
+                        insertProduct();
+                        getExpDate();
+                    }
+                }
+            }
+
+
         }
         return super.onOptionsItemSelected(item);
 
@@ -675,4 +833,5 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }

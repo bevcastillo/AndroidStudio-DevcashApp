@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     TextView takephoto, choosephoto;
     CheckBox chkavail;
     TextInputEditText servicename, serviceprice;
+    TextInputLayout servNameLayout, servPriceLayout;
     Spinner spinnercategory, spinnerdiscounts;
     String selectedcategory, selecteddiscount;
 
@@ -79,6 +81,9 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         //
         servicename = (TextInputEditText) findViewById(R.id.textinput_servname);
         serviceprice = (TextInputEditText) findViewById(R.id.textinput_servprice);
+        servNameLayout = (TextInputLayout) findViewById(R.id.serviceNameLayout);
+        servPriceLayout = (TextInputLayout) findViewById(R.id.servicePriceLayout);
+
         servicesphoto = (ImageView) findViewById(R.id.services_photo);
         takephoto = (TextView) findViewById(R.id.txt_servicestakephoto);
         choosephoto = (TextView) findViewById(R.id.txt_serviceschoosephoto);
@@ -181,6 +186,75 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         });
 
     }
+
+    private boolean validateFields(){
+        String serviceName = servicename.getText().toString();
+        String servicePrice = serviceprice.getText().toString();
+        boolean ok = true;
+
+        if (serviceName.isEmpty()){
+            servNameLayout.setError("Fields can not be empty.");
+            ok = false;
+            if (servicePrice.isEmpty()){
+                servPriceLayout.setError("Fields can not be empty");
+                ok = false;
+            }else {
+                servPriceLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            servNameLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
+    }
+
+    private boolean checkDuplicates(){
+        final String serviceName = servicename.getText().toString();
+        final boolean[] ok = {true};
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/services").orderByChild("service_name").equalTo(serviceName).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    servNameLayout.setError("Service already exists.");
+                                    ok[0] = false;
+                                }else {
+                                    servNameLayout.setError(null);
+                                    ok[0] = true;
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return ok[0];
+
+    }
+
 
     public void addServices(String service_name, String service_status, double service_price, double service_disc_price){
         Discount discount = new Discount();
@@ -362,8 +436,13 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){ //if SAVE is clicked
-            addCheckBoxListener();
-            insertServices();
+
+            if (validateFields()){
+                if (checkDuplicates()){
+                    addCheckBoxListener();
+                    insertServices();
+                }
+            }
         }
         return super.onOptionsItemSelected(item);
 

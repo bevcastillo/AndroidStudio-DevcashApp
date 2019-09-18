@@ -302,8 +302,7 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                         double vat = customerTransaction.getVat() *100/100;
                                         double subtotal = customerTransaction.getSubtotal();
                                         double total = customerTransaction.getTotal_price();
-                                        int quantity = (int) customerTransaction.getTotal_qty();
-                                        double qty = customerTransaction.getTotal_qty();
+                                        int qty = customerTransaction.getTotal_qty();
                                         double totaldiscount = customerTransaction.getTotal_discount();
 
 //                                        text_qty.setText(String.valueOf(qty));

@@ -101,8 +101,8 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
         emppassw = (TextInputEditText) findViewById(R.id.textinput_emppassw);
         empconfpass = (TextInputEditText) findViewById(R.id.textinput_empconfpassw);
-        empFname_layout = (TextInputLayout) findViewById(R.id.empFname_layout);
-        empLname_layout = (TextInputLayout) findViewById(R.id.empLname_layout);
+        empFname_layout = (TextInputLayout) findViewById(R.id.empfnamLayout);
+        empLname_layout = (TextInputLayout) findViewById(R.id.emplnameLayout);
 
         //add listeners to the textviews
         empbdate.setOnClickListener(this);
@@ -285,7 +285,6 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-            
                 if (validateDetails()){
                     addRadioGroupListener();
                     insertEmployee();
@@ -301,11 +300,11 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         boolean ok = true;
 
         if (empLastname.isEmpty()){
-            empLname_layout.setError("Lastname can not be empty");
+            empLname_layout.setError("Fields can not be empty");
             ok = false;
 
             if (empFirstname.isEmpty()){
-                empFname_layout.setError("Firstame can not be empty");
+                empFname_layout.setError("Fields can not be empty");
                 ok = false;
             }else {
                 empFname_layout.setError(null);
