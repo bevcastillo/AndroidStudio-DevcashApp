@@ -176,7 +176,8 @@
                             android:layout_weight="1"
                             android:paddingTop="@dimen/text_padding"
                             android:paddingRight="@dimen/padding_30"
-                            app:errorEnabled="true">
+                            app:errorEnabled="true"
+                            android:id="@+id/layoutProdPrice">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/textinput_editprice"
@@ -533,7 +534,8 @@
                             android:layout_weight="1"
                             android:paddingTop="@dimen/text_padding"
                             android:paddingRight="@dimen/padding_30"
-                            app:errorEnabled="true">
+                            app:errorEnabled="true"
+                            android:id="@+id/layoutProdStock">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/textinput_editinstock"
@@ -553,7 +555,8 @@
                             android:layout_weight="1"
                             android:paddingLeft="@dimen/padding_30"
                             android:paddingTop="@dimen/text_padding"
-                            app:errorEnabled="true">
+                            app:errorEnabled="true"
+                            android:id="@+id/layoutProdRop">
 
                             <android.support.design.widget.TextInputEditText
                                 android:id="@+id/textinput_editROP"

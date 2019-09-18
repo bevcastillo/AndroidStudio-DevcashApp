@@ -4,9 +4,11 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,10 +33,12 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
     private TextInputEditText entname, entempno, entno, entpermit, entaddr, entemail;
-    private String enterprisename, enterprisepermit, enterpriseno, enterpriseaddr, enterprisemail, selectedcategory, selectedentype;
-    private Long enterpriseempno;
+    private TextInputLayout entNameLayout, entCountLayout, entPermitNoLayout, entAddrLayout;
+    private String enterprisename, enterprisepermit, enterpriseno, enterpriseaddr, enterprisemail, selectedcategory, selectedentype, enterpriseCategory;
+//    private Long enterpriseempno;
+    private int enterpriseempno;
     private Spinner spinnercategory;
-    private TextView entype;
+    private TextView entcategory;
     private int pos;
 
     @Override
@@ -43,13 +47,16 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
         setContentView(R.layout.activity_enterprise_info);
 
         entname = (TextInputEditText) findViewById(R.id.edittext_entname);
-        entempno = (TextInputEditText) findViewById(R.id.edittext_numemp);
+        entempno = (TextInputEditText) findViewById(R.id.employee_count);
         entno = (TextInputEditText) findViewById(R.id.edittext_entphone);
         entpermit = (TextInputEditText) findViewById(R.id.edittext_permit);
         entaddr = (TextInputEditText) findViewById(R.id.edittext_entaddr);
         entemail = (TextInputEditText) findViewById(R.id.edittext_entemailaddr);
-        entype = (TextView) findViewById(R.id.txt_enttype);
-        entempno = (TextInputEditText) findViewById(R.id.edittext_numemp);
+        entNameLayout = (TextInputLayout) findViewById(R.id.layoutEntName);
+        entCountLayout = (TextInputLayout) findViewById(R.id.layoutEntCount);
+        entPermitNoLayout = (TextInputLayout) findViewById(R.id.layoutPermitNo);
+        entAddrLayout = (TextInputLayout) findViewById(R.id.layoutEntAddr);
+        entcategory = (TextView) findViewById(R.id.txt_entcategory);
         spinnercategory = (Spinner) findViewById(R.id.spinner_enttype);
 
         //listeners
@@ -67,6 +74,67 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
         //
         displayEntDetails();
 
+    }
+
+    private boolean validateFields(){
+        String enterpriseName = entname.getText().toString();
+        String enterpriseCount = entempno.getText().toString();
+        String enterprisePermit = entpermit.getText().toString();
+        String enterpriseAddr = entaddr.getText().toString();
+        boolean ok = true;
+
+        if (enterpriseName.isEmpty()){
+            entNameLayout.setError("Fields can not be empty.");
+            ok = false;
+            if (enterpriseCount.isEmpty()){
+                entCountLayout.setError("Fields can not be empty");
+                ok = false;
+                if (enterprisePermit.isEmpty()){
+                    entPermitNoLayout.setError("Fields can not be empty.");
+                    ok = false;
+                    if (enterpriseAddr.isEmpty()){
+                        entAddrLayout.setError("Fields can not be empty.");
+                        ok = false;
+                    }else {
+                        entAddrLayout.setError(null);
+                        ok = true;
+                    }
+                }else {
+                    entPermitNoLayout.setError(null);
+                    ok = true;
+                }
+            }else {
+                entCountLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            entNameLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
+    }
+
+    private boolean validateEmployeeCount(){
+        int empCount = Integer.parseInt(entempno.getText().toString());
+        final boolean[] ok = {true};
+
+        if (empCount > 100){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.customdialog_enterprisecount, null);
+            builder.setView(dialogView);
+
+            builder.setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    ok[0] = false;
+                }
+            });
+            builder.show();
+        }
+        return ok[0];
     }
 
     public void displayEntDetails(){
@@ -94,14 +162,23 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                                     enterpriseno = enterprise.getEnt_telno();
                                     enterpriseempno = enterprise.getEnt_no_emp();
                                     selectedentype = enterprise.getEnt_type();
+                                    enterpriseCategory = enterprise.getEnt_cat();
 
                                     entname.setText(enterprisename);
                                     entaddr.setText(enterpriseaddr);
                                     entemail.setText(enterprisemail);
                                     entpermit.setText(enterprisepermit);
-                                    entype.setText(selectedentype);
-                                    entno.setText(enterpriseno);
-                                    entempno.setText(enterpriseempno.toString());
+                                    entcategory.setText(enterpriseCategory);
+
+                                    entempno.setText(Integer.toString(enterpriseempno));
+
+                                    if (enterpriseempno > 0 && enterpriseempno < 10){ //micro
+                                        entcategory.setText("Micro");
+                                    } else if (enterpriseempno > 10 && enterpriseempno < 100){
+                                        entcategory.setText("Small");
+                                    }else {
+                                        entcategory.setText("N/A");
+                                    }
 
                                     String [] enterpriselist = getResources().getStringArray(R.array.ent_types);
 
@@ -149,6 +226,7 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){
                                     Enterprise enterprise = dataSnapshot.getValue(Enterprise.class);
+                                    int ent_count = enterprise.getEnt_no_emp();
 
                                     if(!enterprise.getEnt_name().equals(entname.getText().toString())) {
                                         ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_name").setValue(entname.getText().toString());
@@ -162,7 +240,10 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                                         ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_email").setValue(entemail.getText().toString());
                                     }
 
-                                    if(!enterprise.getEnt_no_emp().equals(Long.valueOf(entempno.getText().toString()))) {
+//                                    if(!enterprise.getEnt_no_emp().equals(Integer.valueOf(entempno.getText().toString()))) {
+//                                        ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_no_emp").setValue(Long.valueOf(entempno.getText().toString()));
+//                                    }
+                                    if (ent_count != Integer.valueOf(entempno.getText().toString())){
                                         ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_no_emp").setValue(Long.valueOf(entempno.getText().toString()));
                                     }
 
@@ -179,16 +260,6 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                                     }
 
 
-//                                    ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_name").setValue(entname.getText().toString());
-//                                    ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_addr").setValue(entaddr.getText().toString());
-
-//                                    ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_email").setValue(entemail.getText().toString());
-//                                    ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_no_emp").setValue(Long.valueOf(entempno.getText().toString()));
-//                                    ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_permitno").setValue(entpermit.getText().toString());
-//                                    ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_telno").setValue(entno.getText().toString());
-//                                    displayEntDetails();
-//                                    ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_cat").setValue(selectedcategory);
-
                                 }
                             }
 
@@ -198,6 +269,7 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                             }
                         });
                         Toast.makeText(EnterpriseInfo.this, "Enterprise is updated!", Toast.LENGTH_SHORT).show();
+                        finish();
                         break;
                     }
                 }
@@ -246,7 +318,11 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                 onBackPressed();
                 return true;
             case R.id.action_save:
-                updateEntDetails();
+                if (validateFields()){
+                    if (validateEmployeeCount()){
+                        updateEntDetails();
+                    }
+                }
         }
 
         return super.onOptionsItemSelected(item);

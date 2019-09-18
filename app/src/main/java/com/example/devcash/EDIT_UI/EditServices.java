@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
     private FirebaseDatabase firebaseDatabase;
 
     private TextInputEditText servname, servprice;
+    private TextInputLayout serviceNameLayout, servicePriceLayout;
     private Spinner spinnerCategory, spinnerDiscount;
     private CheckBox chckavail;
     private String selectedcategory, selecteddiscount, strservname, strchkavail;
@@ -71,6 +73,8 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
         spinnerDiscount = (Spinner) findViewById(R.id.spinner_editserdisc);
         chckavail = (CheckBox) findViewById(R.id.cbox_editservavail);
         servprice = (TextInputEditText) findViewById(R.id.textinput_editservprice);
+        serviceNameLayout = (TextInputLayout) findViewById(R.id.layoutServiceName);
+        servicePriceLayout = (TextInputLayout) findViewById(R.id.layoutServicePrice);
         layoutdelete = (LinearLayout) findViewById(R.id.layout_delservices);
 
         spinnerCategory.setOnItemSelectedListener(this);
@@ -192,6 +196,29 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
             }
         }
 
+    }
+
+    private boolean validateFields(){
+        String serviceName = servname.getText().toString();
+        String servicePrice = servprice.getText().toString();
+        boolean ok = true;
+
+        if (serviceName.isEmpty()){
+            serviceNameLayout.setError("Fields can not be empty.");
+            ok = false;
+            if (servicePrice.isEmpty()){
+                servicePriceLayout.setError("Fields can not be empty.");
+                ok = false;
+            }else {
+                servicePriceLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            serviceNameLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
     }
 
     public void getServDetails(){
@@ -628,7 +655,9 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                 onBackPressed();
                 return true;
             case R.id.action_save:
-                updateServices();
+                if (validateFields()){
+                    updateServices();
+                }
 
         }
 

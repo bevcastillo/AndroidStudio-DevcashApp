@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import java.util.Calendar;
 public class EditDiscount extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private TextInputEditText code, value, startdate, enddate;
+    private TextInputLayout discCodeLayout, discValueLayout, discStartLayout, discEndLayout;
     private String selectedtype, selecteddstatus,dcode, dstart, dend;
     double dvalue;
     private Spinner status;
@@ -62,11 +64,15 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
         code = (TextInputEditText) findViewById(R.id.textinput_discode);
         radioGrouptype = (RadioGroup) findViewById(R.id.rgroup_disctype);
         radioButtonpercentage = (RadioButton) findViewById(R.id.radiobtn_percent);
-            radioButtonamount = (RadioButton) findViewById(R.id.radiobtn_amt);
+        radioButtonamount = (RadioButton) findViewById(R.id.radiobtn_amt);
         value = (TextInputEditText) findViewById(R.id.textinput_amt);
         startdate = (TextInputEditText) findViewById(R.id.textdisc_startdate);
         enddate = (TextInputEditText) findViewById(R.id.textdisc_enddate);
         status = (Spinner) findViewById(R.id.spinner_discstatus);
+        discCodeLayout = (TextInputLayout) findViewById(R.id.layoutdiscountCode);
+        discValueLayout = (TextInputLayout) findViewById(R.id.layoutdiscvalue);
+        discStartLayout = (TextInputLayout) findViewById(R.id.layoutstartdate);
+        discEndLayout = (TextInputLayout) findViewById(R.id.layoutenddate);
 
         deletelayout = (LinearLayout) findViewById(R.id.layout_delcategory);
 
@@ -117,6 +123,45 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
 
             }
         }
+    }
+
+    private boolean validateFields(){
+        String discCode = code.getText().toString();
+        String discValue = value.getText().toString();
+        String discEnd = enddate.getText().toString();
+        String discStart = startdate.getText().toString();
+        boolean ok = true;
+
+        if (discCode.isEmpty()){
+            discCodeLayout.setError("Fields can not be empty.");
+            ok = false;
+            if (discValue.isEmpty()){
+                discValueLayout.setError("Fields can not be empty.");
+                ok = false;
+                if (discStart.isEmpty()){
+                    discStartLayout.setError("Fields can not be empty.");
+                    ok = false;
+                    if (discEnd.isEmpty()){
+                        discEndLayout.setError("Fields can not be empty.");
+                        ok = false;
+                    }else {
+                        discEndLayout.setError(null);
+                        ok = true;
+                    }
+                }else {
+                    discStartLayout.setError(null);
+                    ok = true;
+                }
+            }else {
+                discValueLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            discCodeLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
     }
 
     public void getDiscDetails(){
@@ -402,9 +447,10 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
                 return true;
             case R.id.action_save:
-                addRadioGroupListener();
-                updateDiscount();
-
+                if (validateFields()){
+                    addRadioGroupListener();
+                    updateDiscount();
+                }
         }
 
         return super.onOptionsItemSelected(item);

@@ -16,6 +16,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -51,7 +55,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CategoriesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+public class CategoriesFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, View.OnClickListener {
 
     SwipeRefreshLayout pullToRefresh;
 
@@ -60,6 +64,8 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
+    EditText searchCategory;
+    Button searchbtn;
 
     //
     DatabaseReference dbreference;
@@ -95,9 +101,13 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
         categoryrecyclerView = (RecyclerView) view.findViewById(R.id.catrecyclerview);
+        searchCategory = (EditText) view.findViewById(R.id.edit_categorysearch);
+        searchbtn = (Button) view.findViewById(R.id.searchbtn);
 
         categoriesprogress = (ProgressBar) view.findViewById(R.id.categories_progressbar);
         emptylayout = (LinearLayout) view.findViewById(R.id.layout_emptycategories);
+
+        searchbtn.setOnClickListener(this);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("/datadevcash");
@@ -191,6 +201,84 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
             }
         });
 
+
+        //handles search
+        searchCategory.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                final String searchInput = searchCategory.getText().toString();
+
+                SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                final String username = (shared.getString("owner_username", ""));
+
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                String ownerKey = dataSnapshot1.getKey();
+
+                                ownerdbreference.child(ownerKey+"/business/category").orderByChild("category_name").equalTo(searchInput).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                String categoryKey = dataSnapshot2.getKey();
+                                                Category category = dataSnapshot2.getValue(Category.class);
+                                                Categorylistdata categorylistdata = new Categorylistdata();
+                                                String categoryName = category.getCategory_name();
+                                                categorylistdata.setCategory_name(categoryName);
+                                                list.add(categorylistdata);
+                                            }
+                                            CategoryAdapter adapter = new CategoryAdapter(list);
+                                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                            categoryrecyclerView.setLayoutManager(layoutManager);
+                                            categoryrecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                            categoryrecyclerView.setItemAnimator(new DefaultItemAnimator());
+                                            categoryrecyclerView.setAdapter(adapter);
+                                            adapter.notifyDataSetChanged();
+
+                                            categoriesprogress.setVisibility(View.GONE);
+
+                                            if (list.isEmpty()){
+                                                emptylayout.setVisibility(View.VISIBLE);
+                                            }else {
+                                                emptylayout.setVisibility(View.GONE);
+                                            }
+                                        }else {
+                                            Toast.makeText(getActivity(), "no item found", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
+
+
         return view;
     }
 
@@ -258,4 +346,75 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.searchbtn:
+                searchResults();
+                break;
+        }
+    }
+
+    private void searchResults() {
+        final String searchInput = searchCategory.getText().toString();
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/category").orderByChild("category_name").equalTo(searchInput).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    list = new ArrayList<>();
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String categoryKey = dataSnapshot2.getKey();
+                                        Category category = dataSnapshot2.getValue(Category.class);
+                                        Categorylistdata categorylistdata = new Categorylistdata();
+                                        String categoryName = category.getCategory_name();
+                                        categorylistdata.setCategory_name(categoryName);
+                                        list.add(categorylistdata);
+                                    }
+                                    CategoryAdapter adapter = new CategoryAdapter(list);
+                                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                    categoryrecyclerView.setLayoutManager(layoutManager);
+                                    categoryrecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    categoryrecyclerView.setItemAnimator(new DefaultItemAnimator());
+                                    categoryrecyclerView.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+
+                                    categoriesprogress.setVisibility(View.GONE);
+
+                                    if (list.isEmpty()){
+                                        emptylayout.setVisibility(View.VISIBLE);
+                                    }else {
+                                        emptylayout.setVisibility(View.GONE);
+                                    }
+                                }else {
+//                                    Toast.makeText(getActivity(), "does not exist", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

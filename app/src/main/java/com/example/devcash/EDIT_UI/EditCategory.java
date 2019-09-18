@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,9 +33,8 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference rootRef;
 
-
-
     TextInputEditText editcatname;
+    TextInputLayout catnameLayout;
     LinearLayout layoutdelete;
 
     String name;
@@ -50,6 +50,7 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
 
         editcatname = (TextInputEditText) findViewById(R.id.text_categoryname);
         layoutdelete = (LinearLayout) findViewById(R.id.layout_delcategory);
+        catnameLayout = (TextInputLayout) findViewById(R.id.layout_category_name);
 
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -67,6 +68,21 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
             name = bundle.getString("categoryname");
             editcatname.setText(name);
         }
+    }
+
+    public boolean validateFields(){
+        String categoryName = editcatname.getText().toString();
+        boolean ok = true;
+
+        if (categoryName.isEmpty()){
+            catnameLayout.setError("Fields can not be empty.");
+            ok = false;
+        }else {
+            catnameLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
     }
 
 
@@ -305,7 +321,9 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         switch (id){
             case R.id.layout_delcategory:
-                deleteCategory();
+                if (validateFields()){
+                    deleteCategory();
+                }
                 break;
         }
     }

@@ -7,6 +7,7 @@
     tools:context=".Fragments.CategoriesFragment"
     android:orientation="vertical">
 
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_categories"
         android:layout_width="match_parent"
@@ -37,17 +38,36 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_search"
-                android:drawableTint="#808080"
-                android:background="@drawable/search_btnstroke"
-                android:hint="Search.."
-                android:padding="15dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"/>
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/edit_categorysearch"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
+                    android:drawableRight="@drawable/ic_search"
+                    android:drawableTint="#808080"
+                    android:background="@drawable/search_btnstroke"
+                    android:hint="Search.."
+                    android:padding="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"/>
+
+                <Button
+                    android:id="@+id/searchbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Search"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:gravity="center"/>
+
+            </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"

@@ -3,8 +3,10 @@ package com.example.devcash;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.service.autofill.Dataset;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,7 +39,8 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
 
-    private TextInputEditText ownerlname, ownerfname, ownerphone, owneraddr, ownerbdate, acctemail, acctpassw;
+    private TextInputEditText ownerlname, ownerfname, ownerphone, owneraddr, ownerbdate, acctemail, acctpassw, ownerusername;
+    private TextInputLayout ownerLnameLayout, ownerFnameLayout, ownerPasswLayout, ownerUsernameLayout;
     private TextView txtownerusername, txtdeactivate, txtacctstatus;
     private RadioGroup radioGroupgender;
     private RadioButton radioButton, radioMale, radioFemale;
@@ -54,6 +57,13 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         ownerfname = (TextInputEditText) findViewById(R.id.owner_fname);
         ownerphone = (TextInputEditText) findViewById(R.id.owner_phone);
         ownerbdate = (TextInputEditText)findViewById(R.id.owner_dob);
+        ownerusername = (TextInputEditText) findViewById(R.id.owner_username);
+
+        ownerUsernameLayout = (TextInputLayout) findViewById(R.id.layoutOwnerUsername);
+        ownerFnameLayout = (TextInputLayout) findViewById(R.id.layoutOwnerFname);
+        ownerLnameLayout = (TextInputLayout) findViewById(R.id.layoutOwnerLname);
+        ownerPasswLayout = (TextInputLayout) findViewById(R.id.layoutOwnerPassw);
+
         txtownerusername = (TextView) findViewById(R.id.txtownerusername);
         acctemail = (TextInputEditText) findViewById(R.id.owner_email);
         acctpassw = (TextInputEditText) findViewById(R.id.owner_password);
@@ -100,9 +110,75 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
 
 
         txtownerusername.setText(account.getAcct_uname());
+        ownerusername.setText(account.getAcct_uname());
         acctemail.setText(account.getAcct_email());
         acctpassw.setText(account.getAcct_passw());
 
+    }
+
+    private boolean checkDuplicate(){
+        String owner_user = ownerusername.getText().toString();
+        boolean ok = true;
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Toast.makeText(OwnerInformation.this, "username already exists.", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(OwnerInformation.this, "does not exist", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return ok;
+    }
+
+    private boolean validateFields(){
+        String owner_user = ownerusername.getText().toString();
+        String owner_lname = ownerlname.getText().toString();
+        String owner_fname = ownerfname.getText().toString();
+        String acct_passw = acctpassw.getText().toString();
+        boolean ok = true;
+
+        if (owner_user.isEmpty()){
+            ownerUsernameLayout.setError("Fields can not be empty.");
+            ok = false;
+            if (owner_lname.isEmpty()){
+                ownerLnameLayout.setError("Fields can not be empty.");
+                ok = false;
+                if (owner_fname.isEmpty()){
+                    ownerFnameLayout.setError("Fields can not be empty.");
+                    ok = false;
+                    if (acct_passw.isEmpty()){
+                        ownerPasswLayout.setError("Fields can not be empty.");
+                        ok = false;
+                    }else {
+                        ownerPasswLayout.setError(null);
+                        ok = true;
+                    }
+                }else {
+                    ownerLnameLayout.setError(null);
+                    ok = true;
+                }
+            }else {
+                ownerLnameLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            ownerUsernameLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
     }
 
     public void addRadioGroupListener(){
@@ -207,7 +283,10 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 break;
             case R.id.action_save:
-                updateOwner();
+                if (validateFields()){
+                    updateOwner();
+                }
+//                checkDuplicate();
                 break;
         }
         return super.onOptionsItemSelected(item);

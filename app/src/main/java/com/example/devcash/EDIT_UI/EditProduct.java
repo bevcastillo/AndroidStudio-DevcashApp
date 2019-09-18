@@ -51,7 +51,7 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
     private double strprice, strprodrop;
     private int strprodstock, strprodexpcount, pos, pos1;
     private LinearLayout deletelayout;
-    private TextInputLayout productNameLayout;
+    private TextInputLayout productNameLayout, productPriceLayout, productStockLayout, productRopLayout;
     private String discountCode, discountStart, discountEnd, discountType, discountStatus, strExpirationDate, newExpirationDate;
     private double productPrice, discountValue, discountedPrice;
     private DatePickerDialog datePickerDialog;
@@ -224,6 +224,46 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
         }
     }
 
+    private boolean validateFields(){
+        String prodName = productname.getText().toString();
+        String prodPrice = prodprice.getText().toString();
+        String prodStock = prodstock.getText().toString();
+        String prodRop = prodrop.getText().toString();
+        boolean ok = true;
+
+        if (prodName.isEmpty()){
+            productNameLayout.setError("Fields can not be empty.");
+            ok = false;
+            if (prodPrice.isEmpty()){
+                productPriceLayout.setError("Fields can not be empty.");
+                ok = false;
+                if (prodStock.isEmpty()){
+                    productStockLayout.setError("Fields can not be empty.");
+                    ok = false;
+                    if (prodRop.isEmpty()){
+                        productRopLayout.setError("Fields can not be empty.");
+                        ok = false;
+                    }else {
+                        productRopLayout.setError(null);
+                        ok = false;
+                    }
+                }else {
+                    productStockLayout.setError(null);
+                    ok = true;
+                }
+            }else {
+                productPriceLayout.setError(null);
+                ok = true;
+            }
+        }else {
+            productNameLayout.setError(null);
+            ok = true;
+        }
+
+        return ok;
+
+    }
+
     private void getProdDetails() {
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
@@ -318,7 +358,9 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
             onBackPressed();
             return true;
         }else if(id == R.id.action_save){
-            updateProduct();
+            if (validateFields()){
+                updateProduct();
+            }
 
         }
         return super.onOptionsItemSelected(item);

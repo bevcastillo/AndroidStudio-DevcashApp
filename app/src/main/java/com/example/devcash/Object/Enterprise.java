@@ -2,7 +2,8 @@ package com.example.devcash.Object;
 
 public class Enterprise {
     String ent_addr, ent_cat, ent_name, ent_permitno, ent_telno, ent_type, ent_email;
-    Long ent_no_emp;
+//    Long ent_no_emp;
+    int ent_no_emp;
 
 
     public Enterprise() {
@@ -56,13 +57,13 @@ public class Enterprise {
         this.ent_type = ent_type;
     }
 
-    public Long getEnt_no_emp() {
-        return ent_no_emp;
-    }
-
-    public void setEnt_no_emp(Long ent_no_emp) {
-        this.ent_no_emp = ent_no_emp;
-    }
+//    public int getEnt_no_emp() {
+//        return ent_no_emp;
+//    }
+//
+//    public void setEnt_no_emp(int ent_no_emp) {
+//        this.ent_no_emp = ent_no_emp;
+//    }
 
     public String getEnt_email() {
         return ent_email;
@@ -70,5 +71,13 @@ public class Enterprise {
 
     public void setEnt_email(String ent_email) {
         this.ent_email = ent_email;
+    }
+
+    public int getEnt_no_emp() {
+        return ent_no_emp;
+    }
+
+    public void setEnt_no_emp(int ent_no_emp) {
+        this.ent_no_emp = ent_no_emp;
     }
 }

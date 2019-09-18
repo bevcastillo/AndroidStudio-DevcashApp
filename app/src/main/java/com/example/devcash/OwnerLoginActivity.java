@@ -150,8 +150,10 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                             Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
                                             startActivity(owner_dashboard);
 
+                                            progressDialog();
+
                                         } else {
-//                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 //                                    Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect!", Toast.LENGTH_SHORT).show();
@@ -213,12 +215,16 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                 startActivity(owner_forgotpassw);
                 break;
             case R.id.btn_login:
+//                if (validateEmailPassw()){
+//                    if(internetConnectionAvailable(5) == true){
+//                        ownerLogin();
+//                    } else{
+//                        progressDialog();
+//                    }
+//                }
+
                 if (validateEmailPassw()){
-                    if(internetConnectionAvailable(5) == true){
-                        ownerLogin();
-                    } else{
-                        progressDialog();
-                    }
+                    ownerLogin();
                 }
 
                 break;
