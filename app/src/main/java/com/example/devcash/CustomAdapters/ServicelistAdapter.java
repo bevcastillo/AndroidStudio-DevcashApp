@@ -128,10 +128,10 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
                                                                                 double serviceDiscountedPrice = customerCart.getServices().getDiscounted_price();
 
                                                                                 //details from customer transaction
-                                                                                int totalQty = customerTransaction.getTotal_qty();
+                                                                                int totalQty = customerTransaction.getTotal_item_qty();
                                                                                 double currentSubtotal = customerTransaction.getSubtotal();
-                                                                                double currentTotalPrice = customerTransaction.getTotal_price();
-                                                                                double currentTotalDiscount = customerTransaction.getTotal_discount();
+                                                                                double currentTotalPrice = customerTransaction.getAmount_due();
+                                                                                double currentTotalDiscount = customerTransaction.getTotal_item_discount();
 
                                                                                 //computation here to remove quantity based on the input text from the user
                                                                                 int input_qty = Integer.parseInt(qty.getText().toString());
@@ -233,10 +233,10 @@ public class ServicelistAdapter extends RecyclerView.Adapter<ServicelistAdapter.
                                                                         double serviceDiscountedPrice = customerCart.getServices().getDiscounted_price();
 
                                                                         //details from customer transaction
-                                                                        int totalQty = customerTransaction.getTotal_qty();
+                                                                        int totalQty = customerTransaction.getTotal_item_qty();
                                                                         double currentSubtotal = customerTransaction.getSubtotal();
-                                                                        double currentTotalPrice = customerTransaction.getTotal_price();
-                                                                        double currentTotalDiscount = customerTransaction.getTotal_discount();
+                                                                        double currentTotalPrice = customerTransaction.getAmount_due();
+                                                                        double currentTotalDiscount = customerTransaction.getTotal_item_discount();
 
                                                                         //this is the computation to delete the selected service from the cart
                                                                         double newTotalQty = totalQty - servQty;

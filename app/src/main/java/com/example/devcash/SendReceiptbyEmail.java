@@ -186,8 +186,8 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                         int receiptno = customerTransaction1.getCustomer_id();
                                         double cash = customerTransaction.getCash_received();
                                         double change = customerTransaction.getChange();
-                                        double discount = customerTransaction.getTotal_discount();
-                                        double totprice = customerTransaction.getTotal_price();
+                                        double discount = customerTransaction.getTotal_item_discount();
+                                        double totprice = customerTransaction.getAmount_due();
 
 
                                         String customerReceiptContent = "-------------------------------"+

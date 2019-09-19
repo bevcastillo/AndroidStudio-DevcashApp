@@ -86,6 +86,8 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 final String prodexpdate = plist.get(viewHolder.getAdapterPosition()).getProd_expdate();
                 final double prodprice = plist.get(viewHolder.getAdapterPosition()).getProd_price();
                 final double discountedprice = plist.get(viewHolder.getAdapterPosition()).getDiscounted_price();
+
+
                 final String preference = prodname+prodexpdate;
 
                 plist.get(viewHolder.getAdapterPosition()).setProdclick(plist.get(viewHolder.getAdapterPosition()).getProdclick() + 1);
@@ -144,8 +146,8 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                 customertransactionkey = dataSnapshot2.getKey();
                                                 final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
                                                 final double currentSubtotal = customerTransaction1.getSubtotal();
-                                                final double currentTotalPrice = customerTransaction1.getTotal_price();
-                                                final double currentTotalQty = customerTransaction1.getTotal_qty();
+                                                final double currentTotalPrice = customerTransaction1.getAmount_due();
+                                                final double currentTotalQty = customerTransaction1.getTotal_item_qty();
 
 
                                                 final String finalCustomertransactionkey = customertransactionkey;
@@ -163,8 +165,14 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                 // if product already exists, we just update some fields.
                                                                 if (prodreference.equals(preference)){
 
+                                                                    if (customerType.equals("Senior Citizen")){
+
+                                                                    }else {
+
+                                                                    }
+
                                                                     String productSubtotal_str = String.format("%.2f", prodqty * discountedprice);
-                                                                    String taxVat_str = String.format("%.2f", (discountedprice * prodqty) * .12);
+                                                                    String taxVat_str = String.format("%.2f", (discountedprice * prodqty) / 1.12);
                                                                     String totalPrice_str = String.format("%.2f", currentSubtotal + discountedprice);
                                                                     String partialDiscount_str = String.format("%.2f", prodprice * prodqty);
 
@@ -181,7 +189,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                     double totalDiscount = productSubtotal - partialDiscount;
 
 
-                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(prodqty);
+//                                                                    ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(prodqty);
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(productSubtotal);
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(taxVat);
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_price").setValue(totalPrice);
@@ -190,7 +198,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_discount").setValue(totalDiscount);
                                                                     cartMap.clear();
                                                                 }else {
-                                                                    Toast.makeText(v.getContext(), customerTransaction1.getSubtotal()+" is the current subtotal", Toast.LENGTH_SHORT).show();
+//                                                                    Toast.makeText(v.getContext(), customerTransaction1.getSubtotal()+" is the current subtotal", Toast.LENGTH_SHORT).show();
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").push().setValue(customerCart);
                                                                 }
                                                             }
@@ -200,7 +208,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                             String totalPriceStr = String.format("%.2f", currentTotalPrice + discountedprice); //////// old subtotal + discounted price of the selected item
                                                             double totalPrice = Double.parseDouble(totalPriceStr);
 
-                                                            String vatStr = String.format("%.2f", totalPrice * .12);
+                                                            String vatStr = String.format("%.2f", totalPrice / 1.12);
                                                             double vat = Double.parseDouble(vatStr);
 
                                                             String subtotalStr = String.format("%.2f",  totalPrice - vat);
@@ -216,13 +224,13 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                             double totalDiscount = Double.parseDouble(totalDiscountStr);
 
 
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(vat);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/subtotal").setValue(subtotal);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_price").setValue(totalPrice);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_qty").setValue(currentTotalQty + 1);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_discount").setValue(totalDiscount);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").updateChildren(cartMap);
-                                                            cartMap.clear();
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(vat);
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/subtotal").setValue(subtotal);
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_price").setValue(totalPrice);
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_qty").setValue(currentTotalQty + 1);
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_discount").setValue(totalDiscount);
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").updateChildren(cartMap);
+//                                                            cartMap.clear();
                                                         }
                                                     }
 
@@ -234,29 +242,78 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                             }
                                         }else {
                                             // this is the logic for creating new data.
-                                            String taxvat_str = String.format("%.2f", (discountedprice * prodqty) * .12);
-                                            String partialSubtotal_str = String.format("%.2f", discountedprice * prodqty);
-                                            String totalprice_str = String.format("%.2f", discountedprice * prodqty);
 
-                                            double tax_vat = Double.parseDouble(taxvat_str);
-                                            double partialSubtotal = Double.parseDouble(partialSubtotal_str);
+                                            if (customerType.equals("Senior Citizen")){
 
-                                            String subtotalStr = String.format("%.2f", partialSubtotal - tax_vat);
+                                                String subtotalVatStr = String.format("%.2f", prodprice * prodqty);
+                                                double subtotalVat = Double.parseDouble(subtotalVatStr);
 
-                                            double subTotal = Double.parseDouble(subtotalStr);
-                                            double totalPrice = Double.parseDouble(totalprice_str);
-                                            double partialProdPriceTotal = prodprice * prodqty;
-                                            double totalDiscount = totalPrice - partialProdPriceTotal;
+                                                String vatExemptSaleStr = String.format("%.2f", (discountedprice * prodqty) / 1.12);
+                                                double vatExemptSale = Double.parseDouble(vatExemptSaleStr);
 
-                                            customerTransaction.setCustomer_type(customerType);
-                                            customerTransaction.setVat(tax_vat);
-                                            customerTransaction.setSubtotal(subTotal);
-                                            customerTransaction.setTotal_price(totalPrice);
-                                            customerTransaction.setTotal_qty(prodqty);
-                                            customerTransaction.setTotal_discount(totalDiscount);
+                                                String lessVatStr = String.format("%.2f", subtotalVat - vatExemptSale);
+                                                double lessVat = Double.parseDouble(lessVatStr);
 
-                                            ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
-                                            Toast.makeText(v.getContext(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
+                                                String seniorDiscountStr = String.format("%.2f", vatExemptSale * .20);
+                                                double seniorDiscount = Double.parseDouble(seniorDiscountStr);
+
+                                                String totalDueStr = String.format("%.2f", vatExemptSale - seniorDiscount);
+                                                double totalDue = Double.parseDouble(totalDueStr);
+
+                                                String partialItemDiscSubtotalStr = String.format("%.2f", discountedprice * prodqty);
+                                                double partialItemDiscSubtotal = Double.parseDouble(partialItemDiscSubtotalStr);
+
+                                                String partialItemOrigPriceSubtotalStr = String.format("%.2f", prodprice * prodqty);
+                                                double partialItemOrigPriceSubtotal = Double.parseDouble(partialItemOrigPriceSubtotalStr);
+
+                                                String totalDiscountStr = String.format("%.2f", partialItemDiscSubtotal - partialItemOrigPriceSubtotal);
+                                                double totalDiscount = Double.parseDouble(totalDiscountStr);
+
+
+                                                customerTransaction.setCustomer_type(customerType);
+                                                customerTransaction.setTotal_item_qty(prodqty);
+                                                customerTransaction.setSubtotal(subtotalVat); //with vat
+                                                customerTransaction.setTotal_item_discount(totalDiscount); //total discount (if the item is discounted)
+                                                customerTransaction.setVat(lessVat); //vat off
+                                                customerTransaction.setVat_exempt_sale(vatExemptSale); //this is the total price minus the 12% vat
+                                                customerTransaction.setSenior_discount(seniorDiscount); //this is the value of the 20% senior citizen discount
+                                                customerTransaction.setAmount_due(totalDue); //amount that will be billed to the senior citizen
+                                                ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
+                                                Toast.makeText(v.getContext(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
+
+                                            } else {
+                                                //if the customer type is Regular Customer
+
+                                                String totalAmountDueStr = String.format("%.2f", discountedprice * prodqty);
+                                                double totalAmountDue = Double.parseDouble(totalAmountDueStr);
+
+                                                String subtotalStr = String.format("%.2f",  totalAmountDue / 1.12);
+                                                double subtotal = Double.parseDouble(subtotalStr);
+
+                                                String vatStr = String.format("%.2f", totalAmountDue - subtotal);
+                                                double vat = Double.parseDouble(vatStr);
+
+                                                String partialItemDiscSubtotalStr = String.format("%.2f", discountedprice * prodqty);
+                                                double partialItemDiscSubtotal = Double.parseDouble(partialItemDiscSubtotalStr);
+
+                                                String partialItemOrigPriceSubtotalStr = String.format("%.2f", prodprice * prodqty);
+                                                double partialItemOrigPriceSubtotal = Double.parseDouble(partialItemOrigPriceSubtotalStr);
+
+                                                String totalDiscountStr = String.format("%.2f", partialItemDiscSubtotal - partialItemOrigPriceSubtotal);
+                                                double totalDiscount = Double.parseDouble(totalDiscountStr);
+
+                                                customerTransaction.setCustomer_type(customerType);
+                                                customerTransaction.setSubtotal(subtotal);
+                                                customerTransaction.setTotal_item_qty(prodqty);
+                                                customerTransaction.setVat(vat);
+                                                customerTransaction.setVat_exempt_sale(0.00);
+                                                customerTransaction.setAmount_due(totalAmountDue);
+                                                customerTransaction.setTotal_item_discount(totalDiscount);
+
+                                                ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
+                                                Toast.makeText(v.getContext(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
+                                            } //// end
+
                                         }
                                     }
 
@@ -305,6 +362,16 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
         viewHolder.price.setPaintFlags(viewHolder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
+
+        double originalprice = Double.parseDouble(viewHolder.price.getText().toString());
+        double discountedprice = Double.parseDouble(viewHolder.discountedprice.getText().toString());
+
+        String lessAmountStr = String.format("%.2f", originalprice - discountedprice);
+        double lessAmount = Double.parseDouble(lessAmountStr);
+
+        viewHolder.amountOff.setText(String.valueOf(lessAmount)+" off");
+
+
 //        viewHolder.expiration.setVisibility(View.VISIBLE);
 //        viewHolder.expiration.setText(data.getProd_expdate());
 //        viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
@@ -319,7 +386,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView name, price, expiration, discountedprice;
+        TextView name, price, expiration, discountedprice, amountOff;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -328,6 +395,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
             price = (TextView) itemView.findViewById(R.id.prodlist_price);
             expiration = (TextView) itemView.findViewById(R.id.prodlist_expdate);
             discountedprice = (TextView)itemView.findViewById(R.id.prod_discountedprice);
+            amountOff = (TextView) itemView.findViewById(R.id.lessOff);
 
         }
     }

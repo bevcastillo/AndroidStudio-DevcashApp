@@ -147,10 +147,10 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                                                                         double serviceDiscountedPrice = customerCart.getProduct().getDiscounted_price();
 
                                                                         //details from customer transaction
-                                                                        int totalQty = customerTransaction.getTotal_qty();
+                                                                        int totalQty = customerTransaction.getTotal_item_qty();
                                                                         double currentSubtotal = customerTransaction.getSubtotal();
-                                                                        double currentTotalPrice = customerTransaction.getTotal_price();
-                                                                        double currentTotalDiscount = customerTransaction.getTotal_discount();
+                                                                        double currentTotalPrice = customerTransaction.getAmount_due();
+                                                                        double currentTotalDiscount = customerTransaction.getTotal_item_discount();
 
                                                                         ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
                                                                                 .child(customerCartKey+"/product").setValue(null); //delete the product node from the customer cart

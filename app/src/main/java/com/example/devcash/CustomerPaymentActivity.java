@@ -202,12 +202,13 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
                                         String customertransactionkey = dataSnapshot2.getKey();
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        double subtotal = customerTransaction.getSubtotal();
+                                        double subtotal = customerTransaction.getAmount_due();
                                         double cashreceived = Double.parseDouble(textcashreceived.getText().toString());
-                                        double total = customerTransaction.getTotal_price();
+                                        double total = customerTransaction.getAmount_due();
+                                        double amount_due = customerTransaction.getAmount_due();
 
-                                        if (cashreceived >= subtotal){
-                                            String change_str = String.format("%.2f", cashreceived - total);
+                                        if (cashreceived >= amount_due){
+                                            String change_str = String.format("%.2f", cashreceived - amount_due);
                                             double change = Double.parseDouble(change_str);
 
                                             ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/cash_received").setValue(cashreceived);
@@ -268,7 +269,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                         String customertransactionkey = dataSnapshot2.getKey();
 
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        double total = customerTransaction.getTotal_price();
+                                        double total = customerTransaction.getAmount_due();
 
                                         txtchargeamt.setText("Charge  ₱ "+ (total));
                                         txttotaldue.setText(String.valueOf(total));

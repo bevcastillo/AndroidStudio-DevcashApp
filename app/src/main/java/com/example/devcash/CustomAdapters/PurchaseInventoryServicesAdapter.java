@@ -144,9 +144,9 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
                                                 final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
                                                 final double currentSubtotal = customerTransaction1.getSubtotal();
-                                                final double currentTotalPrice = customerTransaction1.getTotal_price();
-                                                final double currentTotalQty = customerTransaction1.getTotal_qty();
-                                                final double currentTotalDiscount = customerTransaction1.getTotal_discount();
+                                                final double currentTotalPrice = customerTransaction1.getAmount_due();
+                                                final double currentTotalQty = customerTransaction1.getTotal_item_qty();
+                                                final double currentTotalDiscount = customerTransaction1.getTotal_item_discount();
 
                                                 final String finalCustomertransactionkey = customertransactionkey;
                                                 ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
@@ -252,9 +252,9 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
                                             customerTransaction.setVat(taxVat);
                                             customerTransaction.setSubtotal(subTotal);
-                                            customerTransaction.setTotal_qty(servqty);
-                                            customerTransaction.setTotal_price(totalPrice);
-                                            customerTransaction.setTotal_discount(totalDiscount);
+                                            customerTransaction.setTotal_item_qty(servqty);
+                                            customerTransaction.setAmount_due(totalPrice);
+                                            customerTransaction.setTotal_item_discount(totalDiscount);
 
                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction);
 
@@ -300,6 +300,14 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
             viewHolder.serviceprice.setPaintFlags(viewHolder.serviceprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
         }
+
+        double originalprice = Double.parseDouble(viewHolder.serviceprice.getText().toString());
+        double discountedprice = Double.parseDouble(viewHolder.discountedprice.getText().toString());
+
+        String lessAmountStr = String.format("%.2f", originalprice - discountedprice);
+        double lessAmount = Double.parseDouble(lessAmountStr);
+
+        viewHolder.amountOff.setText(String.valueOf(lessAmount)+" off");
     }
 
     @Override
@@ -308,13 +316,14 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView servicename, serviceprice, expiration, discountedprice;
+        TextView servicename, serviceprice, expiration, discountedprice, amountOff;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             servicename = (TextView)itemView.findViewById(R.id.prodlist_name);
             serviceprice = (TextView) itemView.findViewById(R.id.prodlist_price);
             discountedprice = (TextView) itemView.findViewById(R.id.prod_discountedprice);
+            amountOff = (TextView) itemView.findViewById(R.id.lessOff);
         }
     }
 

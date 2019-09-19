@@ -316,8 +316,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                         double cashreceived = customerTransaction.getCash_received();
                                         double cashchange = customerTransaction.getChange();
                                         double subtotal = customerTransaction.getSubtotal();
-                                        double totaldiscount = customerTransaction.getTotal_discount();
-                                        double totalprice = customerTransaction.getTotal_price();
+                                        double totaldiscount = customerTransaction.getTotal_item_discount();
+                                        double totalprice = customerTransaction.getAmount_due();
                                         double vat = customerTransaction.getVat();
                                         String custType = customerTransaction.getCustomer_type();
 

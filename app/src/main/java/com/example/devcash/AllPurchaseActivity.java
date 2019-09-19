@@ -301,9 +301,9 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
                                         double vat = customerTransaction.getVat() *100/100;
                                         double subtotal = customerTransaction.getSubtotal();
-                                        double total = customerTransaction.getTotal_price();
-                                        int qty = customerTransaction.getTotal_qty();
-                                        double totaldiscount = customerTransaction.getTotal_discount();
+                                        double total = customerTransaction.getAmount_due();
+                                        int qty = customerTransaction.getTotal_item_qty();
+                                        double totaldiscount = customerTransaction.getTotal_item_discount();
 
 //                                        text_qty.setText(String.valueOf(qty));
 //                                        text_totprice.setText("₱ "+ (subtotal));

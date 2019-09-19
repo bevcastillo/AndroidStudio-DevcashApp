@@ -505,8 +505,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                                 final String customertransactionkey = dataSnapshot2.getKey();
                                                                                 final CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
                                                                                 final double currentSubtotal = customerTransaction1.getSubtotal();
-                                                                                final double currentTotalPrice = customerTransaction1.getTotal_price();
-                                                                                final int currentTotalQty = customerTransaction1.getTotal_qty();
+                                                                                final double currentTotalPrice = customerTransaction1.getAmount_due();
+                                                                                final int currentTotalQty = customerTransaction1.getTotal_item_qty();
 
                                                                                 ownerdbreference.child(acctkey+"/business/customer_transaction/"+customertransactionkey+"/customer_cart")
                                                                                         .orderByChild("product/prod_reference")
@@ -589,9 +589,9 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 
                                                                             customerTransaction.setVat(vat);
                                                                             customerTransaction.setSubtotal(subtotal);
-                                                                            customerTransaction.setTotal_price(totalPrice);
-                                                                            customerTransaction.setTotal_qty(prodQty);
-                                                                            customerTransaction.setTotal_discount(totalDiscountedPrice);
+                                                                            customerTransaction.setAmount_due(totalPrice);
+                                                                            customerTransaction.setTotal_item_qty(prodQty);
+                                                                            customerTransaction.setTotal_item_discount(totalDiscountedPrice);
                                                                             ownerdbreference.child(acctkey+"/business/customer_transaction").push().setValue(customerTransaction); //creating a new customer transaction node
 
                                                                             Toast.makeText(getActivity(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
@@ -653,8 +653,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                 if (dataSnapshot.exists()){
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        int quantity = customerTransaction.getTotal_qty();
-                                        double total = customerTransaction.getTotal_price();
+                                        int quantity = customerTransaction.getTotal_item_qty();
+                                        double total = customerTransaction.getAmount_due();
 
                                         qtypricetext.setText(quantity+" items = ₱"+total);
 
