@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -112,6 +113,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView prodname, prodstatus, prodprice, prodstock, condname, prodexpdate, prodexpcount, instock, discountedprice;
         ImageView prodimgstatus;
+        LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -125,6 +127,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             instock = (TextView) itemView.findViewById(R.id.instock);
             prodimgstatus = (ImageView) itemView.findViewById(R.id.imageView_availability);
             discountedprice = (TextView) itemView.findViewById(R.id.txtprod_discprice);
+            layout = (LinearLayout) itemView.findViewById(R.id.productLayout);
         }
     }
 }

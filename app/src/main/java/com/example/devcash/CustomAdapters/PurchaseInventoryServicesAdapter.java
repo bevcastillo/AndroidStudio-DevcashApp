@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
@@ -83,7 +84,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
         }
 
 
-        viewHolder.servicename.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 itemcount++;
@@ -165,7 +166,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                                 String itemname = customerCart1.getServices().getService_name();
 //                                                                Toast.makeText(v.getContext(), itemname+" is the item name", Toast.LENGTH_SHORT).show();
 
-                                                                //if added items is already in the customer cart
+                                                                //if selected item is already in the customer cart
                                                                 if (itemname.equals(servname)){
 
                                                                     if (customerType.equals("Senior Citizen")){
@@ -198,8 +199,8 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                                         double totalDiscount = Double.parseDouble(totalDiscountStr);
 
 
-                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(servqty);
-                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(productSubtotal);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/services/service_qty").setValue(servqty);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(productSubtotal);
 
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/senior_discount").setValue(seniorDiscount);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/subtotal").setValue(subtotalVat);
@@ -216,7 +217,9 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
                                                                         String productSubtotalStr = String.format("%.2f", discountedprice * servqty);
                                                                         double productSubtotal = Double.parseDouble(productSubtotalStr);
-                                                                        double totalDue = Double.parseDouble(productSubtotalStr);
+
+                                                                        String totalDueStr = String.format("%.2f", currentAmountDue + discountedprice);
+                                                                        double totalDue = Double.parseDouble(totalDueStr);
 
                                                                         int totalQty = currentTotalQty + 1;
 
@@ -233,8 +236,8 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                                                                         double totalDiscount = productSubtotal - partialDiscount;
 //
 //
-                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(servqty);
-                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(productSubtotal);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/services/service_qty").setValue(servqty);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/services/service_subtotal").setValue(productSubtotal);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_item_qty").setValue(totalQty);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(vat);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/subtotal").setValue(subtotal);
@@ -435,15 +438,6 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
         viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
 
-        if (viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
-            viewHolder.serviceprice.setVisibility(View.INVISIBLE);
-        }
-
-        if (!viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
-            viewHolder.serviceprice.setPaintFlags(viewHolder.serviceprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
-        }
-
         double originalprice = Double.parseDouble(viewHolder.serviceprice.getText().toString());
         double discountedprice = Double.parseDouble(viewHolder.discountedprice.getText().toString());
 
@@ -451,6 +445,20 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
         double lessAmount = Double.parseDouble(lessAmountStr);
 
         viewHolder.amountOff.setText(String.valueOf(lessAmount)+" off");
+
+
+        if (viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.serviceprice.setVisibility(View.INVISIBLE);
+            viewHolder.amountOff.setVisibility(View.INVISIBLE);
+        }
+
+        if (!viewHolder.serviceprice.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.serviceprice.setPaintFlags(viewHolder.serviceprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
+            viewHolder.amountOff.setText(String.valueOf(lessAmount)+" off");
+        }
+
+
     }
 
     @Override
@@ -460,6 +468,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView servicename, serviceprice, expiration, discountedprice, amountOff;
+        RelativeLayout layout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -467,6 +476,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
             serviceprice = (TextView) itemView.findViewById(R.id.prodlist_price);
             discountedprice = (TextView) itemView.findViewById(R.id.prod_discountedprice);
             amountOff = (TextView) itemView.findViewById(R.id.lessOff);
+            layout = (RelativeLayout) itemView.findViewById(R.id.cardLayout);
         }
     }
 

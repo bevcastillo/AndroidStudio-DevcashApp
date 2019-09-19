@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
         view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_employee, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.emplname.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String emplastname =  list.get(viewHolder.getAdapterPosition()).getEmplname();
@@ -84,6 +85,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView emplname, empfname, emptask, acctuname, acctemail, acct_status;
+        LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,6 +95,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
             acctemail = (TextView) itemView.findViewById(R.id.txtemp_email);
             acctuname = (TextView) itemView.findViewById(R.id.txtemp_username);
             acct_status = (TextView) itemView.findViewById(R.id.txtempstatus);
+            layout = (LinearLayout) itemView.findViewById(R.id.employeeLayout);
         }
     }
 }

@@ -51,7 +51,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -698,6 +701,19 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
             case R.id.spinner_customertype:
                 selectedcustomertype = spinnerCustomerType.getItemAtPosition(position).toString();
 
+                //save date and time
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyy HH:mm a");
+                String transactionDateTime = dateFormat.format(calendar.getTime());
+
+                SharedPreferences transactionDateTimePref = getActivity().getSharedPreferences("TransactionDateTimePref", MODE_PRIVATE);
+                SharedPreferences.Editor dateTimeEditor = transactionDateTimePref.edit();
+
+                String dateTime = transactionDateTime;
+                dateTimeEditor.putString("trans_dateTime", dateTime);
+                dateTimeEditor.commit();
+
+                ////
                 SharedPreferences customerTypePref = getActivity().getSharedPreferences("CustomerTypePref", MODE_PRIVATE);
                 SharedPreferences.Editor editor = customerTypePref.edit();
 

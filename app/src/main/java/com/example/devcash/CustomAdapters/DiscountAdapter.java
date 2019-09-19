@@ -8,6 +8,7 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -32,7 +33,7 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
         v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_discount, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(v);
 
-        viewHolder.disccode.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String discode = list.get(viewHolder.getAdapterPosition()).getDisc_code();
@@ -78,6 +79,7 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView disccode, disctype, discvalue, discstart, discend, discstatus;
+        LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,6 +89,7 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
             disctype = (TextView) itemView.findViewById(R.id.txt_disctype);
             discvalue = (TextView) itemView.findViewById(R.id.txt_discvalue);
             discstatus = (TextView) itemView.findViewById(R.id.textdisc_status);
+            layout = (LinearLayout) itemView.findViewById(R.id.discountLayout);
 
         }
     }

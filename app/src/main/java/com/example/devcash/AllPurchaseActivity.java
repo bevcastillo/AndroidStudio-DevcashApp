@@ -64,6 +64,9 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
     TextView text_totprice, text_qty, texttotal, texttotaldiscount, textvat, textpriceqty, textsubtotal;
     LinearLayout moreoptionsbtn, btncharge, layoutbtnscan, layoutbtnnewsale;
 
+    TextView regItemOff, regSubtotal, regVat, regVatExempt, regAmountDue, senItemOff, senSubtotal, senVat, senVatExempt, senDiscount, senAmountDue;
+    LinearLayout regularLayout, seniorLayout;
+
     List<PurchaseTransactionlistdata> list;
     List<Product> products;
     List<Services> services;
@@ -89,13 +92,25 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         recyclerViewProducts = (RecyclerView) findViewById(R.id.prodlist_recyclerview);
         recyclerViewServices = (RecyclerView) findViewById(R.id.servlist_recyclerview);
 
-
         textpriceqty = (TextView) findViewById(R.id.textpriceqty);
-//        text_totprice = (TextView) findViewById(R.id.txt_totprice);
-        texttotal = (TextView) findViewById(R.id.text_total);
-        texttotaldiscount = (TextView) findViewById(R.id.text_discount);
-        textvat = (TextView) findViewById(R.id.text_vat);
-        textsubtotal = (TextView) findViewById(R.id.text_subtotal);
+
+        regItemOff = (TextView) findViewById(R.id.itemOff);
+        regSubtotal = (TextView) findViewById(R.id.regular_subtotal);
+        regVat = (TextView) findViewById(R.id.regular_vat);
+        regVatExempt = (TextView) findViewById(R.id.regular_vatExempt);
+        regAmountDue = (TextView) findViewById(R.id.regular_amountDue);
+        regularLayout = (LinearLayout) findViewById(R.id.regularcustomerLayout);
+
+
+
+        senItemOff = (TextView) findViewById(R.id.seniorItemOff);
+        senSubtotal = (TextView) findViewById(R.id.seniorSubtotal);
+        senVat = (TextView) findViewById(R.id.seniorVat);
+        senVatExempt = (TextView) findViewById(R.id.seniorvatExempt);
+        senDiscount = (TextView) findViewById(R.id.seniorcitizenDiscount);
+        senAmountDue = (TextView) findViewById(R.id.seniorAmountDue);
+        seniorLayout = (LinearLayout) findViewById(R.id.seniorcitizenLayout);
+
 
         mtoolbar = (Toolbar) findViewById(R.id.toolbar_allpurchase);
         customertypeSpinner = (Spinner) findViewById(R.id.spinner_customertype);
@@ -299,25 +314,35 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                         String customertransactionkey = dataSnapshot2.getKey();
 
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        double vat = customerTransaction.getVat() *100/100;
+                                        String customerType = customerTransaction.getCustomer_type();
+                                        double amountDue = customerTransaction.getAmount_due();
+                                        double seniorDisc = customerTransaction.getSenior_discount();
                                         double subtotal = customerTransaction.getSubtotal();
-                                        double total = customerTransaction.getAmount_due();
-                                        int qty = customerTransaction.getTotal_item_qty();
-                                        double totaldiscount = customerTransaction.getTotal_item_discount();
+                                        double itemDiscount = customerTransaction.getTotal_item_discount();
+                                        int totalQty = customerTransaction.getTotal_item_qty();
+                                        double vat = customerTransaction.getVat();
+                                        double vatExempt = customerTransaction.getVat_exempt_sale();
 
-//                                        text_qty.setText(String.valueOf(qty));
-//                                        text_totprice.setText("₱ "+ (subtotal));
-//                                        texttotal.setText("₱ "+ (total));
-//                                        texttotaldiscount.setText(String.valueOf(customerTransaction.getTotal_discount()));
-//                                        textvat.setText(String.valueOf(customerTransaction.getVat()*100/100));
+                                        if (customerType.equals("Regular Customer")){
+                                            regularLayout.setVisibility(View.VISIBLE);
+                                            regItemOff.setText(String.valueOf(itemDiscount));
+                                            regSubtotal.setText(String.valueOf(subtotal));
+                                            regVat.setText(String.valueOf(vat));
+                                            regAmountDue.setText(String.valueOf(amountDue));
 
+                                        }else {
+                                            seniorLayout.setVisibility(View.VISIBLE);
+                                            senItemOff.setText(String.valueOf(itemDiscount));
+                                            senSubtotal.setText(String.valueOf(subtotal));
+                                            senVat.setText(String.valueOf(vat));
+                                            senVatExempt.setText(String.valueOf(vatExempt));
+                                            senDiscount.setText(String.valueOf(seniorDisc));
+                                            senAmountDue.setText(String.valueOf(amountDue));
+                                        }
 
-                                        textsubtotal.setText(String.valueOf(subtotal));
-                                        texttotaldiscount.setText(String.valueOf(totaldiscount));
-                                        textvat.setText(String.valueOf(vat));
-                                        texttotal.setText(String.valueOf(total));
+//                                        Toast.makeText(AllPurchaseActivity.this, "Quantity: "+totalQty+"", Toast.LENGTH_SHORT).show();
 
-                                        textpriceqty.setText(qty+" item = ₱"+(total));
+                                        textpriceqty.setText(totalQty+" item = ₱"+(String.valueOf(amountDue)));
 
 
 
@@ -414,6 +439,28 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intent);
 
                 clearCart(customerId, username);
+            }
+        });
+
+        add_discount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AllPurchaseActivity.this);
+                builder.setTitle("Discount");
+                builder.setPositiveButton("APPLY", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+
             }
         });
 //

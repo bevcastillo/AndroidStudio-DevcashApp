@@ -62,6 +62,9 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
     CartItem cartItem;
     int customerId = 0;
 
+    TextView regItemOff, regSubtotal, regVat, regVatExempt, regAmountDue, senItemOff, senSubtotal, senVat, senVatExempt, senDiscount, senAmountDue;
+    LinearLayout regularLayout, seniorLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +80,31 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
         receiptno = (TextView) findViewById(R.id.text_receiptno);
         customertype = (TextView) findViewById(R.id.text_customertype);
         cashiername = (TextView) findViewById(R.id.text_cashiername);
-        txtdiscount = (TextView) findViewById(R.id.text_discountamt);
-        totalamt = (TextView) findViewById(R.id.text_totalamt);
+
+        regItemOff = (TextView) findViewById(R.id.itemOff);
+        regSubtotal = (TextView) findViewById(R.id.regular_subtotal);
+        regVat = (TextView) findViewById(R.id.regular_vat);
+        regVatExempt = (TextView) findViewById(R.id.regular_vatExempt);
+        regAmountDue = (TextView) findViewById(R.id.regular_amountDue);
+        regularLayout = (LinearLayout) findViewById(R.id.regularcustomerLayout);
+
+
+
+        senItemOff = (TextView) findViewById(R.id.seniorItemOff);
+        senSubtotal = (TextView) findViewById(R.id.seniorSubtotal);
+        senVat = (TextView) findViewById(R.id.seniorVat);
+        senVatExempt = (TextView) findViewById(R.id.seniorvatExempt);
+        senDiscount = (TextView) findViewById(R.id.seniorcitizenDiscount);
+        senAmountDue = (TextView) findViewById(R.id.seniorAmountDue);
+        seniorLayout = (LinearLayout) findViewById(R.id.seniorcitizenLayout);
+
+//        txtdiscount = (TextView) findViewById(R.id.text_discountamt);
+//        totalamt = (TextView) findViewById(R.id.text_totalamt);
         datetime = (TextView) findViewById(R.id.text_transactiondatetime);
-        txtvat = (TextView) findViewById(R.id.text_totalvat);
-        txtsubtotal = (TextView) findViewById(R.id.text_subtotal);
-        cash = (TextView) findViewById(R.id.text_cash);
-        change = (TextView) findViewById(R.id.text_change);
+//        txtvat = (TextView) findViewById(R.id.text_totalvat);
+//        txtsubtotal = (TextView) findViewById(R.id.text_subtotal);
+//        cash = (TextView) findViewById(R.id.text_cash);
+//        change = (TextView) findViewById(R.id.text_change);
 
         showprodrecycler = (RecyclerView) findViewById(R.id.receiptprod_recyclerview);
         showservicesrecycler = (RecyclerView) findViewById(R.id.receiptservice_recyclerview);
@@ -168,7 +189,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                         CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
                                         Gson gson = new Gson();
 
-                                        receiptno.setText("Receipt #"+(customerId));
+                                        receiptno.setText("Receipt # "+(customerId));
+                                        datetime.setText(customerTransaction.getTransaction_datetime());
 
                                         for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
                                             if (entry.getValue().toString().contains("product")) {
@@ -313,21 +335,48 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                         String customertransaction = datasnapshot3.getKey();
 
                                         CustomerTransaction customerTransaction = datasnapshot3.getValue(CustomerTransaction.class);
-                                        double cashreceived = customerTransaction.getCash_received();
-                                        double cashchange = customerTransaction.getChange();
-                                        double subtotal = customerTransaction.getSubtotal();
-                                        double totaldiscount = customerTransaction.getTotal_item_discount();
-                                        double totalprice = customerTransaction.getAmount_due();
-                                        double vat = customerTransaction.getVat();
-                                        String custType = customerTransaction.getCustomer_type();
 
-                                        cash.setText(String.valueOf(cashreceived));
-                                        change.setText(String.valueOf(cashchange));
-                                        txtsubtotal.setText(String.valueOf(subtotal));
-                                        txtdiscount.setText(String.valueOf(totaldiscount));
-                                        totalamt.setText(String.valueOf(totalprice));
-                                        txtvat.setText(String.valueOf(vat));
-                                        customertype.setText(custType);
+                                        String customerType = customerTransaction.getCustomer_type();
+                                        double amountDue = customerTransaction.getAmount_due();
+                                        double seniorDisc = customerTransaction.getSenior_discount();
+                                        double subtotal = customerTransaction.getSubtotal();
+                                        double itemDiscount = customerTransaction.getTotal_item_discount();
+                                        int totalQty = customerTransaction.getTotal_item_qty();
+                                        double vat = customerTransaction.getVat();
+                                        double vatExempt = customerTransaction.getVat_exempt_sale();
+
+                                        if (customerType.equals("Regular Customer")){
+                                            regularLayout.setVisibility(View.VISIBLE);
+                                            regItemOff.setText(String.valueOf(itemDiscount));
+                                            regSubtotal.setText(String.valueOf(subtotal));
+                                            regVat.setText(String.valueOf(vat));
+                                            regAmountDue.setText(String.valueOf(amountDue));
+
+                                        }else {
+                                            seniorLayout.setVisibility(View.VISIBLE);
+                                            senItemOff.setText(String.valueOf(itemDiscount));
+                                            senSubtotal.setText(String.valueOf(subtotal));
+                                            senVat.setText(String.valueOf(vat));
+                                            senVatExempt.setText(String.valueOf(vatExempt));
+                                            senDiscount.setText(String.valueOf(seniorDisc));
+                                            senAmountDue.setText(String.valueOf(amountDue));
+                                        }
+
+//                                        double cashreceived = customerTransaction.getCash_received();
+//                                        double cashchange = customerTransaction.getChange();
+//                                        double subtotal = customerTransaction.getSubtotal();
+//                                        double totaldiscount = customerTransaction.getTotal_item_discount();
+//                                        double totalprice = customerTransaction.getAmount_due();
+//                                        double vat = customerTransaction.getVat();
+//                                        String custType = customerTransaction.getCustomer_type();
+//
+//                                        cash.setText(String.valueOf(cashreceived));
+//                                        change.setText(String.valueOf(cashchange));
+//                                        txtsubtotal.setText(String.valueOf(subtotal));
+//                                        txtdiscount.setText(String.valueOf(totaldiscount));
+//                                        totalamt.setText(String.valueOf(totalprice));
+//                                        txtvat.setText(String.valueOf(vat));
+//                                        customertype.setText(custType);
                                     }
                                 }else {
                                     //set condition here if the id does not exist

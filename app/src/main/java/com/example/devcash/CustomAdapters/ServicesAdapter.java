@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_services, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(v);
 
-        viewHolder.servicename.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String servname = list.get(viewHolder.getAdapterPosition()).getServname();
@@ -94,6 +95,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView servicename, serviceprice, servicestatus, discountedprice;
         ImageView servimgstatus;
+        LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +104,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             servicestatus = (TextView) itemView.findViewById(R.id.txtservice_status);
             servimgstatus = (ImageView) itemView.findViewById(R.id.imageView_servavail);
             discountedprice = (TextView) itemView.findViewById(R.id.txtservice_discprice);
+            layout = (LinearLayout) itemView.findViewById(R.id.serviceLayout);
 
         }
     }

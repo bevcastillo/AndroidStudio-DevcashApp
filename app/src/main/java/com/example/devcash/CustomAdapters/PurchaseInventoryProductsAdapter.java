@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +75,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
             customerId = sharedCustId;
         }
 
-        viewHolder.name.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 Toast.makeText(v.getContext(), "Adding to Cart...", Toast.LENGTH_SHORT).show();
@@ -127,6 +129,10 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 final String customerType = (customerTypePref.getString("customer_type","Regular Customer"));
 
 
+                SharedPreferences transactionDateTimePref = v.getContext().getSharedPreferences("TransactionDateTimePref", MODE_PRIVATE);
+                final String transDateTime = (transactionDateTimePref.getString("trans_dateTime", ""));
+
+
                 // query to customer transaction.
                 ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -161,7 +167,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                 CustomerCart customerCart1 = dataSnapshot3.getValue(CustomerCart.class);
                                                                 String prodreference = customerCart1.getProduct().getProd_reference();
 
-                                                                // if product already exists, we just update some fields
+                                                                //if selected item is already in the customer cart
                                                                 if (prodreference.equals(preference)){
 
                                                                     if (customerType.equals("Senior Citizen")){
@@ -212,7 +218,9 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
                                                                         String productSubtotalStr = String.format("%.2f", discountedprice * prodqty);
                                                                         double productSubtotal = Double.parseDouble(productSubtotalStr);
-                                                                        double totalDue = Double.parseDouble(productSubtotalStr);
+
+                                                                        String totalDueStr = String.format("%.2f", currentAmountDue + productSubtotal);
+                                                                        double totalDue = Double.parseDouble(totalDueStr);
 
                                                                         int totalQty = currentTotalQty + 1;
 
@@ -228,7 +236,6 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                         double partialDiscount = Double.parseDouble(partialDiscount_str);
                                                                         double totalDiscount = productSubtotal - partialDiscount;
 //
-//
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(prodqty);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(productSubtotal);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_item_qty").setValue(totalQty);
@@ -241,10 +248,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                         Toast.makeText(v.getContext(), "Quantity has been updated.", Toast.LENGTH_SHORT).show();
 
                                                                     }
-
-//
                                                                 }else {
-//                                                                    Toast.makeText(v.getContext(), customerTransaction1.getSubtotal()+" is the current subtotal", Toast.LENGTH_SHORT).show();
                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").push().setValue(customerCart);
                                                                 }
                                                             }
@@ -293,7 +297,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                 //customer is Regular Customer
                                                                 int totalQty = currentTotalQty + 1;
 
-                                                                String totalDueStr = String.format("%.2f", currentAmountDue + discountedprice);
+                                                                String totalDueStr = String.format("%.2f", currentAmountDue + (discountedprice * prodqty));
                                                                 double totalDue = Double.parseDouble(totalDueStr);
 
                                                                 String subtotalStr = String.format("%.2f", totalDue / 1.12);
@@ -361,6 +365,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                 double totalDiscount = Double.parseDouble(totalDiscountStr);
 
 
+                                                customerTransaction.setTransaction_datetime(transDateTime);
                                                 customerTransaction.setCustomer_type(customerType);
                                                 customerTransaction.setTotal_item_qty(prodqty);
                                                 customerTransaction.setSubtotal(subtotalVat); //with vat
@@ -393,6 +398,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                 String totalDiscountStr = String.format("%.2f", partialItemDiscSubtotal - partialItemOrigPriceSubtotal);
                                                 double totalDiscount = Double.parseDouble(totalDiscountStr);
 
+                                                customerTransaction.setTransaction_datetime(transDateTime);
                                                 customerTransaction.setCustomer_type(customerType);
                                                 customerTransaction.setSubtotal(subtotal);
                                                 customerTransaction.setTotal_item_qty(prodqty);
@@ -436,24 +442,6 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
         viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
         viewHolder.expiration.setText(data.getProd_expdate());
 
-        if (viewHolder.price.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
-            viewHolder.price.setVisibility(View.INVISIBLE);
-        }
-
-        if (!viewHolder.price.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
-            viewHolder.price.setPaintFlags(viewHolder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
-        }
-
-        if (viewHolder.expiration.getText().toString().equals("No Expiration")){
-            viewHolder.expiration.setVisibility(View.INVISIBLE);
-        }
-
-
-
-        viewHolder.price.setPaintFlags(viewHolder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-
         double originalprice = Double.parseDouble(viewHolder.price.getText().toString());
         double discountedprice = Double.parseDouble(viewHolder.discountedprice.getText().toString());
 
@@ -461,6 +449,24 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
         double lessAmount = Double.parseDouble(lessAmountStr);
 
         viewHolder.amountOff.setText(String.valueOf(lessAmount)+" off");
+
+        if (viewHolder.price.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.price.setVisibility(View.INVISIBLE);
+            viewHolder.amountOff.setVisibility(View.INVISIBLE);
+        }
+
+        if (!viewHolder.price.getText().toString().equals(viewHolder.discountedprice.getText().toString())){
+            viewHolder.price.setPaintFlags(viewHolder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            viewHolder.discountedprice.setText(String.valueOf(data.getDiscounted_price()));
+            viewHolder.amountOff.setText(String.valueOf(lessAmount)+" off");
+        }
+
+        if (viewHolder.expiration.getText().toString().equals("No Expiration")){
+            viewHolder.expiration.setVisibility(View.INVISIBLE);
+
+        }
+
+//        viewHolder.price.setPaintFlags(viewHolder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
 
 //        viewHolder.expiration.setVisibility(View.VISIBLE);
@@ -478,6 +484,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
     class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView name, price, expiration, discountedprice, amountOff;
+        RelativeLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -487,6 +494,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
             expiration = (TextView) itemView.findViewById(R.id.prodlist_expdate);
             discountedprice = (TextView)itemView.findViewById(R.id.prod_discountedprice);
             amountOff = (TextView) itemView.findViewById(R.id.lessOff);
+            layout = (RelativeLayout) itemView.findViewById(R.id.cardLayout);
 
         }
     }

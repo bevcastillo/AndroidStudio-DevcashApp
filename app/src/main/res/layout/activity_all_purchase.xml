@@ -127,7 +127,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:visibility="gone"
+        android:id="@+id/regularcustomerLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -137,16 +139,19 @@
             android:paddingRight="15dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Discount"
+                android:layout_weight="3"
+                android:text="Item off"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_18"/>
+                android:textSize="@dimen/text_18"
+                android:gravity="right" />
 
             <TextView
-                android:id="@+id/text_discount"
-                android:layout_width="100dp"
+                android:id="@+id/itemOff"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="0.00"
                 android:paddingLeft="25dp"
                 android:gravity="right"
@@ -163,16 +168,19 @@
             android:paddingRight="15dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:text="Subtotal"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_18"/>
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
 
             <TextView
-                android:id="@+id/text_subtotal"
-                android:layout_width="100dp"
+                android:id="@+id/regular_subtotal"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="0.00"
                 android:paddingLeft="25dp"
                 android:gravity="right"
@@ -188,22 +196,255 @@
             android:paddingRight="15dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="VAT(12%)"
+                android:layout_weight="3"
+                android:text="(12%) VAT"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_18"/>
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
 
             <TextView
-                android:id="@+id/text_vat"
-                android:layout_width="100dp"
+                android:id="@+id/regular_vat"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="0.00"
                 android:paddingLeft="25dp"
                 android:gravity="right"
                 android:textSize="@dimen/text_18"/>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="VatExempt Sale"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
+
+            <TextView
+                android:id="@+id/regular_vatExempt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            style="@style/Divider"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Amount Due"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
+
+            <TextView
+                android:id="@+id/regular_amountDue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:id="@+id/seniorcitizenLayout"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Item off"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"
+                android:gravity="right" />
+
+            <TextView
+                android:id="@+id/seniorItemOff"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"
+                android:textColor="@color/color_red"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Subtotal w/ VAT"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
+
+            <TextView
+                android:id="@+id/seniorSubtotal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Less: (12%) VAT"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
+
+            <TextView
+                android:id="@+id/seniorVat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            style="@style/Divider"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="VatExempt Sale"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
+
+            <TextView
+                android:id="@+id/seniorvatExempt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Less: (20%) Discount"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
+
+            <TextView
+                android:id="@+id/seniorcitizenDiscount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0.00"
+                android:paddingLeft="25dp"
+                android:gravity="right"
+                android:textSize="@dimen/text_18"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            style="@style/Divider"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -214,16 +455,19 @@
 
             <TextView
                 android:id="@+id/text_totaldisc"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Total"
+                android:layout_weight="3"
+                android:text="Amount Due"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_18"/>
+                android:textSize="@dimen/text_18"
+                android:gravity="right"/>
 
             <TextView
-                android:id="@+id/text_total"
-                android:layout_width="100dp"
+                android:id="@+id/seniorAmountDue"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="0.00"
                 android:paddingLeft="25dp"
                 android:gravity="right"
@@ -277,28 +521,6 @@
                 android:text="Item"
                 android:textColor="@color/whiteBG"
                 android:textSize="@dimen/text_inputs"/>
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="items = "-->
-<!--                android:textColor="@color/whiteBG"-->
-<!--                android:paddingLeft="5dp"-->
-<!--                android:textSize="@dimen/text_inputs"/>-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/txt_totprice"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="0.00"-->
-<!--                android:textColor="@color/whiteBG"-->
-<!--                android:textSize="@dimen/text_inputs"/>-->
-
         </LinearLayout>
-
     </LinearLayout>
-
-
-
-
 </LinearLayout>

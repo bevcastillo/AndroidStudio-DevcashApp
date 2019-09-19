@@ -15,7 +15,8 @@
         android:layout_weight="2"
         android:orientation="horizontal"
         android:gravity="left|center"
-        android:padding="@dimen/padding_10">
+        android:padding="@dimen/padding_10"
+        android:id="@+id/employeeLayout">
 
         <ImageView
             android:id="@+id/imgemp_image"
