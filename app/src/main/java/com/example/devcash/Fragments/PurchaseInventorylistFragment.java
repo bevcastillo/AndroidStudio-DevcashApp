@@ -372,12 +372,6 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         int id = v.getId();
         switch (id){
             case R.id.btn_chargeitem:
-//                Intent intent = new Intent(getActivity(), AllPurchaseActivity.class);
-//                startActivity(intent);
-
-//                Bundle bundle = new Bundle();
-//                bundle.putString("selectedCustomerType", selectedcustomertype);
-
                 Intent intent = new Intent(getActivity(), AllPurchaseActivity.class);
                 intent.putExtra("selectedCustomerType", selectedcustomertype); //passing the selected customer to the intent
                 startActivity(intent);
@@ -665,7 +659,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                     qtypricetext.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
                                     chargebtnlayout.setEnabled(false);
                                     chargebtnlayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.custom_btn_stroke));
-                                    Toast.makeText(getActivity(), "Please add items to cart!", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getActivity(), "Please add items to cart!", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
