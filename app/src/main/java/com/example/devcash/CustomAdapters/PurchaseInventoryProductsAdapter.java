@@ -126,7 +126,6 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 SharedPreferences customerTypePref = v.getContext().getSharedPreferences("CustomerTypePref", MODE_PRIVATE);
                 final String customerType = (customerTypePref.getString("customer_type","Regular Customer"));
 
-//                Toast.makeText(v.getContext(), customerType+" is the selected customer type", Toast.LENGTH_SHORT).show();
 
                 // query to customer transaction.
                 ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -292,37 +291,37 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
                                                             }else {
                                                                 //customer is Regular Customer
+                                                                int totalQty = currentTotalQty + 1;
+
+                                                                String totalDueStr = String.format("%.2f", currentAmountDue + discountedprice);
+                                                                double totalDue = Double.parseDouble(totalDueStr);
+
+                                                                String subtotalStr = String.format("%.2f", totalDue / 1.12);
+                                                                double subtotal = Double.parseDouble(subtotalStr);
+
+                                                                String vatStr = String.format("%.2f", totalDue - subtotal);
+                                                                double vat = Double.parseDouble(vatStr);
+//
+                                                                String partialSubtotalStr = String.format("%.2f", discountedprice * prodqty);
+                                                                double partialSubtotal = Double.parseDouble(partialSubtotalStr);
+                                                                String partialDiscountStr = String.format("%.2f", prodprice * prodqty);
+                                                                double partialDiscount = Double.parseDouble(partialDiscountStr);
+
+                                                                String totalDiscountStr = String.format("%.2f", partialSubtotal - partialDiscount);
+                                                                double totalDiscount = Double.parseDouble(totalDiscountStr);
+
+//
+                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_item_qty").setValue(totalQty);
+                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(vat);
+                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/subtotal").setValue(subtotal);
+                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/amount_due").setValue(totalDue);
+                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_item_discount").setValue(totalDiscount);
+                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat_exempt_sale").setValue(0.00);
+                                                                ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").updateChildren(cartMap);
+                                                                cartMap.clear();
                                                             }
-
-                                                            int totalQty = currentTotalQty + 1;
-
-                                                            String totalDueStr = String.format("%.2f", currentAmountDue + discountedprice);
-                                                            double totalDue = Double.parseDouble(totalDueStr);
-
-                                                            String subtotalStr = String.format("%.2f", totalDue / 1.12);
-                                                            double subtotal = Double.parseDouble(subtotalStr);
-
-                                                            String vatStr = String.format("%.2f", totalDue - subtotal);
-                                                            double vat = Double.parseDouble(vatStr);
-//
-                                                            String partialSubtotalStr = String.format("%.2f", discountedprice * prodqty);
-                                                            double partialSubtotal = Double.parseDouble(partialSubtotalStr);
-                                                            String partialDiscountStr = String.format("%.2f", prodprice * prodqty);
-                                                            double partialDiscount = Double.parseDouble(partialDiscountStr);
-
-                                                            String totalDiscountStr = String.format("%.2f", partialSubtotal - partialDiscount);
-                                                            double totalDiscount = Double.parseDouble(totalDiscountStr);
-
-//
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_item_qty").setValue(totalQty);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(vat);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/subtotal").setValue(subtotal);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/amount_due").setValue(totalDue);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_item_discount").setValue(totalDiscount);
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat_exempt_sale").setValue(0.00);
-                                                            cartMap.clear();
-                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").updateChildren(cartMap);
-                                                            cartMap.clear();
+//                                                            ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart").updateChildren(cartMap);
+//                                                            cartMap.clear();
                                                         }
                                                     }
 
@@ -337,7 +336,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
                                             if (customerType.equals("Senior Citizen")){
 
-                                                String subtotalVatStr = String.format("%.2f", prodprice * prodqty);
+                                                String subtotalVatStr = String.format("%.2f", discountedprice * prodqty);
                                                 double subtotalVat = Double.parseDouble(subtotalVatStr);
 
                                                 String vatExemptSaleStr = String.format("%.2f", (discountedprice * prodqty) / 1.12);

@@ -607,6 +607,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                     }
                                                 });
                                             }
+                                        }else {
+                                            Toast.makeText(getActivity(), "QRCode is not in the database.", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
