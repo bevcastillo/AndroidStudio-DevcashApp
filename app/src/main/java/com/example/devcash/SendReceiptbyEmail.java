@@ -198,6 +198,8 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                                                         "<p>Cash----------"+cash+"</p>"+
                                                                         "<p>Change--------"+change+"</p>";
 
+                                        String receipt = "";
+
                                         //
 
 
@@ -254,7 +256,7 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                         email.putExtra(Intent.EXTRA_SUBJECT, "Customer Receipt");
                                         email.putExtra(Intent.EXTRA_TEXT,
                                                 Html.fromHtml(new StringBuilder()
-                                                        .append(customerReceiptContent)
+                                                        .append(receipt)
                                                         .toString()));
 
                                         try {
@@ -264,7 +266,15 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                                         } catch (android.content.ActivityNotFoundException ex) {
                                             Toast.makeText(SendReceiptbyEmail.this, "No email client installed.",
                                                     Toast.LENGTH_LONG).show();
-                                        }
+//                                        }
+                                    }
+//                                    try {
+//                                        // the user can choose the email client
+//                                        startActivity(Intent.createChooser(email, "Select an email client"));
+//
+//                                    } catch (android.content.ActivityNotFoundException ex) {
+//                                        Toast.makeText(SendReceiptbyEmail.this, "No email client installed.",
+//                                                Toast.LENGTH_LONG).show();
                                     }
                                 }else {
                                     Toast.makeText(SendReceiptbyEmail.this, "No customer transaction yet!"+customerId, Toast.LENGTH_SHORT).show();

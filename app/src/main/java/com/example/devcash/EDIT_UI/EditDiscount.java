@@ -186,12 +186,14 @@ public class EditDiscount extends AppCompatActivity implements View.OnClickListe
                                                    for (DataSnapshot ds1: dataSnapshot.getChildren()){
                                                        Discount discount = ds1.getValue(Discount.class);
                                                        selectedtype = discount.getDisc_type();
-                                                       if(selectedtype.equals(radioButtonamount.getText())){
-                                                           radioButtonamount.setChecked(true);
-                                                           radioButtonpercentage.setChecked(false);
-                                                       } else {
-                                                           radioButtonamount.setChecked(false);
-                                                           radioButtonpercentage.setChecked(true);
+                                                       if (selectedtype != null) {
+                                                           if(selectedtype.equals(radioButtonamount.getText())){
+                                                               radioButtonamount.setChecked(true);
+                                                               radioButtonpercentage.setChecked(false);
+                                                           } else {
+                                                               radioButtonamount.setChecked(false);
+                                                               radioButtonpercentage.setChecked(true);
+                                                           }
                                                        }
                                                    }
                                                }

@@ -217,13 +217,16 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         double prodprice = product.getProd_price();
                                         double discountedprice = product.getDiscounted_price();
                                         String status = product.getProd_status();
+                                        int prodStock = product.getProd_stock();
 
                                         if (status.equals("Available")){
-                                            listdata.setProd_name(prodname);
-                                            listdata.setProd_price(prodprice);
-                                            listdata.setDiscounted_price(discountedprice);
-                                            listdata.setProd_expdate(product.getProd_expdate());
-                                            list.add(listdata);
+                                            if (prodStock > 0){
+                                                listdata.setProd_name(prodname);
+                                                listdata.setProd_price(prodprice);
+                                                listdata.setDiscounted_price(discountedprice);
+                                                listdata.setProd_expdate(product.getProd_expdate());
+                                                list.add(listdata);
+                                            }
                                         }
 
                                     }

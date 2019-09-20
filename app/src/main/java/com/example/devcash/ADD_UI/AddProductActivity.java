@@ -295,12 +295,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 //
 //    }
 
-    private boolean checkStockRop(){
-        double stock = Double.parseDouble(prodstock.getText().toString());
-        double rop = Double.parseDouble(prodrop.getText().toString());
-        final boolean[] ok = {true};
+    private boolean ropValid(double rop, double stock) {
+        return rop < stock;
+    }
 
-        if (rop > stock){
+    private void displayRopDialog(double rop, double stock) {
+        if (rop > stock) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater inflater = this.getLayoutInflater();
             final View dialogView = inflater.inflate(R.layout.customdialog_warning, null);
@@ -309,7 +309,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             builder.setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ok[0] = true;
+//                    ok[0] = true;
+//                    dialog.dismiss();
+                    insertProduct();
                 }
             });
 
@@ -319,10 +321,51 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     dialog.dismiss();
                 }
             });
-        }
 
-        return ok[0];
+            builder.show();
+        }
     }
+
+
+//    private boolean checkStockRop(){
+////        double stock = Double.parseDouble(prodstock.getText().toString());
+////        double rop = Double.parseDouble(prodrop.getText().toString());
+//        double stock = 0.0;
+//        double rop = 0.0;
+//
+//        if (!prodstock.getText().toString().equals("")) {
+//            stock = Double.parseDouble(prodstock.getText().toString());
+//        }
+//
+//        if (!prodrop.getText().toString().equals("")) {
+//            rop = Double.parseDouble(prodrop.getText().toString());
+//        }
+//
+//        final boolean[] ok = {true};
+//
+//        if (rop > stock){
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            LayoutInflater inflater = this.getLayoutInflater();
+//            final View dialogView = inflater.inflate(R.layout.customdialog_warning, null);
+//            builder.setView(dialogView);
+//
+//            builder.setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    ok[0] = true;
+//                }
+//            });
+//
+//            builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                }
+//            });
+//        }
+//
+//        return ok[0];
+//    }
 
     private boolean checkDuplicateProdName(){ //check if the user input same data that already exist in the firebase database
         final String productName = prodname.getText().toString();
@@ -375,47 +418,74 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         String productPriceStr = prodprice.getText().toString();
         String productStock = prodstock.getText().toString();
         String productRop = prodrop.getText().toString();
-        boolean ok = true;
 
-        if (productName.isEmpty()){
-            productNameLayout.setError("Fields can not be empty.");
-            ok = false;
-            if (productBrand.isEmpty()){
-                productBrandLayout.setError("Fields can not be empty.");
-                ok = false;
-                if (productPriceStr.isEmpty()){
-                    productPriceLayout.setError("Fields can not be empty.");
-                    ok = false;
-                    if (productStock.equals("")){
-                        productStockLayout.setError("Fields can not be empty.");
-                        ok = false;
-                        if (productRop.equals("")){
-                            productRopLayout.setError("Fields can not be empty.");
-                            ok = false;
-                        }else {
-                            productRopLayout.setError(null);
-                            ok = true;
-                        }
-                    }else {
-                        productStockLayout.setError(null);
-                        ok = true;
-                    }
-                }else {
-                    productPriceLayout.setError(null);
-                    ok = true;
-                }
-            }else {
-                productBrandLayout.setError(null);
-                ok = true;
-            }
-        }else {
-            productNameLayout.setError(null);
-            ok = true;
+        if (productName.isEmpty()) {
+            productNameLayout.setError("Fields cannot be empty");
+            return false;
         }
 
+        if (productBrand.isEmpty()) {
+            productBrandLayout.setError("Fields cannot be empty");
+            return false;
+        }
 
+        if (productPriceStr.isEmpty()) {
+            productPriceLayout.setError("Fields cannot be empty");
+            return false;
+        }
 
-        return ok;
+        if (productStock.equals("")) {
+            productStockLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        if (productRop.equals("")) {
+            productRopLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        return true;
+//        boolean ok = true;
+//
+//        if (productName.isEmpty()){
+//            productNameLayout.setError("Fields can not be empty.");
+//            ok = false;
+//            if (productBrand.isEmpty()){
+//                productBrandLayout.setError("Fields can not be empty.");
+//                ok = false;
+//                if (productPriceStr.isEmpty()){
+//                    productPriceLayout.setError("Fields can not be empty.");
+//                    ok = false;
+//                    if (productStock.equals("")){
+//                        productStockLayout.setError("Fields can not be empty.");
+//                        ok = false;
+//                        if (productRop.equals("")){
+//                            productRopLayout.setError("Fields can not be empty.");
+//                            ok = false;
+//                        }else {
+//                            productRopLayout.setError(null);
+//                            ok = true;
+//                        }
+//                    }else {
+//                        productStockLayout.setError(null);
+//                        ok = true;
+//                    }
+//                }else {
+//                    productPriceLayout.setError(null);
+//                    ok = true;
+//                }
+//            }else {
+//                productBrandLayout.setError(null);
+//                ok = true;
+//            }
+//        }else {
+//            productNameLayout.setError(null);
+//            ok = true;
+//        }
+//
+//
+//
+//        return ok;
 
     }
 
@@ -539,7 +609,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                         discountStart = discount.getDisc_start();
                                         discountEnd = discount.getDisc_end();
                                         discountStatus = discount.getDisc_status();
-                                        discountType = discount.getDisc_type();
+                                        if (discount.getDisc_type() != null) {
+                                            discountType = discount.getDisc_type();
+                                        } else {
+                                            discountType = "Percentage";
+                                        }
+//                                        discountType = discount.getDisc_type();
                                         discountValue = discount.getDisc_value();
 
                                         pname = prodname.getText().toString();
@@ -551,32 +626,44 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                         }else{
                                             pbrand = prodbrand.getText().toString();
                                         }
+
                                         pstatus = chkavail.getText().toString();
-                                        pstock = Integer.parseInt(prodstock.getText().toString());
-                                        pprice = Double.parseDouble(prodprice.getText().toString());
-                                        prop = Integer.parseInt(prodrop.getText().toString());
+                                        if (!prodstock.getText().toString().equals("")) {
+                                            pstock = Integer.parseInt(prodstock.getText().toString());
+                                        }
+
+                                        if (!prodprice.getText().toString().equals("")) {
+                                            pprice = Double.parseDouble(prodprice.getText().toString());
+                                        }
+
+                                        if (!prodrop.getText().toString().equals("")) {
+                                            prop = Integer.parseInt(prodrop.getText().toString());
+                                        }
 
                                         ProductExpiration expiration = new ProductExpiration();
                                         String expdate = expiration.getProd_expdate();
                                         p_reference = pname+expdate;
 
-
                                         if (discountStatus.equals("Active")){
-                                            if (discountType.equals("Percentage")){
-                                                discountedPrice = pprice - discountValue;
+                                            if (discountType != null) {
+                                                if (discountType.equals("Percentage")) {
+                                                    discountedPrice = pprice - discountValue;
 
-                                                addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
-                                                Toast.makeText(getApplicationContext(), "Product has been successfully added.", Toast.LENGTH_SHORT).show();
-                                                finish();
-//
-//
-                                            }else {
-                                                //amount
-                                                discountedPrice = pprice - discountValue;
-                                                addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
-                                                Toast.makeText(getApplicationContext(), "Product has been successfully added.", Toast.LENGTH_SHORT).show();
-                                                finish();
+                                                    addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
+                                                    Toast.makeText(getApplicationContext(), "Product has been successfully added.", Toast.LENGTH_SHORT).show();
+                                                    finish();
+                                                    //
+                                                    //
+                                                } else {
+                                                    //amount
+                                                    discountedPrice = pprice - discountValue;
+                                                    addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
+                                                    Toast.makeText(getApplicationContext(), "Product has been successfully added.", Toast.LENGTH_SHORT).show();
+                                                    finish();
 
+                                                }
+                                            } else {
+                                                Toast.makeText(AddProductActivity.this, discountType+" is the discount type", Toast.LENGTH_SHORT).show();
                                             }
                                         }else {
                                             //not active
@@ -585,11 +672,20 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                                 }else {
                                     /// the user selected "No Discount"
                                     pname = prodname.getText().toString();
-                                    pprice = Double.parseDouble(prodprice.getText().toString());
+                                    if (!prodprice.getText().toString().equals("")){
+                                        pprice = Double.parseDouble(prodprice.getText().toString());
+                                    }
+
                                     pstatus = chkavail.getText().toString();
-                                    pprice = Double.parseDouble(prodprice.getText().toString());
-                                    prop = Integer.parseInt(prodrop.getText().toString());
-                                    pstock = Integer.parseInt(prodstock.getText().toString());
+//                                    pprice = Double.parseDouble(prodprice.getText().toString());
+                                    if (!prodrop.getText().toString().equals("")) {
+                                        prop = Integer.parseInt(prodrop.getText().toString());
+                                    }
+
+                                    if (!prodstock.getText().toString().equals("")) {
+                                        pstock = Integer.parseInt(prodstock.getText().toString());
+                                    }
+
                                     discountedPrice = pprice; //discounted price is equals to the original price
                                     addProduct(pname, pbrand, selectedprodunit, pstatus, pprice, prop, pstock, p_reference, discountedPrice);
                                     Toast.makeText(getApplicationContext(), "New Product Added!", Toast.LENGTH_SHORT).show();
@@ -657,6 +753,19 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        double stock = 0.0;
+        double rop = 0.0;
+
+        if (!prodstock.getText().toString().equals("")) {
+            stock = Double.parseDouble(prodstock.getText().toString());
+        }
+
+        if (!prodrop.getText().toString().equals("")) {
+            rop = Double.parseDouble(prodrop.getText().toString());
+        }
+
+
+
         if (id == android.R.id.home){
             onBackPressed();
             return true;
@@ -666,11 +775,18 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             if (validateFields()){
                 if (checkDuplicateProdName()){
-                    if (checkStockRop()){
+                    if (ropValid(rop, stock)){
                         addCheckBoxListener();
                         insertProduct();
                         getExpDate();
+                    } else {
+                        displayRopDialog(rop, stock);
                     }
+//                    if (checkStockRop()){
+//                        addCheckBoxListener();
+//                        insertProduct();
+//                        getExpDate();
+//                    }
                 }
             }
 

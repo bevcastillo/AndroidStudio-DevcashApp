@@ -306,6 +306,7 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
         inflater.inflate(R.menu.searchmenu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search..");
 
@@ -316,6 +317,7 @@ public class CategoriesFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        Toast.makeText(getActivity(), "This is submit"+query, Toast.LENGTH_SHORT).show();
         return true;
     }
 

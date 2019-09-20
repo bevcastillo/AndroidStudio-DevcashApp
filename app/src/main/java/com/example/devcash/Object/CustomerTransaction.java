@@ -10,7 +10,7 @@ public class CustomerTransaction {
 
     double cash_received, change, subtotal, vat, vat_exempt_sale, senior_discount, amount_due, total_item_discount;
     int total_item_qty;
-    String customer_email, customer_phone, transaction_datetime, customer_type;
+    String customer_email, customer_phone, transaction_datetime, customer_type, transaction_status;
     Enterprise enterprise;
     Employee employee;
 
@@ -69,7 +69,15 @@ public class CustomerTransaction {
         this.employee = employee;
     }
 
-//    public CustomerCart getCustomerCart() {
+    public String getTransaction_status() {
+        return transaction_status;
+    }
+
+    public void setTransaction_status(String transaction_status) {
+        this.transaction_status = transaction_status;
+    }
+
+    //    public CustomerCart getCustomerCart() {
 //        return customerCart;
 //    }
 //

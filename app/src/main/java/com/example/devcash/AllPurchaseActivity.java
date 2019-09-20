@@ -83,8 +83,6 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_purchase);
 
-
-        //
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        recyclerViewpurchaselist = (RecyclerView) findViewById(R.id.purchaselist_recyclerview);

@@ -62,4 +62,6 @@ public class Account {
     public void setAcct_status(String acct_status) {
         this.acct_status = acct_status;
     }
+
+
 }
