@@ -443,22 +443,8 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
         add_discount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AllPurchaseActivity.this);
-                builder.setTitle("Discount");
-                builder.setPositiveButton("APPLY", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-
+                Intent discount_intent = new Intent(AllPurchaseActivity.this, AddDiscountActivity.class);
+                startActivity(discount_intent);
             }
         });
 //

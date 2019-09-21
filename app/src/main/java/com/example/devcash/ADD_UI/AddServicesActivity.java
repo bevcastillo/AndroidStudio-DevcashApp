@@ -190,24 +190,36 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     private boolean validateFields(){
         String serviceName = servicename.getText().toString();
         String servicePrice = serviceprice.getText().toString();
-        boolean ok = true;
 
-        if (serviceName.isEmpty()){
-            servNameLayout.setError("Fields can not be empty.");
-            ok = false;
-            if (servicePrice.isEmpty()){
-                servPriceLayout.setError("Fields can not be empty");
-                ok = false;
-            }else {
-                servPriceLayout.setError(null);
-                ok = true;
-            }
-        }else {
-            servNameLayout.setError(null);
-            ok = true;
+        if (serviceName.isEmpty()) {
+            servNameLayout.setError("Fields cannot be empty");
+            return false;
         }
 
-        return ok;
+        if (servicePrice.isEmpty()) {
+            servPriceLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        return true;
+//        boolean ok = true;
+//
+//        if (serviceName.isEmpty()){
+//            servNameLayout.setError("Fields can not be empty.");
+//            ok = false;
+//            if (servicePrice.isEmpty()){
+//                servPriceLayout.setError("Fields can not be empty");
+//                ok = false;
+//            }else {
+//                servPriceLayout.setError(null);
+//                ok = true;
+//            }
+//        }else {
+//            servNameLayout.setError(null);
+//            ok = true;
+//        }
+//
+//        return ok;
     }
 
     private boolean checkDuplicates(){
@@ -327,12 +339,19 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
                                         discountStart = discount.getDisc_start();
                                         discountEnd = discount.getDisc_end();
                                         discountStatus = discount.getDisc_status();
-                                        discountType = discount.getDisc_type();
+                                        if (discount.getDisc_type() != null) {
+                                            discountType = discount.getDisc_type();
+                                        } else {
+                                            discountType = "Percentage";
+                                        }
                                         discountValue = discount.getDisc_value();
 
 
                                         servname = servicename.getText().toString();
-                                        servprce = Double.parseDouble(serviceprice.getText().toString());
+                                        if (serviceprice.getText() != null) {
+                                            servprce = Double.parseDouble(serviceprice.getText().toString());
+                                        }
+
                                         servstatus  = chkavail.getText().toString();
 
                                         if (discountStatus.equals("Active")){

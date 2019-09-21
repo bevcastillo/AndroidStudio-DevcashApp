@@ -59,6 +59,7 @@ public class ReceiptProductAdapter extends RecyclerView.Adapter<ReceiptProductAd
 
             viewHolder.prodOriginalPrice.setText(""+product.getProd_price());
             viewHolder.prodLessDisc.setText(""+subtotalDiscount);
+            viewHolder.prodDiscountedPrice.setText("@ "+product.getDiscounted_price());
 
             if (viewHolder.prodOriginalPrice.getText().toString().equals(viewHolder.prodDiscountedPrice.getText().toString())){
                 viewHolder.prodOriginalPrice.setVisibility(View.INVISIBLE);

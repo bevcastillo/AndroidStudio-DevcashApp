@@ -192,15 +192,17 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                                     String task = employee.getEmp_task();
                                     String uname = employee.getAccount().getAcct_uname();
                                     String email = employee.getAccount().getAcct_email();
+                                    String employeeImageUrl = employee.getEmp_imageUrl();
                                     employeelistdata.setEmplname(lname);
                                     employeelistdata.setEmpfname(fname);
                                     employeelistdata.setAcctuname(uname);
                                     employeelistdata.setAcctemail(email);
                                     employeelistdata.setEmptask(task);
+//                                    employeelistdata.setEmp_imageUrl(employeeImageUrl);
                                     emplist.add(employeelistdata);
                                 }
 
-                                EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+                                EmployeesAdapter employeesAdapter = new EmployeesAdapter(getContext(),emplist);
                                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                                 emprecyclerview.setLayoutManager(mLayoutManager);
                                 emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -343,7 +345,7 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                                         employeelistdata.setEmptask(task);
                                         emplist.add(employeelistdata);
                                     }
-                                    EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+                                    EmployeesAdapter employeesAdapter = new EmployeesAdapter(getContext(),emplist);
                                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                                     emprecyclerview.setLayoutManager(mLayoutManager);
                                     emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));

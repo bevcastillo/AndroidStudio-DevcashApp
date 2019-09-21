@@ -329,6 +329,7 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
                                                 ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_task").setValue(null);
                                                 ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_username").setValue(null);
                                                 ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_workfor").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_imageUrl").setValue(null);
 
                                                 ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_email").setValue(null);
                                                 ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_passw").setValue(null);

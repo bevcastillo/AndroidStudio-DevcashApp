@@ -74,7 +74,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
             public void onCreateContextMenu(ContextMenu menu, final View v, ContextMenu.ContextMenuInfo menuInfo) {
 
                 String itemName = productList.get(viewHolder.getAdapterPosition()).getProd_name();
-                double itemQty = productList.get(viewHolder.getAdapterPosition()).getProd_qty();
+                final int itemQty = productList.get(viewHolder.getAdapterPosition()).getProd_qty();
 
                 menu.add("Edit Quantity").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
@@ -82,6 +82,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                         AlertDialog.Builder dialog = new AlertDialog.Builder(v.getContext());
                         dialog.setTitle("Update Item Quantity");
                         final EditText qty = new EditText(v.getContext());
+                        qty.setText(String.valueOf(itemQty));
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -90,7 +91,133 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                         dialog.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                final int newQty = Integer.parseInt(qty.getText().toString()); //this is the quantity that the user has inputted
 
+
+                                final String productName = productList.get(viewHolder.getAdapterPosition()).getProd_name();
+                                final int productQty = productList.get(viewHolder.getAdapterPosition()).getProd_qty();
+                                final double productDicsountedPrice = productList.get(viewHolder.getAdapterPosition()).getDiscounted_price();
+                                String productExpiration = productList.get(viewHolder.getAdapterPosition()).getProd_expdate();
+                                final String productReference = productName+""+productExpiration;
+
+                                SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                                final String username = (shared.getString("owner_username", ""));
+
+                                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                                final String ownerKey = dataSnapshot1.getKey();
+
+                                                ownerdbreference.child(ownerKey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+                                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                                final String customerTransactionKey = dataSnapshot2.getKey();
+                                                                final CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+
+                                                                ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                        .orderByChild("product/prod_reference").equalTo(productReference).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                        if (dataSnapshot.exists()){
+                                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                                String customerCartKey = dataSnapshot3.getKey();
+                                                                                CustomerCart customerCart = dataSnapshot3.getValue(CustomerCart.class);
+
+                                                                                int currentProductQty = customerCart.getProduct().getProd_qty();
+                                                                                double currentProductSubTotal = customerCart.getProduct().getProd_subtotal();
+                                                                                double productPrice = customerCart.getProduct().getProd_price();
+                                                                                double productDiscountedPrice = customerCart.getProduct().getDiscounted_price();
+
+                                                                                //details from customer transaction
+                                                                                int currentTotalQty = customerTransaction.getTotal_item_qty();
+                                                                                double currentSubtotal = customerTransaction.getSubtotal();
+                                                                                double currentAmountDue = customerTransaction.getAmount_due();
+                                                                                double currentTotalDiscount = customerTransaction.getTotal_item_discount();
+                                                                                String customerType = customerTransaction.getCustomer_type();
+
+                                                                                double tempQty = 0.00;
+                                                                                double newTotalQty = 0.00;
+
+                                                                                if (customerType.equals("Regular Customer")){
+
+                                                                                    if (currentProductQty > newQty){
+                                                                                        tempQty = currentProductQty - newQty;
+                                                                                        newTotalQty = currentTotalQty - tempQty;
+                                                                                    }else {
+                                                                                        tempQty = newQty - currentProductQty;
+                                                                                        newTotalQty = currentTotalQty + tempQty;
+                                                                                    }
+
+                                                                                    String newProductSubtotalStr = String.format("%.2f", productDicsountedPrice * newQty);
+                                                                                    double newProductSubtotal = Double.parseDouble(newProductSubtotalStr);
+
+                                                                                    //get new total amount due
+                                                                                    String tempAmountDueStr = String.format("%.2f", currentAmountDue - currentProductSubTotal);
+                                                                                    double tempAmountDue = Double.parseDouble(tempAmountDueStr);
+
+                                                                                    String newAmountDueStr = String.format("%.2f", tempAmountDue + newProductSubtotal);
+                                                                                    double newAmountDue = Double.parseDouble(newAmountDueStr);
+
+                                                                                    String newSubtotalStr = String.format("%.2f", newAmountDue / 1.12);
+                                                                                    double newSubtotal = Double.parseDouble(newSubtotalStr);
+
+                                                                                    String newVatStr = String.format("%.2f", newAmountDue - newSubtotal);
+                                                                                    double newVat = Double.parseDouble(newVatStr);
+
+                                                                                    //get the new total discounted
+                                                                                    String getProdTotalDiscountStr = String.format("%.2f", productPrice - productDicsountedPrice);
+                                                                                    double getProdTotalDiscount = Double.parseDouble(getProdTotalDiscountStr);
+
+                                                                                    String newTotalDiscountStr = String.format("%.2f", getProdTotalDiscount * newQty);
+                                                                                    double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
+
+
+                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                                            .child(customerCartKey+"/product/prod_qty").setValue(newQty); //we update the quantity
+                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                                            .child(customerCartKey+"/product/prod_subtotal").setValue(newProductSubtotal);
+
+                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_item_qty").setValue(newTotalQty);
+                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/amount_due").setValue(newAmountDue);
+                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/subtotal").setValue(newSubtotal);
+                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_item_discount").setValue(newTotalDiscount);
+                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/vat").setValue(newVat);
+                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/vat_exempt_sale").setValue(0.00);
+
+                                                                                }else {
+                                                                                    //for senior citizen
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                             }
                         });
                         dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -110,7 +237,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
 
                         final String productName = productList.get(viewHolder.getAdapterPosition()).getProd_name();
                         final int productQty = productList.get(viewHolder.getAdapterPosition()).getProd_qty();
-                        double productDiscountedPrice = productList.get(viewHolder.getAdapterPosition()).getDiscounted_price();
+                        final double productDiscountedPrice = productList.get(viewHolder.getAdapterPosition()).getDiscounted_price();
                         final String expdate = productList.get(viewHolder.getAdapterPosition()).getProd_expdate();
                         final String productReference = productName+""+expdate;
 
@@ -146,7 +273,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                                                                         int productQty = customerCart.getProduct().getProd_qty();
                                                                         double productSubTotal = customerCart.getProduct().getProd_subtotal();
                                                                         double productPrice = customerCart.getProduct().getProd_price();
-                                                                        double serviceDiscountedPrice = customerCart.getProduct().getDiscounted_price();
+                                                                        double prodcutDiscountedPrice = customerCart.getProduct().getDiscounted_price();
 
                                                                         //details from customer transaction
                                                                         int totalQty = customerTransaction.getTotal_item_qty();
@@ -168,13 +295,13 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                                                                             double newVat = Double.parseDouble(newVatStr);
 
                                                                             //for discount
-                                                                            String newServDiscValueStr = String.format("%.2f", (productPrice - serviceDiscountedPrice) * productQty); //we get the total discount value of each service
-                                                                            double newServDiscValue = Double.parseDouble(newServDiscValueStr);
+                                                                            String newProdDiscValueStr = String.format("%.2f", (productPrice - productDiscountedPrice) * productQty); //we get the total discount value of each service
+                                                                            double newProdDiscValue = Double.parseDouble(newProdDiscValueStr);
 
                                                                             String getPositiveDiscountStr = String.format("%.2f", currentTotalDiscount * -1); //we convert the negative discount amount to positive so that we can deduct it
                                                                             double getPositiveDiscount = Double.parseDouble(getPositiveDiscountStr);
 
-                                                                            String newTotalDiscountStr = String.format("%.2f", getPositiveDiscount - newServDiscValue);
+                                                                            String newTotalDiscountStr = String.format("%.2f", getPositiveDiscount - newProdDiscValue);
                                                                             double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
 
                                                                             ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
@@ -209,13 +336,13 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                                                                             double newAmountDue = Double.parseDouble(newAmountDueStr);
 
                                                                             //for discount
-                                                                            String newServDiscValueStr = String.format("%.2f", (productPrice - serviceDiscountedPrice) * productQty); //we get the total discount value of each service
-                                                                            double newServDiscValue = Double.parseDouble(newServDiscValueStr);
+                                                                            String newProdDiscValueStr = String.format("%.2f", (productPrice - productDiscountedPrice) * productQty); //we get the total discount value of each service
+                                                                            double newProdDiscValue = Double.parseDouble(newProdDiscValueStr);
 
                                                                             String getPositiveDiscountStr = String.format("%.2f", currentTotalDiscount * -1); //we convert the negative discount amount to positive so that we can deduct it
                                                                             double getPositiveDiscount = Double.parseDouble(getPositiveDiscountStr);
 
-                                                                            String newTotalDiscountStr = String.format("%.2f", getPositiveDiscount - newServDiscValue);
+                                                                            String newTotalDiscountStr = String.format("%.2f", getPositiveDiscount - newProdDiscValue);
                                                                             double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
 
                                                                             ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")

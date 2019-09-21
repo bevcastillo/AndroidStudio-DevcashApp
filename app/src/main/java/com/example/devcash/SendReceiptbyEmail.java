@@ -27,6 +27,7 @@ import com.example.devcash.CustomAdapters.ReceiptProductAdapter;
 import com.example.devcash.CustomAdapters.ReceiptServiceAdapter;
 import com.example.devcash.Object.CartItem;
 import com.example.devcash.Object.CustomerTransaction;
+import com.example.devcash.Object.Enterprise;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Services;
 import com.google.firebase.database.DataSnapshot;
@@ -169,6 +170,23 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
                 if (dataSnapshot.exists()){
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                         String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/enterprise").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        Enterprise enterprise = dataSnapshot2.getValue(Enterprise.class);
+                                        Toast.makeText(SendReceiptbyEmail.this, enterprise.getEnt_name()+" is the enterprise name", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
 
                         ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override

@@ -140,25 +140,59 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                 if (dataSnapshot.exists()) {
                                     for(DataSnapshot ds1 : dataSnapshot.getChildren()) {
                                         final String passkey = ds1.getKey();
-                                        Account account = ds1.getValue(Account.class);
-                                        if (account.getAcct_passw().equals(ownerpassword) && account.getAcct_uname().equals(owneruser)) {
-                                            Toast.makeText(OwnerLoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
-                                            String accountJson = gson.toJson(account);
-                                            editor.putString("account", accountJson);
-                                            editor.putString("account_type", "Owner");
-                                            editor.commit();
-                                            Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
-                                            startActivity(owner_dashboard);
+//                                        Account account = ds1.getValue(Account.class);
 
-                                            progressDialog();
+                                        ownerbusinessReference.child(key+"/business/account")
+                                                .orderByChild("acct_uname")
+                                                .equalTo(owneruser)
+                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()) {
+                                                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                                                Account account = dataSnapshot1.getValue(Account.class);
 
-                                        } else {
-                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
-                                        }
+                                                                if (account.getAcct_passw().equals(ownerpassword)) {
+                                                                    String accountJson = gson.toJson(account);
+                                                                    editor.putString("account", accountJson);
+                                                                    editor.putString("account_type", "Owner");
+                                                                    editor.commit();
+                                                                    Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
+                                                                    startActivity(owner_dashboard);
+
+                                                                    Toast.makeText(OwnerLoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
+                                                                    progressDialog();
+                                                                } else {
+                                                                    Toast.makeText(OwnerLoginActivity.this, "Username/Password is Incorrect", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        } else {
+                                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is Incorrect", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+//                                        if (account.getAcct_passw().equals(ownerpassword) && account.getAcct_uname().equals(owneruser)) {
+//                                            String accountJson = gson.toJson(account);
+//                                            editor.putString("account", accountJson);
+//                                            editor.putString("account_type", "Owner");
+//                                            editor.commit();
+//                                            Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
+//                                            startActivity(owner_dashboard);
+//
+//                                            Toast.makeText(OwnerLoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
+//                                            progressDialog();
+//                                        } else {
+//                                            Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect.", Toast.LENGTH_SHORT).show();
+//                                        }
                                     }
 //                                    Toast.makeText(OwnerLoginActivity.this, "Username/Password is incorrect!", Toast.LENGTH_SHORT).show();
                                 } else{
-
                                     Toast.makeText(OwnerLoginActivity.this, "Account not found!", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -172,6 +206,7 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
 
                 }else{
 //                    Toast.makeText(OwnerLoginActivity.this, "does not exist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OwnerLoginActivity.this, "Account not found!", Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -10,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -97,6 +98,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     String selectedinventorytype, selectedcustomertype;
     int customerId;
 
+    SwipeRefreshLayout refreshSwipe;
+
 
     public PurchaseInventorylistFragment() {
         // Required empty public constructor
@@ -129,6 +132,16 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         scanqrcode = (LinearLayout) view.findViewById(R.id.scanqrcode_layout);
         newsale = (LinearLayout) view.findViewById(R.id.layoutnewsale);
         spinnerCustomerType = (Spinner) view.findViewById(R.id.spinner_customertype);
+
+//        refreshSwipe = (SwipeRefreshLayout) view.findViewById(R.id.purchase_pullRefresh);
+//
+//        refreshSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                displayQtyPrice();
+//                refreshSwipe.setRefreshing(false);
+//            }
+//        });
 
         chargebtnlayout.setOnClickListener(this);
         scanqrcode.setOnClickListener(this);

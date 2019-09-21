@@ -153,7 +153,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                                                                     }
 
                                                                                 } else {
-                                                                                    Toast.makeText(CustomerPaymentActivity.this, "Product not found", Toast.LENGTH_SHORT).show();
+//                                                                                    Toast.makeText(CustomerPaymentActivity.this, "Product not found", Toast.LENGTH_SHORT).show();
                                                                                 }
                                                                             }
 
@@ -215,6 +215,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
 
                                             ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/cash_received").setValue(cashreceived);
                                             ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue(change);
+                                            ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/transaction_status").setValue("Completed");
                                             Toast.makeText(CustomerPaymentActivity.this, "Cash is saved", Toast.LENGTH_SHORT).show();
 
                                             Intent intent = new Intent(CustomerPaymentActivity.this, FinalCustomerActivity.class);

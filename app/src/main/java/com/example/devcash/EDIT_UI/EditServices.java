@@ -201,24 +201,36 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
     private boolean validateFields(){
         String serviceName = servname.getText().toString();
         String servicePrice = servprice.getText().toString();
-        boolean ok = true;
 
-        if (serviceName.isEmpty()){
-            serviceNameLayout.setError("Fields can not be empty.");
-            ok = false;
-            if (servicePrice.isEmpty()){
-                servicePriceLayout.setError("Fields can not be empty.");
-                ok = false;
-            }else {
-                servicePriceLayout.setError(null);
-                ok = true;
-            }
-        }else {
-            serviceNameLayout.setError(null);
-            ok = true;
+        if (serviceName.isEmpty()) {
+            serviceNameLayout.setError("Fields cannot be empty");
+            return false;
         }
 
-        return ok;
+        if (servicePrice.isEmpty()) {
+            servicePriceLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        return true;
+//        boolean ok = true;
+//
+//        if (serviceName.isEmpty()){
+//            serviceNameLayout.setError("Fields can not be empty.");
+//            ok = false;
+//            if (servicePrice.isEmpty()){
+//                servicePriceLayout.setError("Fields can not be empty.");
+//                ok = false;
+//            }else {
+//                servicePriceLayout.setError(null);
+//                ok = true;
+//            }
+//        }else {
+//            serviceNameLayout.setError(null);
+//            ok = true;
+//        }
+//
+//        return ok;
     }
 
     public void getServDetails(){

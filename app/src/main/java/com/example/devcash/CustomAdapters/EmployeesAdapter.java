@@ -18,6 +18,7 @@ import com.example.devcash.Model.EmployeeList;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.Object.Employeelistdata;
 import com.example.devcash.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -26,10 +27,17 @@ import java.util.List;
 
 public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.ViewHolder> {
 
+    Context context;
     List<Employeelistdata> list;
     List<Employee> employeeList;
 
-    public EmployeesAdapter(List<Employeelistdata> list) {
+//    public EmployeesAdapter(List<Employeelistdata> list) {
+//        this.list = list;
+//    }
+
+
+    public EmployeesAdapter(Context context, List<Employeelistdata> list) {
+        this.context = context;
         this.list = list;
     }
 
@@ -75,7 +83,13 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
         viewHolder.emptask.setText(data.getEmptask());
         viewHolder.acctuname.setText(data.getAcctuname());
         viewHolder.acctemail.setText(data.getAcctemail());
-        viewHolder.acct_status.setText("Test");
+//        viewHolder.empImage.setImageURI(data.getEmp_imageUrl());
+//        viewHolder.acct_status.setText("Test");
+//        Picasso.with(context)
+//                .load(data.getEmp_imageUrl())
+//                .into(viewHolder.empImage);
+        Picasso.with(context).load(data.getEmp_imageUrl())
+                .into(viewHolder.empImage);
     }
 
     @Override
@@ -85,6 +99,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView emplname, empfname, emptask, acctuname, acctemail, acct_status;
+        ImageView empImage;
         LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -96,6 +111,7 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
             acctuname = (TextView) itemView.findViewById(R.id.txtemp_username);
             acct_status = (TextView) itemView.findViewById(R.id.txtempstatus);
             layout = (LinearLayout) itemView.findViewById(R.id.employeeLayout);
+            empImage = (ImageView) itemView.findViewById(R.id.imgemp_image);
         }
     }
 }

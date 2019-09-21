@@ -229,38 +229,60 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
         String prodPrice = prodprice.getText().toString();
         String prodStock = prodstock.getText().toString();
         String prodRop = prodrop.getText().toString();
-        boolean ok = true;
 
-        if (prodName.isEmpty()){
-            productNameLayout.setError("Fields can not be empty.");
-            ok = false;
-            if (prodPrice.isEmpty()){
-                productPriceLayout.setError("Fields can not be empty.");
-                ok = false;
-                if (prodStock.isEmpty()){
-                    productStockLayout.setError("Fields can not be empty.");
-                    ok = false;
-                    if (prodRop.isEmpty()){
-                        productRopLayout.setError("Fields can not be empty.");
-                        ok = false;
-                    }else {
-                        productRopLayout.setError(null);
-                        ok = false;
-                    }
-                }else {
-                    productStockLayout.setError(null);
-                    ok = true;
-                }
-            }else {
-                productPriceLayout.setError(null);
-                ok = true;
-            }
-        }else {
-            productNameLayout.setError(null);
-            ok = true;
+        if (prodName.isEmpty()) {
+            productNameLayout.setError("Fields cannot be empty");
+            return false;
         }
 
-        return ok;
+        if (prodPrice.isEmpty()) {
+            productPriceLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        if (prodStock.isEmpty()) {
+            productStockLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        if (prodRop.isEmpty()) {
+            productRopLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        return true;
+//        boolean ok = true;
+//
+//        if (prodName.isEmpty()){
+//            productNameLayout.setError("Fields can not be empty.");
+//            ok = false;
+//            if (prodPrice.isEmpty()){
+//                productPriceLayout.setError("Fields can not be empty.");
+//                ok = false;
+//                if (prodStock.isEmpty()){
+//                    productStockLayout.setError("Fields can not be empty.");
+//                    ok = false;
+//                    if (prodRop.isEmpty()){
+//                        productRopLayout.setError("Fields can not be empty.");
+//                        ok = false;
+//                    }else {
+//                        productRopLayout.setError(null);
+//                        ok = false;
+//                    }
+//                }else {
+//                    productStockLayout.setError(null);
+//                    ok = true;
+//                }
+//            }else {
+//                productPriceLayout.setError(null);
+//                ok = true;
+//            }
+//        }else {
+//            productNameLayout.setError(null);
+//            ok = true;
+//        }
+//
+//        return ok;
 
     }
 

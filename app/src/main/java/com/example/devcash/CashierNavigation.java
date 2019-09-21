@@ -222,7 +222,7 @@ public class CashierNavigation extends AppCompatActivity
                 empeditor.clear();
                 editor.commit();
                 empeditor.commit();
-                Intent cashierlogout = new Intent(CashierNavigation.this, EmployeeLoginActivity.class);
+                Intent cashierlogout = new Intent(CashierNavigation.this, IndexActivity.class);
                 startActivity(cashierlogout);
                 Toast.makeText(CashierNavigation.this, "You have been logged out!", Toast.LENGTH_SHORT).show();
                 finish();

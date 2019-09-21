@@ -1,12 +1,14 @@
 package com.example.devcash.ADD_UI;
 
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -34,15 +37,21 @@ import android.widget.Toast;
 
 import com.example.devcash.Database.DatabaseHelper;
 import com.example.devcash.GettingStarted;
+import com.example.devcash.MyUtility;
 import com.example.devcash.Object.Account;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.R;
 import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -56,14 +65,20 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
 
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebasedb;
+    private StorageReference storageReference;
+    private StorageTask uploadTask;
+
     private DatabaseReference accountFirebaseReference;
     private DatabaseReference ownerdbreference;
     TextInputEditText empLname, empFname, empEmail, empPhone, empbdate, empuname, emppassw, empconfpass, empaddr;
     TextInputLayout empLname_layout, empFname_layout;
     EditText acctstatus, accttype;
     private Uri empimageUri;
+
     ImageView empimage;
+
     LinearLayout takephoto, choosephoto;
+
     Spinner emptask;
     String selectedemptask, selectedgender;
     DatePickerDialog bdatePickerDia;
@@ -114,6 +129,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         databaseReference = firebasedb.getReference("/datadevcash");
         accountFirebaseReference = firebasedb.getReference("/datadevcash/account");
         ownerdbreference = firebasedb.getReference("/datadevcash/owner");
+        storageReference = FirebaseStorage.getInstance().getReference("Employee");//
         EmployeeId = databaseReference.push().getKey();
         AccountId = databaseReference.push().getKey();
 
@@ -134,52 +150,114 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_phone, emp_workfor, emp_username);
         final Account acct = new Account();
 
+        // handling image upload of employee avatar.
+        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()
+                + "." + getFileExtension(empimageUri));
 
-        acct.setAcct_uname(accountUsername);
-        acct.setAcct_email("");
-        acct.setAcct_passw(accountPassw);
-        acct.setAcct_status("Active");
-        acct.setAcct_type("Employee");
-        employee.setAccount(acct);
-
-
-        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
-
-        SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
-        final SharedPreferences.Editor emp_editor = empshared.edit();
-
-        SharedPreferences acctshared = getSharedPreferences("AcctShared", MODE_PRIVATE);
-        final SharedPreferences.Editor acct_editor = acctshared.edit();
-
-        final Gson gson = new Gson();
-
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        uploadTask = fileReference.putFile(empimageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    emp_editor.putString("employee_id", EmployeeId);
-                    acct_editor.putString("acct_id", AccountId);
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        String key = ds.getKey();
-                        ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
-                        String acctJson = gson.toJson(acct);
-                        acct_editor.putString("employee", acctJson);
-                        acct_editor.commit();
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Handler handler = new Handler();
 
-                        ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
-                        String empJson = gson.toJson(employee);
-                        emp_editor.putString("employee", empJson);
-                        emp_editor.commit();
+                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        acct.setAcct_uname(accountUsername);
+                        acct.setAcct_email("");
+                        acct.setAcct_passw(accountPassw);
+                        acct.setAcct_status("Active");
+                        acct.setAcct_type("Employee");
+                        employee.setAccount(acct);
+                        employee.setEmp_imageUrl(uri.toString());
+
+                        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                        final String username = (shared.getString("owner_username", ""));
+
+                        SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
+                        final SharedPreferences.Editor emp_editor = empshared.edit();
+
+                        SharedPreferences acctshared = getSharedPreferences("AcctShared", MODE_PRIVATE);
+                        final SharedPreferences.Editor acct_editor = acctshared.edit();
+
+                        final Gson gson = new Gson();
+
+                        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    emp_editor.putString("employee_id", EmployeeId);
+                                    acct_editor.putString("acct_id", AccountId);
+                                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                                        String key = ds.getKey();
+                                        ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
+                                        String acctJson = gson.toJson(acct);
+                                        acct_editor.putString("employee", acctJson);
+                                        acct_editor.commit();
+
+                                        ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
+                                        String empJson = gson.toJson(employee);
+                                        emp_editor.putString("employee", empJson);
+                                        emp_editor.commit();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                });
             }
         });
+        // end file upload.
+
+
+//        acct.setAcct_uname(accountUsername);
+//        acct.setAcct_email("");
+//        acct.setAcct_passw(accountPassw);
+//        acct.setAcct_status("Active");
+//        acct.setAcct_type("Employee");
+//        employee.setAccount(acct);
+//
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
+//        final SharedPreferences.Editor emp_editor = empshared.edit();
+//
+//        SharedPreferences acctshared = getSharedPreferences("AcctShared", MODE_PRIVATE);
+//        final SharedPreferences.Editor acct_editor = acctshared.edit();
+//
+//        final Gson gson = new Gson();
+//
+//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()){
+//                    emp_editor.putString("employee_id", EmployeeId);
+//                    acct_editor.putString("acct_id", AccountId);
+//                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                        String key = ds.getKey();
+//                        ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
+//                        String acctJson = gson.toJson(acct);
+//                        acct_editor.putString("employee", acctJson);
+//                        acct_editor.commit();
+//
+//                        ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
+//                        String empJson = gson.toJson(employee);
+//                        emp_editor.putString("employee", empJson);
+//                        emp_editor.commit();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
     
 
@@ -288,6 +366,7 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
                 if (validateDetails()){
                     addRadioGroupListener();
                     insertEmployee();
+                    uploadFile();
                 }
         }
         return super.onOptionsItemSelected(item);
@@ -297,24 +376,36 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
     private boolean validateDetails() {
         String empLastname = empLname.getText().toString();
         String empFirstname = empFname.getText().toString();
-        boolean ok = true;
 
-        if (empLastname.isEmpty()){
-            empLname_layout.setError("Fields can not be empty");
-            ok = false;
-
-            if (empFirstname.isEmpty()){
-                empFname_layout.setError("Fields can not be empty");
-                ok = false;
-            }else {
-                empFname_layout.setError(null);
-                ok = false;
-            }
-        }else {
-            empLname_layout.setError(null);
-            ok = true;
+        if (empLastname.isEmpty()) {
+            empLname_layout.setError("Fields cannot be empty");
+            return false;
         }
-        return ok;
+
+        if (empFirstname.isEmpty()) {
+            empFname_layout.setError("Fieds cannot be empty");
+            return false;
+        }
+
+        return true;
+//        boolean ok = true;
+//
+//        if (empLastname.isEmpty()){
+//            empLname_layout.setError("Fields can not be empty");
+//            ok = false;
+//
+//            if (empFirstname.isEmpty()){
+//                empFname_layout.setError("Fields can not be empty");
+//                ok = false;
+//            }else {
+//                empFname_layout.setError(null);
+//                ok = false;
+//            }
+//        }else {
+//            empLname_layout.setError(null);
+//            ok = true;
+//        }
+//        return ok;
 
     }
 
@@ -368,6 +459,41 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
             empimage.setImageBitmap(bitmap);
         }
 
+    }
+
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    //add image to the firebase storage
+    private void uploadFile(){
+        if (empimageUri!=null){
+            final StorageReference fileReference = storageReference.child(System.currentTimeMillis()
+            + "." + getFileExtension(empimageUri));
+
+            uploadTask = fileReference.putFile(empimageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Handler handler = new Handler();
+
+                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+//                            Employee employee = new Employee();
+////                            employee.setEmp_imageUrl(empFname.getText().toString());
+//                            employee.setEmp_imageUrl(uri.toString());
+//
+//                            String uploadId = databaseReference.push().getKey();
+//                            databaseReference.child(uploadId).setValue(employee);
+//                            Toast.makeText(AddEmployeeActivity.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+
+        }
     }
 
 

@@ -118,28 +118,31 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
 
     private boolean checkDuplicate(){
         String owner_user = ownerusername.getText().toString();
-        boolean ok = true;
+        final boolean[] ok = {true};
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    Toast.makeText(OwnerInformation.this, "username already exists.", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(OwnerInformation.this, "does not exist", Toast.LENGTH_SHORT).show();
+        if (!owner_user.equals(username)) {
+            ownerdbreference.orderByChild("business/owner_username").equalTo(owner_user).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        ownerUsernameLayout.setError("Username already exists.");
+                    }else {
+                        ownerUsernameLayout.setError(null);
+                        ok[0] = false;
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
-        return ok;
+        return ok[0];
     }
 
     private boolean validateFields(){
@@ -147,38 +150,60 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         String owner_lname = ownerlname.getText().toString();
         String owner_fname = ownerfname.getText().toString();
         String acct_passw = acctpassw.getText().toString();
-        boolean ok = true;
 
-        if (owner_user.isEmpty()){
-            ownerUsernameLayout.setError("Fields can not be empty.");
-            ok = false;
-            if (owner_lname.isEmpty()){
-                ownerLnameLayout.setError("Fields can not be empty.");
-                ok = false;
-                if (owner_fname.isEmpty()){
-                    ownerFnameLayout.setError("Fields can not be empty.");
-                    ok = false;
-                    if (acct_passw.isEmpty()){
-                        ownerPasswLayout.setError("Fields can not be empty.");
-                        ok = false;
-                    }else {
-                        ownerPasswLayout.setError(null);
-                        ok = true;
-                    }
-                }else {
-                    ownerLnameLayout.setError(null);
-                    ok = true;
-                }
-            }else {
-                ownerLnameLayout.setError(null);
-                ok = true;
-            }
-        }else {
-            ownerUsernameLayout.setError(null);
-            ok = true;
+        if (owner_user.isEmpty()) {
+            ownerUsernameLayout.setError("Fields cannot be empty");
+            return false;
         }
 
-        return ok;
+        if (owner_lname.isEmpty()) {
+            ownerLnameLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        if (owner_fname.isEmpty()) {
+            ownerFnameLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        if (acct_passw.isEmpty()) {
+            ownerPasswLayout.setError("Fields cannot be empty");
+            return false;
+        }
+
+        return true;
+//        boolean ok = true;
+//
+//        if (owner_user.isEmpty()){
+//            ownerUsernameLayout.setError("Fields can not be empty.");
+//            ok = false;
+//            if (owner_lname.isEmpty()){
+//                ownerLnameLayout.setError("Fields can not be empty.");
+//                ok = false;
+//                if (owner_fname.isEmpty()){
+//                    ownerFnameLayout.setError("Fields can not be empty.");
+//                    ok = false;
+//                    if (acct_passw.isEmpty()){
+//                        ownerPasswLayout.setError("Fields can not be empty.");
+//                        ok = false;
+//                    }else {
+//                        ownerPasswLayout.setError(null);
+//                        ok = true;
+//                    }
+//                }else {
+//                    ownerLnameLayout.setError(null);
+//                    ok = true;
+//                }
+//            }else {
+//                ownerLnameLayout.setError(null);
+//                ok = true;
+//            }
+//        }else {
+//            ownerUsernameLayout.setError(null);
+//            ok = true;
+//        }
+
+//        return ok;
     }
 
     public void addRadioGroupListener(){
@@ -233,6 +258,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
 //                                Toast.makeText(OwnerInformation.this, business.getOwner_username()+"", Toast.LENGTH_SHORT).show();
                                 ownerdbreference.child(ownerkey+"/business/owner_fname").setValue(ownerfname.getText().toString());
                                 ownerdbreference.child(ownerkey+"/business/owner_lname").setValue(ownerlname.getText().toString());
+                                ownerdbreference.child(ownerkey+"/business/owner_username").setValue(ownerusername.getText().toString());
                                 ownerdbreference.child(ownerkey+"/business/owner_mobileno").setValue(ownerphone.getText().toString());
 
                                 addRadioGroupListener();
@@ -249,6 +275,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
 
                                                 ownerdbreference.child(ownerkey+"/business/account").child(acctkey+"/acct_email").setValue(acctemail.getText().toString());
                                                 ownerdbreference.child(ownerkey+"/business/account").child(acctkey+"/acct_passw").setValue(acctpassw.getText().toString());
+                                                ownerdbreference.child(ownerkey+"/business/account").child(acctkey+"/acct_uname").setValue(ownerusername.getText().toString());
                                             }
                                         }
                                     }
@@ -284,7 +311,9 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.action_save:
                 if (validateFields()){
-                    updateOwner();
+                    if (checkDuplicate()){
+                        updateOwner();
+                    }
                 }
 //                checkDuplicate();
                 break;

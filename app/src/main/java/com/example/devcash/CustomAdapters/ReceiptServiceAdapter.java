@@ -56,12 +56,12 @@ public class ReceiptServiceAdapter extends RecyclerView.Adapter<ReceiptServiceAd
             double subtotalDiscount = Double.parseDouble(subtotalDiscountStr);
 
             viewHolder.servQtyName.setText(prodQty+"   "+services.getService_name());
-            viewHolder.servQtyName.setTextColor(Color.BLACK);
-            viewHolder.servQtyName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+//            viewHolder.servQtyName.setTextColor(Color.BLACK);
+//            viewHolder.servQtyName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 
             viewHolder.servSubtotal.setText(""+subtotal);
-            viewHolder.servSubtotal.setTextColor(Color.BLACK);
-            viewHolder.servSubtotal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+//            viewHolder.servSubtotal.setTextColor(Color.BLACK);
+//            viewHolder.servSubtotal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             viewHolder.servDiscountedPrice.setText("@ "+discountedPrice);
 
 

@@ -1,19 +1,25 @@
 package com.example.devcash;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -62,7 +68,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
     CartItem cartItem;
     int customerId = 0;
 
-    TextView regItemOff, regSubtotal, regVat, regVatExempt, regAmountDue, senItemOff, senSubtotal, senVat, senVatExempt, senDiscount, senAmountDue;
+    TextView regItemOff, regSubtotal, regVat, regVatExempt, regAmountDue, senItemOff, senSubtotal, senVat, senVatExempt, senDiscount, senAmountDue, regCash, regChange, seniorCash, seniorChange;
     LinearLayout regularLayout, seniorLayout;
 
 
@@ -86,6 +92,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
         regVat = (TextView) findViewById(R.id.regular_vat);
         regVatExempt = (TextView) findViewById(R.id.regular_vatExempt);
         regAmountDue = (TextView) findViewById(R.id.regular_amountDue);
+        regCash = (TextView) findViewById(R.id.regular_cash);
+        regChange = (TextView) findViewById(R.id.regular_change);
         regularLayout = (LinearLayout) findViewById(R.id.regularcustomerLayout);
 
 
@@ -96,6 +104,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
         senVatExempt = (TextView) findViewById(R.id.seniorvatExempt);
         senDiscount = (TextView) findViewById(R.id.seniorcitizenDiscount);
         senAmountDue = (TextView) findViewById(R.id.seniorAmountDue);
+        seniorCash = (TextView) findViewById(R.id.senior_cash);
+        seniorChange = (TextView) findViewById(R.id.senior_change);
         seniorLayout = (LinearLayout) findViewById(R.id.seniorcitizenLayout);
 
 //        txtdiscount = (TextView) findViewById(R.id.text_discountamt);
@@ -157,9 +167,40 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
         if (id == android.R.id.home){
             onBackPressed();
             return true;
+        }else if (id == R.id.email_action){
+//            emailDialog();
+            Intent intent = new Intent(CustomerReceiptActivity.this, SendReceiptbyEmail.class);
+            startActivity(intent);
+        }else if (id == R.id.mms_action){
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void emailDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.customlayout_send_email, null);
+        builder.setView(dialogView);
+
+        final TextInputEditText cust_email= (TextInputEditText) dialogView.findViewById(R.id.edit_customer_email);
+
+        builder.setPositiveButton("SEND", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 
     public void displayAllPurchase(){
@@ -238,7 +279,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                         }
                                     }
                                 }else {
-                                    Toast.makeText(CustomerReceiptActivity.this, "No customer transaction yet!"+customerId, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(CustomerReceiptActivity.this, "No customer transaction yet!"+customerId, Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -344,6 +385,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                         int totalQty = customerTransaction.getTotal_item_qty();
                                         double vat = customerTransaction.getVat();
                                         double vatExempt = customerTransaction.getVat_exempt_sale();
+                                        double cash = customerTransaction.getCash_received();
+                                        double change = customerTransaction.getChange();
 
                                         if (customerType.equals("Regular Customer")){
                                             regularLayout.setVisibility(View.VISIBLE);
@@ -351,6 +394,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                             regSubtotal.setText(String.valueOf(subtotal));
                                             regVat.setText(String.valueOf(vat));
                                             regAmountDue.setText(String.valueOf(amountDue));
+                                            regCash.setText(String.valueOf(cash));
+                                            regChange.setText(String.valueOf(change));
 
                                         }else {
                                             seniorLayout.setVisibility(View.VISIBLE);
@@ -360,6 +405,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                             senVatExempt.setText(String.valueOf(vatExempt));
                                             senDiscount.setText(String.valueOf(seniorDisc));
                                             senAmountDue.setText(String.valueOf(amountDue));
+                                            seniorCash.setText(String.valueOf(cash));
+                                            seniorChange.setText(String.valueOf(change));
                                         }
 
 //                                        double cashreceived = customerTransaction.getCash_received();
@@ -412,5 +459,13 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                 startActivity(intent1);
             break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_send_receipt, menu);
+
+        return true;
     }
 }

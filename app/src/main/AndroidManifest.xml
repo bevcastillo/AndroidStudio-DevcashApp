@@ -10,6 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AddDiscountActivity"
+            android:label="Add Discount"></activity>
         <activity android:name=".ViewReceiptActivity" />
         <activity
             android:name=".ScanQRCode"

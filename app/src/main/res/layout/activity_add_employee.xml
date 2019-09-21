@@ -386,7 +386,8 @@
                 android:background="@color/whiteBG"
                 android:padding="@dimen/text_padding"
                 android:layout_marginLeft="@dimen/padding_150"
-                android:layout_marginRight="@dimen/padding_150">
+                android:layout_marginRight="@dimen/padding_150"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"

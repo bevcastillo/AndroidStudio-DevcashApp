@@ -115,26 +115,45 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
         return ok;
     }
 
-    private boolean validateEmployeeCount(){
-        int empCount = Integer.parseInt(entempno.getText().toString());
-        final boolean[] ok = {true};
+//    private boolean validateEmployeeCount(){
+//        int empCount = Integer.parseInt(entempno.getText().toString());
+//        final boolean[] ok = {true};
+//
+//        if (empCount > 100){
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            LayoutInflater inflater = this.getLayoutInflater();
+//            final View dialogView = inflater.inflate(R.layout.customdialog_enterprisecount, null);
+//            builder.setView(dialogView);
+//
+//            builder.setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                    ok[0] = false;
+//                }
+//            });
+//            builder.show();
+//        }
+//        return ok[0];
+//    }
 
-        if (empCount > 100){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            LayoutInflater inflater = this.getLayoutInflater();
-            final View dialogView = inflater.inflate(R.layout.customdialog_enterprisecount, null);
-            builder.setView(dialogView);
+    private boolean hasValidEmployeeCount(int empCount) {
+        return empCount < 100;
+    }
 
-            builder.setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    ok[0] = false;
-                }
-            });
-            builder.show();
-        }
-        return ok[0];
+    private void displayWarningEmployeeCount(int empCount) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.customdialog_enterprisecount, null);
+        builder.setView(dialogView);
+
+        builder.setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     public void displayEntDetails(){
@@ -174,7 +193,7 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
 
                                     if (enterpriseempno > 0 && enterpriseempno < 10){ //micro
                                         entcategory.setText("Micro");
-                                    } else if (enterpriseempno > 10 && enterpriseempno < 100){
+                                    } else if (enterpriseempno >= 10 && enterpriseempno < 100){
                                         entcategory.setText("Small");
                                     }else {
                                         entcategory.setText("N/A");
@@ -313,15 +332,23 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        int empCount = Integer.parseInt(entempno.getText().toString());
+
         switch (id){
             case R.id.home:
                 onBackPressed();
                 return true;
             case R.id.action_save:
                 if (validateFields()){
-                    if (validateEmployeeCount()){
+
+                    if (!hasValidEmployeeCount(empCount)) {
+                        displayWarningEmployeeCount(empCount);
+                    } else {
                         updateEntDetails();
                     }
+//                    if (validateEmployeeCount()){
+//                        updateEntDetails();
+//                    }
                 }
         }
 

@@ -8,7 +8,7 @@ import android.net.Uri;
 
 public class Employee {
 
-    public String emp_lname, emp_fname, emp_task, emp_gender, emp_phone, emp_workfor, emp_username;
+    public String emp_lname, emp_fname, emp_task, emp_gender, emp_phone, emp_workfor, emp_username, emp_imageUrl;
     public Account account;
 
     public Employee() {
@@ -90,5 +90,13 @@ public class Employee {
 
     public void setEmp_username(String emp_username) {
         this.emp_username = emp_username;
+    }
+
+    public String getEmp_imageUrl() {
+        return emp_imageUrl;
+    }
+
+    public void setEmp_imageUrl(String emp_imageUrl) {
+        this.emp_imageUrl = emp_imageUrl;
     }
 }

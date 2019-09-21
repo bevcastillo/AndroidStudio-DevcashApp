@@ -75,7 +75,7 @@ public class EditCategory extends AppCompatActivity implements View.OnClickListe
         boolean ok = true;
 
         if (categoryName.isEmpty()){
-            catnameLayout.setError("Fields can not be empty.");
+            catnameLayout.setError("Fields cannot be empty.");
             ok = false;
         }else {
             catnameLayout.setError(null);

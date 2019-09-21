@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/email_action"
+        android:title="Send Receipt via Email"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/mms_action"
+        android:title="Send Receipt via MMS"
+        app:showAsAction="never"/>
+
+</menu>
