@@ -294,6 +294,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                     Product product = dataSnapshot1.getValue(Product.class);
                                     Productlistdata listdata = new Productlistdata();
                                     String pname = product.getProd_name();
+                                    String prodimage = product.getProd_image();
                                     double prop = product.getProd_rop();
                                     double pprice = product.getProd_price();
                                     double discprice = product.getDiscounted_price();
@@ -311,10 +312,11 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                     listdata.setProd_expdate(pexpdate);
                                     listdata.setDiscounted_price(discprice);
                                     listdata.setProd_expdatecount(pexpdatecount);
+                                    listdata.setProd_image(prodimage);
                                     list.add(listdata);
 
                                 }
-                                ProductsAdapter adapter = new ProductsAdapter(list);
+                                ProductsAdapter adapter = new ProductsAdapter(list, getContext());
                                 RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
                                 prodrecyclerview.setLayoutManager(pLayoutManager);
                                 prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -369,6 +371,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                         Product product = dataSnapshot2.getValue(Product.class);
                                         Productlistdata listdata = new Productlistdata();
                                         String pname = product.getProd_name();
+                                        String prodimage = product.getProd_image();
                                         double prop = product.getProd_rop();
                                         double pprice = product.getProd_price();
                                         int pstock = product.getProd_stock();
@@ -384,9 +387,10 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                         listdata.setCond_name(condname);
                                         listdata.setProd_expdate(pexpdate);
                                         listdata.setProd_expdatecount(pexpdatecount);
+                                        listdata.setProd_image(prodimage);
                                         list.add(listdata);
                                     }
-                                    ProductsAdapter adapter = new ProductsAdapter(list);
+                                    ProductsAdapter adapter = new ProductsAdapter(list,getContext());
                                     RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
                                     prodrecyclerview.setLayoutManager(pLayoutManager);
                                     prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -446,6 +450,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                         Product product = dataSnapshot2.getValue(Product.class);
                                         Productlistdata listdata = new Productlistdata();
                                         String pname = product.getProd_name();
+                                        String prodimage = product.getProd_image();
                                         double prop = product.getProd_rop();
                                         double pprice = product.getProd_price();
                                         int pstock = product.getProd_stock();
@@ -461,9 +466,10 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                         listdata.setCond_name(condname);
                                         listdata.setProd_expdate(pexpdate);
                                         listdata.setProd_expdatecount(pexpdatecount);
+                                        listdata.setProd_image(prodimage);
                                         list.add(listdata);
                                     }
-                                    ProductsAdapter adapter = new ProductsAdapter(list);
+                                    ProductsAdapter adapter = new ProductsAdapter(list, getContext());
                                     RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
                                     prodrecyclerview.setLayoutManager(pLayoutManager);
                                     prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -524,6 +530,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                         String pname = product.getProd_name();
                                         double prop = product.getProd_rop();
                                         double pprice = product.getProd_price();
+                                        String prodimage = product.getProd_image();
                                         int pstock = product.getProd_stock();
                                         String pexpdate = product.getProd_expdate();
                                         int pexpdatecount = product.getProd_expdatecount();
@@ -537,9 +544,10 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                         listdata.setCond_name(condname);
                                         listdata.setProd_expdate(pexpdate);
                                         listdata.setProd_expdatecount(pexpdatecount);
+                                        listdata.setProd_image(prodimage);
                                         list.add(listdata);
                                     }
-                                    ProductsAdapter adapter = new ProductsAdapter(list);
+                                    ProductsAdapter adapter = new ProductsAdapter(list, getContext());
                                     RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
                                     prodrecyclerview.setLayoutManager(pLayoutManager);
                                     prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -662,6 +670,7 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                         double discprice = product.getDiscounted_price();
                                         int pstock = product.getProd_stock();
                                         String pexpdate = product.getProd_expdate();
+                                        String prodimage = product.getProd_image();
                                         int pexpdatecount = product.getProd_expdatecount();
                                         String condname = product.getProductCondition().getCond_name();
                                         String pstatus = product.getProd_status();
@@ -674,9 +683,10 @@ public class ProductsFragment extends Fragment implements SearchView.OnQueryText
                                         listdata.setProd_expdate(pexpdate);
                                         listdata.setDiscounted_price(discprice);
                                         listdata.setProd_expdatecount(pexpdatecount);
+                                        listdata.setProd_image(prodimage);
                                         list.add(listdata);
                                     }
-                                    ProductsAdapter adapter = new ProductsAdapter(list);
+                                    ProductsAdapter adapter = new ProductsAdapter(list, getContext());
                                     RecyclerView.LayoutManager pLayoutManager = new LinearLayoutManager(getActivity());
                                     prodrecyclerview.setLayoutManager(pLayoutManager);
                                     prodrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));

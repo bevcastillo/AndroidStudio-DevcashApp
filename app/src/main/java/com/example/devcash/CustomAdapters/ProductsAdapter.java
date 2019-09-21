@@ -1,5 +1,6 @@
 package com.example.devcash.CustomAdapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -18,14 +19,22 @@ import android.widget.Toast;
 import com.example.devcash.EDIT_UI.EditProduct;
 import com.example.devcash.Object.Productlistdata;
 import com.example.devcash.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
     List<Productlistdata> list;
+    Context context;
 
-    public ProductsAdapter(List<Productlistdata> list) {
+//    public ProductsAdapter(List<Productlistdata> list) {
+//        this.list = list;
+//    }
+
+
+    public ProductsAdapter(List<Productlistdata> list, Context context) {
         this.list = list;
+        this.context = context;
     }
 
     @NonNull
@@ -102,6 +111,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             viewHolder.prodprice.setPaintFlags(viewHolder.prodprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             viewHolder.discountedprice.setText("₱"+(data.getDiscounted_price()));
         }
+
+        Picasso.with(context).load(data.getProd_image()).into(viewHolder.prodImage);
     }
 
     @Override
@@ -112,7 +123,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView prodname, prodstatus, prodprice, prodstock, condname, prodexpdate, prodexpcount, instock, discountedprice;
-        ImageView prodimgstatus;
+        ImageView prodimgstatus, prodImage;
         LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -128,6 +139,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             prodimgstatus = (ImageView) itemView.findViewById(R.id.imageView_availability);
             discountedprice = (TextView) itemView.findViewById(R.id.txtprod_discprice);
             layout = (LinearLayout) itemView.findViewById(R.id.productLayout);
+            prodImage = (ImageView) itemView.findViewById(R.id.prod_image);
         }
     }
 }

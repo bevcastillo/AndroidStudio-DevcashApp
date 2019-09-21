@@ -195,14 +195,16 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                     double sprice = services.getService_price();
                                     double discountedprice = services.getDiscounted_price();
                                     String sstatus = services.getService_status();
+                                    String image = services.getService_image();
                                     serviceslistdata.setServname(sname);
                                     serviceslistdata.setServprice(sprice);
                                     serviceslistdata.setServstatus(sstatus);
                                     serviceslistdata.setDiscounted_price(discountedprice);
+                                    serviceslistdata.setService_image(image);
                                     serviceslist.add(serviceslistdata);
                                 }
 
-                                ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                ServicesAdapter servicesAdapter = new ServicesAdapter(getContext(), serviceslist);
                                 RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
                                 servrecyclerview.setLayoutManager(sLayoutManager);
                                 servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -258,14 +260,16 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                         String sname = services.getService_name();
                                         double sprice = services.getService_price();
                                         double discPrice = services.getDiscounted_price();
+                                        String image = services.getService_image();
                                         String sstatus = services.getService_status();
                                         serviceslistdata.setServname(sname);
                                         serviceslistdata.setServprice(sprice);
                                         serviceslistdata.setServstatus(sstatus);
                                         serviceslistdata.setDiscounted_price(discPrice);
+                                        serviceslistdata.setService_image(image);
                                         serviceslist.add(serviceslistdata);
                                     }
-                                    ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                    ServicesAdapter servicesAdapter = new ServicesAdapter(getContext(), serviceslist);
                                     RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
                                     servrecyclerview.setLayoutManager(sLayoutManager);
                                     servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -322,14 +326,16 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                         Services services = dataSnapshot2.getValue(Services.class);
                                         Serviceslistdata serviceslistdata = new Serviceslistdata();
                                         String sname = services.getService_name();
+                                        String image = services.getService_image();
                                         double sprice = services.getService_price();
                                         String sstatus = services.getService_status();
                                         serviceslistdata.setServname(sname);
                                         serviceslistdata.setServprice(sprice);
                                         serviceslistdata.setServstatus(sstatus);
+                                        serviceslistdata.setService_image(image);
                                         serviceslist.add(serviceslistdata);
                                     }
-                                    ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                    ServicesAdapter servicesAdapter = new ServicesAdapter(getContext(), serviceslist);
                                     RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
                                     servrecyclerview.setLayoutManager(sLayoutManager);
                                     servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -448,14 +454,16 @@ public class ServicesFragment extends Fragment implements SearchView.OnQueryText
                                         String sname = services.getService_name();
                                         double sprice = services.getService_price();
                                         double discountedprice = services.getDiscounted_price();
+                                        String image = services.getService_image();
                                         String sstatus = services.getService_status();
                                         serviceslistdata.setServname(sname);
                                         serviceslistdata.setServprice(sprice);
                                         serviceslistdata.setServstatus(sstatus);
                                         serviceslistdata.setDiscounted_price(discountedprice);
+                                        serviceslistdata.setService_image(image);
                                         serviceslist.add(serviceslistdata);
                                     }
-                                    ServicesAdapter servicesAdapter = new ServicesAdapter(serviceslist);
+                                    ServicesAdapter servicesAdapter = new ServicesAdapter(getContext(), serviceslist);
                                     RecyclerView.LayoutManager sLayoutManager = new LinearLayoutManager(getActivity());
                                     servrecyclerview.setLayoutManager(sLayoutManager);
                                     servrecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));

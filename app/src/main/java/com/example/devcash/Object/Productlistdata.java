@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class Productlistdata {
-    String prod_name, prod_brand, prod_unitof_measure, prod_status, category_name, cond_name, prod_expdate, prod_reference;
+    String prod_name, prod_brand, prod_unitof_measure, prod_status, category_name, cond_name, prod_expdate, prod_reference, prod_image;
     double prod_price, prod_rop, subtotal, discounted_price;
     int prod_stock, prod_expdatecount, prod_qty, prodclick;
     public Category category;
@@ -178,5 +178,13 @@ public class Productlistdata {
 
     public void setDiscounted_price(double discounted_price) {
         this.discounted_price = discounted_price;
+    }
+
+    public String getProd_image() {
+        return prod_image;
+    }
+
+    public void setProd_image(String prod_image) {
+        this.prod_image = prod_image;
     }
 }

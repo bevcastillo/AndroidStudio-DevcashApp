@@ -150,114 +150,114 @@ public class AddEmployeeActivity extends AppCompatActivity implements View.OnCli
         final Employee employee = new Employee(emp_lname, emp_fname, emp_task, emp_gender, emp_phone, emp_workfor, emp_username);
         final Account acct = new Account();
 
-        // handling image upload of employee avatar.
-        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()
-                + "." + getFileExtension(empimageUri));
-
-        uploadTask = fileReference.putFile(empimageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Handler handler = new Handler();
-
-                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        acct.setAcct_uname(accountUsername);
-                        acct.setAcct_email("");
-                        acct.setAcct_passw(accountPassw);
-                        acct.setAcct_status("Active");
-                        acct.setAcct_type("Employee");
-                        employee.setAccount(acct);
-                        employee.setEmp_imageUrl(uri.toString());
-
-                        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-                        final String username = (shared.getString("owner_username", ""));
-
-                        SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
-                        final SharedPreferences.Editor emp_editor = empshared.edit();
-
-                        SharedPreferences acctshared = getSharedPreferences("AcctShared", MODE_PRIVATE);
-                        final SharedPreferences.Editor acct_editor = acctshared.edit();
-
-                        final Gson gson = new Gson();
-
-                        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    emp_editor.putString("employee_id", EmployeeId);
-                                    acct_editor.putString("acct_id", AccountId);
-                                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                                        String key = ds.getKey();
-                                        ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
-                                        String acctJson = gson.toJson(acct);
-                                        acct_editor.putString("employee", acctJson);
-                                        acct_editor.commit();
-
-                                        ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
-                                        String empJson = gson.toJson(employee);
-                                        emp_editor.putString("employee", empJson);
-                                        emp_editor.commit();
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                });
-            }
-        });
+//        // handling image upload of employee avatar.
+//        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()
+//                + "." + getFileExtension(empimageUri));
+//
+//        uploadTask = fileReference.putFile(empimageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Handler handler = new Handler();
+//
+//                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        acct.setAcct_uname(accountUsername);
+//                        acct.setAcct_email("");
+//                        acct.setAcct_passw(accountPassw);
+//                        acct.setAcct_status("Active");
+//                        acct.setAcct_type("Employee");
+//                        employee.setAccount(acct);
+//                        employee.setEmp_imageUrl(uri.toString());
+//
+//                        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//                        final String username = (shared.getString("owner_username", ""));
+//
+//                        SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
+//                        final SharedPreferences.Editor emp_editor = empshared.edit();
+//
+//                        SharedPreferences acctshared = getSharedPreferences("AcctShared", MODE_PRIVATE);
+//                        final SharedPreferences.Editor acct_editor = acctshared.edit();
+//
+//                        final Gson gson = new Gson();
+//
+//                        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                if(dataSnapshot.exists()){
+//                                    emp_editor.putString("employee_id", EmployeeId);
+//                                    acct_editor.putString("acct_id", AccountId);
+//                                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                                        String key = ds.getKey();
+//                                        ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
+//                                        String acctJson = gson.toJson(acct);
+//                                        acct_editor.putString("employee", acctJson);
+//                                        acct_editor.commit();
+//
+//                                        ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
+//                                        String empJson = gson.toJson(employee);
+//                                        emp_editor.putString("employee", empJson);
+//                                        emp_editor.commit();
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//                    }
+//                });
+//            }
+//        });
         // end file upload.
 
 
-//        acct.setAcct_uname(accountUsername);
-//        acct.setAcct_email("");
-//        acct.setAcct_passw(accountPassw);
-//        acct.setAcct_status("Active");
-//        acct.setAcct_type("Employee");
-//        employee.setAccount(acct);
-//
-//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-//        final String username = (shared.getString("owner_username", ""));
-//
-//        SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
-//        final SharedPreferences.Editor emp_editor = empshared.edit();
-//
-//        SharedPreferences acctshared = getSharedPreferences("AcctShared", MODE_PRIVATE);
-//        final SharedPreferences.Editor acct_editor = acctshared.edit();
-//
-//        final Gson gson = new Gson();
-//
-//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.exists()){
-//                    emp_editor.putString("employee_id", EmployeeId);
-//                    acct_editor.putString("acct_id", AccountId);
-//                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-//                        String key = ds.getKey();
-//                        ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
-//                        String acctJson = gson.toJson(acct);
-//                        acct_editor.putString("employee", acctJson);
-//                        acct_editor.commit();
-//
-//                        ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
-//                        String empJson = gson.toJson(employee);
-//                        emp_editor.putString("employee", empJson);
-//                        emp_editor.commit();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        acct.setAcct_uname(accountUsername);
+        acct.setAcct_email("");
+        acct.setAcct_passw(accountPassw);
+        acct.setAcct_status("Active");
+        acct.setAcct_type("Employee");
+        employee.setAccount(acct);
+
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        SharedPreferences empshared = getSharedPreferences("EmpShared",MODE_PRIVATE);
+        final SharedPreferences.Editor emp_editor = empshared.edit();
+
+        SharedPreferences acctshared = getSharedPreferences("AcctShared", MODE_PRIVATE);
+        final SharedPreferences.Editor acct_editor = acctshared.edit();
+
+        final Gson gson = new Gson();
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    emp_editor.putString("employee_id", EmployeeId);
+                    acct_editor.putString("acct_id", AccountId);
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        String key = ds.getKey();
+                        ownerdbreference.child(key+"/business/account").child(AccountId).setValue(acct);
+                        String acctJson = gson.toJson(acct);
+                        acct_editor.putString("employee", acctJson);
+                        acct_editor.commit();
+
+                        ownerdbreference.child(key+"/business/employee").child(EmployeeId).setValue(employee);
+                        String empJson = gson.toJson(employee);
+                        emp_editor.putString("employee", empJson);
+                        emp_editor.commit();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
     
 

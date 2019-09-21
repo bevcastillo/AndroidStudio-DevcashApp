@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class Serviceslistdata {
-    public String servname, servstatus;
+    public String servname, servstatus, service_image;
     public int servqty;
     double servprice, discounted_price;
     int click;
@@ -71,5 +71,13 @@ public class Serviceslistdata {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getService_image() {
+        return service_image;
+    }
+
+    public void setService_image(String service_image) {
+        this.service_image = service_image;
     }
 }

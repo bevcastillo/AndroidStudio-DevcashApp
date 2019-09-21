@@ -1,6 +1,7 @@
 package com.example.devcash.ADD_UI;
 
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,11 +42,16 @@ import com.example.devcash.Object.ProductCondition;
 import com.example.devcash.Object.ProductExpiration;
 import com.example.devcash.Object.QRCode;
 import com.example.devcash.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
@@ -61,9 +68,15 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     private DatabaseReference dbreference;
     private DatabaseReference mydbreference;
+    private StorageReference productstoragereference;
+    private StorageTask uploadTask;
     //
+
+    private StorageReference filereference;
+
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
+    private FirebaseStorage firebaseStorage;
     private String ProductId, QRCodeId;
     private String ProductCondId, pexpdate, count;
 
@@ -190,6 +203,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         ///
 
         firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+
         dbreference = firebaseDatabase.getReference("/datadevcash");
         ProductId = dbreference.push().getKey();
         QRCodeId = dbreference.push().getKey();
@@ -198,6 +213,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         //
         ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
+//        productstoragereference = firebaseStorage.getReference("Product");
+        productstoragereference = FirebaseStorage.getInstance().getReference("Product");
+
 
 
         final ArrayList<String> categories = new ArrayList<String>();
@@ -489,98 +507,218 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final int prod_rop, int prod_stock, final String prod_reference, final double discounted_price){
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
 
-        ProductCondition condition = new ProductCondition();
-        Category category = new Category();
-        Discount discount = new Discount();
-        final QRCode qrCode = new QRCode();
 
-        qrCode.setQr_category("Product");
-        qrCode.setQr_code(prod_name);
-        qrCode.setQr_price(prod_price);
-        qrCode.setQr_disc_price(discounted_price);
+    public void addProduct(final String prod_name, final String prod_brand, final String prod_unitof_measure, final String prod_status, final double prod_price, final int prod_rop, final int prod_stock, final String prod_reference, final double discounted_price){
 
-        discount.setDisc_code(selecteddisc);
-        category.setCategory_name(selectedcategory);
+        //handles adding an image
+        final StorageReference filereference = productstoragereference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
 
-        condition.setCond_name(selectedprodcond);
-
-        if(condcount.getText().toString().equals("") && selectedprodcond.equals("New")){
-            int count = 0;
-            condition.setCond_count(count);
-        }else{
-            int count = Integer.parseInt(condcount.getText().toString());
-            condition.setCond_count(count);
-        }
-
-        final Product product = new Product(prod_name, prod_brand, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock, prod_reference, discounted_price);
-        product.setProductCondition(condition);
-        product.setCategory(category);
-        product.setDiscount(discount);
-        product.setQrCode(qrCode);
-
-        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
-
-        SharedPreferences productshared = getSharedPreferences("ProductPref",MODE_PRIVATE); //creating a shared preference for products
-        final SharedPreferences.Editor product_editor = productshared.edit();
-
-        final Gson gson = new Gson();
-
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        uploadTask = filereference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    product_editor.putString("product_id", ProductId); //saving the ProductId to shared preference
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                filereference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
 
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        final Product product = new Product(prod_name, prod_brand, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock, prod_reference, discounted_price);
 
-                        final String key = ds.getKey();
+                        product.setProd_image(uri.toString()); //adding image to database
 
-                        if (productExpDates.size()>0){
-                            for(ProductExpiration productExpDate : productExpDates) {
-                                product.setProd_expdate(productExpDate.getProd_expdate());
-                                product.setProd_expdatecount(productExpDate.getProd_expdatecount());
-                                String pname = product.getProd_name();
-                                product.setProd_reference(pname+productExpDate.getProd_expdate());
-                                qrCode.setQr_reference(pname+productExpDate.getProd_expdate());
-                                product.setQrCode(qrCode);
+                        ProductCondition condition = new ProductCondition();
+                        Category category = new Category();
+                        Discount discount = new Discount();
+                        final QRCode qrCode = new QRCode();
 
-                                dbreference.child("owner/"+key+"/business/qrCode").push().setValue(qrCode);
-                                dbreference.child("owner/"+key+"/business/product").push().setValue(product);
+                        qrCode.setQr_category("Product");
+                        qrCode.setQr_code(prod_name);
+                        qrCode.setQr_price(prod_price);
+                        qrCode.setQr_disc_price(discounted_price);
 
-                                String productJson = gson.toJson(product);
-                                product_editor.putString("product", productJson);
-                                product_editor.commit();
+                        discount.setDisc_code(selecteddisc);
+                        category.setCategory_name(selectedcategory);
 
-                            }
-                        } else{
-                            product.setProd_expdate("No Expiration");
-                            String pname = product.getProd_name();
-                            product.setProd_reference(pname+product.getProd_expdate().trim());
-                            qrCode.setQr_reference(pname+product.getProd_expdate().trim());
-                            product.setQrCode(qrCode);
+                        condition.setCond_name(selectedprodcond);
 
-//                            product.setDiscounted_price();
-                            dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
-                            dbreference.child("owner/"+key+"/business/qrCode").child(QRCodeId).setValue(qrCode);
-                            String productJson = gson.toJson(product);
-                            product_editor.putString("product", productJson);
-                            product_editor.commit();
+                        if(condcount.getText().toString().equals("") && selectedprodcond.equals("New")){
+                            int count = 0;
+                            condition.setCond_count(count);
+                        }else{
+                            int count = Integer.parseInt(condcount.getText().toString());
+                            condition.setCond_count(count);
 
                         }
 
+                        product.setProductCondition(condition);
+                        product.setCategory(category);
+                        product.setDiscount(discount);
+                        product.setQrCode(qrCode);
+
+
+                        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                        final String username = (shared.getString("owner_username", ""));
+
+                        SharedPreferences productshared = getSharedPreferences("ProductPref",MODE_PRIVATE); //creating a shared preference for products
+                        final SharedPreferences.Editor product_editor = productshared.edit();
+
+                        final Gson gson = new Gson();
+
+                        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    product_editor.putString("product_id", ProductId); //saving the ProductId to shared preference
+
+                                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+
+                                        final String key = ds.getKey();
+
+                                        if (productExpDates.size()>0){
+                                            for(ProductExpiration productExpDate : productExpDates) {
+                                                product.setProd_expdate(productExpDate.getProd_expdate());
+                                                product.setProd_expdatecount(productExpDate.getProd_expdatecount());
+                                                String pname = product.getProd_name();
+                                                product.setProd_reference(pname+productExpDate.getProd_expdate());
+                                                qrCode.setQr_reference(pname+productExpDate.getProd_expdate());
+                                                product.setQrCode(qrCode);
+
+                                                dbreference.child("owner/"+key+"/business/qrCode").push().setValue(qrCode);
+                                                dbreference.child("owner/"+key+"/business/product").push().setValue(product);
+
+                                                String productJson = gson.toJson(product);
+                                                product_editor.putString("product", productJson);
+                                                product_editor.commit();
+
+                                            }
+                                        } else{
+                                            product.setProd_expdate("No Expiration");
+                                            String pname = product.getProd_name();
+                                            product.setProd_reference(pname+product.getProd_expdate().trim());
+                                            qrCode.setQr_reference(pname+product.getProd_expdate().trim());
+                                            product.setQrCode(qrCode);
+
+//                            product.setDiscounted_price();
+                                            dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
+                                            dbreference.child("owner/"+key+"/business/qrCode").child(QRCodeId).setValue(qrCode);
+                                            String productJson = gson.toJson(product);
+                                            product_editor.putString("product", productJson);
+                                            product_editor.commit();
+
+                                        }
+
+
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
 
                     }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                });
 
             }
         });
+
+
+//        ProductCondition condition = new ProductCondition();
+//        Category category = new Category();
+//        Discount discount = new Discount();
+//        final QRCode qrCode = new QRCode();
+//
+//        qrCode.setQr_category("Product");
+//        qrCode.setQr_code(prod_name);
+//        qrCode.setQr_price(prod_price);
+//        qrCode.setQr_disc_price(discounted_price);
+//
+//        discount.setDisc_code(selecteddisc);
+//        category.setCategory_name(selectedcategory);
+//
+//        condition.setCond_name(selectedprodcond);
+//
+//        if(condcount.getText().toString().equals("") && selectedprodcond.equals("New")){
+//            int count = 0;
+//            condition.setCond_count(count);
+//        }else{
+//            int count = Integer.parseInt(condcount.getText().toString());
+//            condition.setCond_count(count);
+//        }
+
+//        final Product product = new Product(prod_name, prod_brand, prod_unitof_measure, prod_status, prod_price, prod_rop, prod_stock, prod_reference, discounted_price);
+//        product.setProductCondition(condition);
+//        product.setCategory(category);
+//        product.setDiscount(discount);
+//        product.setQrCode(qrCode);
+//
+//        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+//        final String username = (shared.getString("owner_username", ""));
+//
+//        SharedPreferences productshared = getSharedPreferences("ProductPref",MODE_PRIVATE); //creating a shared preference for products
+//        final SharedPreferences.Editor product_editor = productshared.edit();
+//
+//        final Gson gson = new Gson();
+//
+//        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()){
+//                    product_editor.putString("product_id", ProductId); //saving the ProductId to shared preference
+//
+//                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+//
+//                        final String key = ds.getKey();
+//
+//                        if (productExpDates.size()>0){
+//                            for(ProductExpiration productExpDate : productExpDates) {
+//                                product.setProd_expdate(productExpDate.getProd_expdate());
+//                                product.setProd_expdatecount(productExpDate.getProd_expdatecount());
+//                                String pname = product.getProd_name();
+//                                product.setProd_reference(pname+productExpDate.getProd_expdate());
+//                                qrCode.setQr_reference(pname+productExpDate.getProd_expdate());
+//                                product.setQrCode(qrCode);
+//
+//                                dbreference.child("owner/"+key+"/business/qrCode").push().setValue(qrCode);
+//                                dbreference.child("owner/"+key+"/business/product").push().setValue(product);
+//
+//                                String productJson = gson.toJson(product);
+//                                product_editor.putString("product", productJson);
+//                                product_editor.commit();
+//
+//                            }
+//                        } else{
+//                            product.setProd_expdate("No Expiration");
+//                            String pname = product.getProd_name();
+//                            product.setProd_reference(pname+product.getProd_expdate().trim());
+//                            qrCode.setQr_reference(pname+product.getProd_expdate().trim());
+//                            product.setQrCode(qrCode);
+//
+////                            product.setDiscounted_price();
+//                            dbreference.child("owner/"+key+"/business/product").child(ProductId).setValue(product);
+//                            dbreference.child("owner/"+key+"/business/qrCode").child(QRCodeId).setValue(qrCode);
+//                            String productJson = gson.toJson(product);
+//                            product_editor.putString("product", productJson);
+//                            product_editor.commit();
+//
+//                        }
+//
+//
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     public void insertProduct(){

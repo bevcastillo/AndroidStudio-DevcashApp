@@ -27,19 +27,19 @@ import java.util.List;
 
 public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.ViewHolder> {
 
-    Context context;
+//    Context context;
     List<Employeelistdata> list;
     List<Employee> employeeList;
 
-//    public EmployeesAdapter(List<Employeelistdata> list) {
-//        this.list = list;
-//    }
-
-
-    public EmployeesAdapter(Context context, List<Employeelistdata> list) {
-        this.context = context;
+    public EmployeesAdapter(List<Employeelistdata> list) {
         this.list = list;
     }
+
+
+//    public EmployeesAdapter(Context context, List<Employeelistdata> list) {
+//        this.context = context;
+//        this.list = list;
+//    }
 
     @NonNull
     @Override
@@ -88,8 +88,8 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.View
 //        Picasso.with(context)
 //                .load(data.getEmp_imageUrl())
 //                .into(viewHolder.empImage);
-        Picasso.with(context).load(data.getEmp_imageUrl())
-                .into(viewHolder.empImage);
+//        Picasso.with(context).load(data.getEmp_imageUrl())
+//                .into(viewHolder.empImage);
     }
 
     @Override

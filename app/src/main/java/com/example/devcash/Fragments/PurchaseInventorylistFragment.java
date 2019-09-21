@@ -231,6 +231,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         double discountedprice = product.getDiscounted_price();
                                         String status = product.getProd_status();
                                         int prodStock = product.getProd_stock();
+                                        String image = product.getProd_image();
 
                                         if (status.equals("Available")){
                                             if (prodStock > 0){
@@ -238,12 +239,13 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                 listdata.setProd_price(prodprice);
                                                 listdata.setDiscounted_price(discountedprice);
                                                 listdata.setProd_expdate(product.getProd_expdate());
+                                                listdata.setProd_image(image);
                                                 list.add(listdata);
                                             }
                                         }
 
                                     }
-                                        PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(list);
+                                        PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(getContext(), list);
                                         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),5);
                                         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                         recyclerViewitemlist.setLayoutManager(gridLayoutManager);
@@ -298,16 +300,18 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                         double sprice = services.getService_price();
                                         double discountedprice = services.getDiscounted_price();
                                         String status = services.getService_status();
+                                        String image = services.getService_image();
 
                                         if (status.equals("Available")){
                                             slistdata.setServname(sname);
                                             slistdata.setServprice(sprice);
                                             slistdata.setDiscounted_price(discountedprice);
+                                            slistdata.setService_image(image);
                                             slist.add(slistdata);
                                         }
 
                                     }
-                                        PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist);
+                                        PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist, getContext());
                                         GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),5);
                                         sgridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                         recyclerViewitemlist.setLayoutManager(sgridLayoutManager);

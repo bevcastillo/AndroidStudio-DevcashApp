@@ -19,14 +19,22 @@ import com.example.devcash.EDIT_UI.EditServices;
 import com.example.devcash.Object.Services;
 import com.example.devcash.Object.Serviceslistdata;
 import com.example.devcash.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHolder> {
+    Context context;
     List<Serviceslistdata> list;
 
-    public ServicesAdapter(List<Serviceslistdata> list) {
+//    public ServicesAdapter(List<Serviceslistdata> list) {
+//        this.list = list;
+//    }
+
+
+    public ServicesAdapter(Context context, List<Serviceslistdata> list) {
+        this.context = context;
         this.list = list;
     }
 
@@ -85,6 +93,8 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             viewHolder.serviceprice.setPaintFlags(viewHolder.serviceprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             viewHolder.discountedprice.setText("₱"+(data.getDiscounted_price()));
         }
+
+        Picasso.with(context).load(data.getService_image()).into(viewHolder.image);
     }
 
     @Override
@@ -94,7 +104,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView servicename, serviceprice, servicestatus, discountedprice;
-        ImageView servimgstatus;
+        ImageView servimgstatus, image;
         LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -105,6 +115,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             servimgstatus = (ImageView) itemView.findViewById(R.id.imageView_servavail);
             discountedprice = (TextView) itemView.findViewById(R.id.txtservice_discprice);
             layout = (LinearLayout) itemView.findViewById(R.id.serviceLayout);
+            image = (ImageView) itemView.findViewById(R.id.service_image);
 
         }
     }

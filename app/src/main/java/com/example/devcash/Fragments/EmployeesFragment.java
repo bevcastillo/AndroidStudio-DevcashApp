@@ -202,7 +202,7 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                                     emplist.add(employeelistdata);
                                 }
 
-                                EmployeesAdapter employeesAdapter = new EmployeesAdapter(getContext(),emplist);
+                                EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
                                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                                 emprecyclerview.setLayoutManager(mLayoutManager);
                                 emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
@@ -345,7 +345,7 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                                         employeelistdata.setEmptask(task);
                                         emplist.add(employeelistdata);
                                     }
-                                    EmployeesAdapter employeesAdapter = new EmployeesAdapter(getContext(),emplist);
+                                    EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
                                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                                     emprecyclerview.setLayoutManager(mLayoutManager);
                                     emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));

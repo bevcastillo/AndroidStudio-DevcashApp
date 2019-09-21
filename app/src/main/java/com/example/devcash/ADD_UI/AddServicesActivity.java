@@ -2,6 +2,7 @@ package com.example.devcash.ADD_UI;
 
 import android.app.ProgressDialog;
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -32,11 +34,16 @@ import com.example.devcash.Object.ProductExpiration;
 import com.example.devcash.Object.QRCode;
 import com.example.devcash.Object.Services;
 import com.example.devcash.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
@@ -49,6 +56,9 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
     private DatabaseReference ownerdbreference;
 //    private StorageReference storageReference;
     private String ServicesId, QRCodeId;
+
+    private StorageReference storageReference;
+    private StorageTask uploadTask;
 
 
     String servname, servstatus;
@@ -107,6 +117,7 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
         categorydbreference = firebaseDatabase.getReference("datadevcash/category");
         discountsdbreference = firebaseDatabase.getReference("datadevcash/discount");
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+        storageReference = FirebaseStorage.getInstance().getReference("Service");
 
         final ArrayList<String> categories = new ArrayList<String>();
 
@@ -267,49 +278,74 @@ public class AddServicesActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
 
-    public void addServices(String service_name, String service_status, double service_price, double service_disc_price){
-        Discount discount = new Discount();
-        Category category = new Category();
+
+    public void addServices(final String service_name, final String service_status, final double service_price, final double service_disc_price){
+
+        final Discount discount = new Discount();
+        final Category category = new Category();
         final QRCode qrCode = new QRCode();
-        qrCode.setQr_category("Services");
-        qrCode.setQr_code(service_name);
-        qrCode.setQr_price(service_price);
-        qrCode.setQr_reference(service_name+service_price);
-        qrCode.setQr_disc_price(service_disc_price);
-        discount.setDisc_code(selecteddiscount);
-        category.setCategory_name(selectedcategory);
-
         final Services services = new Services();
-        services.setService_status(service_status);
-        services.setService_name(service_name);
-        services.setService_price(service_price);
+
+
+        //upload image
+        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+
+        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        services.setService_image(uri.toString());
+
+                        qrCode.setQr_category("Services");
+                        qrCode.setQr_code(service_name);
+                        qrCode.setQr_price(service_price);
+                        qrCode.setQr_reference(service_name+service_price);
+                        qrCode.setQr_disc_price(service_disc_price);
+                        discount.setDisc_code(selecteddiscount);
+                        category.setCategory_name(selectedcategory);
+
+                        services.setService_status(service_status);
+                        services.setService_name(service_name);
+                        services.setService_price(service_price);
 //        services.setService_disc_price(service_disc_price);
-        services.setDiscounted_price(service_disc_price);
-        services.setDiscount(discount);
-        services.setCategory(category);
-        services.setQrCode(qrCode);
+                        services.setDiscounted_price(service_disc_price);
+                        services.setDiscount(discount);
+                        services.setCategory(category);
+                        services.setQrCode(qrCode);
 
-        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
-        final String username = (shared.getString("owner_username", ""));
+                        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                        final String username = (shared.getString("owner_username", ""));
 
-        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        String key = ds.getKey();
-                        dbreference.child("owner/"+key+"/business/qrCode").child(QRCodeId).setValue(qrCode);
-                        dbreference.child("owner/"+key+"/business/services").child(ServicesId).setValue(services);
+                        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                                        String key = ds.getKey();
+                                        dbreference.child("owner/"+key+"/business/qrCode").child(QRCodeId).setValue(qrCode);
+                                        dbreference.child("owner/"+key+"/business/services").child(ServicesId).setValue(services);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                });
             }
         });
+
     }
 
 

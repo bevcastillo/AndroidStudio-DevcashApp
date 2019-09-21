@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,8 +61,14 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
     Context context;
     int customerId;
 
-    public PurchaseInventoryServicesAdapter(List<Serviceslistdata> list) {
+//    public PurchaseInventoryServicesAdapter(List<Serviceslistdata> list) {
+//        this.list = list;
+//    }
+
+
+    public PurchaseInventoryServicesAdapter(List<Serviceslistdata> list, Context context) {
         this.list = list;
+        this.context = context;
     }
 
     @NonNull
@@ -458,6 +466,8 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
             viewHolder.amountOff.setText(String.valueOf(lessAmount)+" off");
         }
 
+        Picasso.with(context).load(data.getService_image()).into(viewHolder.image);
+
 
     }
 
@@ -469,6 +479,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView servicename, serviceprice, expiration, discountedprice, amountOff;
         RelativeLayout layout;
+        ImageView image;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -477,6 +488,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
             discountedprice = (TextView) itemView.findViewById(R.id.prod_discountedprice);
             amountOff = (TextView) itemView.findViewById(R.id.lessOff);
             layout = (RelativeLayout) itemView.findViewById(R.id.cardLayout);
+            image = (ImageView) itemView.findViewById(R.id.prodlist_image);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.devcash.CustomAdapters;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -43,7 +46,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
 
-
+    Context context;
     List<Productlistdata> plist;
     Map<String, PurchasedItem> purchasedItemMap;
     Map<String, Object> cartMap;
@@ -51,7 +54,13 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
     private static int itemcount = 0;
     int customerId;
 
-    public PurchaseInventoryProductsAdapter(List<Productlistdata> plist) {
+//    public PurchaseInventoryProductsAdapter(List<Productlistdata> plist) {
+//        this.plist = plist;
+//    }
+
+
+    public PurchaseInventoryProductsAdapter(Context context, List<Productlistdata> plist) {
+        this.context = context;
         this.plist = plist;
     }
 
@@ -466,6 +475,8 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
 
         }
 
+        Picasso.with(context).load(data.getProd_image()).into(viewHolder.image);
+
 //        viewHolder.price.setPaintFlags(viewHolder.price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
 
@@ -484,6 +495,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
     class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView name, price, expiration, discountedprice, amountOff;
+        ImageView image;
         RelativeLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -495,6 +507,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
             discountedprice = (TextView)itemView.findViewById(R.id.prod_discountedprice);
             amountOff = (TextView) itemView.findViewById(R.id.lessOff);
             layout = (RelativeLayout) itemView.findViewById(R.id.cardLayout);
+            image = (ImageView) itemView.findViewById(R.id.prodlist_image);
 
         }
     }
