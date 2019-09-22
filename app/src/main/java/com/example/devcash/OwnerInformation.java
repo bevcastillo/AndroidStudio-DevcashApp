@@ -42,6 +42,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 public class OwnerInformation extends AppCompatActivity implements View.OnClickListener {
 
@@ -100,7 +101,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
-        storageReference = FirebaseStorage.getInstance().getReference("owner");
+        storageReference = FirebaseStorage.getInstance().getReference("Owner");
     }
 
     @Override
@@ -121,6 +122,9 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         ownerfname.setText(business.getOwner_fname());
         ownerphone.setText(business.getOwner_mobileno());
 
+        Picasso.with(this).load(business.getOwner_image()).into(imageView);
+        Toast.makeText(this, business.getOwner_image()+" is the url", Toast.LENGTH_SHORT).show();
+
         selectedGender = business.getOwner_gender();
         if(selectedGender.equals(radioMale.getText().toString())){
             radioMale.setChecked(true);
@@ -130,11 +134,15 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
             radioMale.setChecked(false);
         }
 
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
 
         txtownerusername.setText(account.getAcct_uname());
         ownerusername.setText(account.getAcct_uname());
         acctemail.setText(account.getAcct_email());
         acctpassw.setText(account.getAcct_passw());
+
 
     }
 
@@ -271,11 +279,20 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
     }
 
     public void updateOwner(){
+//        final StorageReference fileReference = null;
+//
+//        if (imageUri!=null){
+//            fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+//        }
 
-        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
 
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
+
+        SharedPreferences businessPref = getApplicationContext().getSharedPreferences("BusinessPref", MODE_PRIVATE);
+        final SharedPreferences.Editor businessEditor = businessPref.edit();
+
+        final Gson gson = new Gson();
 
         ownerdbreference.orderByChild("/business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -293,21 +310,31 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
                                 ownerdbreference.child(ownerkey+"/business/owner_username").setValue(ownerusername.getText().toString());
                                 ownerdbreference.child(ownerkey+"/business/owner_mobileno").setValue(ownerphone.getText().toString());
 
-                                uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                            @Override
-                                            public void onSuccess(Uri uri) {
-                                                ownerdbreference.child(ownerkey+"/business/owner_image").setValue(uri.toString());
-                                            }
-                                        });
-                                    }
-                                });
+//                                uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                    @Override
+//                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                        fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                            @Override
+//                                            public void onSuccess(Uri uri) {
+//                                                ownerdbreference.child(ownerkey+"/business/owner_image").setValue(uri.toString());
+//                                            }
+//                                        });
+//                                    }
+//                                });
 
                                 addRadioGroupListener();
                                 ownerdbreference.child(ownerkey+"/business/owner_gender").setValue(selectedGender);
 
+                                // we update the shared preferences.
+                                business.setOwner_lname(ownerlname.getText().toString());
+                                business.setOwner_fname(ownerfname.getText().toString());
+                                business.setOwner_username(ownerusername.getText().toString());
+                                business.setOwner_mobileno(ownerphone.getText().toString());
+                                business.setOwner_gender(selectedGender);
+
+                                String businessJson = gson.toJson(business);
+                                businessEditor.putString("business", businessJson);
+                                businessEditor.commit();
                                 ///
                                 ownerdbreference.child(ownerkey+"/business/account")
                                         .orderByChild("acct_uname").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {

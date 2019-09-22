@@ -226,7 +226,7 @@ public class EmployeeAccountInfo extends AppCompatActivity implements View.OnCli
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+//        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
 
         ownerdbreference.orderByChild("/business/owner_username")
                 .equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -257,17 +257,17 @@ public class EmployeeAccountInfo extends AppCompatActivity implements View.OnCli
                                                         Employee employee = dataSnapshot3.getValue(Employee.class);
                                                         selectedgender = employee.getEmp_gender();
 
-                                                        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                            @Override
-                                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                    @Override
-                                                                    public void onSuccess(Uri uri) {
-                                                                        ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/employee_image").setValue(uri.toString());
-                                                                    }
-                                                                });
-                                                            }
-                                                        });
+//                                                        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                                            @Override
+//                                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                                                    @Override
+//                                                                    public void onSuccess(Uri uri) {
+//                                                                        ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/employee_image").setValue(uri.toString());
+//                                                                    }
+//                                                                });
+//                                                            }
+//                                                        });
 
                                                         ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/account/acct_passw").setValue(editpassword.getText().toString());
                                                         ownerdbreference.child(ownerkey+"/business/employee").child(empkey+"/account/acct_email").setValue(editemail.getText().toString());

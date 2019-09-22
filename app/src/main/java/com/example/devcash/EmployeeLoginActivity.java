@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.devcash.Object.Business;
 import com.example.devcash.Object.Employee;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -83,11 +84,13 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
         SharedPreferences ownerPref = getApplicationContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final SharedPreferences.Editor ownerEditor = ownerPref.edit();
 
+        SharedPreferences businessPref = getApplicationContext().getSharedPreferences("BusinessPref", MODE_PRIVATE);
+        final SharedPreferences.Editor businessEditor = businessPref.edit();
+
         final Gson gson = new Gson();
 
         final String empuser = empusername.getText().toString();
         final String emppassword = emppassw.getText().toString();
-
 
         databaseReference.child("owner")
                 .addValueEventListener(new ValueEventListener() {
@@ -106,6 +109,46 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
                                                     if(dataSnapshot.exists()) {
                                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                             Employee employee = snapshot.getValue(Employee.class);
+
+                                                            // query business
+                                                            businessownerdbreference.orderByChild("business/owner_username")
+                                                                    .equalTo(employee.getEmp_workfor())
+                                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                            if (dataSnapshot.exists()) {
+                                                                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                                                                    final String businessKey = dataSnapshot1.getKey();
+
+                                                                                    businessownerdbreference.child(businessKey+"/business").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                        @Override
+                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                            if (dataSnapshot.exists()) {
+                                                                                                Business business = dataSnapshot.getValue(Business.class);
+
+                                                                                                // Save to shared preference
+                                                                                                String businessJson = gson.toJson(business);
+                                                                                                businessEditor.putString("business", businessJson);
+                                                                                                businessEditor.commit();
+                                                                                            }
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                        }
+                                                                    });
+                                                            // end query business.
+
                                                             if (employee.getAccount().getAcct_passw().equals(emppassword)) {
                                                                 String json = gson.toJson(employee);
                                                                 editor.putString("Employee", json);
@@ -115,6 +158,9 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
                                                                 ownerEditor.putString("owner_username", employee.getEmp_workfor());
                                                                 ownerEditor.commit();
                                                                 if(employee.getEmp_task().equals("Cashiering")){
+                                                                    editor.putString("emp_task", "Cashiering");
+                                                                    editor.commit();
+
                                                                     Intent intent = new Intent(EmployeeLoginActivity.this, CashierNavigation.class);
                                                                     startActivity(intent);
                                                                     Toast.makeText(EmployeeLoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();

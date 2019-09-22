@@ -5,10 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
@@ -16,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +57,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.w3c.dom.Text;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -72,8 +82,12 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
     CartItem cartItem;
     int customerId = 0;
 
-    TextView regItemOff, regSubtotal, regVat, regVatExempt, regAmountDue, senItemOff, senSubtotal, senVat, senVatExempt, senDiscount, senAmountDue, regCash, regChange, seniorCash, seniorChange;
+    TextView regItemOff, regSubtotal, regVat, regVatExempt, regAmountDue, senItemOff, senSubtotal,
+            senVat, senVatExempt, senDiscount, senAmountDue, regCash, regChange, seniorCash, seniorChange,
+            enterpriseTin;
     LinearLayout regularLayout, seniorLayout;
+    CardView card_receipt;
+    Button btnscreenshot;
 
 
     @Override
@@ -87,6 +101,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
         enterprisename = (TextView) findViewById(R.id.text_enterprisename);
         enterpriseaddr = (TextView) findViewById(R.id.text_enterpriseaddr);
         enterprisephone = (TextView) findViewById(R.id.text_enterprisephone);
+        enterpriseTin = (TextView) findViewById(R.id.text_enterprisetin);
         receiptno = (TextView) findViewById(R.id.text_receiptno);
         customertype = (TextView) findViewById(R.id.text_customertype);
         cashiername = (TextView) findViewById(R.id.text_cashiername);
@@ -99,8 +114,10 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
         regCash = (TextView) findViewById(R.id.regular_cash);
         regChange = (TextView) findViewById(R.id.regular_change);
         regularLayout = (LinearLayout) findViewById(R.id.regularcustomerLayout);
+        card_receipt = (CardView) findViewById(R.id.cardview_receipt);
+        btnscreenshot = (Button) findViewById(R.id.screenshot);
 
-
+        btnscreenshot.setOnClickListener(this);
 
         senItemOff = (TextView) findViewById(R.id.seniorItemOff);
         senSubtotal = (TextView) findViewById(R.id.seniorSubtotal);
@@ -173,6 +190,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
             return true;
         }else if (id == R.id.email_action){
             emailDialog();
+            // call screenshot
+//            screenshot();
 //            Intent intent = new Intent(CustomerReceiptActivity.this, SendReceiptbyEmail.class);
 //            startActivity(intent);
         }else if (id == R.id.mms_action){
@@ -274,24 +293,46 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                                                 double discount = customerTransaction.getTotal_item_discount();
                                                                 double totprice = customerTransaction.getAmount_due();
                                                                 String customerType = customerTransaction.getCustomer_type();
+                                                                String date = customerTransaction1.getTransaction_datetime();
+                                                                double itemOff = customerTransaction1.getTotal_item_discount();
+                                                                double subtotal = customerTransaction1.getSubtotal();
+                                                                double vat = customerTransaction1.getVat();
+                                                                double vatE = customerTransaction1.getVat_exempt_sale();
+                                                                double amountDue = customerTransaction1.getAmount_due();
 
-                                                                String header = "";
+                                                                String header = "<p>"+enterpriseName+"</p>" +
+                                                                                "<p>"+enterpriseAddr+"</p>" +
+                                                                                "<p>TEL: "+enterprisePhone+"</p>" +
+                                                                                "<p>TIN: "+tinNo+"</p>" +
+                                                                                "<p></p>" +
+                                                                                "------------------------------------------------------------------------------------------------"+
+                                                                                "<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"O F F I C I A L &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; R E C E I P T"+"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>"+
+                                                                                "------------------------------------------------------------------------------------------------"+
+                                                                                "<p>Receipt#: "+receiptno+"</p>" +
+                                                                                "<p>Date: "+date+"</p>" +
+                                                                                "<p> "+customerType+"</p>" +
+                                                                                "<p>Cashier : "+finalCashier+"</p>";
 
-                                                                String customerReceiptContent =
-                                                                        "<h2>"+enterpriseName+"</h2>"+
-                                                                        "<p>"+enterpriseAddr+"</p>" +
-                                                                        "<p>"+enterprisePhone+"</p>" +
-                                                                        "<tt>Receipt#"+receiptno+"</tt>" +
-                                                                        "<p>"+ finalCashier +"</p>" +
-                                                                        "<p>"+customerType+"</p>";
+                                                                String body = "<p>------------------------------------------------------------------------------------------------</p>";
 
-                                                                String totalDue =  "<p>Total Due-----"+totprice+"</p>" +
-                                                                        "<p>Discount------"+discount+"</p>"+
-                                                                        "<p>Cash----------"+cash+"</p>"+
-                                                                        "<p>Change--------"+change+"</p>";
+                                                                String footer = "<p>------------------------------------------------------------------------------------------------</p>"+
+                                                                                "<p>Item off: "+itemOff+"</p>"+
+                                                                                "<p>Subtotal: "+subtotal+"</p>"+
+                                                                                "<p>(12%) VAT: "+vat+"</p>"+
+                                                                                "<p>VatExempt Sale: "+vatE+"</p>"+
+                                                                                "<p>------------------------------------------------------------------------------------------------</p>"+
+                                                                                "<p>Amount Due: "+amountDue+"</p>"+
+                                                                                "<p>Cash: "+cash+"</p>"+
+                                                                                "<p>Change: "+change+"</p>";
 
 
-                                                                String anothersample = "[html]<body><h1>Foobar</h1><ul><li>foo</li><li>bar</li></ul></body>[/html]";
+                                                                String totalDue =  "<p>------------------------------------------------------------------------------------------------</p>" +
+                                                                                    "<p>Devcash, Inc</p>"+
+                                                                                    "<p>Date Issued: September 23, 2019</p>" +
+                                                                                    "<p>Valid Until: September 23, 2024</p>" +
+                                                                                    "<p>This receipt shall be valid for</p>" +
+                                                                                    "<p>five (5) years from the date of transaction.</p>";
+
 
 
                                                                 for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
@@ -315,7 +356,11 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
 
                                                                         ReceiptServiceAdapter adapter = new ReceiptServiceAdapter(services);
                                                                         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                                                                        customerReceiptContent += "Qty: "+prodObj.getProd_qty()+"\npurchasedItems: "+prodObj.getProd_name()+" \nwith a price of: "+prodObj.getProd_price();
+                                                                        body += "<p>"+prodObj.getProd_qty()+ "&nbsp;&nbsp;&nbsp;"+ prodObj.getProd_name()+
+                                                                                "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                                                                prodObj.getProd_subtotal()+"</p>" +
+                                                                                "<p>@ "+prodObj.getDiscounted_price()+"</p>"+
+                                                                                "<p>------------------------------------------------------------------------------------------------</p>";
 
                                                                     } else {
                                                                         String json = gson.toJson(entry.getValue());
@@ -330,7 +375,11 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                                                         cartItems.add(cartItem);
                                                                         services.add(servicesObj);
 
-                                                                        customerReceiptContent += "Qty: "+servicesObj.getService_qty()+" \npurchasedItems: "+servicesObj.getService_name()+" \nwith a price of: "+servicesObj.getService_price();
+                                                                        body += "<p>"+servicesObj.getService_qty()+ "&nbsp;&nbsp;&nbsp;"+servicesObj.getService_name()+
+                                                                                "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+                                                                                servicesObj.getService_subtotal()+"</p>" +
+                                                                                "<p>@ "+servicesObj.getDiscounted_price()+"</p>"+
+                                                                                "<p>------------------------------------------------------------------------------------------------</p>";
                                                                     }
                                                                 }
 
@@ -339,9 +388,10 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                                                 String[] recipients = {cust_email.getText().toString()};
                                                                 Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto: "));
                                                                 String htmlBody = new StringBuilder()
-                                                                        .append(customerReceiptContent)
+                                                                        .append(header)
+                                                                        .append(body)
+                                                                        .append(footer)
                                                                         .append(totalDue)
-                                                                        .append(anothersample)
                                                                         .toString();
 
                                                                 //prompts email clients
@@ -359,7 +409,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                                                                     email.putExtra(Intent.EXTRA_TEXT,
                                                                             Html.fromHtml(htmlBody, Html.FROM_HTML_MODE_LEGACY));
-                                                                    Toast.makeText(CustomerReceiptActivity.this, "this is SDK", Toast.LENGTH_SHORT).show();
+//                                                                    Toast.makeText(CustomerReceiptActivity.this, "this is SDK", Toast.LENGTH_SHORT).show();
                                                                 }else {
                                                                     email.putExtra(Intent.EXTRA_TEXT,
                                                                             Html.fromHtml(htmlBody));
@@ -536,11 +586,81 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
 
         Account account = gson.fromJson(json, Account.class);
         Business business = gson.fromJson(businessJson, Business.class);
-        enterprisephone.setText(business.getOwner_mobileno());
+        enterprisephone.setText("TEL: "+business.getOwner_mobileno());
         enterprisename.setText(business.enterprise.getEnt_name());
         enterpriseaddr.setText(business.enterprise.getEnt_addr());
+        enterpriseTin.setText("TIN: "+business.enterprise.getEnt_tin());
 
     }
+
+    private void screenshot(){
+//        Toast.makeText(this, "this is screenshot", Toast.LENGTH_SHORT).show();
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+//        try {
+//            // image naming and path  to include sd card  appending name you choose for file
+//            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpeg";
+//
+//            // create bitmap screen capture
+//            view.setDrawingCacheEnabled(true);
+//            Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+//            view.setDrawingCacheEnabled(false);
+//
+//            File imageFile = new File(mPath);
+//
+//            FileOutputStream outputStream = new FileOutputStream(imageFile);
+//            int quality = 100;
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+//            outputStream.flush();
+//            outputStream.close();
+//
+//            //setting screenshot in imageview
+//            String filePath = imageFile.getPath();
+//            Toast.makeText(this, "Screenshot can be found at "+filePath, Toast.LENGTH_SHORT).show();
+//
+////            Bitmap ssbitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+////            ivpl.setImageBitmap(ssbitmap);
+//            //sharePath = filePath;
+//
+//        } catch (Throwable e) {
+//            // Several error may come out with file handling or DOM
+//            e.printStackTrace();
+//        }
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            openScreenshot(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
+    }
+
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
+    }
+
+
 
     public void displayTransactionDetails(){
 
@@ -683,6 +803,9 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                 Intent intent1 = new Intent(CustomerReceiptActivity.this, SendReceiptviaMMS.class);
                 startActivity(intent1);
             break;
+            case R.id.screenshot:
+                screenshot();
+                break;
         }
     }
 

@@ -443,34 +443,37 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                                         Product product = dataSnapshot2.getValue(Product.class);
                                         strprodavail = product.getProd_status();
 
-                                        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+//                                        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+//
+//                                        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                            @Override
+//                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                                    @Override
+//                                                    public void onSuccess(Uri uri) {
+//                                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_image").setValue(uri.toString());
+//                                                    }
+//                                                });
+//                                            }
+//                                        });
 
-                                        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                            @Override
-                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                    @Override
-                                                    public void onSuccess(Uri uri) {
-                                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_image").setValue(uri.toString());
-                                                    }
-                                                });
+
+                                        if (strExpirationDate != null) {
+                                            if (strExpirationDate.equals("")){
+                                                newExpirationDate = "No Expiration";
+                                                Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
+                                            }else {
+                                                newExpirationDate = strExpirationDate;
+                                                Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
                                             }
-                                        });
 
-
-                                        if (strExpirationDate.equals("")){
-                                            newExpirationDate = "No Expiration";
-                                            Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
-                                        }else {
-                                            newExpirationDate = strExpirationDate;
-                                            Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
+                                            if (!strExpirationDate.equals(null)){
+                                                Toast.makeText(EditProduct.this, strExpirationDate+"", Toast.LENGTH_SHORT).show();
+                                            }else {
+                                                Toast.makeText(EditProduct.this, "does not expire", Toast.LENGTH_SHORT).show();
+                                            }
                                         }
 
-                                        if (!strExpirationDate.equals(null)){
-                                            Toast.makeText(EditProduct.this, strExpirationDate+"", Toast.LENGTH_SHORT).show();
-                                        }else {
-                                            Toast.makeText(EditProduct.this, "does not expire", Toast.LENGTH_SHORT).show();
-                                        }
                                         final String newProductReference = productname.getText().toString()+""+newExpirationDate;
 
                                         if (checkBoxavail.isChecked()){

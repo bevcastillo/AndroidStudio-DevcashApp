@@ -29,6 +29,8 @@ import com.example.devcash.CustomAdapters.AllPurchaseAdapter;
 import com.example.devcash.CustomAdapters.AllPurchasesAdapter;
 import com.example.devcash.CustomAdapters.ProductlistAdapter;
 import com.example.devcash.CustomAdapters.ServicelistAdapter;
+import com.example.devcash.Fragments.InventoryListFragment;
+import com.example.devcash.Fragments.PurchaseInventorylistFragment;
 import com.example.devcash.Object.CartItem;
 import com.example.devcash.Object.CustomerTransaction;
 import com.example.devcash.Object.Product;
@@ -209,51 +211,101 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
 
                                         Gson gson = new Gson();
 
-                                        for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
+                                        if (customerTransaction.getCustomer_cart()!=null){
+                                            for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
 //                                            Toast.makeText(AllPurchaseActivity.this, entry.getValue()+" value", Toast.LENGTH_SHORT).show();
-                                            if (entry.getValue().toString().contains("product")) {
-                                                String json = gson.toJson(entry.getValue());
-                                                Log.d("PRODUCT JSON REP @@@@", json);
-                                                String mJsonString = json;
-                                                JsonParser parser = new JsonParser();
-                                                JsonElement mJson =  parser.parse(mJsonString);
+                                                if (entry.getValue().toString().contains("product")) {
+                                                    String json = gson.toJson(entry.getValue());
+                                                    Log.d("PRODUCT JSON REP @@@@", json);
+                                                    String mJsonString = json;
+                                                    JsonParser parser = new JsonParser();
+                                                    JsonElement mJson =  parser.parse(mJsonString);
 
-                                                JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
-                                                JsonElement prodJson = jsonObject.get("product");
-                                                Product prodObj = gson.fromJson(prodJson, Product.class);
+                                                    JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+                                                    JsonElement prodJson = jsonObject.get("product");
+                                                    Product prodObj = gson.fromJson(prodJson, Product.class);
 
-                                                cartItem.setProduct(prodObj);
-                                                cartItems.add(cartItem);
-                                                products.add(prodObj);
+                                                    cartItem.setProduct(prodObj);
+                                                    cartItems.add(cartItem);
+                                                    products.add(prodObj);
 
-                                                ProductlistAdapter adapter = new ProductlistAdapter(products);
-                                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                                                recyclerViewProducts.setLayoutManager(layoutManager);
-                                                recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                                                recyclerViewProducts.setItemAnimator(new DefaultItemAnimator());
-                                                recyclerViewProducts.setAdapter(adapter);
+                                                    ProductlistAdapter adapter = new ProductlistAdapter(products);
+                                                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                                                    recyclerViewProducts.setLayoutManager(layoutManager);
+                                                    recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                                                    recyclerViewProducts.setItemAnimator(new DefaultItemAnimator());
+                                                    recyclerViewProducts.setAdapter(adapter);
 
-                                            } else {
-                                                String json = gson.toJson(entry.getValue());
-                                                String mJsonString = json;
-                                                JsonParser parser = new JsonParser();
-                                                JsonElement mJson =  parser.parse(mJsonString);
+                                                } else {
+                                                    String json = gson.toJson(entry.getValue());
+                                                    String mJsonString = json;
+                                                    JsonParser parser = new JsonParser();
+                                                    JsonElement mJson =  parser.parse(mJsonString);
 
-                                                JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
-                                                JsonElement servicesJson = jsonObject.get("services");
-                                                Services servicesObj = gson.fromJson(servicesJson, Services.class);
-                                                cartItem.setServices(servicesObj);
-                                                cartItems.add(cartItem);
-                                                services.add(servicesObj);
+                                                    JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+                                                    JsonElement servicesJson = jsonObject.get("services");
+                                                    Services servicesObj = gson.fromJson(servicesJson, Services.class);
+                                                    cartItem.setServices(servicesObj);
+                                                    cartItems.add(cartItem);
+                                                    services.add(servicesObj);
 
-                                                ServicelistAdapter adapter = new ServicelistAdapter(services);
-                                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                                                recyclerViewServices.setLayoutManager(layoutManager);
-                                                recyclerViewServices.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-                                                recyclerViewServices.setItemAnimator(new DefaultItemAnimator());
-                                                recyclerViewServices.setAdapter(adapter);
+                                                    ServicelistAdapter adapter = new ServicelistAdapter(services);
+                                                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                                                    recyclerViewServices.setLayoutManager(layoutManager);
+                                                    recyclerViewServices.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+                                                    recyclerViewServices.setItemAnimator(new DefaultItemAnimator());
+                                                    recyclerViewServices.setAdapter(adapter);
+                                                }
                                             }
+                                        }else {
+                                            Toast.makeText(AllPurchaseActivity.this, "Your cart is empty!", Toast.LENGTH_SHORT).show();
                                         }
+
+//                                        for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
+////                                            Toast.makeText(AllPurchaseActivity.this, entry.getValue()+" value", Toast.LENGTH_SHORT).show();
+//                                            if (entry.getValue().toString().contains("product")) {
+//                                                String json = gson.toJson(entry.getValue());
+//                                                Log.d("PRODUCT JSON REP @@@@", json);
+//                                                String mJsonString = json;
+//                                                JsonParser parser = new JsonParser();
+//                                                JsonElement mJson =  parser.parse(mJsonString);
+//
+//                                                JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+//                                                JsonElement prodJson = jsonObject.get("product");
+//                                                Product prodObj = gson.fromJson(prodJson, Product.class);
+//
+//                                                cartItem.setProduct(prodObj);
+//                                                cartItems.add(cartItem);
+//                                                products.add(prodObj);
+//
+//                                                ProductlistAdapter adapter = new ProductlistAdapter(products);
+//                                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                                                recyclerViewProducts.setLayoutManager(layoutManager);
+//                                                recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+//                                                recyclerViewProducts.setItemAnimator(new DefaultItemAnimator());
+//                                                recyclerViewProducts.setAdapter(adapter);
+//
+//                                            } else {
+//                                                String json = gson.toJson(entry.getValue());
+//                                                String mJsonString = json;
+//                                                JsonParser parser = new JsonParser();
+//                                                JsonElement mJson =  parser.parse(mJsonString);
+//
+//                                                JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+//                                                JsonElement servicesJson = jsonObject.get("services");
+//                                                Services servicesObj = gson.fromJson(servicesJson, Services.class);
+//                                                cartItem.setServices(servicesObj);
+//                                                cartItems.add(cartItem);
+//                                                services.add(servicesObj);
+//
+//                                                ServicelistAdapter adapter = new ServicelistAdapter(services);
+//                                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                                                recyclerViewServices.setLayoutManager(layoutManager);
+//                                                recyclerViewServices.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+//                                                recyclerViewServices.setItemAnimator(new DefaultItemAnimator());
+//                                                recyclerViewServices.setAdapter(adapter);
+//                                            }
+//                                        }
 
 //                                         Beverly
 //                                        AllPurchaseAdapter adapter = new AllPurchaseAdapter(cartItems);
@@ -518,7 +570,19 @@ public class AllPurchaseActivity extends AppCompatActivity implements View.OnCli
                                                                                 .setValue(0);
                                                                         // update total_qty
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction")
-                                                                                .child(customertransactionkey+"/total_qty")
+                                                                                .child(customertransactionkey+"/total_item_qty")
+                                                                                .setValue(0);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction")
+                                                                                .child(customertransactionkey+"/vat")
+                                                                                .setValue(0);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction")
+                                                                                .child(customertransactionkey+"/vat_exempt_sale")
+                                                                                .setValue(0);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction")
+                                                                                .child(customertransactionkey+"/amount_due")
+                                                                                .setValue(0);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction")
+                                                                                .child(customertransactionkey+"/senior_discount")
                                                                                 .setValue(0);
                                                                     }
 

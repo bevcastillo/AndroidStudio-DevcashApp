@@ -388,19 +388,19 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                         }
 
                                         //upload image
-                                        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
-
-                                        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                            @Override
-                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                    @Override
-                                                    public void onSuccess(Uri uri) {
-                                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_image").setValue(uri.toString());
-                                                    }
-                                                });
-                                            }
-                                        });
+//                                        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+//
+//                                        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                            @Override
+//                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                                    @Override
+//                                                    public void onSuccess(Uri uri) {
+//                                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_image").setValue(uri.toString());
+//                                                    }
+//                                                });
+//                                            }
+//                                        });
 
                                         final String myqr_ref = servname.getText().toString()+Double.valueOf(servprice.getText().toString());
                                         //updating inside the service node

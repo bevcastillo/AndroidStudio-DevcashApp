@@ -23,6 +23,7 @@
 
 
         <android.support.v7.widget.CardView
+            android:id="@+id/cardview_receipt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -60,7 +61,14 @@
                     android:id="@+id/text_enterprisephone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="09065283986"
+                    android:text="TEL:09065283986"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/text_enterprisetin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TIN:11223344556699"
                     android:gravity="center"/>
 
                 <View
@@ -68,14 +76,37 @@
                     android:layout_height="1dp"
                     style="@style/Divider"
                     android:layout_marginTop="@dimen/top"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="OFFICAL RECEIPT"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_text"
+                    android:textAllCaps="true"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    style="@style/Divider"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="@dimen/top"/>
 
+
+                <TextView
+                    android:id="@+id/text_transactiondatetime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Date: December 12, 2019 1:30 PM"
+                    android:layout_marginTop="10dp"/>
 
                 <TextView
                     android:id="@+id/text_receiptno"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:text="Receipt# 1"
                     android:textSize="@dimen/text_inputs"/>
 
                 <TextView
@@ -542,26 +573,47 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     style="@style/Divider"
-                    android:layout_marginTop="@dimen/top"/>
+                    android:layout_marginTop="@dimen/top"
+                    android:layout_marginBottom="@dimen/top"/>
 
                 <TextView
-                    android:id="@+id/text_transactiondatetime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="December 12, 2019 1:30 PM"
-                    android:layout_marginTop="10dp"/>
+                    android:text="Devcash, Inc."
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/text_date_issued"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Date Issued: September 23, 2019"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Valid Until: September 23, 2024"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="This receipt shall be valid for \nfive(5) years from the date of transaction"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white">
-
-
-        </android.support.v7.widget.CardView>
+            <Button
+                android:id="@+id/screenshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="take screenshot"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:visibility="gone"/>
         </LinearLayout>
 
 

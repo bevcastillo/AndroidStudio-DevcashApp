@@ -219,23 +219,24 @@ public class DashboardActivity extends AppCompatActivity
         builder.setPositiveButton("LEAVE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                SharedPreferences ownerPref = getSharedPreferences("OwnerPref", MODE_PRIVATE);
                 SharedPreferences custIdShared = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
                 SharedPreferences empPref = getApplicationContext().getSharedPreferences("EmpPref", MODE_PRIVATE);
                 SharedPreferences customerTypePref = getApplicationContext().getSharedPreferences("CustomerTypePref", MODE_PRIVATE);
+                SharedPreferences businessPref = getApplicationContext().getSharedPreferences("BusinessPref", MODE_PRIVATE);
 
-                SharedPreferences.Editor editor = shared.edit();
+                SharedPreferences.Editor editor = ownerPref.edit();
                 SharedPreferences.Editor editor1 = custIdShared.edit();
                 SharedPreferences.Editor editor2 = empPref.edit();
                 SharedPreferences.Editor editor3 = customerTypePref.edit();
-                editor.clear();
-                editor.commit();
-                editor1.clear();
-                editor1.commit();
-                editor2.clear();
-                editor2.commit();
-                editor3.clear();
-                editor3.commit();
+                SharedPreferences.Editor editor4 = businessPref.edit();
+
+                editor.clear().commit();
+                editor1.clear().commit();
+                editor2.clear().commit();
+                editor3.clear().commit();
+                editor4.clear().commit();
+
                 Intent logout = new Intent(DashboardActivity.this, IndexActivity.class);
                 startActivity(logout);
                 Toast.makeText(DashboardActivity.this, "You have been logged out!", Toast.LENGTH_SHORT).show();

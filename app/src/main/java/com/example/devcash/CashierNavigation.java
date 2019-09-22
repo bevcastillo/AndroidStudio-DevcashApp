@@ -105,7 +105,8 @@ public class CashierNavigation extends AppCompatActivity
         String lname = business.getOwner_lname();
         String fname = business.getOwner_fname();
         String employee_name = fname+" "+lname;
-        String entname = business.enterprise.getEnt_name();
+//        String entname = business.enterprise.getEnt_name();
+        String entname = business.getEnterprise().getEnt_name();
 
 //        ownername.setText(name);
         txtEnterpriseName.setText(entname);

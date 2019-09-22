@@ -59,6 +59,9 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
         SharedPreferences customerIdShared = getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
         customerId = (customerIdShared.getInt("customer_id", 0));
 
+        if (customerId <= 0) {
+            customerId = customerId + 1;
+        }
     }
 
     @Override
@@ -92,10 +95,108 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
         switch (id){
             case R.id.btnchargecustomer:
                 // update product stock
+                SharedPreferences empPref = getApplicationContext().getSharedPreferences("EmpPref", MODE_PRIVATE);
+                String empTask = empPref.getString("emp_task", "");
+
                 updateProductStock();
-                saveCashChange();
+
+                if (empTask.equals("")) {
+                    // it means we are the owner.
+                    saveCashChange();
+                } else {
+                    // we are a cashier.
+                    saveCashChangeCashier();
+                }
+
+//                if (empTask == "Owner") {
+//                    saveCashChange();
+//                }
+//                updateProductStock();
+//                saveCashChange();
                 break;
         }
+    }
+
+    private void saveCashChangeCashier() {
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        Toast.makeText(this, username+" is the username", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, customerId+" is the customer id", Toast.LENGTH_SHORT).show();
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        final String acctkey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        String customertransactionkey = dataSnapshot2.getKey();
+                                        CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+
+                                        double subtotal = customerTransaction.getAmount_due();
+                                        double cashreceived = Double.parseDouble(textcashreceived.getText().toString());
+                                        double total = customerTransaction.getAmount_due();
+                                        double amount_due = customerTransaction.getAmount_due();
+
+//                                        if (cashreceived < amount_due) {
+//                                            Toast.makeText(CustomerPaymentActivity.this, "Short Cash!", Toast.LENGTH_SHORT).show();
+//                                            return;
+//                                        }
+
+                                        String change_str = String.format("%.2f", cashreceived - amount_due);
+                                        double change = Double.parseDouble(change_str);
+
+//                                        ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/cash_received").setValue(1);
+
+//
+//                                        ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/cash_received").setValue(cashreceived);
+//                                        ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue(change);
+//                                        ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/transaction_status").setValue("Completed");
+
+                                        Toast.makeText(CustomerPaymentActivity.this, customerTransaction.getSubtotal()+" is the subtotal", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), FinalCustomerActivity.class);
+                                        startActivity(intent);
+
+//                                        if (cashreceived >= amount_due){
+//                                            String change_str = String.format("%.2f", cashreceived - amount_due);
+//                                            double change = Double.parseDouble(change_str);
+//
+//                                            ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/cash_received").setValue(cashreceived);
+//                                            ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue(change);
+//                                            ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/transaction_status").setValue("Completed");
+//                                            Toast.makeText(CustomerPaymentActivity.this, "Cash is saved", Toast.LENGTH_SHORT).show();
+//                                        }else {
+//                                            Toast.makeText(CustomerPaymentActivity.this, "Short cash!", Toast.LENGTH_LONG).show();
+//                                        }
+                                    }
+                                }else {
+//                                    Toast.makeText(CustomerPaymentActivity.this, "cust id does not exist"+customerId, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+//        Intent intent = new Intent(this, FinalCustomerActivity.class);
+//        startActivity(intent);
     }
 
     private void updateProductStock() {
@@ -148,7 +249,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
                                                                                     for (DataSnapshot dataSnapshot3 : dataSnapshot.getChildren()) {
                                                                                         String prodKey = dataSnapshot3.getKey();
                                                                                         Product prod = dataSnapshot3.getValue(Product.class);
-                                                                                        double newStock = prod.getProd_stock() - prodObj.getProd_qty();
+                                                                                        int newStock = prod.getProd_stock() - prodObj.getProd_qty();
                                                                                         ownerdbreference.child(acctKey+"/business/product/"+prodKey+"/prod_stock").setValue(newStock);
                                                                                     }
 
@@ -186,7 +287,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
     }
 
 
-    public void saveCashChange(){
+    public void saveCashChange() {
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
@@ -220,7 +321,6 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
 
                                             Intent intent = new Intent(CustomerPaymentActivity.this, FinalCustomerActivity.class);
                                             startActivity(intent);
-
                                         }else {
                                             Toast.makeText(CustomerPaymentActivity.this, "Short cash!", Toast.LENGTH_LONG).show();
                                         }
@@ -250,12 +350,12 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
-        SharedPreferences custIdShared = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
-        customerId = (custIdShared.getInt("customer_id", 0));
-
-        if (customerId <= 0) {
-            customerId = customerId + 1;
-        }
+//        SharedPreferences custIdShared = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+//        customerId = (custIdShared.getInt("customer_id", 0));
+//
+//        if (customerId <= 0) {
+//            customerId = customerId + 1;
+//        }
 
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
