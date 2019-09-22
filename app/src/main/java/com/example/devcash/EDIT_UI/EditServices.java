@@ -98,6 +98,7 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
         layoutdelete = (LinearLayout) findViewById(R.id.layout_delservices);
         choosePhoto = (LinearLayout) findViewById(R.id.choose_photo);
         takePhoto = (LinearLayout) findViewById(R.id.take_photo);
+        imageView = (ImageView) findViewById(R.id.services_photo);
 
         choosePhoto.setOnClickListener(this);
         takePhoto.setOnClickListener(this);
@@ -221,7 +222,6 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                 chckavail.setChecked(false);
             }
 
-            Picasso.with(this).load(strimageUrl).into(imageView);
         }
 
     }
@@ -280,6 +280,11 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
 
                                     for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
                                         String servkey = dataSnapshot2.getKey();
+                                        Services services = dataSnapshot2.getValue(Services.class);
+                                        String serviceImageUrl = services.getService_image();
+
+                                        Picasso.with(EditServices.this).load(serviceImageUrl).into(imageView);
+
 
                                         ownerdbreference.child(ownerkey+"/business/services").child(servkey+"/category").addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -401,6 +406,7 @@ public class EditServices extends AppCompatActivity implements AdapterView.OnIte
                                         //updating inside the service node
                                         ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_name").setValue(servname.getText().toString());
                                         ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_price").setValue(Double.valueOf(servprice.getText().toString()));
+                                        ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_reference").setValue(myqr_ref);
                                         ownerdbreference.child(ownerKey+"/business/services/").child(servicesKey+"/service_status").setValue(strchkavail);
 ////
 //                                        //updating inside the service/qrCode

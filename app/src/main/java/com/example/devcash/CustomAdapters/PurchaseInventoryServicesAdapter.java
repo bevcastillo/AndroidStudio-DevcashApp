@@ -112,6 +112,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
                 services.setService_name(servname);
                 services.setService_price(servprice);
                 services.setDiscounted_price(discountedprice);
+                services.setService_reference(servname+servprice);
                 services.setService_qty(servqty);
 //                services.setService_subtotal(discountedprice * servqty);
 //                services.setService_subtotal(services.getService_qty() * services.getService_price());
@@ -181,9 +182,39 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
 
                                                                         int totalQty = currentTotalQty + 1;
 
+
+//                                                                        String productSubtotalStr = String.format("%.2f", discountedprice * servqty);
+//                                                                        double productSubtotal = Double.parseDouble(productSubtotalStr);
+//                                                                        double subtotalVat = Double.parseDouble(productSubtotalStr);
+//
+//                                                                        String vatExemptSaleStr = String.format("%.2f", subtotalVat / 1.12);
+//                                                                        double vatExemptSale = Double.parseDouble(vatExemptSaleStr);
+//
+//                                                                        String lessVatStr = String.format("%.2f", subtotalVat - vatExemptSale);
+//                                                                        double lessVat = Double.parseDouble(lessVatStr);
+//
+//                                                                        String seniorDiscountStr = String.format("%.2f", vatExemptSale * .20);
+//                                                                        double seniorDiscount = Double.parseDouble(seniorDiscountStr);
+//
+//                                                                        String totalDueStr = String.format("%.2f", vatExemptSale - seniorDiscount);
+//                                                                        double totalDue = Double.parseDouble(totalDueStr);
+//
+//                                                                        String partialItemDiscSubtotalStr = String.format("%.2f", discountedprice * servqty);
+//                                                                        double partialItemDiscSubtotal = Double.parseDouble(partialItemDiscSubtotalStr);
+//
+//                                                                        String partialItemOrigPriceSubtotalStr = String.format("%.2f", servprice * servqty);
+//                                                                        double partialItemOrigPriceSubtotal = Double.parseDouble(partialItemOrigPriceSubtotalStr);
+//
+//                                                                        String totalDiscountStr = String.format("%.2f", partialItemDiscSubtotal - partialItemOrigPriceSubtotal);
+//                                                                        double totalDiscount = Double.parseDouble(totalDiscountStr);
+
                                                                         String productSubtotalStr = String.format("%.2f", discountedprice * servqty);
                                                                         double productSubtotal = Double.parseDouble(productSubtotalStr);
-                                                                        double subtotalVat = Double.parseDouble(productSubtotalStr);
+//
+
+//                                                                        double subtotalVat = Double.parseDouble(productSubtotalStr);
+                                                                        String subtotalVatStr = String.format("%.2f", currentSubtotal + discountedprice);
+                                                                        double subtotalVat = Double.parseDouble(subtotalVatStr);
 
                                                                         String vatExemptSaleStr = String.format("%.2f", subtotalVat / 1.12);
                                                                         double vatExemptSale = Double.parseDouble(vatExemptSaleStr);

@@ -6,7 +6,7 @@ package com.example.devcash.Object;
 import android.net.Uri;
 
 public class Services {
-    String service_name, service_status, service_image;
+    String service_name, service_status, service_image, service_reference;
     double service_price, service_subtotal, discounted_price;
     int service_qty;
     public Discount discount;
@@ -115,5 +115,13 @@ public class Services {
 
     public void setService_image(String service_image) {
         this.service_image = service_image;
+    }
+
+    public String getService_reference() {
+        return service_reference;
+    }
+
+    public void setService_reference(String service_reference) {
+        this.service_reference = service_reference;
     }
 }
