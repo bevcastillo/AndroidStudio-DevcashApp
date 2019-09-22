@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Fragments.PurchaseInventorylistFragment">
+    tools:context=".Fragments.CashierAllPurchaseFragment">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_purchaseitemlist"
@@ -301,88 +301,38 @@
         android:layout_marginTop="10dp" />
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:layout_below="@+id/recyclerview_purchitemlist">
+
         <LinearLayout
+            android:id="@+id/btn_chargeitem"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="bottom"
-            android:layout_below="@+id/recyclerview_purchitemlist">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:background="@color/colorPrimary"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp">
 
-            <LinearLayout
-                android:id="@+id/btn_chargeitem"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textqtyprice"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="15dp"
-                android:background="@color/colorPrimary"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:id="@+id/textqtyprice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="items"
-                    android:textColor="@color/whiteBG"
-                    android:textSize="@dimen/text_inputs"/>
-
-            </LinearLayout>
+                android:text="items"
+                android:textColor="@color/whiteBG"
+                android:textSize="@dimen/text_inputs"/>
 
         </LinearLayout>
-<!--    <android.support.v4.widget.SwipeRefreshLayout-->
-<!--        android:id="@+id/purchase_pullRefresh"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_below="@id/searchlayout">-->
-<!--        </android.support.v4.widget.SwipeRefreshLayout>-->
 
-
-<!--    <android.support.v7.widget.RecyclerView-->
-<!--        android:id="@+id/recyclerview_purchitemlist"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/searchlayout"-->
-<!--        android:layout_marginTop="10dp"/>-->
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical"-->
-<!--        android:gravity="bottom"-->
-<!--        android:layout_below="@+id/recyclerview_purchitemlist">-->
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/btn_chargeitem"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:padding="15dp"-->
-<!--            android:background="@color/colorPrimary"-->
-<!--            android:layout_gravity="center_horizontal"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:gravity="center"-->
-<!--            android:layout_marginTop="15dp"-->
-<!--            android:layout_marginLeft="10dp"-->
-<!--            android:layout_marginRight="10dp"-->
-<!--            android:layout_marginBottom="10dp">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textqtyprice"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="items"-->
-<!--                android:textColor="@color/whiteBG"-->
-<!--                android:textSize="@dimen/text_inputs"/>-->
-
-<!--        </LinearLayout>-->
-
-<!--    </LinearLayout>-->
-
-
+    </LinearLayout>
 
 </RelativeLayout>

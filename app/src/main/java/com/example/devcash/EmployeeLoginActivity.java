@@ -154,27 +154,27 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
                                                                 editor.putString("Employee", json);
                                                                 editor.putString("emp_username", employee.getEmp_username());
                                                                 editor.putString("account_type", "Employee");
+
                                                                 editor.commit();
                                                                 ownerEditor.putString("owner_username", employee.getEmp_workfor());
                                                                 ownerEditor.commit();
                                                                 if(employee.getEmp_task().equals("Cashiering")){
                                                                     editor.putString("emp_task", "Cashiering");
                                                                     editor.commit();
-
                                                                     Intent intent = new Intent(EmployeeLoginActivity.this, CashierNavigation.class);
                                                                     startActivity(intent);
-                                                                    Toast.makeText(EmployeeLoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+//                                                                    Toast.makeText(EmployeeLoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                                                                 } else if(employee.getEmp_task().equals("Inventory Monitoring")) {
                                                                     Intent invintent = new Intent(EmployeeLoginActivity.this, InventoryNav.class);
                                                                     startActivity(invintent);
-                                                                    Toast.makeText(EmployeeLoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+//                                                                    Toast.makeText(EmployeeLoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                                                                 } else {
                                                                     noTaskDialog();
 //                                                                    Toast.makeText(EmployeeLoginActivity.this, "Sorry, you have no task for today.", Toast.LENGTH_SHORT).show();
                                                                 }
 
                                                             } else {
-                                                                Toast.makeText(EmployeeLoginActivity.this, "Username/Password is incorrect, please try again.", Toast.LENGTH_SHORT).show();
+//                                                                Toast.makeText(EmployeeLoginActivity.this, "Username/Password is incorrect, please try again.", Toast.LENGTH_SHORT).show();
                                                             }
                                                         }
                                                     }

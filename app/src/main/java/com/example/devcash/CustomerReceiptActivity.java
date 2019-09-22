@@ -299,6 +299,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                                                 double vat = customerTransaction1.getVat();
                                                                 double vatE = customerTransaction1.getVat_exempt_sale();
                                                                 double amountDue = customerTransaction1.getAmount_due();
+                                                                double senior_discount = customerTransaction1.getSenior_discount();
 
                                                                 String header = "<p>"+enterpriseName+"</p>" +
                                                                                 "<p>"+enterpriseAddr+"</p>" +
@@ -320,6 +321,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
                                                                                 "<p>Subtotal: "+subtotal+"</p>"+
                                                                                 "<p>(12%) VAT: "+vat+"</p>"+
                                                                                 "<p>VatExempt Sale: "+vatE+"</p>"+
+                                                                                "<p>(20%) Discount: "+senior_discount+"</p>"+
                                                                                 "<p>------------------------------------------------------------------------------------------------</p>"+
                                                                                 "<p>Amount Due: "+amountDue+"</p>"+
                                                                                 "<p>Cash: "+cash+"</p>"+

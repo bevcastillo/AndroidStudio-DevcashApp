@@ -123,10 +123,13 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                 if (spinneremptask.getSelectedItem().toString().equals("All Tasks")){
                     dispAllTask();
                 }else if (spinneremptask.getSelectedItem().toString().equals("Cashiering")){
+                    displayCashieringTask();
 
                 }else if (spinneremptask.getSelectedItem().toString().equals("Inventory Monitoring")){
+                    displayInventoryMonitoringTask();
 
                 }else if (spinneremptask.getSelectedItem().toString().equals("Unassign Employee")){
+                    displayUnassign();
 
                 }
             }
@@ -168,6 +171,212 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
         });
 
         return view;
+    }
+
+    private void displayUnassign() {
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/employee").orderByChild("emp_task").equalTo("Unassign").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        emplist = new ArrayList<>();
+                                        Employee employee = dataSnapshot2.getValue(Employee.class);
+                                        Employeelistdata employeelistdata = new Employeelistdata();
+                                        String lname = employee.getEmp_lname();
+                                        String fname = employee.getEmp_fname();
+                                        String task = employee.getEmp_task();
+                                        String uname = employee.getAccount().getAcct_uname();
+                                        String email = employee.getAccount().getAcct_email();
+                                        employeelistdata.setEmplname(lname);
+                                        employeelistdata.setEmpfname(fname);
+                                        employeelistdata.setAcctuname(uname);
+                                        employeelistdata.setAcctemail(email);
+                                        employeelistdata.setEmptask(task);
+                                        emplist.add(employeelistdata);
+                                    }
+                                    EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+                                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                                    emprecyclerview.setLayoutManager(mLayoutManager);
+                                    emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    emprecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    emprecyclerview.setAdapter(employeesAdapter);
+                                    employeesAdapter.notifyDataSetChanged();
+
+                                    empprogress.setVisibility(View.GONE);
+
+                                    if(emplist.isEmpty()){
+                                        emptylayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+
+                                    }
+                                }else {
+                                    Toast.makeText(getActivity(), "does not exist", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void displayInventoryMonitoringTask() {
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/employee").orderByChild("emp_task").equalTo("Inventory Monitoring").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        emplist = new ArrayList<>();
+                                        Employee employee = dataSnapshot2.getValue(Employee.class);
+                                        Employeelistdata employeelistdata = new Employeelistdata();
+                                        String lname = employee.getEmp_lname();
+                                        String fname = employee.getEmp_fname();
+                                        String task = employee.getEmp_task();
+                                        String uname = employee.getAccount().getAcct_uname();
+                                        String email = employee.getAccount().getAcct_email();
+                                        employeelistdata.setEmplname(lname);
+                                        employeelistdata.setEmpfname(fname);
+                                        employeelistdata.setAcctuname(uname);
+                                        employeelistdata.setAcctemail(email);
+                                        employeelistdata.setEmptask(task);
+                                        emplist.add(employeelistdata);
+                                    }
+                                    EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+                                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                                    emprecyclerview.setLayoutManager(mLayoutManager);
+                                    emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    emprecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    emprecyclerview.setAdapter(employeesAdapter);
+                                    employeesAdapter.notifyDataSetChanged();
+
+                                    empprogress.setVisibility(View.GONE);
+
+                                    if(emplist.isEmpty()){
+                                        emptylayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+
+                                    }
+                                }else {
+                                    Toast.makeText(getActivity(), "does not exist", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void displayCashieringTask() {
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+
+                        ownerdbreference.child(ownerKey+"/business/employee").orderByChild("emp_task").equalTo("Cashiering").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                        emplist = new ArrayList<>();
+                                        Employee employee = dataSnapshot2.getValue(Employee.class);
+                                        Employeelistdata employeelistdata = new Employeelistdata();
+                                        String lname = employee.getEmp_lname();
+                                        String fname = employee.getEmp_fname();
+                                        String task = employee.getEmp_task();
+                                        String uname = employee.getAccount().getAcct_uname();
+                                        String email = employee.getAccount().getAcct_email();
+                                        employeelistdata.setEmplname(lname);
+                                        employeelistdata.setEmpfname(fname);
+                                        employeelistdata.setAcctuname(uname);
+                                        employeelistdata.setAcctemail(email);
+                                        employeelistdata.setEmptask(task);
+                                        emplist.add(employeelistdata);
+                                    }
+                                    EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+                                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                                    emprecyclerview.setLayoutManager(mLayoutManager);
+                                    emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                    emprecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                    emprecyclerview.setAdapter(employeesAdapter);
+                                    employeesAdapter.notifyDataSetChanged();
+
+                                    empprogress.setVisibility(View.GONE);
+
+                                    if(emplist.isEmpty()){
+                                        emptylayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+
+                                    }
+                                }else {
+                                    Toast.makeText(getActivity(), "does not exist", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void dispAllTask(){
@@ -373,6 +582,69 @@ public class EmployeesFragment extends Fragment implements SearchView.OnQueryTex
                         });
                     }
                 }
+                //search for another
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                String ownerKey = dataSnapshot1.getKey();
+
+                                ownerdbreference.child(ownerKey+"/business/employee").orderByChild("emp_lname").equalTo(inputText).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                emplist = new ArrayList<>();
+                                                Employee employee = dataSnapshot2.getValue(Employee.class);
+                                                Employeelistdata employeelistdata = new Employeelistdata();
+                                                String lname = employee.getEmp_lname();
+                                                String fname = employee.getEmp_fname();
+                                                String task = employee.getEmp_task();
+                                                String uname = employee.getAccount().getAcct_uname();
+                                                String email = employee.getAccount().getAcct_email();
+                                                employeelistdata.setEmplname(lname);
+                                                employeelistdata.setEmpfname(fname);
+                                                employeelistdata.setAcctuname(uname);
+                                                employeelistdata.setAcctemail(email);
+                                                employeelistdata.setEmptask(task);
+                                                emplist.add(employeelistdata);
+                                            }
+                                            EmployeesAdapter employeesAdapter = new EmployeesAdapter(emplist);
+                                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                                            emprecyclerview.setLayoutManager(mLayoutManager);
+                                            emprecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true));
+                                            emprecyclerview.setItemAnimator(new DefaultItemAnimator());
+                                            emprecyclerview.setAdapter(employeesAdapter);
+                                            employeesAdapter.notifyDataSetChanged();
+
+                                            empprogress.setVisibility(View.GONE);
+
+                                            if(emplist.isEmpty()){
+                                                emptylayout.setVisibility(View.VISIBLE);
+                                            }else{
+                                                emptylayout.setVisibility(View.GONE);
+
+                                            }
+                                        }else {
+                                            Toast.makeText(getActivity(), "does not exist", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override

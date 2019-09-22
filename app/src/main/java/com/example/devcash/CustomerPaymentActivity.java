@@ -120,9 +120,9 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
     private void saveCashChangeCashier() {
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
-
-        Toast.makeText(this, username+" is the username", Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, customerId+" is the customer id", Toast.LENGTH_SHORT).show();
+//
+//        Toast.makeText(this, username+" is the username", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, customerId+" is the customer id", Toast.LENGTH_SHORT).show();
 
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -159,7 +159,7 @@ public class CustomerPaymentActivity extends AppCompatActivity implements View.O
 //                                        ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/change").setValue(change);
 //                                        ownerdbreference.child(acctkey+"/business/customer_transaction/").child(customertransactionkey+"/transaction_status").setValue("Completed");
 
-                                        Toast.makeText(CustomerPaymentActivity.this, customerTransaction.getSubtotal()+" is the subtotal", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(CustomerPaymentActivity.this, customerTransaction.getSubtotal()+" is the subtotal", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getApplicationContext(), FinalCustomerActivity.class);
                                         startActivity(intent);
 

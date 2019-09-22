@@ -44,7 +44,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.customlayout_products, viewGroup, false);
         final ViewHolder viewHolder = new ViewHolder(v);
 
-        viewHolder.prodname.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String prodname = list.get(viewHolder.getAdapterPosition()).getProd_name();

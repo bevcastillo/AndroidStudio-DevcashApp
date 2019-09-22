@@ -10,7 +10,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CashierFinalActivity"></activity>
+        <activity android:name=".CashierFinalCustomerActivity"></activity>
+        <activity android:name=".CashierCustomerPaymentActivity" />
+        <activity android:name=".CashierPurchaseListActivity" />
+        <activity android:name=".CashierFinalActivity" />
         <activity
             android:name=".AddDiscountActivity"
             android:label="Add Discount" />

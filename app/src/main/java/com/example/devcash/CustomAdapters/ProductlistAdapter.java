@@ -425,7 +425,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
             double originalPrice = product.getProd_price();
             double subtotal = product.getProd_subtotal();
 
-            String subtotalDiscountStr = String.format("%.2f", originalPrice - discountedPrice);
+            String subtotalDiscountStr = String.format("%.2f", product.getProd_price() - product.getDiscounted_price());
             double subtotalDiscount = Double.parseDouble(subtotalDiscountStr);
 
             viewHolder.prodQtyName.setText(prodQty+"   "+prodName);
@@ -436,6 +436,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
             viewHolder.prodSubtotal.setTextColor(Color.BLACK);
             viewHolder.prodSubtotal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             viewHolder.prodDiscountedPrice.setText("@ "+discountedPrice);
+
 
 
             viewHolder.prodOriginalPrice.setText(""+product.getProd_price());

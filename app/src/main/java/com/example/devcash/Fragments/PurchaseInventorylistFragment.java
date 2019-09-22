@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -99,6 +101,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
     RecyclerView recyclerViewitemlist;
     String selectedinventorytype, selectedcustomertype, transactionDateTime;
     int customerId;
+    EditText editSearch;
+    Button searchBtn;
 
     String dateTime;
 
@@ -136,6 +140,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
         scanqrcode = (LinearLayout) view.findViewById(R.id.scanqrcode_layout);
         newsale = (LinearLayout) view.findViewById(R.id.layoutnewsale);
         spinnerCustomerType = (Spinner) view.findViewById(R.id.spinner_customertype);
+        editSearch = (EditText) view.findViewById(R.id.itemssarchtext);
+        searchBtn = (Button) view.findViewById(R.id.itemssearchbtn);
 
 //        refreshSwipe = (SwipeRefreshLayout) view.findViewById(R.id.purchase_pullRefresh);
 //
@@ -146,6 +152,8 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
 //                refreshSwipe.setRefreshing(false);
 //            }
 //        });
+
+        searchBtn.setOnClickListener(this);
 
         chargebtnlayout.setOnClickListener(this);
         scanqrcode.setOnClickListener(this);
@@ -411,7 +419,155 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
             case R.id.layoutnewsale:
                 startNewSale();
                 break;
+            case R.id.itemssearchbtn:
+                searchItem();
+                break;
         }
+    }
+
+    private void searchItem() {
+        final String inputSearch = editSearch.getText().toString();
+
+        SharedPreferences shared = getActivity().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
+        ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                        String ownerKey = dataSnapshot1.getKey();
+                        ownerdbreference.child(ownerKey+"/business/product").orderByChild("prod_name")
+                                .equalTo(inputSearch).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    for (DataSnapshot dataSnapshot2 : dataSnapshot.getChildren()) {
+                                        list = new ArrayList<>();
+                                        Product product = dataSnapshot2.getValue(Product.class);
+                                        Productlistdata listdata = new Productlistdata();
+                                        String prodname = product.getProd_name();
+                                        double prodprice = product.getProd_price();
+                                        double discountedprice = product.getDiscounted_price();
+                                        String status = product.getProd_status();
+                                        int prodStock = product.getProd_stock();
+                                        String image = product.getProd_image();
+
+                                        if (status.equals("Available")) {
+                                            if (prodStock > 0) {
+                                                listdata.setProd_name(prodname);
+                                                listdata.setProd_price(prodprice);
+                                                listdata.setDiscounted_price(discountedprice);
+                                                listdata.setProd_expdate(product.getProd_expdate());
+                                                listdata.setProd_image(image);
+                                                list.add(listdata);
+                                            }
+                                        }
+                                    }
+                                    PurchaseInventoryProductsAdapter adapter = new PurchaseInventoryProductsAdapter(getContext(), list);
+                                    GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),5);
+                                    gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                                    recyclerViewitemlist.setLayoutManager(gridLayoutManager);
+                                    recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
+                                    recyclerViewitemlist.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+
+                                    invprogress.setVisibility(View.GONE);
+
+                                    if(list.isEmpty()){
+                                        emptylayout.setVisibility(View.VISIBLE);
+                                    }else{
+                                        emptylayout.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+
+                //search for services
+
+                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                String ownerKey = dataSnapshot1.getKey();
+                                ownerdbreference.child(ownerKey+"/business/services").orderByChild("service_name")
+                                        .equalTo(inputSearch).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            slist = new ArrayList<>();
+                                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                                Services services = dataSnapshot1.getValue(Services.class);
+                                                Serviceslistdata slistdata = new Serviceslistdata();
+                                                String sname = services.getService_name();
+                                                double sprice = services.getService_price();
+                                                double discountedprice = services.getDiscounted_price();
+                                                String status = services.getService_status();
+                                                String image = services.getService_image();
+
+                                                if (status.equals("Available")){
+                                                    slistdata.setServname(sname);
+                                                    slistdata.setServprice(sprice);
+                                                    slistdata.setDiscounted_price(discountedprice);
+                                                    slistdata.setService_image(image);
+                                                    slist.add(slistdata);
+                                                }
+
+                                            }
+                                            PurchaseInventoryServicesAdapter sadapter = new PurchaseInventoryServicesAdapter(slist, getContext());
+                                            GridLayoutManager sgridLayoutManager = new GridLayoutManager(getActivity(),5);
+                                            sgridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                                            recyclerViewitemlist.setLayoutManager(sgridLayoutManager);
+                                            recyclerViewitemlist.setItemAnimator(new DefaultItemAnimator());
+                                            recyclerViewitemlist.setAdapter(sadapter);
+                                            sadapter.notifyDataSetChanged();
+
+                                            invprogress.setVisibility(View.GONE);
+
+                                            if(slist.isEmpty()){
+                                                emptylayout.setVisibility(View.VISIBLE);
+                                            }else{
+                                                emptylayout.setVisibility(View.GONE);
+                                            }
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        //search for services
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void startNewSale() {

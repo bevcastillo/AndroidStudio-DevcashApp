@@ -308,10 +308,12 @@
                 android:id="@+id/txt_deactivate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="deactivate"
+                android:text="delete"
                 android:textAllCaps="true"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:textColor="@color/color_red"/>
+                android:textColor="@color/color_red"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"/>
 
         </LinearLayout>
     </ScrollView>

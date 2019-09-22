@@ -334,10 +334,15 @@
     <string name="title_activity_inventory_nav">InventoryNav</string>
 
     <string-array name="enterprise_type">
-        <item>School Supplies</item>
-        <item>Hardware Suppies</item>
-        <item>Merchandising Supplies</item>
-        <item>Retail Enterprises</item>
+        <item>Carwash</item>
+        <item>Electronics</item>
+        <item>Hardware Supply</item>
+        <item>Merchandising Supply</item>
+        <item>Repair Shop</item>
+        <item>Retail Supply</item>
+        <item>Salon</item>
+        <item>Spa</item>
+        <item>Others</item>
     </string-array>
 
     <string-array name="categories">

@@ -322,20 +322,22 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
                                                 String username = account.getAcct_uname();
                                                 String status = account.getAcct_status();
 
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_fname").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_gender").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_lname").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_phone").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_task").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_username").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_workfor").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_imageUrl").setValue(null);
+                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey).setValue(null);
 
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_email").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_passw").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_status").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_type").setValue(null);
-                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_uname").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_fname").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_gender").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_lname").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_phone").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_task").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_username").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_workfor").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/emp_imageUrl").setValue(null);
+
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_email").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_passw").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_status").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_type").setValue(null);
+//                                                ownerdbreference.child(ownerKey+"/business/employee/").child(empKey+"/account/acct_uname").setValue(null);
 
                                                 ownerdbreference.child(ownerKey+"/business/account")
                                                         .orderByChild("acct_uname")
@@ -348,11 +350,11 @@ public class EditEmployee extends AppCompatActivity implements View.OnClickListe
                                                                 Account account1 = dataSnapshot3.getValue(Account.class);
                                                                 String acctuname = account1.getAcct_uname();
 
-                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_email").setValue(null);
-                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_passw").setValue(null);
-                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_status").setValue(null);
-                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_type").setValue(null);
-                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_uname").setValue(null);
+                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey).setValue(null);
+//                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_passw").setValue(null);
+//                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_status").setValue(null);
+//                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_type").setValue(null);
+//                                                                ownerdbreference.child(ownerKey+"/business/account/").child(acctKey+"/acct_uname").setValue(null);
                                                             }
                                                         }
                                                     }

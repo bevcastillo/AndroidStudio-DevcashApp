@@ -461,16 +461,16 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                                         if (strExpirationDate != null) {
                                             if (strExpirationDate.equals("")){
                                                 newExpirationDate = "No Expiration";
-                                                Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
                                             }else {
                                                 newExpirationDate = strExpirationDate;
-                                                Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
                                             }
 
                                             if (!strExpirationDate.equals(null)){
-                                                Toast.makeText(EditProduct.this, strExpirationDate+"", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(EditProduct.this, strExpirationDate+"", Toast.LENGTH_SHORT).show();
                                             }else {
-                                                Toast.makeText(EditProduct.this, "does not expire", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(EditProduct.this, "does not expire", Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -551,9 +551,9 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 if (dataSnapshot.exists()){
-                                                    Toast.makeText(EditProduct.this, "reference exists from qrCode"+newProductReference, Toast.LENGTH_SHORT).show();
+//                                                    Toast.makeText(EditProduct.this, "reference exists from qrCode"+newProductReference, Toast.LENGTH_SHORT).show();
                                                 }else {
-                                                    Toast.makeText(EditProduct.this, "reference does not exist"+newProductReference, Toast.LENGTH_SHORT).show();
+//                                                    Toast.makeText(EditProduct.this, "reference does not exist"+newProductReference, Toast.LENGTH_SHORT).show();
                                                 }
                                             }
 

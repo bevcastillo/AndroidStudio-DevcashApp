@@ -123,7 +123,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         ownerphone.setText(business.getOwner_mobileno());
 
         Picasso.with(this).load(business.getOwner_image()).into(imageView);
-        Toast.makeText(this, business.getOwner_image()+" is the url", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, business.getOwner_image()+" is the url", Toast.LENGTH_SHORT).show();
 
         selectedGender = business.getOwner_gender();
         if(selectedGender.equals(radioMale.getText().toString())){
@@ -357,6 +357,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
                                     }
                                 });
                                 Toast.makeText(OwnerInformation.this, "Account is updated!", Toast.LENGTH_SHORT).show();
+                                finish();
 
                             }
                         }
@@ -405,7 +406,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         btnconfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(txtdeactivate.getText().toString().equals("deactivate")){
+                if(txtdeactivate.getText().toString().equals("delete")){
 
                     SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
                     final String username = (shared.getString("owner_username", ""));
@@ -549,7 +550,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
 
         builder.setTitle("Sure to delete account?");
         builder.setMessage("Your account will be deleted after 30 days.");
-        builder.setPositiveButton("DEACTIVATE", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -574,7 +575,7 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
                                                 String acctkey = dataSnapshot2.getKey();
                                                 Account account = dataSnapshot2.getValue(Account.class);
 
-                                                txtacctstatus.setText("Deactivated");
+                                                txtacctstatus.setText("Deleted");
                                                 ownerdbreference.child(ownerkey+"/business/account").child(acctkey+"/acct_status").setValue(txtacctstatus.getText().toString());
                                                 logoutOwner();
                                             }

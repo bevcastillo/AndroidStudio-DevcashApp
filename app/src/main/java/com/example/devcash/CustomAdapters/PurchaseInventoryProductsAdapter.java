@@ -146,6 +146,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                         if (dataSnapshot.exists()){
                             for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                 final String acctkey = dataSnapshot1.getKey();

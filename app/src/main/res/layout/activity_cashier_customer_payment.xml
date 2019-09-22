@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CashierCustomerPaymentActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="80dp">
+
+        <TextView
+            android:id="@+id/txttotalamount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/money_1"
+            android:textSize="30dp"
+            android:textColor="@color/dark_text"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Total amount due"
+            android:textSize="@dimen/text_inputs"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="180dp"
+        android:paddingRight="180dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/text_cashreceived"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter cash received"
+            android:inputType="numberDecimal"
+            android:padding="15dp"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="@dimen/text_inputs"
+            android:drawableLeft="@drawable/ic_bill"
+            android:drawablePadding="15dp"
+            android:drawableTint="@color/colorGray"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
+
+
+        <LinearLayout
+            android:id="@+id/btnchargecustomer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="15dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/textchargeamount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Charge 0.00"
+                android:textColor="@color/whiteBG"
+                android:gravity="center"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
