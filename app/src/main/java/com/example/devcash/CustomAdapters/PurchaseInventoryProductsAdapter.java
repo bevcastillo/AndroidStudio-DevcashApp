@@ -209,7 +209,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                         double totalDiscount = Double.parseDouble(totalDiscountStr);
 
 
-                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(prodqty);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(totalQty);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(productSubtotal);
 
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/senior_discount").setValue(seniorDiscount);
@@ -245,7 +245,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                                                                         double partialDiscount = Double.parseDouble(partialDiscount_str);
                                                                         double totalDiscount = productSubtotal - partialDiscount;
 //
-                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(prodqty);
+                                                                        ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_qty").setValue(totalQty);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/customer_cart/").child(cartkey+"/product/prod_subtotal").setValue(productSubtotal);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/total_item_qty").setValue(totalQty);
                                                                         ownerdbreference.child(acctkey+"/business/customer_transaction/"+ finalCustomertransactionkey +"/vat").setValue(vat);

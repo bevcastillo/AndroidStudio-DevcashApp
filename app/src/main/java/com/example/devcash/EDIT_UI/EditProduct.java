@@ -1,9 +1,15 @@
 package com.example.devcash.EDIT_UI;
 
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -12,10 +18,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -27,11 +35,17 @@ import com.example.devcash.Object.Category;
 import com.example.devcash.Object.Discount;
 import com.example.devcash.Object.Product;
 import com.example.devcash.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +55,8 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
     private DatabaseReference dbreference;
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
+    private StorageReference storageReference;
+    private StorageTask uploadTask;
 
     private TextInputEditText productname, prodprice, prodcondcount, prodstock, prodrop, prodexpdate, prodexpcount;
     private Spinner spinnerunit, spinnercategory, spinnerdiscount, spinnercondition;
@@ -50,11 +66,14 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
     private String selectedcategory, selectedunit, selectedcondition, selecteddiscount, strprodname, strprodexpdate, strprodavail, prodreference;
     private double strprice, strprodrop;
     private int strprodstock, strprodexpcount, pos, pos1;
-    private LinearLayout deletelayout;
+    private LinearLayout deletelayout, choosephoto, takephoto;
     private TextInputLayout productNameLayout, productPriceLayout, productStockLayout, productRopLayout;
-    private String discountCode, discountStart, discountEnd, discountType, discountStatus, strExpirationDate, newExpirationDate;
+    private String discountCode, discountStart, discountEnd, discountType, discountStatus, strExpirationDate, newExpirationDate, strImageUrl;
     private double productPrice, discountValue, discountedPrice;
     private DatePickerDialog datePickerDialog;
+    private ImageView imageView;
+    private Uri imageUri;
+    private static final int PICK_IMAGE = 100;
 
     ArrayList<String> categoryArrayList = new ArrayList<String>();
     ArrayList<String> discountArrayList = new ArrayList<String>();
@@ -83,6 +102,9 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
         spinnerdiscount = (Spinner) findViewById(R.id.spinner_editproddisc);
         deletelayout = (LinearLayout) findViewById(R.id.layout_delcategory);
         productNameLayout = (TextInputLayout) findViewById(R.id.editProdname_layout);
+        imageView = (ImageView) findViewById(R.id.prod_photo);
+        choosephoto = (LinearLayout) findViewById(R.id.choose_photo_layout);
+        takephoto = (LinearLayout) findViewById(R.id.take_photo_layout);
 
         //listeners
         spinnerdiscount.setOnItemSelectedListener(this);
@@ -91,11 +113,14 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
         spinnercondition.setOnItemSelectedListener(this);
         deletelayout.setOnClickListener(this);
         prodexpdate.setOnClickListener(this);
+        choosephoto.setOnClickListener(this);
+        takephoto.setOnClickListener(this);
 
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbreference = firebaseDatabase.getReference("datadevcash");
         ownerdbreference = firebaseDatabase.getReference("datadevcash/owner");
+        storageReference = FirebaseStorage.getInstance().getReference("Product");
 
         final ArrayList<String> categories = new ArrayList<String>();
         final ArrayList<String> prodcond = new ArrayList<String>();
@@ -198,12 +223,15 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
             strprodexpdate = bundle.getString("product_expdate");
             strprodexpcount = bundle.getInt("product_expcount");
             strprodrop = bundle.getDouble("product_rop");
+            strImageUrl = bundle.getString("product_image");
 
             prodreference = strprodname+""+strprodexpdate;
 
             productname.setText(strprodname);
             prodprice.setText(Double.toString(strprice));
             prodstock.setText(Integer.toString(strprodstock));
+
+            Picasso.with(this).load(strImageUrl).into(imageView);
 
             if (prodexpdate.equals("No Expiration")){
                 prodexpdate.setText("");
@@ -389,6 +417,12 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
 
     }
 
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
     private void updateProduct() {
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
@@ -408,19 +442,35 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                                         final String productKey = dataSnapshot2.getKey();
                                         Product product = dataSnapshot2.getValue(Product.class);
                                         strprodavail = product.getProd_status();
-//                                        if (strExpirationDate.equals("")){
-//                                            newExpirationDate = "No Expiration";
-//                                            Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
-//                                        }else {
-//                                            newExpirationDate = strExpirationDate;
-//                                            Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
-//                                        }
 
-//                                        if (!strExpirationDate.equals(null)){
-//                                            Toast.makeText(EditProduct.this, strExpirationDate+"", Toast.LENGTH_SHORT).show();
-//                                        }else {
-//                                            Toast.makeText(EditProduct.this, "does not expire", Toast.LENGTH_SHORT).show();
-//                                        }
+                                        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+
+                                        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_image").setValue(uri.toString());
+                                                    }
+                                                });
+                                            }
+                                        });
+
+
+                                        if (strExpirationDate.equals("")){
+                                            newExpirationDate = "No Expiration";
+                                            Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
+                                        }else {
+                                            newExpirationDate = strExpirationDate;
+                                            Toast.makeText(EditProduct.this, newExpirationDate+"", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        if (!strExpirationDate.equals(null)){
+                                            Toast.makeText(EditProduct.this, strExpirationDate+"", Toast.LENGTH_SHORT).show();
+                                        }else {
+                                            Toast.makeText(EditProduct.this, "does not expire", Toast.LENGTH_SHORT).show();
+                                        }
                                         final String newProductReference = productname.getText().toString()+""+newExpirationDate;
 
                                         if (checkBoxavail.isChecked()){
@@ -429,25 +479,23 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                                             strprodavail = "Not Available";
                                         }
 
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_status").setValue(strprodavail);
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_name").setValue(productname.getText().toString());
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_price").setValue(Double.parseDouble(prodprice.getText().toString()));
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_stock").setValue(Integer.parseInt(prodstock.getText().toString()));
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_rop").setValue(Double.parseDouble(prodrop.getText().toString()));
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_unitof_measure").setValue(selectedunit);
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_expdate").setValue(newExpirationDate);
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_reference").setValue(newProductReference);
 
+//                                        updating the product/qrCode
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_code").setValue(productname.getText().toString());
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_price").setValue(Double.parseDouble(prodprice.getText().toString()));
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_reference").setValue(newProductReference);
 
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_status").setValue(strprodavail);
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_name").setValue(productname.getText().toString());
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_price").setValue(Double.parseDouble(prodprice.getText().toString()));
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_stock").setValue(Integer.parseInt(prodstock.getText().toString()));
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_rop").setValue(Double.parseDouble(prodrop.getText().toString()));
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_unitof_measure").setValue(selectedunit);
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_expdate").setValue(newExpirationDate);
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_reference").setValue(newProductReference);
-
-                                        //updating the product/qrCode
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_code").setValue(productname.getText().toString());
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_price").setValue(Double.parseDouble(prodprice.getText().toString()));
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_reference").setValue(newProductReference);
-
-                                        //updating the discount and category
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/discount/disc_code").setValue(selecteddiscount);
-//                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/category/category_name").setValue(selectedcategory);
+//                                        updating the discount and category
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/discount/disc_code").setValue(selecteddiscount);
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/category/category_name").setValue(selectedcategory);
 
                                         //updating the discounted price based on the selected discount
                                         ownerdbreference.child(ownerKey+"/business/discount").orderByChild("disc_code").equalTo(selecteddiscount).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -468,14 +516,14 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                                                         productPrice = Double.parseDouble(prodprice.getText().toString());
                                                         if (discountStatus.equals("Active")){
                                                             if (discountType.equals("Percentage")){
-//                                                                discountedPrice = productPrice - discountValue;
-//                                                                ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/discounted_price").setValue(discountedPrice);
-//                                                                ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_disc_price").setValue(discountedPrice);
+                                                                discountedPrice = productPrice - discountValue;
+                                                                ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/discounted_price").setValue(discountedPrice);
+                                                                ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_disc_price").setValue(discountedPrice);
                                                             }else {
                                                                 //type is amount
-//                                                                discountedPrice = productPrice - discountValue;
-//                                                                ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/discounted_price").setValue(discountedPrice);
-//                                                                ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_disc_price").setValue(discountedPrice);
+                                                                discountedPrice = productPrice - discountValue;
+                                                                ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/discounted_price").setValue(discountedPrice);
+                                                                ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_disc_price").setValue(discountedPrice);
                                                             }
                                                         }else {
                                                             //the discount is not active
@@ -484,8 +532,8 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
 
                                                 }else {
                                                     //the selected discount is "No Discount", hence, we just set the discounted price to the original price
-//                                                    ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/discounted_price").setValue(Double.parseDouble(prodprice.getText().toString()));
-//                                                    ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_disc_price").setValue(Double.parseDouble(prodprice.getText().toString()));
+                                                    ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/discounted_price").setValue(Double.parseDouble(prodprice.getText().toString()));
+                                                    ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/qrCode/qr_disc_price").setValue(Double.parseDouble(prodprice.getText().toString()));
                                                 }
                                             }
 
@@ -586,6 +634,16 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                         },mYear,mMonth,mDay);
                 datePickerDialog.show();
                 break;
+            case R.id.choose_photo_layout:
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Picture"),PICK_IMAGE);
+                break;
+            case R.id.take_photo_layout:
+                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(camera, 0);
+                break;
         }
     }
 
@@ -663,5 +721,18 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
             }
         });
         builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+        }else{
+            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+            imageView.setImageBitmap(bitmap);
+        }
     }
 }

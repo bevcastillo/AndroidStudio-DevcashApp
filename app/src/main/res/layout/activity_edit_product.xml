@@ -641,6 +641,7 @@
                             android:paddingLeft="@dimen/padding_30">
 
                             <LinearLayout
+                                android:id="@+id/choose_photo_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
@@ -663,6 +664,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/take_photo_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"

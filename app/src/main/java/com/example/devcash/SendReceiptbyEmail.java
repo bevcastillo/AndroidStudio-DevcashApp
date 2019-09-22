@@ -25,8 +25,11 @@ import android.widget.Toast;
 
 import com.example.devcash.CustomAdapters.ReceiptProductAdapter;
 import com.example.devcash.CustomAdapters.ReceiptServiceAdapter;
+import com.example.devcash.Object.Account;
+import com.example.devcash.Object.Business;
 import com.example.devcash.Object.CartItem;
 import com.example.devcash.Object.CustomerTransaction;
+import com.example.devcash.Object.Employee;
 import com.example.devcash.Object.Enterprise;
 import com.example.devcash.Object.Product;
 import com.example.devcash.Object.Services;
@@ -99,38 +102,13 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
     protected void onStart() {
         super.onStart();
 
-        displayAllPurchase();
-    }
-
-    public void convertReceiptToPdf(View view){
-        PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
-        Paint paint = new Paint();
-        String mString = "Sample";
-        int x=10;
-        int y=25;
-        page.getCanvas().drawText(mString, x,y, paint);
-        pdfDocument.finishPage(page);
-
-        String mfilePath = Environment.getExternalStorageDirectory().getPath() + "/receipt.pdf";
-        File file = new File(mfilePath);
-
-        try {
-            pdfDocument.writeTo(new FileOutputStream(file));
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-        }
-
-        pdfDocument.close();
+//        displayAllPurchase();
     }
 
 
     public void sendEmail(){
         String[] recipients = {customer_email.getText().toString()};
-        Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto: "));
+        Intent email = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto: "));
 
         //prompts email clients
         email.setType("message/rfc822");
@@ -154,6 +132,38 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
     }
 
     public void displayAllPurchase(){
+
+        SharedPreferences ownerPref = getApplicationContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        SharedPreferences businessPref = getApplicationContext().getSharedPreferences("BusinessPref", MODE_PRIVATE);
+        SharedPreferences empPref = getApplicationContext().getSharedPreferences("EmpPref", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = ownerPref.getString("account", "");
+        String ownerAccountType = ownerPref.getString("account_type","");
+        String employeeAccountType = empPref.getString("account_type", "");
+        String businessJson = businessPref.getString("business", "");
+        String employeeJson = empPref.getString("Employee", "");
+
+        Account account = gson.fromJson(json, Account.class);
+        Business business = gson.fromJson(businessJson, Business.class);
+        Employee employee = gson.fromJson(employeeJson, Employee.class);
+
+        String lname = business.getOwner_lname();
+        String fname = business.getOwner_fname();
+        String name = fname+" "+lname;
+        String cashier = "";
+
+        if (!ownerAccountType.equals("")){
+//            cashiername.setText("Cashier: "+name);
+            cashier = name;
+        }
+
+        if (!employeeAccountType.equals("")){
+            String employeeName = employee.getEmp_fname() + " " + employee.getEmp_lname();
+//            cashiername.setText("Cashier: "+employeeName);
+            cashier = employeeName;
+        }
+
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
@@ -164,128 +174,124 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
             customerId = customerId + 1;
         }
 
+        final String finalCashier = cashier;
+
         ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                        String acctkey = dataSnapshot1.getKey();
+                        final String acctkey = dataSnapshot1.getKey();
 
                         ownerdbreference.child(acctkey+"/business/enterprise").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){
-                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                        Enterprise enterprise = dataSnapshot2.getValue(Enterprise.class);
-                                        Toast.makeText(SendReceiptbyEmail.this, enterprise.getEnt_name()+" is the enterprise name", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
+                                    final Enterprise enterprise = dataSnapshot.getValue(Enterprise.class);
+                                    final String enterpriseName = enterprise.getEnt_name();
+                                    final String enterpriseAddr = enterprise.getEnt_addr();
+                                    final String enterprisePhone = enterprise.getEnt_telno();
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
-                        ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()){
-                                    Toast.makeText(SendReceiptbyEmail.this, "customer id exists", Toast.LENGTH_SHORT).show();
-                                    for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                        String customertransactionkey = dataSnapshot2.getKey();
-                                        CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        Gson gson = new Gson();
+                                    ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()){
+//                                                Toast.makeText(SendReceiptbyEmail.this, "customer id exists", Toast.LENGTH_SHORT).show();
+                                                for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                    String customertransactionkey = dataSnapshot2.getKey();
+                                                    CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+                                                    Gson gson = new Gson();
 
 //                                        receiptno.setText("Receipt #"+(customerId));
 
-                                        CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
-                                        int receiptno = customerTransaction1.getCustomer_id();
-                                        double cash = customerTransaction.getCash_received();
-                                        double change = customerTransaction.getChange();
-                                        double discount = customerTransaction.getTotal_item_discount();
-                                        double totprice = customerTransaction.getAmount_due();
+                                                    CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
+                                                    int receiptno = customerTransaction1.getCustomer_id();
+                                                    double cash = customerTransaction.getCash_received();
+                                                    double change = customerTransaction.getChange();
+                                                    double discount = customerTransaction.getTotal_item_discount();
+                                                    double totprice = customerTransaction.getAmount_due();
+                                                    String customerType = customerTransaction.getCustomer_type();
 
 
-                                        String customerReceiptContent = "-------------------------------"+
-                                                                        "<p>&nbsp;&nbsp;&nbsp;RECEIPT&nbsp;&nbsp;&nbsp;</p>"+
-                                                                        "<p>Receipt#"+receiptno+"</p>" +
-                                                                        "<p>Total Due-----"+totprice+"</p>" +
-                                                                        "<p>Discount------"+discount+"</p>"+
-                                                                        "<p>Cash----------"+cash+"</p>"+
-                                                                        "<p>Change--------"+change+"</p>";
+                                                    String customerReceiptContent = "-------------------------------"+
+                                                            "<p>&nbsp;&nbsp;&nbsp;RECEIPT&nbsp;&nbsp;&nbsp;</p>"+
+                                                            "<p>"+enterpriseName+"</p>" +
+                                                            "<p>"+enterpriseAddr+"</p>" +
+                                                            "<p>"+enterprisePhone+"</p>" +
+                                                            "<p>"+receiptno+"</p>" +
+                                                            "<p>"+ finalCashier +"</p>" +
+                                                            "<p>"+customerType+"</p>";
 
-                                        String receipt = "";
+                                                    String totalDue =  "<p>Total Due-----"+totprice+"</p>" +
+                                                            "<p>Discount------"+discount+"</p>"+
+                                                            "<p>Cash----------"+cash+"</p>"+
+                                                            "<p>Change--------"+change+"</p>";
 
-                                        //
 
+                                                    for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
+                                                        if (entry.getValue().toString().contains("product")) {
+                                                            String json = gson.toJson(entry.getValue());
+                                                            Log.d("PRODUCT JSON REP @@@@", json);
+                                                            String mJsonString = json;
+                                                            JsonParser parser = new JsonParser();
+                                                            JsonElement mJson =  parser.parse(mJsonString);
 
+                                                            JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+                                                            JsonElement prodJson = jsonObject.get("product");
+                                                            Product prodObj = gson.fromJson(prodJson, Product.class);
 
+                                                            cartItem.setProduct(prodObj);
+                                                            cartItems.add(cartItem);
+                                                            products.add(prodObj);
+                                                            String itemname = prodObj.getProd_name();
+                                                            double itemqty = prodObj.getProd_qty();
+                                                            double discprice = prodObj.getDiscounted_price();
 
-                                        for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
-                                            if (entry.getValue().toString().contains("product")) {
-                                                String json = gson.toJson(entry.getValue());
-                                                Log.d("PRODUCT JSON REP @@@@", json);
-                                                String mJsonString = json;
-                                                JsonParser parser = new JsonParser();
-                                                JsonElement mJson =  parser.parse(mJsonString);
+                                                            ReceiptServiceAdapter adapter = new ReceiptServiceAdapter(services);
+                                                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                                                            customerReceiptContent += "Qty: "+prodObj.getProd_qty()+"purchasedItems: "+prodObj.getProd_name()+" with a price of: "+prodObj.getProd_price();
 
-                                                JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
-                                                JsonElement prodJson = jsonObject.get("product");
-                                                Product prodObj = gson.fromJson(prodJson, Product.class);
+                                                        } else {
+                                                            String json = gson.toJson(entry.getValue());
+                                                            String mJsonString = json;
+                                                            JsonParser parser = new JsonParser();
+                                                            JsonElement mJson =  parser.parse(mJsonString);
 
-                                                cartItem.setProduct(prodObj);
-                                                cartItems.add(cartItem);
-                                                products.add(prodObj);
-                                                String itemname = prodObj.getProd_name();
-                                                double itemqty = prodObj.getProd_qty();
-                                                double discprice = prodObj.getDiscounted_price();
+                                                            JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+                                                            JsonElement servicesJson = jsonObject.get("services");
+                                                            Services servicesObj = gson.fromJson(servicesJson, Services.class);
+                                                            cartItem.setServices(servicesObj);
+                                                            cartItems.add(cartItem);
+                                                            services.add(servicesObj);
 
-                                                ReceiptServiceAdapter adapter = new ReceiptServiceAdapter(services);
-                                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                                                customerReceiptContent += "Qty: "+prodObj.getProd_qty()+"purchasedItems: "+prodObj.getProd_name()+" with a price of: "+prodObj.getProd_price();
-
-                                            } else {
-                                                String json = gson.toJson(entry.getValue());
-                                                String mJsonString = json;
-                                                JsonParser parser = new JsonParser();
-                                                JsonElement mJson =  parser.parse(mJsonString);
-
-                                                JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
-                                                JsonElement servicesJson = jsonObject.get("services");
-                                                Services servicesObj = gson.fromJson(servicesJson, Services.class);
-                                                cartItem.setServices(servicesObj);
-                                                cartItems.add(cartItem);
-                                                services.add(servicesObj);
-
-                                                customerReceiptContent += "Qty: "+servicesObj.getService_qty()+" purchasedItems: "+servicesObj.getService_name()+" with a price of: "+servicesObj.getService_price();
-                                            }
-                                        }
+                                                            customerReceiptContent += "Qty: "+servicesObj.getService_qty()+" purchasedItems: "+servicesObj.getService_name()+" with a price of: "+servicesObj.getService_price();
+                                                        }
+                                                    }
 
 //                                        Toast.makeText(SendReceiptbyEmail.this, cartItems.size()+" are the items.", Toast.LENGTH_SHORT).show();
 
-                                        String[] recipients = {customer_email.getText().toString()};
-                                        Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto: "));
+                                                    String[] recipients = {customer_email.getText().toString()};
+                                                    Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto: "));
 
-                                        //prompts email clients
-                                        email.setType("message/rfc822");
-                                        email.putExtra(Intent.EXTRA_EMAIL, recipients);
-                                        email.putExtra(Intent.EXTRA_SUBJECT, "Customer Receipt");
-                                        email.putExtra(Intent.EXTRA_TEXT,
-                                                Html.fromHtml(new StringBuilder()
-                                                        .append(receipt)
-                                                        .toString()));
+                                                    //prompts email clients
+                                                    email.setType("message/rfc822");
+                                                    email.putExtra(Intent.EXTRA_EMAIL, recipients);
+                                                    email.putExtra(Intent.EXTRA_SUBJECT, "Customer Receipt");
+                                                    email.putExtra(Intent.EXTRA_TEXT,
+                                                            Html.fromHtml(new StringBuilder()
+                                                                    .append(customerReceiptContent)
+                                                                    .append(totalDue)
+                                                                    .toString()));
 
-                                        try {
-                                            // the user can choose the email client
-                                            startActivity(Intent.createChooser(email, "Select an email client"));
+                                                    try {
+                                                        // the user can choose the email client
+                                                        startActivity(Intent.createChooser(email, "Select an email client"));
 
-                                        } catch (android.content.ActivityNotFoundException ex) {
-                                            Toast.makeText(SendReceiptbyEmail.this, "No email client installed.",
-                                                    Toast.LENGTH_LONG).show();
+                                                    } catch (android.content.ActivityNotFoundException ex) {
+                                                        Toast.makeText(SendReceiptbyEmail.this, "No email client installed.",
+                                                                Toast.LENGTH_LONG).show();
 //                                        }
-                                    }
+                                                    }
 //                                    try {
 //                                        // the user can choose the email client
 //                                        startActivity(Intent.createChooser(email, "Select an email client"));
@@ -293,9 +299,19 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
 //                                    } catch (android.content.ActivityNotFoundException ex) {
 //                                        Toast.makeText(SendReceiptbyEmail.this, "No email client installed.",
 //                                                Toast.LENGTH_LONG).show();
-                                    }
-                                }else {
-                                    Toast.makeText(SendReceiptbyEmail.this, "No customer transaction yet!"+customerId, Toast.LENGTH_SHORT).show();
+                                                }
+                                            }else {
+                                                Toast.makeText(SendReceiptbyEmail.this, "No customer transaction yet!"+customerId, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
                                 }
                             }
 
@@ -304,6 +320,8 @@ public class SendReceiptbyEmail extends AppCompatActivity implements View.OnClic
 
                             }
                         });
+
+
                     } // outer for-loop
 
                 }

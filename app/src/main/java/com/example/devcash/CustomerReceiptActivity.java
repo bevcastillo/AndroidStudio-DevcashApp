@@ -7,7 +7,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +19,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -168,9 +172,9 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
             onBackPressed();
             return true;
         }else if (id == R.id.email_action){
-//            emailDialog();
-            Intent intent = new Intent(CustomerReceiptActivity.this, SendReceiptbyEmail.class);
-            startActivity(intent);
+            emailDialog();
+//            Intent intent = new Intent(CustomerReceiptActivity.this, SendReceiptbyEmail.class);
+//            startActivity(intent);
         }else if (id == R.id.mms_action){
 
         }
@@ -190,7 +194,227 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-            }
+                    SharedPreferences ownerPref = getApplicationContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                    SharedPreferences businessPref = getApplicationContext().getSharedPreferences("BusinessPref", MODE_PRIVATE);
+                    SharedPreferences empPref = getApplicationContext().getSharedPreferences("EmpPref", MODE_PRIVATE);
+
+                    Gson gson = new Gson();
+                    String json = ownerPref.getString("account", "");
+                    String ownerAccountType = ownerPref.getString("account_type","");
+                    String employeeAccountType = empPref.getString("account_type", "");
+                    String businessJson = businessPref.getString("business", "");
+                    String employeeJson = empPref.getString("Employee", "");
+
+                    Account account = gson.fromJson(json, Account.class);
+                    Business business = gson.fromJson(businessJson, Business.class);
+                    Employee employee = gson.fromJson(employeeJson, Employee.class);
+
+                    String lname = business.getOwner_lname();
+                    String fname = business.getOwner_fname();
+                    String name = fname+" "+lname;
+                    String cashier = "";
+
+                    if (!ownerAccountType.equals("")){
+//            cashiername.setText("Cashier: "+name);
+                        cashier = name;
+                    }
+
+                    if (!employeeAccountType.equals("")){
+                        String employeeName = employee.getEmp_fname() + " " + employee.getEmp_lname();
+//            cashiername.setText("Cashier: "+employeeName);
+                        cashier = employeeName;
+                    }
+
+                    SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+                    final String username = (shared.getString("owner_username", ""));
+
+                    SharedPreferences custIdShared = getApplicationContext().getSharedPreferences("CustomerIdPref", MODE_PRIVATE);
+                    customerId = (custIdShared.getInt("customer_id", 0));
+
+                    if (customerId <= 0) {
+                        customerId = customerId + 1;
+                    }
+
+                    final String finalCashier = cashier;
+
+                    ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                    final String acctkey = dataSnapshot1.getKey();
+
+                                    ownerdbreference.child(acctkey+"/business/enterprise").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()){
+                                                final Enterprise enterprise = dataSnapshot.getValue(Enterprise.class);
+                                                final String enterpriseName = enterprise.getEnt_name();
+                                                final String enterpriseAddr = enterprise.getEnt_addr();
+                                                final String enterprisePhone = enterprise.getEnt_telno();
+                                                final String tinNo = enterprise.getEnt_permitno();
+
+                                                ownerdbreference.child(acctkey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @RequiresApi(api = Build.VERSION_CODES.N)
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()){
+//                                                Toast.makeText(SendReceiptbyEmail.this, "customer id exists", Toast.LENGTH_SHORT).show();
+                                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                                String customertransactionkey = dataSnapshot2.getKey();
+                                                                CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+                                                                Gson gson = new Gson();
+
+//                                        receiptno.setText("Receipt #"+(customerId));
+
+                                                                CustomerTransaction customerTransaction1 = dataSnapshot2.getValue(CustomerTransaction.class);
+                                                                int receiptno = customerTransaction1.getCustomer_id();
+                                                                double cash = customerTransaction.getCash_received();
+                                                                double change = customerTransaction.getChange();
+                                                                double discount = customerTransaction.getTotal_item_discount();
+                                                                double totprice = customerTransaction.getAmount_due();
+                                                                String customerType = customerTransaction.getCustomer_type();
+
+                                                                String header = "";
+
+                                                                String customerReceiptContent =
+                                                                        "<h2>"+enterpriseName+"</h2>"+
+                                                                        "<p>"+enterpriseAddr+"</p>" +
+                                                                        "<p>"+enterprisePhone+"</p>" +
+                                                                        "<tt>Receipt#"+receiptno+"</tt>" +
+                                                                        "<p>"+ finalCashier +"</p>" +
+                                                                        "<p>"+customerType+"</p>";
+
+                                                                String totalDue =  "<p>Total Due-----"+totprice+"</p>" +
+                                                                        "<p>Discount------"+discount+"</p>"+
+                                                                        "<p>Cash----------"+cash+"</p>"+
+                                                                        "<p>Change--------"+change+"</p>";
+
+
+                                                                String anothersample = "[html]<body><h1>Foobar</h1><ul><li>foo</li><li>bar</li></ul></body>[/html]";
+
+
+                                                                for(Map.Entry<String, Object> entry : customerTransaction.getCustomer_cart().entrySet()) {
+                                                                    if (entry.getValue().toString().contains("product")) {
+                                                                        String json = gson.toJson(entry.getValue());
+                                                                        Log.d("PRODUCT JSON REP @@@@", json);
+                                                                        String mJsonString = json;
+                                                                        JsonParser parser = new JsonParser();
+                                                                        JsonElement mJson =  parser.parse(mJsonString);
+
+                                                                        JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+                                                                        JsonElement prodJson = jsonObject.get("product");
+                                                                        Product prodObj = gson.fromJson(prodJson, Product.class);
+
+                                                                        cartItem.setProduct(prodObj);
+                                                                        cartItems.add(cartItem);
+                                                                        products.add(prodObj);
+                                                                        String itemname = prodObj.getProd_name();
+                                                                        double itemqty = prodObj.getProd_qty();
+                                                                        double discprice = prodObj.getDiscounted_price();
+
+                                                                        ReceiptServiceAdapter adapter = new ReceiptServiceAdapter(services);
+                                                                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                                                                        customerReceiptContent += "Qty: "+prodObj.getProd_qty()+"\npurchasedItems: "+prodObj.getProd_name()+" \nwith a price of: "+prodObj.getProd_price();
+
+                                                                    } else {
+                                                                        String json = gson.toJson(entry.getValue());
+                                                                        String mJsonString = json;
+                                                                        JsonParser parser = new JsonParser();
+                                                                        JsonElement mJson =  parser.parse(mJsonString);
+
+                                                                        JsonObject jsonObject = gson.fromJson(mJson, JsonObject.class);
+                                                                        JsonElement servicesJson = jsonObject.get("services");
+                                                                        Services servicesObj = gson.fromJson(servicesJson, Services.class);
+                                                                        cartItem.setServices(servicesObj);
+                                                                        cartItems.add(cartItem);
+                                                                        services.add(servicesObj);
+
+                                                                        customerReceiptContent += "Qty: "+servicesObj.getService_qty()+" \npurchasedItems: "+servicesObj.getService_name()+" \nwith a price of: "+servicesObj.getService_price();
+                                                                    }
+                                                                }
+
+//                                        Toast.makeText(SendReceiptbyEmail.this, cartItems.size()+" are the items.", Toast.LENGTH_SHORT).show();
+
+                                                                String[] recipients = {cust_email.getText().toString()};
+                                                                Intent email = new Intent(Intent.ACTION_SEND, Uri.parse("mailto: "));
+                                                                String htmlBody = new StringBuilder()
+                                                                        .append(customerReceiptContent)
+                                                                        .append(totalDue)
+                                                                        .append(anothersample)
+                                                                        .toString();
+
+                                                                //prompts email clients
+//                                                                email.setType("message/rfc822");
+                                                                email.setType("text/html");
+                                                                email.putExtra(Intent.EXTRA_EMAIL, recipients);
+                                                                email.putExtra(Intent.EXTRA_SUBJECT, "Customer Receipt");
+
+//                                                                email.putExtra(Intent.EXTRA_TEXT,
+//                                                                        Html.fromHtml(new StringBuilder()
+//                                                                                .append(customerReceiptContent)
+//                                                                                .append(totalDue)
+//                                                                                .toString()));
+
+                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                                                                    email.putExtra(Intent.EXTRA_TEXT,
+                                                                            Html.fromHtml(htmlBody, Html.FROM_HTML_MODE_LEGACY));
+                                                                    Toast.makeText(CustomerReceiptActivity.this, "this is SDK", Toast.LENGTH_SHORT).show();
+                                                                }else {
+                                                                    email.putExtra(Intent.EXTRA_TEXT,
+                                                                            Html.fromHtml(htmlBody));
+                                                                }
+
+                                                                try {
+                                                                    // the user can choose the email client
+                                                                    startActivity(Intent.createChooser(email, "Select an email client"));
+
+                                                                } catch (android.content.ActivityNotFoundException ex) {
+                                                                    Toast.makeText(CustomerReceiptActivity.this, "No email client installed.",
+                                                                            Toast.LENGTH_LONG).show();
+//                                        }
+                                                                }
+//                                    try {
+//                                        // the user can choose the email client
+//                                        startActivity(Intent.createChooser(email, "Select an email client"));
+//
+//                                    } catch (android.content.ActivityNotFoundException ex) {
+//                                        Toast.makeText(SendReceiptbyEmail.this, "No email client installed.",
+//                                                Toast.LENGTH_LONG).show();
+                                                            }
+                                                        }else {
+                                                            Toast.makeText(CustomerReceiptActivity.this, "No customer transaction yet!"+customerId, Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
+                                } // outer for-loop
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
         });
 
         builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -202,6 +426,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements View.O
 
         builder.show();
     }
+
 
     public void displayAllPurchase(){
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);

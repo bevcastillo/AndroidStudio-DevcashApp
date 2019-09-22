@@ -153,6 +153,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true"
+                        android:id="@+id/layoutTinNo">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edittext_tin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="TIN number"
+                            android:inputType="phone"
+                            android:padding="@dimen/text_padding"
+                            android:textColorHint="@color/colorPrimary"
+                            android:textSize="@dimen/text_inputs" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true"
                         android:id="@+id/layoutEntAddr">
 
                         <android.support.design.widget.TextInputEditText

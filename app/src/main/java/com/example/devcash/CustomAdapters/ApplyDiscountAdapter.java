@@ -17,6 +17,10 @@ public class ApplyDiscountAdapter extends RecyclerView.Adapter<ApplyDiscountAdap
 
     List<Discountlistdata> list;
 
+    public ApplyDiscountAdapter(List<Discountlistdata> list) {
+        this.list = list;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

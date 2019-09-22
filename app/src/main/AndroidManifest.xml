@@ -65,13 +65,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EmployeeAccountInfo"
-            android:label="My Profile"
-            android:screenOrientation="landscape" />
+            android:label="My Profile" />
         <activity
             android:name=".OwnerInformation"
             android:label="Account Information"
             android:parentActivityName=".Settings_UI.SettingsActivity"
-            android:screenOrientation="landscape"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".EnterpriseInfo"

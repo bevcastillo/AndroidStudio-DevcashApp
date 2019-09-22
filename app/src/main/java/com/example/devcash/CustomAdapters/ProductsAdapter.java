@@ -54,6 +54,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 String prodexpdate = list.get(viewHolder.getAdapterPosition()).getProd_expdate();
                 int prodexpcount = list.get(viewHolder.getAdapterPosition()).getProd_expdatecount();
                 double rop = list.get(viewHolder.getAdapterPosition()).getProd_rop();
+                String imageUrl = list.get(viewHolder.getAdapterPosition()).getProd_image();
 
 
                 Intent intent = new Intent(v.getContext(), EditProduct.class);
@@ -64,6 +65,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 intent.putExtra("product_expdate", prodexpdate);
                 intent.putExtra("product_expcount", prodexpcount);
                 intent.putExtra("product_rop", rop);
+                intent.putExtra("product_image", imageUrl);
                 v.getContext().startActivity(intent);
             }
         });

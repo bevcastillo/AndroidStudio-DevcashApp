@@ -29,6 +29,10 @@
     <item android:title="Others">
         <menu>
             <item
+                android:id="@+id/nav_notification"
+                android:icon="@drawable/ic_notifications"
+                android:title="Notifications"/>
+            <item
                 android:id="@+id/nav_reports"
                 android:icon="@drawable/ic_insert_chart"
                 android:title="@string/backoffice"/>

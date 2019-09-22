@@ -10,12 +10,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:text="Discount name"/>
+        android:text="Discount name"
+        android:textColor="@color/dark_text"
+        android:textStyle="bold"
+        android:textSize="18dp"/>
 
     <Switch
         android:id="@+id/discount_switch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:layout_marginRight="550dp"/>
 
 </LinearLayout>

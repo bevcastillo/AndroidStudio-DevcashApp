@@ -1,10 +1,13 @@
 package com.example.devcash;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.service.autofill.Dataset;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -14,7 +17,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -26,11 +31,16 @@ import com.example.devcash.Object.Account;
 import com.example.devcash.Object.Business;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.Object.Owner;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 
 public class OwnerInformation extends AppCompatActivity implements View.OnClickListener {
@@ -38,6 +48,8 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
     private DatabaseReference dbreference;
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
+    private StorageReference storageReference;
+    private StorageTask uploadTask;
 
     private TextInputEditText ownerlname, ownerfname, ownerphone, owneraddr, ownerbdate, acctemail, acctpassw, ownerusername;
     private TextInputLayout ownerLnameLayout, ownerFnameLayout, ownerPasswLayout, ownerUsernameLayout;
@@ -45,6 +57,11 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
     private RadioGroup radioGroupgender;
     private RadioButton radioButton, radioMale, radioFemale;
     private String selectedGender;
+
+    private ImageView imageView;
+    private Uri imageUri;
+
+    private static final int PICK_IMAGE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +90,17 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         txtdeactivate = (TextView) findViewById(R.id.txt_deactivate);
         txtacctstatus = (TextView) findViewById(R.id.txtacctstatus);
 
+        imageView = (ImageView) findViewById(R.id.owner_photo);
+
+        imageView.setOnClickListener(this);
+
         ownerbdate.setOnClickListener(this);
         txtdeactivate.setOnClickListener(this);
 
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
         ownerdbreference = firebaseDatabase.getReference("/datadevcash/owner");
+        storageReference = FirebaseStorage.getInstance().getReference("owner");
     }
 
     @Override
@@ -241,7 +263,17 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
         builder.show();
     }
 
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
     public void updateOwner(){
+
+        final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri));
+
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
 
@@ -260,6 +292,18 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
                                 ownerdbreference.child(ownerkey+"/business/owner_lname").setValue(ownerlname.getText().toString());
                                 ownerdbreference.child(ownerkey+"/business/owner_username").setValue(ownerusername.getText().toString());
                                 ownerdbreference.child(ownerkey+"/business/owner_mobileno").setValue(ownerphone.getText().toString());
+
+                                uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                ownerdbreference.child(ownerkey+"/business/owner_image").setValue(uri.toString());
+                                            }
+                                        });
+                                    }
+                                });
 
                                 addRadioGroupListener();
                                 ownerdbreference.child(ownerkey+"/business/owner_gender").setValue(selectedGender);
@@ -559,6 +603,29 @@ public class OwnerInformation extends AppCompatActivity implements View.OnClickL
             case R.id.txt_deactivate:
                 enterPasswDialog();
                 break;
+
+            case R.id.imageView:
+                choosePhoto();
+                break;
         }
+    }
+
+    private void choosePhoto() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+        }
+
+
     }
 }

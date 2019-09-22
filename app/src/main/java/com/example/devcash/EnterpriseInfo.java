@@ -32,9 +32,9 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
 
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
-    private TextInputEditText entname, entempno, entno, entpermit, entaddr, entemail;
-    private TextInputLayout entNameLayout, entCountLayout, entPermitNoLayout, entAddrLayout;
-    private String enterprisename, enterprisepermit, enterpriseno, enterpriseaddr, enterprisemail, selectedcategory, selectedentype, enterpriseCategory;
+    private TextInputEditText entname, entempno, entno, entpermit, entaddr, entemail, entTin;
+    private TextInputLayout entNameLayout, entCountLayout, entPermitNoLayout, entAddrLayout,entTinLayout;
+    private String enterprisename, enterprisepermit, enterpriseno, enterpriseaddr, enterprisemail, selectedcategory, selectedentype, enterpriseCategory, enterpriseTin;
 //    private Long enterpriseempno;
     private int enterpriseempno;
     private Spinner spinnercategory;
@@ -58,6 +58,8 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
         entAddrLayout = (TextInputLayout) findViewById(R.id.layoutEntAddr);
         entcategory = (TextView) findViewById(R.id.txt_entcategory);
         spinnercategory = (Spinner) findViewById(R.id.spinner_enttype);
+        entTin = (TextInputEditText) findViewById(R.id.edittext_tin);
+        entTinLayout = (TextInputLayout) findViewById(R.id.layoutTinNo);
 
         //listeners
         spinnercategory.setOnItemSelectedListener(this);
@@ -81,38 +83,77 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
         String enterpriseCount = entempno.getText().toString();
         String enterprisePermit = entpermit.getText().toString();
         String enterpriseAddr = entaddr.getText().toString();
-        boolean ok = true;
+        String enterpriseTin = entTin.getText().toString();
+//        boolean ok = true;
 
         if (enterpriseName.isEmpty()){
-            entNameLayout.setError("Fields can not be empty.");
-            ok = false;
-            if (enterpriseCount.isEmpty()){
-                entCountLayout.setError("Fields can not be empty");
-                ok = false;
-                if (enterprisePermit.isEmpty()){
-                    entPermitNoLayout.setError("Fields can not be empty.");
-                    ok = false;
-                    if (enterpriseAddr.isEmpty()){
-                        entAddrLayout.setError("Fields can not be empty.");
-                        ok = false;
-                    }else {
-                        entAddrLayout.setError(null);
-                        ok = true;
-                    }
-                }else {
-                    entPermitNoLayout.setError(null);
-                    ok = true;
-                }
-            }else {
-                entCountLayout.setError(null);
-                ok = true;
-            }
-        }else {
-            entNameLayout.setError(null);
-            ok = true;
+            entNameLayout.setError("Fields cannot be empty.");
+            return false;
         }
 
-        return ok;
+        if (enterpriseCount.isEmpty()){
+            entCountLayout.setError("Fields cannot be empty.");
+            return false;
+        }
+
+
+        if (enterprisePermit.isEmpty()){
+            entAddrLayout.setError("Fields cannot be empty.");
+            return false;
+        }
+
+        if (enterpriseAddr.isEmpty()){
+            entCountLayout.setError("Fields cannot be empty.");
+            return false;
+        }
+
+        if (enterpriseTin.isEmpty()){
+            entTinLayout.setError("Fields cannot be empty.");
+            return false;
+        }
+
+        return true;
+
+
+
+//
+//        if (enterpriseName.isEmpty()){
+//            entNameLayout.setError("Fields can not be empty.");
+//            ok = false;
+//            if (enterpriseCount.isEmpty()){
+//                entCountLayout.setError("Fields can not be empty");
+//                ok = false;
+//                if (enterprisePermit.isEmpty()){
+//                    entPermitNoLayout.setError("Fields can not be empty.");
+//                    ok = false;
+//                    if (enterpriseAddr.isEmpty()){
+//                        entAddrLayout.setError("Fields can not be empty.");
+//                        ok = false;
+//                        if (enterpriseTin.isEmpty()){
+//                            entTinLayout.setError("Fields cannot be empty");
+//                            ok = false;
+//                        }else {
+//                            entTinLayout.setError(null);
+//                            ok = true;
+//                        }
+//                    }else {
+//                        entAddrLayout.setError(null);
+//                        ok = true;
+//                    }
+//                }else {
+//                    entPermitNoLayout.setError(null);
+//                    ok = true;
+//                }
+//            }else {
+//                entCountLayout.setError(null);
+//                ok = true;
+//            }
+//        }else {
+//            entNameLayout.setError(null);
+//            ok = true;
+//        }
+//
+//        return ok;
     }
 
 //    private boolean validateEmployeeCount(){
@@ -182,12 +223,15 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                                     enterpriseempno = enterprise.getEnt_no_emp();
                                     selectedentype = enterprise.getEnt_type();
                                     enterpriseCategory = enterprise.getEnt_cat();
+                                    enterpriseTin = enterprise.getEnt_tin();
+
 
                                     entname.setText(enterprisename);
                                     entaddr.setText(enterpriseaddr);
                                     entemail.setText(enterprisemail);
                                     entpermit.setText(enterprisepermit);
                                     entcategory.setText(enterpriseCategory);
+                                    entTin.setText(enterpriseTin);
 
                                     entempno.setText(Integer.toString(enterpriseempno));
 
@@ -249,6 +293,10 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
 
                                     if(!enterprise.getEnt_name().equals(entname.getText().toString())) {
                                         ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_name").setValue(entname.getText().toString());
+                                    }
+
+                                    if (!enterprise.getEnt_tin().equals(entTin.getText().toString())){
+                                        ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_tin").setValue(entTin.getText().toString());
                                     }
 
                                     if(!enterprise.getEnt_addr().equals(entaddr.getText().toString())) {

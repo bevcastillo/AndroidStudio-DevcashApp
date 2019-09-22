@@ -51,11 +51,13 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
                 String servname = list.get(viewHolder.getAdapterPosition()).getServname();
                 String servstatus = list.get(viewHolder.getAdapterPosition()).getServstatus();
                 double servprice = list.get(viewHolder.getAdapterPosition()).getServprice();
+                String imageUrl = list.get(viewHolder.getAdapterPosition()).getService_image();
 
                 Intent intent = new Intent(v.getContext(), EditServices.class);
                 intent.putExtra("service_name", servname);
                 intent.putExtra("service_status", servstatus);
                 intent.putExtra("service_price", servprice);
+                intent.putExtra("image_url", imageUrl);
                 v.getContext().startActivity(intent);
 
             }
