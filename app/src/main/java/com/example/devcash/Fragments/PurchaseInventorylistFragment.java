@@ -1223,6 +1223,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ customertransactionkey +"/amount_due").setValue(totalDue);
                                                                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ customertransactionkey +"/total_item_discount").setValue(totalDiscount);
                                                                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ customertransactionkey +"/customer_cart").updateChildren(cartMap);
+                                                                                                                    Toast.makeText(getActivity(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
                                                                                                                     cartMap.clear();
 
                                                                                                                 }else {
@@ -1254,6 +1255,7 @@ public class PurchaseInventorylistFragment extends Fragment implements SearchVie
                                                                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ customertransactionkey +"/total_item_discount").setValue(totalDiscount);
                                                                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ customertransactionkey +"/vat_exempt_sale").setValue(0.00);
                                                                                                                     ownerdbreference.child(acctkey+"/business/customer_transaction/"+ customertransactionkey +"/customer_cart").updateChildren(cartMap);
+                                                                                                                    Toast.makeText(getActivity(), "Item has been added to cart.", Toast.LENGTH_SHORT).show();
                                                                                                                     cartMap.clear();
                                                                                                                 }
                                                                                                             }

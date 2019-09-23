@@ -1,6 +1,7 @@
 package com.example.devcash.CustomAdapters;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,10 +43,17 @@ public class AllReceiptsAdapter extends RecyclerView.Adapter<AllReceiptsAdapter.
                 double amountDue = list.get(viewHolder.getAdapterPosition()).getAmount_due();
 
                 Intent intent = new Intent(v.getContext(), ViewReceiptActivity.class);
-                intent.putExtra("receipt_no", receiptNo);
+                intent.putExtra("customer_id", receiptNo);
                 intent.putExtra("date_time", dateTime);
                 intent.putExtra("amount_due", amountDue);
+
+
+                Bundle b = new Bundle();
+//                b.putInt("customer_id", receiptNo);
+//                intent.putExtras(b);
                 v.getContext().startActivity(intent);
+
+//                Toast.makeText(v.getContext(), receiptNo+" from the adapter", Toast.LENGTH_SHORT).show();
 
             }
         });

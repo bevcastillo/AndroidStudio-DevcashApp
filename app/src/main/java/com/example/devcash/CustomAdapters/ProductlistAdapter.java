@@ -190,8 +190,59 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
 
                                                                                 }else {
                                                                                     //for senior citizen
+                                                                                    if (currentProductQty > newQty) {
+                                                                                        tempQty = currentProductQty - newQty;
+                                                                                        newTotalQty = currentTotalQty - tempQty;
+                                                                                    } else {
+                                                                                        tempQty = newQty - currentProductQty;
+                                                                                        newTotalQty = currentTotalQty + tempQty;
+
+                                                                                        String newServiceSubtotalStr = String.format("%.2f", productDiscountedPrice * newQty);
+                                                                                        double newServiceSubtotal = Double.parseDouble(newServiceSubtotalStr);
+
+
+                                                                                        String tempSubtotalVatStr = String.format("%.2f", currentAmountDue - currentProductSubTotal);
+                                                                                        double tempSubtotalVat = Double.parseDouble(tempSubtotalVatStr);
+
+                                                                                        String newSubtotalVatStr = String.format("%.2f", tempSubtotalVat + newServiceSubtotal);
+                                                                                        double newSubtotalVat = Double.parseDouble(newSubtotalVatStr);
+
+                                                                                        String newVatExemptStr = String.format("%.2f", newSubtotalVat / 1.12);
+                                                                                        double newVatExempt = Double.parseDouble(newVatExemptStr);
+
+                                                                                        String newVatStr = String.format("%.2f", newSubtotalVat - newVatExempt);
+                                                                                        double newVat = Double.parseDouble(newVatStr);
+
+                                                                                        String newSeniorDiscountStr = String.format("%.2f", newVatExempt * .20);
+                                                                                        double newSeniorDiscount = Double.parseDouble(newSeniorDiscountStr);
+
+                                                                                        String newAmountDueStr = String.format("%.2f", newVatExempt - newSeniorDiscount);
+                                                                                        double newAmountDue = Double.parseDouble(newAmountDueStr);
+
+                                                                                        //get the new total discounted
+                                                                                        String getServTotalDiscountStr = String.format("%.2f", productPrice - productDiscountedPrice);
+                                                                                        double getServTotalDiscount = Double.parseDouble(getServTotalDiscountStr);
+
+                                                                                        String newTotalDiscountStr = String.format("%.2f", getServTotalDiscount * newQty);
+                                                                                        double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
+
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/" + customerTransactionKey + "/customer_cart")
+                                                                                                .child(customerCartKey + "/product/prod_qty").setValue(newQty); //we update the quantity
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/" + customerTransactionKey + "/customer_cart")
+                                                                                                .child(customerCartKey + "/product/prod_subtotal").setValue(newServiceSubtotal);
+
+
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/amount_due").setValue(newAmountDue);
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/senior_discount").setValue(newSeniorDiscount);
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/subtotal").setValue(newSubtotalVat);
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/total_item_discount").setValue(newTotalDiscount);
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/total_item_qty").setValue(newTotalQty);
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/vat").setValue(newVat);
+                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/vat_exempt_sale").setValue(newVatExempt);
+                                                                                    }
                                                                                 }
                                                                             }
+                                                                            Toast.makeText(v.getContext(), "Quantity has been updated.", Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     }
 
@@ -357,6 +408,7 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                                                                             ownerdbreference.child(ownerKey+"/business/customer_transaction/").child(customerTransactionKey+"/vat_exempt_sale").setValue(newVatExempt);
                                                                         }
                                                                     }
+                                                                    Toast.makeText(v.getContext(), "Item has been deleted.", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
 

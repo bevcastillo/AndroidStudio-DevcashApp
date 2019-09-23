@@ -95,6 +95,7 @@ public class PurchaseInventoryServicesAdapter extends RecyclerView.Adapter<Purch
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                Toast.makeText(v.getContext(), "Adding to cart..", Toast.LENGTH_SHORT).show();
                 itemcount++;
 
                 final String TransId = ownerdbreference.push().getKey();
