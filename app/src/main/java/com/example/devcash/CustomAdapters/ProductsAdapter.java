@@ -48,6 +48,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 String prodname = list.get(viewHolder.getAdapterPosition()).getProd_name();
+                String prodbrand = list.get(viewHolder.getAdapterPosition()).getProd_brand();
                 String prodstatus = list.get(viewHolder.getAdapterPosition()).getProd_status();
                 double prodprice = list.get(viewHolder.getAdapterPosition()).getProd_price();
                 int prodstock = list.get(viewHolder.getAdapterPosition()).getProd_stock();
@@ -59,6 +60,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
                 Intent intent = new Intent(v.getContext(), EditProduct.class);
                 intent.putExtra("product_name", prodname);
+                intent.putExtra("product_brand", prodbrand);
                 intent.putExtra("product_status", prodstatus);
                 intent.putExtra("product_price", prodprice);
                 intent.putExtra("product_stock", prodstock);

@@ -129,7 +129,7 @@ public class InventoryNav extends AppCompatActivity
                                         String empTask = employee.getEmp_task();
                                         String empName = empFirstname+" "+empLastname;
 
-                                        txtEmployeeName.setText("Welcome, "+empName);
+                                        txtEmployeeName.setText(""+empName);
                                         txtEmployeeTask.setText(empTask);
 
                                     }

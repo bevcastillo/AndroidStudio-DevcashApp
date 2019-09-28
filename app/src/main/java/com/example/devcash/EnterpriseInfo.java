@@ -1,8 +1,12 @@
 package com.example.devcash;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +16,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,25 +28,38 @@ import com.example.devcash.Object.Account;
 import com.example.devcash.Object.Business;
 import com.example.devcash.Object.Employee;
 import com.example.devcash.Object.Enterprise;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
-public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private DatabaseReference ownerdbreference;
     private FirebaseDatabase firebaseDatabase;
+    private StorageTask uploadTask;
+    private StorageReference storageReference;
+
     private TextInputEditText entname, entempno, entno, entpermit, entaddr, entemail, entTin;
     private TextInputLayout entNameLayout, entCountLayout, entPermitNoLayout, entAddrLayout,entTinLayout;
-    private String enterprisename, enterprisepermit, enterpriseno, enterpriseaddr, enterprisemail, selectedcategory, selectedentype, enterpriseCategory, enterpriseTin;
+    private String enterprisename, enterprisepermit, enterpriseno, enterpriseaddr, enterprisemail,
+                    selectedcategory, selectedentype, enterpriseCategory, enterpriseTin, enterpriseImageUrl, finalUri;
 //    private Long enterpriseempno;
     private int enterpriseempno;
     private Spinner spinnercategory;
     private TextView entcategory;
     private int pos;
+    Uri imageUri, uploadImageUri;
+    ImageView imageView;
+    Button btnUpload;
+    private static final int PICK_IMAGE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +80,13 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
         spinnercategory = (Spinner) findViewById(R.id.spinner_enttype);
         entTin = (TextInputEditText) findViewById(R.id.edittext_tin);
         entTinLayout = (TextInputLayout) findViewById(R.id.layoutTinNo);
+        imageView = (ImageView) findViewById(R.id.prod_photo);
+        btnUpload = (Button) findViewById(R.id.btnUpload);
 
         //listeners
+        btnUpload.setOnClickListener(this);
         spinnercategory.setOnItemSelectedListener(this);
+        imageView.setOnClickListener(this);
 
         //
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -113,70 +137,8 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
         }
 
         return true;
-
-
-
-//
-//        if (enterpriseName.isEmpty()){
-//            entNameLayout.setError("Fields can not be empty.");
-//            ok = false;
-//            if (enterpriseCount.isEmpty()){
-//                entCountLayout.setError("Fields can not be empty");
-//                ok = false;
-//                if (enterprisePermit.isEmpty()){
-//                    entPermitNoLayout.setError("Fields can not be empty.");
-//                    ok = false;
-//                    if (enterpriseAddr.isEmpty()){
-//                        entAddrLayout.setError("Fields can not be empty.");
-//                        ok = false;
-//                        if (enterpriseTin.isEmpty()){
-//                            entTinLayout.setError("Fields cannot be empty");
-//                            ok = false;
-//                        }else {
-//                            entTinLayout.setError(null);
-//                            ok = true;
-//                        }
-//                    }else {
-//                        entAddrLayout.setError(null);
-//                        ok = true;
-//                    }
-//                }else {
-//                    entPermitNoLayout.setError(null);
-//                    ok = true;
-//                }
-//            }else {
-//                entCountLayout.setError(null);
-//                ok = true;
-//            }
-//        }else {
-//            entNameLayout.setError(null);
-//            ok = true;
-//        }
-//
-//        return ok;
     }
 
-//    private boolean validateEmployeeCount(){
-//        int empCount = Integer.parseInt(entempno.getText().toString());
-//        final boolean[] ok = {true};
-//
-//        if (empCount > 100){
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            LayoutInflater inflater = this.getLayoutInflater();
-//            final View dialogView = inflater.inflate(R.layout.customdialog_enterprisecount, null);
-//            builder.setView(dialogView);
-//
-//            builder.setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                    ok[0] = false;
-//                }
-//            });
-//            builder.show();
-//        }
-//        return ok[0];
-//    }
 
     private boolean hasValidEmployeeCount(int empCount) {
         return empCount < 100;
@@ -224,6 +186,7 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                                     selectedentype = enterprise.getEnt_type();
                                     enterpriseCategory = enterprise.getEnt_cat();
                                     enterpriseTin = enterprise.getEnt_tin();
+                                    enterpriseImageUrl = enterprise.getEnt_image();
 
 
                                     entname.setText(enterprisename);
@@ -232,6 +195,12 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                                     entpermit.setText(enterprisepermit);
                                     entcategory.setText(enterpriseCategory);
                                     entTin.setText(enterpriseTin);
+
+                                    if (enterpriseImageUrl!=null){
+                                        Picasso.with(EnterpriseInfo.this).load(enterpriseImageUrl).into(imageView);
+                                    }else {
+                                        Picasso.with(EnterpriseInfo.this).load(R.drawable.picture).into(imageView);
+                                    }
 
                                     entempno.setText(Integer.toString(enterpriseempno));
 
@@ -272,9 +241,81 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
         });
     }
 
-    public void updateEntDetails(){
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    private void uploadLogo() {
+
         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
         final String username = (shared.getString("owner_username", ""));
+
+        if (imageUri!=null){
+            final StorageReference fileReference = storageReference.child(System.currentTimeMillis()+"."+getFileExtension(imageUri)); //upload image to storage
+
+            uploadTask = fileReference.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(final Uri uri) {
+
+                                    ownerdbreference.orderByChild("business/owner_username")
+                                            .equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.exists()){
+                                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                                    final String ownerkey = dataSnapshot1.getKey();
+
+                                                    ownerdbreference.child(ownerkey+"/business/enterprise").addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if(dataSnapshot.exists()){
+                                                                Enterprise enterprise = dataSnapshot.getValue(Enterprise.class);
+                                                                enterprise.setEnt_image(uri.toString());
+
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                                    Toast.makeText(EnterpriseInfo.this, "Enterprise is updated!", Toast.LENGTH_SHORT).show();
+                                                    finish();
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                }
+                            });
+                        }
+                    });
+
+        }else {
+//            Picasso.with(EnterpriseInfo.this).load(imageUri).into(imageView);
+        }
+
+    }
+
+    public void updateEntDetails(){
+
+        Toast.makeText(this, finalUri+" is the final image uri", Toast.LENGTH_SHORT).show();
+        SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);
+        final String username = (shared.getString("owner_username", ""));
+
 
         ownerdbreference.orderByChild("business/owner_username")
                 .equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -290,6 +331,27 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                                 if(dataSnapshot.exists()){
                                     Enterprise enterprise = dataSnapshot.getValue(Enterprise.class);
                                     int ent_count = enterprise.getEnt_no_emp();
+
+                                    if (imageUri!=null) {
+                                        final StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+
+                                        uploadTask = fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        Enterprise enterprise = new Enterprise();
+
+                                                        enterprise.setEnt_image(uri.toString());
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                    }else {
+
+                                    }
 
                                     if(!enterprise.getEnt_name().equals(entname.getText().toString())) {
                                         ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_name").setValue(entname.getText().toString());
@@ -325,7 +387,6 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
                                     if(!enterprise.getEnt_cat().equals(selectedcategory)) {
                                         ownerdbreference.child(ownerkey+"/business/enterprise").child("ent_cat").setValue(selectedcategory);
                                     }
-
 
                                 }
                             }
@@ -416,5 +477,40 @@ public class EnterpriseInfo extends AppCompatActivity implements AdapterView.OnI
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.prod_photo:
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+                break;
+            case R.id.btnUpload:
+                uploadLogo();
+                break;
+        }
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+//            if (imageUri!=null){
+//                imageUri = data.getData();
+//                imageView.setImageURI(imageUri);
+//            }else {
+//                uploadImageUri = data.getData();
+//                imageView.setImageURI(uploadImageUri);
+//            }
+            imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+        }
     }
 }

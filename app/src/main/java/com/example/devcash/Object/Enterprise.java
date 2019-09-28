@@ -1,7 +1,7 @@
 package com.example.devcash.Object;
 
 public class Enterprise {
-    String ent_addr, ent_cat, ent_name, ent_permitno, ent_telno, ent_type, ent_email, ent_tin;
+    String ent_addr, ent_cat, ent_name, ent_permitno, ent_telno, ent_type, ent_email, ent_tin, ent_image;
 //    Long ent_no_emp;
     int ent_no_emp;
 
@@ -87,5 +87,13 @@ public class Enterprise {
 
     public void setEnt_tin(String ent_tin) {
         this.ent_tin = ent_tin;
+    }
+
+    public String getEnt_image() {
+        return ent_image;
+    }
+
+    public void setEnt_image(String ent_image) {
+        this.ent_image = ent_image;
     }
 }

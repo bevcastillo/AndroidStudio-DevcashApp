@@ -54,7 +54,7 @@
                     android:id="@+id/textinput_empemail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/user_email"
+                    android:hint="Username"
                     android:inputType="text"
                     android:padding="@dimen/text_padding"
                     android:textSize="@dimen/page_title"/>

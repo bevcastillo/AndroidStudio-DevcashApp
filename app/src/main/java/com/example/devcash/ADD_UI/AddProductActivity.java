@@ -442,10 +442,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             return false;
         }
 
-        if (productBrand.isEmpty()) {
-            productBrandLayout.setError("Fields cannot be empty");
-            return false;
-        }
+//        if (productBrand.isEmpty()) {
+//            productBrandLayout.setError("Fields cannot be empty");
+//            return false;
+//        }
 
         if (productPriceStr.isEmpty()) {
             productPriceLayout.setError("Fields cannot be empty");
@@ -558,6 +558,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                         product.setCategory(category);
                         product.setDiscount(discount);
                         product.setQrCode(qrCode);
+                        product.setProd_brand(prod_brand);
 
 
                         SharedPreferences shared = getSharedPreferences("OwnerPref", MODE_PRIVATE);

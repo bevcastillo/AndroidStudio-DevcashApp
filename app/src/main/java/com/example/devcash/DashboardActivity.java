@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class DashboardActivity extends AppCompatActivity
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar;
+    ImageView ownerImage;
 
     private DatabaseReference dbreference;
     private DatabaseReference ownerdbreference;
@@ -80,6 +83,7 @@ public class DashboardActivity extends AppCompatActivity
         ownername = (TextView) header.findViewById(R.id.header_ownername);
         enterprisename = (TextView) header.findViewById(R.id.header_entname);
         accountype = (TextView) header.findViewById(R.id.header_acctype);
+        ownerImage = (ImageView) header.findViewById(R.id.imageView);
         //
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -115,6 +119,10 @@ public class DashboardActivity extends AppCompatActivity
         String fname = business.getOwner_fname();
         String name = fname+" "+lname;
         String entname = business.enterprise.getEnt_name();
+        String owner_image  = business.getOwner_image();
+        String enterprise_logo = business.getEnterprise().getEnt_image();
+
+        Picasso.with(this).load(enterprise_logo).into(ownerImage);
 
         ownername.setText(name);
         enterprisename.setText(entname);

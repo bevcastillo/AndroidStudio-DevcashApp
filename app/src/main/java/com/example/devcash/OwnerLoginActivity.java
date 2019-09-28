@@ -1,6 +1,7 @@
 package com.example.devcash;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -153,15 +154,30 @@ public class OwnerLoginActivity extends AppCompatActivity implements View.OnClic
                                                                 Account account = dataSnapshot1.getValue(Account.class);
 
                                                                 if (account.getAcct_passw().equals(ownerpassword)) {
-                                                                    String accountJson = gson.toJson(account);
-                                                                    editor.putString("account", accountJson);
-                                                                    editor.putString("account_type", "Owner");
-                                                                    editor.commit();
-                                                                    Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
-                                                                    startActivity(owner_dashboard);
+                                                                    if (!account.getAcct_status().equals("Disabled")){
+                                                                        String accountJson = gson.toJson(account);
+                                                                        editor.putString("account", accountJson);
+                                                                        editor.putString("account_type", "Owner");
+                                                                        editor.commit();
+                                                                        Intent owner_dashboard = new Intent(OwnerLoginActivity.this, DashboardActivity.class);
+                                                                        startActivity(owner_dashboard);
 
-                                                                    Toast.makeText(OwnerLoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
-                                                                    progressDialog();
+                                                                        Toast.makeText(OwnerLoginActivity.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
+                                                                        progressDialog();
+                                                                    }else {
+                                                                        AlertDialog.Builder builder = new AlertDialog.Builder(OwnerLoginActivity.this);
+                                                                        builder.setMessage("Your account has been disabled. Please contact the admin to re-activate your account.");
+
+                                                                        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                               dialog.dismiss();
+                                                                            }
+                                                                        });
+                                                                        builder.show();
+
+                                                                    }
+
                                                                 } else {
                                                                     Toast.makeText(OwnerLoginActivity.this, "Username/Password is Incorrect", Toast.LENGTH_SHORT).show();
                                                                 }

@@ -173,7 +173,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/pnumber"
-                                android:inputType="number"
+                                android:inputType="phone"
                                 android:padding="@dimen/text_padding"
                                 android:textColorHint="@color/colorPrimary"
                                 android:textSize="@dimen/page_title" />
@@ -286,7 +286,7 @@
                             android:layout_height="wrap_content"
                             app:errorEnabled="true"
                             app:passwordToggleEnabled="true"
-                            app:counterEnabled="true"
+                            app:counterEnabled="false"
                             android:id="@+id/layoutOwnerPassw">
 
                             <android.support.design.widget.TextInputEditText

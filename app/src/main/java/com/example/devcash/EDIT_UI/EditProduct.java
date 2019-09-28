@@ -58,7 +58,7 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
     private StorageReference storageReference;
     private StorageTask uploadTask;
 
-    private TextInputEditText productname, prodprice, prodcondcount, prodstock, prodrop, prodexpdate, prodexpcount;
+    private TextInputEditText productname, prodprice, prodcondcount, prodstock, prodrop, prodexpdate, prodexpcount, prodBrand;
     private Spinner spinnerunit, spinnercategory, spinnerdiscount, spinnercondition;
     private CheckBox checkBoxavail;
     private RadioGroup radioGroupsoldby;
@@ -67,8 +67,8 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
     private double strprice, strprodrop;
     private int strprodstock, strprodexpcount, pos, pos1;
     private LinearLayout deletelayout, choosephoto, takephoto;
-    private TextInputLayout productNameLayout, productPriceLayout, productStockLayout, productRopLayout;
-    private String discountCode, discountStart, discountEnd, discountType, discountStatus, strExpirationDate, newExpirationDate, strImageUrl;
+    private TextInputLayout productNameLayout, productPriceLayout, productStockLayout, productRopLayout, prodBrandLayout;
+    private String discountCode, discountStart, discountEnd, discountType, discountStatus, strExpirationDate, newExpirationDate, strImageUrl, strProdBrand;
     private double productPrice, discountValue, discountedPrice;
     private DatePickerDialog datePickerDialog;
     private ImageView imageView;
@@ -89,6 +89,7 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
 
         //
         productname = (TextInputEditText) findViewById(R.id.textinput_editprodname);
+        prodBrand = (TextInputEditText) findViewById(R.id.textinput_editbrand);
         prodprice = (TextInputEditText) findViewById(R.id.textinput_editprice);
         prodcondcount = (TextInputEditText) findViewById(R.id.textinput_editcondcount);
         prodstock = (TextInputEditText) findViewById(R.id.textinput_editinstock);
@@ -105,6 +106,7 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
         imageView = (ImageView) findViewById(R.id.prod_photo);
         choosephoto = (LinearLayout) findViewById(R.id.choose_photo_layout);
         takephoto = (LinearLayout) findViewById(R.id.take_photo_layout);
+        prodBrandLayout = (TextInputLayout) findViewById(R.id.editProdBrand_layout);
 
         //listeners
         spinnerdiscount.setOnItemSelectedListener(this);
@@ -224,10 +226,12 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
             strprodexpcount = bundle.getInt("product_expcount");
             strprodrop = bundle.getDouble("product_rop");
             strImageUrl = bundle.getString("product_image");
+            strProdBrand = bundle.getString("product_brand");
 
             prodreference = strprodname+""+strprodexpdate;
 
             productname.setText(strprodname);
+            prodBrand.setText(strProdBrand);
             prodprice.setText(Double.toString(strprice));
             prodstock.setText(Integer.toString(strprodstock));
 
@@ -483,6 +487,7 @@ public class EditProduct extends AppCompatActivity implements AdapterView.OnItem
                                         }
 
                                         ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_status").setValue(strprodavail);
+                                        ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_status").setValue(prodBrand.getText().toString());
                                         ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_name").setValue(productname.getText().toString());
                                         ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_price").setValue(Double.parseDouble(prodprice.getText().toString()));
                                         ownerdbreference.child(ownerKey+"/business/product/").child(productKey+"/prod_stock").setValue(Integer.parseInt(prodstock.getText().toString()));

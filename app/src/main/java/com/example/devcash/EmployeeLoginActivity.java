@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.devcash.Object.Business;
 import com.example.devcash.Object.Employee;
+import com.example.devcash.Object.Owner;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -178,6 +179,15 @@ public class EmployeeLoginActivity extends AppCompatActivity implements View.OnC
                                                             }
                                                         }
                                                     }
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(EmployeeLoginActivity.this);
+                                                    builder.setMessage("Your account has been deleted. Please contact your enterprise owner");
+                                                    builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    });
+                                                    builder.show();
                                                 }
 
                                                 @Override

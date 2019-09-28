@@ -75,6 +75,8 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
 
                 String itemName = productList.get(viewHolder.getAdapterPosition()).getProd_name();
                 final int itemQty = productList.get(viewHolder.getAdapterPosition()).getProd_qty();
+//                final int itemStock = productList.get(viewHolder.getAdapterPosition()).getProd_stock();
+
 
                 menu.add("Edit Quantity").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
@@ -99,176 +101,192 @@ public class ProductlistAdapter extends RecyclerView.Adapter<ProductlistAdapter.
                                 final double productDicsountedPrice = productList.get(viewHolder.getAdapterPosition()).getDiscounted_price();
                                 String productExpiration = productList.get(viewHolder.getAdapterPosition()).getProd_expdate();
                                 final String productReference = productName+""+productExpiration;
+                                final int itemStock = productList.get(viewHolder.getAdapterPosition()).getProd_stock();
 
                                 SharedPreferences shared = v.getContext().getSharedPreferences("OwnerPref", MODE_PRIVATE);
                                 final String username = (shared.getString("owner_username", ""));
 
-                                ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.exists()){
-                                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                                final String ownerKey = dataSnapshot1.getKey();
+                                if (newQty>=itemStock){
 
-                                                ownerdbreference.child(ownerKey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        if (dataSnapshot.exists()){
-                                                            for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
-                                                                final String customerTransactionKey = dataSnapshot2.getKey();
-                                                                final CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                                    builder.setMessage(productList.get(viewHolder.getAdapterPosition()).getProd_stock()+" stocks left. \nPlease input lesser quantity.");
+                                    builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    builder.show();
+                                }else {
 
-                                                                ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
-                                                                        .orderByChild("product/prod_reference").equalTo(productReference).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                    @Override
-                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                        if (dataSnapshot.exists()){
-                                                                            for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
-                                                                                String customerCartKey = dataSnapshot3.getKey();
-                                                                                CustomerCart customerCart = dataSnapshot3.getValue(CustomerCart.class);
+                                    ownerdbreference.orderByChild("business/owner_username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()){
+                                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                                    final String ownerKey = dataSnapshot1.getKey();
 
-                                                                                int currentProductQty = customerCart.getProduct().getProd_qty();
-                                                                                double currentProductSubTotal = customerCart.getProduct().getProd_subtotal();
-                                                                                double productPrice = customerCart.getProduct().getProd_price();
-                                                                                double productDiscountedPrice = customerCart.getProduct().getDiscounted_price();
+                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction").orderByChild("customer_id").equalTo(customerId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            if (dataSnapshot.exists()){
+                                                                for (DataSnapshot dataSnapshot2: dataSnapshot.getChildren()){
+                                                                    final String customerTransactionKey = dataSnapshot2.getKey();
+                                                                    final CustomerTransaction customerTransaction = dataSnapshot2.getValue(CustomerTransaction.class);
 
-                                                                                //details from customer transaction
-                                                                                int currentTotalQty = customerTransaction.getTotal_item_qty();
-                                                                                double currentSubtotal = customerTransaction.getSubtotal();
-                                                                                double currentAmountDue = customerTransaction.getAmount_due();
-                                                                                double currentTotalDiscount = customerTransaction.getTotal_item_discount();
-                                                                                String customerType = customerTransaction.getCustomer_type();
+                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                            .orderByChild("product/prod_reference").equalTo(productReference).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                            if (dataSnapshot.exists()){
+                                                                                for (DataSnapshot dataSnapshot3: dataSnapshot.getChildren()){
+                                                                                    String customerCartKey = dataSnapshot3.getKey();
+                                                                                    CustomerCart customerCart = dataSnapshot3.getValue(CustomerCart.class);
 
-                                                                                double tempQty = 0.00;
-                                                                                double newTotalQty = 0.00;
+                                                                                    int currentProductQty = customerCart.getProduct().getProd_qty();
+                                                                                    double currentProductSubTotal = customerCart.getProduct().getProd_subtotal();
+                                                                                    double productPrice = customerCart.getProduct().getProd_price();
+                                                                                    double productDiscountedPrice = customerCart.getProduct().getDiscounted_price();
 
-                                                                                if (customerType.equals("Regular Customer")){
+                                                                                    //details from customer transaction
+                                                                                    int currentTotalQty = customerTransaction.getTotal_item_qty();
+                                                                                    double currentSubtotal = customerTransaction.getSubtotal();
+                                                                                    double currentAmountDue = customerTransaction.getAmount_due();
+                                                                                    double currentTotalDiscount = customerTransaction.getTotal_item_discount();
+                                                                                    String customerType = customerTransaction.getCustomer_type();
 
-                                                                                    if (currentProductQty > newQty){
-                                                                                        tempQty = currentProductQty - newQty;
-                                                                                        newTotalQty = currentTotalQty - tempQty;
-                                                                                    }else {
-                                                                                        tempQty = newQty - currentProductQty;
-                                                                                        newTotalQty = currentTotalQty + tempQty;
-                                                                                    }
+                                                                                    double tempQty = 0.00;
+                                                                                    double newTotalQty = 0.00;
 
-                                                                                    String newProductSubtotalStr = String.format("%.2f", productDicsountedPrice * newQty);
-                                                                                    double newProductSubtotal = Double.parseDouble(newProductSubtotalStr);
+                                                                                    if (customerType.equals("Regular Customer")){
 
-                                                                                    //get new total amount due
-                                                                                    String tempAmountDueStr = String.format("%.2f", currentAmountDue - currentProductSubTotal);
-                                                                                    double tempAmountDue = Double.parseDouble(tempAmountDueStr);
+                                                                                        if (currentProductQty > newQty){
+                                                                                            tempQty = currentProductQty - newQty;
+                                                                                            newTotalQty = currentTotalQty - tempQty;
+                                                                                        }else {
+                                                                                            tempQty = newQty - currentProductQty;
+                                                                                            newTotalQty = currentTotalQty + tempQty;
+                                                                                        }
 
-                                                                                    String newAmountDueStr = String.format("%.2f", tempAmountDue + newProductSubtotal);
-                                                                                    double newAmountDue = Double.parseDouble(newAmountDueStr);
+                                                                                        String newProductSubtotalStr = String.format("%.2f", productDicsountedPrice * newQty);
+                                                                                        double newProductSubtotal = Double.parseDouble(newProductSubtotalStr);
 
-                                                                                    String newSubtotalStr = String.format("%.2f", newAmountDue / 1.12);
-                                                                                    double newSubtotal = Double.parseDouble(newSubtotalStr);
+                                                                                        //get new total amount due
+                                                                                        String tempAmountDueStr = String.format("%.2f", currentAmountDue - currentProductSubTotal);
+                                                                                        double tempAmountDue = Double.parseDouble(tempAmountDueStr);
 
-                                                                                    String newVatStr = String.format("%.2f", newAmountDue - newSubtotal);
-                                                                                    double newVat = Double.parseDouble(newVatStr);
-
-                                                                                    //get the new total discounted
-                                                                                    String getProdTotalDiscountStr = String.format("%.2f", productPrice - productDicsountedPrice);
-                                                                                    double getProdTotalDiscount = Double.parseDouble(getProdTotalDiscountStr);
-
-                                                                                    String newTotalDiscountStr = String.format("%.2f", getProdTotalDiscount * newQty);
-                                                                                    double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
-
-
-                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
-                                                                                            .child(customerCartKey+"/product/prod_qty").setValue(newQty); //we update the quantity
-                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
-                                                                                            .child(customerCartKey+"/product/prod_subtotal").setValue(newProductSubtotal);
-
-                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_item_qty").setValue(newTotalQty);
-                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/amount_due").setValue(newAmountDue);
-                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/subtotal").setValue(newSubtotal);
-                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_item_discount").setValue(newTotalDiscount);
-                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/vat").setValue(newVat);
-                                                                                    ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/vat_exempt_sale").setValue(0.00);
-
-                                                                                }else {
-                                                                                    //for senior citizen
-                                                                                    if (currentProductQty > newQty) {
-                                                                                        tempQty = currentProductQty - newQty;
-                                                                                        newTotalQty = currentTotalQty - tempQty;
-                                                                                    } else {
-                                                                                        tempQty = newQty - currentProductQty;
-                                                                                        newTotalQty = currentTotalQty + tempQty;
-
-                                                                                        String newServiceSubtotalStr = String.format("%.2f", productDiscountedPrice * newQty);
-                                                                                        double newServiceSubtotal = Double.parseDouble(newServiceSubtotalStr);
-
-
-                                                                                        String tempSubtotalVatStr = String.format("%.2f", currentAmountDue - currentProductSubTotal);
-                                                                                        double tempSubtotalVat = Double.parseDouble(tempSubtotalVatStr);
-
-                                                                                        String newSubtotalVatStr = String.format("%.2f", tempSubtotalVat + newServiceSubtotal);
-                                                                                        double newSubtotalVat = Double.parseDouble(newSubtotalVatStr);
-
-                                                                                        String newVatExemptStr = String.format("%.2f", newSubtotalVat / 1.12);
-                                                                                        double newVatExempt = Double.parseDouble(newVatExemptStr);
-
-                                                                                        String newVatStr = String.format("%.2f", newSubtotalVat - newVatExempt);
-                                                                                        double newVat = Double.parseDouble(newVatStr);
-
-                                                                                        String newSeniorDiscountStr = String.format("%.2f", newVatExempt * .20);
-                                                                                        double newSeniorDiscount = Double.parseDouble(newSeniorDiscountStr);
-
-                                                                                        String newAmountDueStr = String.format("%.2f", newVatExempt - newSeniorDiscount);
+                                                                                        String newAmountDueStr = String.format("%.2f", tempAmountDue + newProductSubtotal);
                                                                                         double newAmountDue = Double.parseDouble(newAmountDueStr);
 
-                                                                                        //get the new total discounted
-                                                                                        String getServTotalDiscountStr = String.format("%.2f", productPrice - productDiscountedPrice);
-                                                                                        double getServTotalDiscount = Double.parseDouble(getServTotalDiscountStr);
+                                                                                        String newSubtotalStr = String.format("%.2f", newAmountDue / 1.12);
+                                                                                        double newSubtotal = Double.parseDouble(newSubtotalStr);
 
-                                                                                        String newTotalDiscountStr = String.format("%.2f", getServTotalDiscount * newQty);
+                                                                                        String newVatStr = String.format("%.2f", newAmountDue - newSubtotal);
+                                                                                        double newVat = Double.parseDouble(newVatStr);
+
+                                                                                        //get the new total discounted
+                                                                                        String getProdTotalDiscountStr = String.format("%.2f", productPrice - productDicsountedPrice);
+                                                                                        double getProdTotalDiscount = Double.parseDouble(getProdTotalDiscountStr);
+
+                                                                                        String newTotalDiscountStr = String.format("%.2f", getProdTotalDiscount * newQty);
                                                                                         double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
 
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/" + customerTransactionKey + "/customer_cart")
-                                                                                                .child(customerCartKey + "/product/prod_qty").setValue(newQty); //we update the quantity
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/" + customerTransactionKey + "/customer_cart")
-                                                                                                .child(customerCartKey + "/product/prod_subtotal").setValue(newServiceSubtotal);
+
+                                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                                                .child(customerCartKey+"/product/prod_qty").setValue(newQty); //we update the quantity
+                                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/customer_cart")
+                                                                                                .child(customerCartKey+"/product/prod_subtotal").setValue(newProductSubtotal);
+
+                                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_item_qty").setValue(newTotalQty);
+                                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/amount_due").setValue(newAmountDue);
+                                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/subtotal").setValue(newSubtotal);
+                                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/total_item_discount").setValue(newTotalDiscount);
+                                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/vat").setValue(newVat);
+                                                                                        ownerdbreference.child(ownerKey+"/business/customer_transaction/"+customerTransactionKey+"/vat_exempt_sale").setValue(0.00);
+
+                                                                                    }else {
+                                                                                        //for senior citizen
+                                                                                        if (currentProductQty > newQty) {
+                                                                                            tempQty = currentProductQty - newQty;
+                                                                                            newTotalQty = currentTotalQty - tempQty;
+                                                                                        } else {
+                                                                                            tempQty = newQty - currentProductQty;
+                                                                                            newTotalQty = currentTotalQty + tempQty;
+
+                                                                                            String newServiceSubtotalStr = String.format("%.2f", productDiscountedPrice * newQty);
+                                                                                            double newServiceSubtotal = Double.parseDouble(newServiceSubtotalStr);
 
 
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/amount_due").setValue(newAmountDue);
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/senior_discount").setValue(newSeniorDiscount);
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/subtotal").setValue(newSubtotalVat);
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/total_item_discount").setValue(newTotalDiscount);
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/total_item_qty").setValue(newTotalQty);
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/vat").setValue(newVat);
-                                                                                        ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/vat_exempt_sale").setValue(newVatExempt);
+                                                                                            String tempSubtotalVatStr = String.format("%.2f", currentAmountDue - currentProductSubTotal);
+                                                                                            double tempSubtotalVat = Double.parseDouble(tempSubtotalVatStr);
+
+                                                                                            String newSubtotalVatStr = String.format("%.2f", tempSubtotalVat + newServiceSubtotal);
+                                                                                            double newSubtotalVat = Double.parseDouble(newSubtotalVatStr);
+
+                                                                                            String newVatExemptStr = String.format("%.2f", newSubtotalVat / 1.12);
+                                                                                            double newVatExempt = Double.parseDouble(newVatExemptStr);
+
+                                                                                            String newVatStr = String.format("%.2f", newSubtotalVat - newVatExempt);
+                                                                                            double newVat = Double.parseDouble(newVatStr);
+
+                                                                                            String newSeniorDiscountStr = String.format("%.2f", newVatExempt * .20);
+                                                                                            double newSeniorDiscount = Double.parseDouble(newSeniorDiscountStr);
+
+                                                                                            String newAmountDueStr = String.format("%.2f", newVatExempt - newSeniorDiscount);
+                                                                                            double newAmountDue = Double.parseDouble(newAmountDueStr);
+
+                                                                                            //get the new total discounted
+                                                                                            String getServTotalDiscountStr = String.format("%.2f", productPrice - productDiscountedPrice);
+                                                                                            double getServTotalDiscount = Double.parseDouble(getServTotalDiscountStr);
+
+                                                                                            String newTotalDiscountStr = String.format("%.2f", getServTotalDiscount * newQty);
+                                                                                            double newTotalDiscount = Double.parseDouble(newTotalDiscountStr);
+
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/" + customerTransactionKey + "/customer_cart")
+                                                                                                    .child(customerCartKey + "/product/prod_qty").setValue(newQty); //we update the quantity
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/" + customerTransactionKey + "/customer_cart")
+                                                                                                    .child(customerCartKey + "/product/prod_subtotal").setValue(newServiceSubtotal);
+
+
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/amount_due").setValue(newAmountDue);
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/senior_discount").setValue(newSeniorDiscount);
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/subtotal").setValue(newSubtotalVat);
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/total_item_discount").setValue(newTotalDiscount);
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/total_item_qty").setValue(newTotalQty);
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/vat").setValue(newVat);
+                                                                                            ownerdbreference.child(ownerKey + "/business/customer_transaction/").child(customerTransactionKey + "/vat_exempt_sale").setValue(newVatExempt);
+                                                                                        }
                                                                                     }
                                                                                 }
+                                                                                Toast.makeText(v.getContext(), "Quantity has been updated.", Toast.LENGTH_SHORT).show();
                                                                             }
-                                                                            Toast.makeText(v.getContext(), "Quantity has been updated.", Toast.LENGTH_SHORT).show();
                                                                         }
-                                                                    }
 
-                                                                    @Override
-                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                        @Override
+                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                    }
-                                                                });
+                                                                        }
+                                                                    });
+                                                                }
                                                             }
                                                         }
-                                                    }
 
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                    }
-                                                });
+                                                        }
+                                                    });
+                                                }
                                             }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    }
-                                });
+                                        }
+                                    });
+                                } // end else
+
                             }
                         });
                         dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
