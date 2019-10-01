@@ -97,7 +97,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 final String prodexpdate = plist.get(viewHolder.getAdapterPosition()).getProd_expdate();
                 final double prodprice = plist.get(viewHolder.getAdapterPosition()).getProd_price();
                 final double discountedprice = plist.get(viewHolder.getAdapterPosition()).getDiscounted_price();
-
+                final int prodStock = plist.get(viewHolder.getAdapterPosition()).getProd_stock();
 
                 final String preference = prodname+prodexpdate;
 
@@ -111,6 +111,7 @@ public class PurchaseInventoryProductsAdapter extends RecyclerView.Adapter<Purch
                 product.setProd_expdate(prodexpdate);
                 product.setProd_price(prodprice);
                 product.setProd_qty(prodqty);
+                product.setProd_stock(prodStock);
                 product.setProd_reference(preference);
                 product.setDiscounted_price(discountedprice);
                 product.setProd_subtotal(product.getDiscounted_price() * product.getProd_qty());
