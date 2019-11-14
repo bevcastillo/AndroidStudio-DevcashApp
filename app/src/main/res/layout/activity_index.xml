@@ -7,12 +7,12 @@
     tools:context=".IndexActivity"
     android:background="@color/white">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@mipmap/backdrop_index"
-        android:scaleType="centerCrop"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:srcCompat="@mipmap/backdrop_index"-->
+<!--        android:scaleType="centerCrop"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,39 +26,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp">
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:srcCompat="@drawable/another_devcash_logo" />
 
         <Button
             android:id="@+id/btnforowners"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient_button"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp"
             android:text="@string/forowners"
             android:textColor="@color/white"
             android:layout_marginTop="100dp"
-            android:textAllCaps="false"
-            android:textSize="@dimen/page_title"/>
+            android:textAllCaps="false"/>
 
         <Button
             android:id="@+id/btnforemp"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_cornered_stroke"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp"
             android:text="@string/foremp"
             android:textColor="@color/colorPrimary"
             android:layout_marginTop="20dp"
-            android:textAllCaps="false"
-            android:textSize="@dimen/page_title"/>
+            android:textAllCaps="false"/>
 
 
 

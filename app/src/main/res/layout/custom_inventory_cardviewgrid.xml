@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="187dp"
-    android:layout_height="160dp"
+    android:layout_width="130dp"
+    android:layout_height="120dp"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
     cardview:cardCornerRadius="1dp">
@@ -20,7 +20,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="83dp"
+            android:layout_height="70dp"
             android:background="@color/colorBlack"
             android:orientation="vertical"
             android:alpha="0.6"
@@ -37,8 +37,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="Product Name"
-                android:textColor="@color/white"
-                android:textSize="22dp"/>
+                android:textColor="@color/white"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,8 +76,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="0.00"
-                android:textColor="@color/white"
-                android:textSize="18dp"/>
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/prodlist_expdate"

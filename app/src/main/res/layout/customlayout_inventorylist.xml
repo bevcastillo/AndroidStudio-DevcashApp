@@ -3,7 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding_15"
+    android:padding="10dp"
     android:gravity="left|center"
     android:id="@+id/inventoryoptions_layout">
 

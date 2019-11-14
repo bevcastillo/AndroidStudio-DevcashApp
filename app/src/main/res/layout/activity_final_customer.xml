@@ -9,9 +9,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:src="@drawable/ic_checked"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="30dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -20,14 +20,13 @@
         android:gravity="center"
         android:paddingTop="15dp"
         android:textStyle="bold"
-        android:textSize="18dp"
         android:textColor="@color/greenSuccess"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp">
 
         <LinearLayout
@@ -131,20 +130,18 @@
             android:drawableTint="@color/colorGray"
             android:textAllCaps="false"
             android:layout_marginTop="10dp"
-            android:paddingLeft="10dp"
-            android:textSize="16dp"/>
+            android:paddingLeft="10dp"/>
 
         <Button
             android:id="@+id/btn_startnewsale"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:padding="15dp"
+            android:padding="10dp"
             android:text="Start a new sale"
             android:textColor="@color/white"
             android:textAllCaps="false"
-            android:layout_marginTop="10dp"
-            android:textSize="16dp"/>
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 

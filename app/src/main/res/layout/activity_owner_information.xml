@@ -26,8 +26,8 @@
                 android:layout_marginTop="@dimen/padding_30"
                 android:background="@color/whiteBG"
                 android:padding="@dimen/text_padding"
-                android:layout_marginRight="@dimen/padding_150"
-                android:layout_marginLeft="@dimen/padding_150">
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -35,8 +35,8 @@
                     android:layout_marginTop="@dimen/padding_30"
                     android:layout_marginBottom="@dimen/padding_30"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/padding_30"
-                    android:paddingRight="@dimen/padding_30">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <ImageView
                         android:id="@+id/owner_photo"
@@ -193,8 +193,8 @@
                 android:layout_marginTop="@dimen/padding_20"
                 android:background="@color/whiteBG"
                 android:padding="@dimen/text_padding"
-                android:layout_marginLeft="@dimen/padding_150"
-                android:layout_marginRight="@dimen/padding_150"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:visibility="visible">
 
                 <LinearLayout
@@ -203,8 +203,8 @@
                     android:layout_marginTop="@dimen/padding_30"
                     android:layout_marginBottom="@dimen/padding_30"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/padding_30"
-                    android:paddingRight="@dimen/padding_30">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:layout_width="match_parent"

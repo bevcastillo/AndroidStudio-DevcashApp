@@ -19,11 +19,13 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/prod_image_card"
-                android:layout_width="650dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:layout_marginTop="@dimen/padding_top"
                 android:layout_marginBottom="@dimen/padding_20"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -33,8 +35,8 @@
                     android:layout_marginTop="@dimen/padding_30"
                     android:layout_marginBottom="@dimen/padding_30"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/padding_30"
-                    android:paddingRight="@dimen/padding_30">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -92,11 +94,13 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/category_card"
-                android:layout_width="650dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:layout_marginTop="@dimen/padding_top"
                 android:layout_marginBottom="@dimen/padding_top"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@color/whiteBG"
                 android:layout_gravity="center">
 
@@ -106,8 +110,8 @@
                     android:layout_marginTop="@dimen/padding_30"
                     android:layout_marginBottom="@dimen/padding_30"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/padding_30"
-                    android:paddingRight="@dimen/padding_30">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -281,11 +285,13 @@
             </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:layout_width="650dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/text_padding"
             android:layout_marginTop="@dimen/padding_top"
             android:layout_marginBottom="@dimen/padding_top"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:background="@color/whiteBG"
             android:layout_gravity="center">
 
@@ -295,8 +301,8 @@
             android:layout_marginTop="@dimen/padding_30"
             android:layout_marginBottom="@dimen/padding_30"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/padding_30"
-            android:paddingRight="@dimen/padding_30">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="match_parent"

@@ -100,11 +100,9 @@
         <activity
             android:name=".EmployeeLoginActivity"
             android:label="@string/login"
-            android:parentActivityName=".IndexActivity"
-            android:screenOrientation="landscape" />
+            android:parentActivityName=".IndexActivity" />
         <activity
-            android:name=".IndexActivity"
-            android:screenOrientation="landscape" />
+            android:name=".IndexActivity"/>
         <activity
             android:name=".WhyDevcash"
             android:screenOrientation="landscape" />
@@ -219,17 +217,14 @@
         <activity
             android:name=".Settings_UI.ForgotPasswordActivity"
             android:label="@string/f_password"
-            android:parentActivityName=".OwnerLoginActivity"
-            android:screenOrientation="landscape" />
+            android:parentActivityName=".OwnerLoginActivity"/>
         <activity
             android:name=".OwnerLoginActivity"
             android:label="@string/login"
             android:parentActivityName=".RegisterLoginActivity"
-            android:screenOrientation="landscape"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".SplashScreenActivity"
-            android:screenOrientation="landscape"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

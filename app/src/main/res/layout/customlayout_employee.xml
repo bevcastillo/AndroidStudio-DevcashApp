@@ -39,7 +39,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/lname"
                 android:textColor="@color/dark_text"
-                android:textSize="@dimen/page_title"
                 android:layout_marginLeft="@dimen/text_padding"/>
 
             <TextView
@@ -55,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fname"
                 android:textColor="@color/dark_text"
-                android:textSize="@dimen/page_title"
                 android:layout_marginLeft="@dimen/text_spacing"/>
 
         </LinearLayout>
@@ -67,7 +65,6 @@
             android:layout_weight="2"
             android:text="@string/email"
             android:textColor="@color/icon_light"
-            android:textSize="@dimen/text_inputs"
             android:layout_marginLeft="@dimen/padding_30"
             android:gravity="left"/>
 
@@ -90,7 +87,6 @@
             android:layout_weight="2"
             android:text="@string/username"
             android:textColor="@color/icon_light"
-            android:textSize="@dimen/text_inputs"
             android:layout_marginLeft="@dimen/padding_30"
             android:gravity="left"
             android:paddingRight="@dimen/text_padding"/>
@@ -102,7 +98,6 @@
             android:layout_weight="2"
             android:text="@string/task"
             android:textColor="@color/colorGray"
-            android:textSize="@dimen/text_inputs"
             android:layout_marginLeft="@dimen/padding_50"
             android:gravity="left"/>
 
